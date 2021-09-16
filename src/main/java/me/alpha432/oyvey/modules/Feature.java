@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Feature {
-    public List<Setting> settings = new ArrayList<Setting>();
+    public List<Setting> settings = new ArrayList<>();
     public TextManager renderer = OyVey.textManager;
     private String name;
 

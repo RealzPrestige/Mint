@@ -22,10 +22,6 @@ public class Module
     public boolean hasListener;
     public boolean alwaysListening;
     public boolean hidden;
-    public float arrayListOffset = 0.0f;
-    public float arrayListVOffset = 0.0f;
-    public float offset;
-    public float vOffset;
     public boolean sliding;
 
     public Module(String name, String description, Category category, boolean hasListener, boolean hidden, boolean alwaysListening) {
@@ -84,7 +80,7 @@ public class Module
     }
 
     public boolean isOff() {
-        return this.enabled.getValue() == false;
+        return !this.enabled.getValue();
     }
 
     public void setEnabled(boolean enabled) {
