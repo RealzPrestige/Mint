@@ -121,5 +121,8 @@ public class OyVeyGui
         super.keyTyped(typedChar, keyCode);
         this.components.forEach(component -> component.onKeyTyped(typedChar, keyCode));
     }
+            public void drawGradient(double left, double top, double right, double bottom, int startColor, int endColor) {
+        drawGradientRect((int)left, (int)top, (int)right, (int)bottom, startColor, endColor);
+    }
 }
 
