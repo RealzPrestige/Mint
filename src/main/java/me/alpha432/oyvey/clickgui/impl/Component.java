@@ -4,11 +4,10 @@ import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.clickgui.impl.buttons.ButtonFrame;
-import me.alpha432.oyvey.modules.client.ClickGui;
+import me.alpha432.oyvey.modules.client.Gui;
 import me.alpha432.oyvey.utils.ColorUtil;
 import me.alpha432.oyvey.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.init.SoundEvents;
 
 import java.awt.*;
@@ -53,11 +52,11 @@ public class Component
         this.drag(mouseX, mouseY);
         counter1 = new int[]{1};
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
-        Gui.drawRect(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ColorUtil.toARGB(ClickGui.getInstance().topRed.getValue(), ClickGui.getInstance().topGreen.getValue(), ClickGui.getInstance().topBlue.getValue(), ClickGui.getInstance().topAlpha.getValue()));
+        net.minecraft.client.gui.Gui.drawRect(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ColorUtil.toARGB(Gui.getInstance().topRed.getValue(), Gui.getInstance().topGreen.getValue(), Gui.getInstance().topBlue.getValue(), Gui.getInstance().topAlpha.getValue()));
          if (this.open) {
             RenderUtil.drawRect(this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, 0x77000000);
-            if(ClickGui.getInstance().outline.getValue()) {
-                RenderUtil.drawBorder(this.x + 1, this.y + 12.2F, this.width - 2, height + getTotalItemHeight() - 15, new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), ClickGui.getInstance().alpha.getValue()));
+            if(Gui.getInstance().outline.getValue()) {
+                RenderUtil.drawBorder(this.x + 1, this.y + 12.2F, this.width - 2, height + getTotalItemHeight() - 15, new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
             }
          }
         OyVey.textManager.drawStringWithShadow(this.getName(), (float) this.x + 3.0f, (float) this.y - 4.0f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);

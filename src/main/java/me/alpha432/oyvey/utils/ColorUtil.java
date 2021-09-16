@@ -1,7 +1,5 @@
 package me.alpha432.oyvey.utils;
 
-import me.alpha432.oyvey.modules.client.ClickGui;
-
 import java.awt.*;
 
 public class ColorUtil {

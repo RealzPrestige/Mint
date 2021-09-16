@@ -2,7 +2,7 @@ package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
-import me.alpha432.oyvey.modules.client.ClickGui;
+import me.alpha432.oyvey.modules.client.Gui;
 import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.utils.ColorUtil;
 import me.alpha432.oyvey.utils.RenderUtil;
@@ -22,9 +22,9 @@ public class BooleanFrame
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         int booleancolor = ColorUtil.toARGB(0,0,0, 50);
-        int falseboolean = ColorUtil.toARGB(ClickGui.getInstance().stateFalseBooleanRed.getValue(), ClickGui.getInstance().stateFalseBooleanGreen.getValue(), ClickGui.getInstance().stateFalseBooleanBlue.getValue(), ClickGui.getInstance().stateFalseBooleanAlpha.getValue());
-        int trueboolean = ColorUtil.toARGB(ClickGui.getInstance().stateTrueBooleanRed.getValue(), ClickGui.getInstance().stateTrueBooleanGreen.getValue(), ClickGui.getInstance().stateTrueBooleanBlue.getValue(), ClickGui.getInstance().stateTrueBooleanAlpha.getValue());
-        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        int falseboolean = ColorUtil.toARGB(Gui.getInstance().stateFalseBooleanRed.getValue(), Gui.getInstance().stateFalseBooleanGreen.getValue(), Gui.getInstance().stateFalseBooleanBlue.getValue(), Gui.getInstance().stateFalseBooleanAlpha.getValue());
+        int trueboolean = ColorUtil.toARGB(Gui.getInstance().stateTrueBooleanRed.getValue(), Gui.getInstance().stateTrueBooleanGreen.getValue(), Gui.getInstance().stateTrueBooleanBlue.getValue(), Gui.getInstance().stateTrueBooleanAlpha.getValue());
+        int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
         RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         OyVey.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
         RenderUtil.drawRect(this.x + 85, this.y + 5, this.x + 105, this.y + 13, booleancolor);

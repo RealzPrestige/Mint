@@ -1,9 +1,5 @@
 package me.alpha432.oyvey.managers;
 
-import me.alpha432.oyvey.clickgui.impl.Component;
-import me.alpha432.oyvey.modules.client.ClickGui;
-import me.alpha432.oyvey.utils.ColorUtil;
-
 import java.awt.*;
 
 public class ColorManager {

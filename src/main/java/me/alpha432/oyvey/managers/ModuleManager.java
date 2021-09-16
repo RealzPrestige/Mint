@@ -6,7 +6,7 @@ import me.alpha432.oyvey.events.Render3DEvent;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.Module;
-import me.alpha432.oyvey.modules.client.ClickGui;
+import me.alpha432.oyvey.modules.client.Gui;
 import me.alpha432.oyvey.modules.client.FontMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -25,7 +25,7 @@ public class ModuleManager
     public List<String> sortedModulesABC = new ArrayList<String>();
 
     public void init() {
-        this.modules.add(new ClickGui());
+        this.modules.add(new Gui());
         this.modules.add(new FontMod());
     }
 

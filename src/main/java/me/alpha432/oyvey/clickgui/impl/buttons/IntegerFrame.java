@@ -4,13 +4,11 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.clickgui.impl.Component;
-import me.alpha432.oyvey.modules.client.ClickGui;
+import me.alpha432.oyvey.modules.client.Gui;
 import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.utils.ColorUtil;
 import me.alpha432.oyvey.utils.RenderUtil;
 import org.lwjgl.input.Mouse;
-
-import java.awt.*;
 
 public class IntegerFrame
         extends ButtonFrame {
@@ -31,9 +29,9 @@ public class IntegerFrame
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.dragSetting(mouseX, mouseY);
-        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
         RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
-        RenderUtil.drawRect(this.x, this.y + ((height / 4) * 3) - 1, this.x + (this.width+ 7.4f), this.y + ((height / 4) * 3) + 2 , ColorUtil.toRGBA(ClickGui.getInstance().sliderBgRed.getValue(), ClickGui.getInstance().sliderBgGreen.getValue(), ClickGui.getInstance().sliderBgBlue.getValue(), isHovering(mouseX, mouseY) ? ClickGui.getInstance().sliderBgAlpha.getValue() - 20 : ClickGui.getInstance().sliderBgAlpha.getValue()));
+        RenderUtil.drawRect(this.x, this.y + ((height / 4) * 3) - 1, this.x + (this.width+ 7.4f), this.y + ((height / 4) * 3) + 2 , ColorUtil.toRGBA(Gui.getInstance().sliderBgRed.getValue(), Gui.getInstance().sliderBgGreen.getValue(), Gui.getInstance().sliderBgBlue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().sliderBgAlpha.getValue() - 20 : Gui.getInstance().sliderBgAlpha.getValue()));
         RenderUtil.drawRect(((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier() - 2, this.y + ((height / 4) * 3) - 2, ((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier(), this.y + ((height / 4) * 3) + 3 , -1);
         OyVey.textManager.drawStringWithShadow(this.getName() + " " + ChatFormatting.GRAY + (this.setting.getValue() instanceof Float ? this.setting.getValue() : Double.valueOf(((Number) this.setting.getValue()).doubleValue())), this.x + 2.3f, this.y, -1);
     }

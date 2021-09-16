@@ -1,21 +1,18 @@
 package me.alpha432.oyvey.modules.client;
 
-import com.google.common.primitives.Booleans;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.clickgui.impl.buttons.ParentFrame;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.Module;
 import me.alpha432.oyvey.clickgui.setting.Setting;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-public class ClickGui
+public class Gui
         extends Module {
-    private static ClickGui INSTANCE = new ClickGui();
+    private static Gui INSTANCE = new Gui();
     public Setting<String> prefix = register(new Setting<>("Prefix", ".", false));
     public Setting<Boolean> outline = register(new Setting<>("Outline", false, false));
     public Setting<Boolean> color = register(new Setting<>("Color", false, true));
@@ -45,15 +42,15 @@ public class ClickGui
     public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
 
 
-    public ClickGui() {
+    public Gui() {
         super("ClickGui", "Opens the ClickGui", Module.Category.CLIENT, true, false, false);
         setBind(Keyboard.KEY_O);
         this.setInstance();
     }
 
-    public static ClickGui getInstance() {
+    public static Gui getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ClickGui();
+            INSTANCE = new Gui();
         }
         return INSTANCE;
     }
