@@ -10,6 +10,8 @@ import me.alpha432.oyvey.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
+import java.awt.*;
+
 public class ButtonFrame
         extends Frame {
     private boolean state;

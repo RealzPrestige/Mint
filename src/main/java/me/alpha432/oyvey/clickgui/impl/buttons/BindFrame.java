@@ -1,6 +1,5 @@
 package me.alpha432.oyvey.clickgui.impl.buttons;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.client.ClickGui;

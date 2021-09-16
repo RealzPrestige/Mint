@@ -1,6 +1,7 @@
 package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.clickgui.impl.Component;
 import me.alpha432.oyvey.clickgui.impl.Frame;
 import me.alpha432.oyvey.modules.Module;
@@ -54,6 +55,7 @@ public class ModuleFrame
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (!this.items.isEmpty()) {
+            OyVey.textManager.drawString((this.subOpen ? "v" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) OyVeyGui.getClickGui().getTextOffset(), -1, false);
             if (this.subOpen) {
                 float height = 1.0f;
                 for (Frame item : this.items) {
