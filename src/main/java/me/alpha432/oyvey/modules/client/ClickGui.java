@@ -3,7 +3,7 @@ package me.alpha432.oyvey.modules.client;
 import com.google.common.primitives.Booleans;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.event.events.Render2DEvent;
+import me.alpha432.oyvey.events.Render2DEvent;
 import me.alpha432.oyvey.clickgui.impl.buttons.ParentFrame;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
