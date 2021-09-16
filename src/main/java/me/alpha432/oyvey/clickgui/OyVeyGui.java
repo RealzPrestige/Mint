@@ -15,7 +15,6 @@ import java.util.Comparator;
 
 public class OyVeyGui
         extends GuiScreen {
-    private static OyVeyGui oyveyGui;
     private static OyVeyGui INSTANCE;
 
     static {
