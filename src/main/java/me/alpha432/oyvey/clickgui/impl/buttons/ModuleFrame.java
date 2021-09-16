@@ -18,7 +18,6 @@ public class ModuleFrame
     private final Module module;
     private List<Frame> items = new ArrayList<Frame>();
     private boolean subOpen;
-
     public ModuleFrame(Module module) {
         super(module.getName());
         this.module = module;
@@ -27,7 +26,7 @@ public class ModuleFrame
 
 
     public void initSettings() {
-        ArrayList<Frame> newItems = new ArrayList<Frame>();
+        ArrayList<Frame> newItems = new ArrayList<>();
         if (!this.module.getSettings().isEmpty()) {
             for (Setting setting : this.module.getSettings()) {
                 if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled")) {

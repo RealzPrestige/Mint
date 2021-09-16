@@ -6,15 +6,11 @@ import me.alpha432.oyvey.modules.client.ClickGui;
 import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.utils.ColorUtil;
 import me.alpha432.oyvey.utils.RenderUtil;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.init.SoundEvents;
 
 public class ParentFrame extends ButtonFrame {
-    private final Setting setting;
-    public boolean isVisible;
+
     public ParentFrame(Setting setting) {
         super(setting.getName());
-        this.setting = setting;
         this.width = 15;
     }
 
@@ -34,32 +30,5 @@ public class ParentFrame extends ButtonFrame {
         }
     }
 
-    @Override
-    public void update() {
-        this.setHidden(!this.setting.isVisible());
-    }
-
-    @Override
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-        if (this.isHovering(mouseX, mouseY)) {
-            OyVey.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
-        }
-    }
-
-    @Override
-    public int getHeight() {
-        return 14;
-    }
-
-    @Override
-    public void toggle() {
-        this.setting.setValue(!((Boolean) this.setting.getValue()));
-    }
-
-    @Override
-    public boolean getState() {
-        return (Boolean) this.setting.getValue();
-    }
 }
 
