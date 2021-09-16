@@ -33,7 +33,8 @@ public class StringFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, ColorUtil.toRGBA(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? ClickGui.getInstance().alpha.getValue() - 20 : ClickGui.getInstance().alpha.getValue()));
+        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         if (this.isListening) {
             OyVey.textManager.drawStringWithShadow(this.currentString.getString() + OyVey.textManager.getIdleSign(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
         } else {

@@ -21,8 +21,18 @@ public class BooleanFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, getState() ? ColorUtil.toRGBA(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? ClickGui.getInstance().alpha.getValue() - 20 : ClickGui.getInstance().alpha.getValue()) : -2007673515);
+        int booleancolor = ColorUtil.toARGB(0,0,0, 50);
+        int falseboolean = ColorUtil.toARGB(ClickGui.getInstance().stateFalseBooleanRed.getValue(), ClickGui.getInstance().stateFalseBooleanGreen.getValue(), ClickGui.getInstance().stateFalseBooleanBlue.getValue(), ClickGui.getInstance().stateFalseBooleanAlpha.getValue());
+        int trueboolean = ColorUtil.toARGB(ClickGui.getInstance().stateTrueBooleanRed.getValue(), ClickGui.getInstance().stateTrueBooleanGreen.getValue(), ClickGui.getInstance().stateTrueBooleanBlue.getValue(), ClickGui.getInstance().stateTrueBooleanAlpha.getValue());
+        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         OyVey.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+        RenderUtil.drawRect(this.x + 85, this.y + 5, this.x + 105, this.y + 13, booleancolor);
+            if(getState()) {
+                RenderUtil.drawRect(this.x + 95, this.y + 6, this.x + 104, this.y + 12, trueboolean);
+            } else {
+                RenderUtil.drawRect(this.x + 85, this.y + 6, this.x + 94, this.y + 12, falseboolean);
+        }
     }
 
     @Override

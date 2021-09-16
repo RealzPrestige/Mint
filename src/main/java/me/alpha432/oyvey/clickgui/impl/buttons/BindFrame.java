@@ -24,11 +24,12 @@ public class BindFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-       RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f,ColorUtil.toRGBA(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? ClickGui.getInstance().alpha.getValue() - 20 : ClickGui.getInstance().alpha.getValue()));
+        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         if (this.isListening) {
-            OyVey.textManager.drawStringWithShadow("Press a Key...", this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);
+            OyVey.textManager.drawStringWithShadow("Listening...", this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);
         } else {
-            OyVey.textManager.drawStringWithShadow(this.setting.getName() + " " + ChatFormatting.GRAY + this.setting.getValue().toString().toUpperCase(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+            OyVey.textManager.drawStringWithShadow(this.setting.getName() + " " + this.setting.getValue().toString().toUpperCase(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
         }
     }
 

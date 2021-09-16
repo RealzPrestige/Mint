@@ -23,14 +23,23 @@ public class ClickGui
     public Setting<Integer> topGreen = register(new Setting<>("TopGreen", 0, 0, 255));
     public Setting<Integer> topBlue = register(new Setting<>("TopBlue", 150, 0, 255));
     public Setting<Integer> topAlpha = register(new Setting<>("TopAlpha", 180, 0, 255));
-    public Setting<Integer> sliderBgRed = register(new Setting<>("SliderBgRed", 0, 0, 255));
-    public Setting<Integer> sliderBgGreen = register(new Setting<>("SliderBgGreen", 0, 0, 255));
-    public Setting<Integer> sliderBgBlue = register(new Setting<>("SliderBgBlue", 150, 0, 255));
-    public Setting<Integer> sliderBgAlpha = register(new Setting<>("SliderBgAlpha", 180, 0, 255));
-    public Setting<Boolean> rainbow = register(new Setting<>("Rainbow", false));
-    public Setting<Integer> rainbowHue = register(new Setting<>("Delay", 240, 0, 600, v -> this.rainbow.getValue()));
-    public Setting<Float> rainbowBrightness = register(new Setting<>("Brightness ", 150.0f, 1.0f, 255.0f, v -> this.rainbow.getValue()));
-    public Setting<Float> rainbowSaturation = register(new Setting<>("Saturation", 150.0f, 1.0f, 255.0f, v -> this.rainbow.getValue()));
+    public Setting<Integer> sliderBgRed = register(new Setting<>("SliderBgRed", 120, 0, 255));
+    public Setting<Integer> sliderBgGreen = register(new Setting<>("SliderBgGreen", 120, 0, 255));
+    public Setting<Integer> sliderBgBlue = register(new Setting<>("SliderBgBlue", 120, 0, 255));
+    public Setting<Integer> sliderBgAlpha = register(new Setting<>("SliderBgAlpha", 55, 0, 255));
+    public Setting<Integer> sideRed = this.register(new Setting<>("SideRed", 255, 0, 255));
+    public Setting<Integer> sideGreen = this.register(new Setting<>("SideGreen", 255, 0, 255));
+    public Setting<Integer> sideBlue = this.register(new Setting<>("SideBlue", 255, 0, 255));
+    public Setting<Integer> sideAlpha = this.register(new Setting<>("SideAlpha", 255, 0, 255));
+    public Setting<Integer> stateFalseBooleanRed = register(new Setting<>("BoolDisabledRed", 255, 0, 255));
+    public Setting<Integer> stateFalseBooleanGreen = register(new Setting<>("BoolDisabledGreen", 0, 0, 255));
+    public Setting<Integer> stateFalseBooleanBlue = register(new Setting<>("BoolDisabledBlue", 0, 0, 255));
+    public Setting<Integer> stateFalseBooleanAlpha = register(new Setting<>("BoolDisabledAlpha", 255, 0, 255));
+    public Setting<Integer> stateTrueBooleanRed = register(new Setting<>("BoolEnabledRed", 0, 0, 255));
+    public Setting<Integer> stateTrueBooleanGreen = register(new Setting<>("BoolEnabledGreen", 255, 0, 255));
+    public Setting<Integer> stateTrueBooleanBlue = register(new Setting<>("BoolEnabledBlue", 0, 0, 255));
+    public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
+
 
     public ClickGui() {
         super("ClickGui", "Opens the ClickGui", Module.Category.CLIENT, true, false, false);
@@ -49,6 +58,10 @@ public class ClickGui
         INSTANCE = this;
     }
 
+    @Override
+    public void onDisable() {
+        OyVey.configManager.saveConfig("Default");
+    }
     @SubscribeEvent
     public void onSettingChange(ClientEvent event) {
         if (event.getStage() == 2 && event.getSetting().getFeature().equals(this)) {

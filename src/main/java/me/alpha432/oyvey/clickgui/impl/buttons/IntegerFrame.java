@@ -31,6 +31,8 @@ public class IntegerFrame
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.dragSetting(mouseX, mouseY);
+        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         RenderUtil.drawRect(this.x, this.y + ((height / 4) * 3) - 1, this.x + (this.width+ 7.4f), this.y + ((height / 4) * 3) + 2 , ColorUtil.toRGBA(ClickGui.getInstance().sliderBgRed.getValue(), ClickGui.getInstance().sliderBgGreen.getValue(), ClickGui.getInstance().sliderBgBlue.getValue(), isHovering(mouseX, mouseY) ? ClickGui.getInstance().sliderBgAlpha.getValue() - 20 : ClickGui.getInstance().sliderBgAlpha.getValue()));
         RenderUtil.drawRect(((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier() - 2, this.y + ((height / 4) * 3) - 2, ((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier(), this.y + ((height / 4) * 3) + 3 , -1);
         OyVey.textManager.drawStringWithShadow(this.getName() + " " + ChatFormatting.GRAY + (this.setting.getValue() instanceof Float ? this.setting.getValue() : Double.valueOf(((Number) this.setting.getValue()).doubleValue())), this.x + 2.3f, this.y, -1);

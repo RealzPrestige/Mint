@@ -5,6 +5,7 @@ import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.client.ClickGui;
 import me.alpha432.oyvey.clickgui.setting.Setting;
+import me.alpha432.oyvey.utils.ColorUtil;
 import me.alpha432.oyvey.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -21,6 +22,8 @@ public class EnumFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        int sidecolor = ColorUtil.toARGB(ClickGui.getInstance().sideRed.getValue(), ClickGui.getInstance().sideGreen.getValue(), ClickGui.getInstance().sideBlue.getValue(), ClickGui.getInstance().sideAlpha.getValue());
+        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, -2007673515);
         OyVey.textManager.drawStringWithShadow(this.setting.getName() + " " + ChatFormatting.GRAY + (this.setting.currentEnumName().equalsIgnoreCase("ABC") ? "ABC" : this.setting.currentEnumName()), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
     }
