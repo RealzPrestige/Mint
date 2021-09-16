@@ -13,11 +13,11 @@ import java.awt.*;
 public class FontMod
         extends Module {
     private static FontMod INSTANCE = new FontMod();
-    public Setting<String> fontName = this.register(new Setting<String>("FontName", "Arial", "Name of the font."));
-    public Setting<Boolean> antiAlias = this.register(new Setting<Boolean>("AntiAlias", true , "Smoother font."));
-    public Setting<Boolean> fractionalMetrics = this.register(new Setting<Boolean>("Metrics", true , "Thinner font."));
-    public Setting<Integer> fontSize = this.register(new Setting<Integer>("Size", 18 , 12 , 30 , "Size of the font."));
-    public Setting<Integer> fontStyle = this.register(new Setting<Integer>("Style", 0 , 0 , 3 , "Style of the font."));
+    public Setting<String> fontName = this.register(new Setting<>("FontName", "Arial", "Name of the font."));
+    public Setting<Boolean> antiAlias = this.register(new Setting<>("AntiAlias", true, "Smoother font."));
+    public Setting<Boolean> fractionalMetrics = this.register(new Setting<>("Metrics", true, "Thinner font."));
+    public Setting<Integer> fontSize = this.register(new Setting<>("Size", 18, 12, 30, "Size of the font."));
+    public Setting<Integer> fontStyle = this.register(new Setting<>("Style", 0, 0, 3, "Style of the font."));
     private boolean reloadFont = false;
 
     public FontMod() {

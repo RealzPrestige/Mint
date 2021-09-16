@@ -15,6 +15,7 @@ public class StringFrame
         extends ButtonFrame {
     private final Setting setting;
     public boolean isListening;
+
     private CurrentString currentString = new CurrentString("");
 
     public StringFrame(Setting setting) {

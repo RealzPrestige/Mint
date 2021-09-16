@@ -1,7 +1,9 @@
 package me.alpha432.oyvey.modules.client;
 
+import com.google.common.primitives.Booleans;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.clickgui.impl.buttons.ParentFrame;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
@@ -14,11 +16,13 @@ import org.lwjgl.input.Keyboard;
 public class ClickGui
         extends Module {
     private static ClickGui INSTANCE = new ClickGui();
-    public Setting<String> prefix = register(new Setting<>("Prefix", "."));
-    public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
-    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 180, 0, 255));
+    public Setting<String> prefix = register(new Setting<>("Prefix", ".", false));
+    public Setting<Boolean> outline = register(new Setting<>("Outline", false, false));
+    public Setting<Boolean> color = register(new Setting<>("Color", false, true));
+    public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255, v-> color.getValue()));
+    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255, v-> color.getValue()));
+    public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255, v-> color.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 180, 0, 255, v-> color.getValue()));
     public Setting<Integer> topRed = register(new Setting<>("TopRed", 0, 0, 255));
     public Setting<Integer> topGreen = register(new Setting<>("TopGreen", 0, 0, 255));
     public Setting<Integer> topBlue = register(new Setting<>("TopBlue", 150, 0, 255));
@@ -27,10 +31,10 @@ public class ClickGui
     public Setting<Integer> sliderBgGreen = register(new Setting<>("SliderBgGreen", 120, 0, 255));
     public Setting<Integer> sliderBgBlue = register(new Setting<>("SliderBgBlue", 120, 0, 255));
     public Setting<Integer> sliderBgAlpha = register(new Setting<>("SliderBgAlpha", 55, 0, 255));
-    public Setting<Integer> sideRed = this.register(new Setting<>("SideRed", 255, 0, 255));
-    public Setting<Integer> sideGreen = this.register(new Setting<>("SideGreen", 255, 0, 255));
-    public Setting<Integer> sideBlue = this.register(new Setting<>("SideBlue", 255, 0, 255));
-    public Setting<Integer> sideAlpha = this.register(new Setting<>("SideAlpha", 255, 0, 255));
+    public Setting<Integer> sideRed = register(new Setting<>("SideRed", 255, 0, 255));
+    public Setting<Integer> sideGreen = register(new Setting<>("SideGreen", 255, 0, 255));
+    public Setting<Integer> sideBlue = register(new Setting<>("SideBlue", 255, 0, 255));
+    public Setting<Integer> sideAlpha = register(new Setting<>("SideAlpha", 255, 0, 255));
     public Setting<Integer> stateFalseBooleanRed = register(new Setting<>("BoolDisabledRed", 255, 0, 255));
     public Setting<Integer> stateFalseBooleanGreen = register(new Setting<>("BoolDisabledGreen", 0, 0, 255));
     public Setting<Integer> stateFalseBooleanBlue = register(new Setting<>("BoolDisabledBlue", 0, 0, 255));

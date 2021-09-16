@@ -45,6 +45,10 @@ public class ModuleFrame
                 }
                 if (!setting.isEnumSetting()) continue;
                 newItems.add(new EnumFrame(setting));
+
+                if (setting.isParent) {
+                    newItems.add(new ParentFrame(setting));
+                }
             }
         }
         newItems.add(new BindFrame(this.module.getSettingByName("Keybind")));
