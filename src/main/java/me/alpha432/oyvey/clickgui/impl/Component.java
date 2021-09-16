@@ -31,7 +31,7 @@ public class Component
         super(name);
         this.x = x;
         this.y = y;
-        this.width = 88;
+        this.width = 120;
         this.height = 18;
         this.open = open;
         this.setupItems();

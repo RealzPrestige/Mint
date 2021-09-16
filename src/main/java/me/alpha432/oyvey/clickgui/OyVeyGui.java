@@ -45,9 +45,9 @@ public class OyVeyGui
     }
 
     private void load() {
-        int x = -50;
+        int x = -119;
         for (final Module.Category category : OyVey.moduleManager.getCategories()) {
-            this.components.add(new Component(category.getName(), x += 90, 2, true) {
+            this.components.add(new Component(category.getName(), x += 121, 2, true) {
 
                 @Override
                 public void setupItems() {
