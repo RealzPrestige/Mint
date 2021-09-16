@@ -2,7 +2,7 @@ package me.alpha432.oyvey.managers;
 
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.modules.Feature;
-import me.alpha432.oyvey.gui.font.CustomFont;
+import me.alpha432.oyvey.clickgui.impl.font.CustomFont;
 import me.alpha432.oyvey.modules.client.FontMod;
 import me.alpha432.oyvey.utils.Timer;
 import net.minecraft.util.math.MathHelper;
@@ -57,7 +57,7 @@ public class TextManager
     public int getFontHeight() {
         if (OyVey.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
             String text = "A";
-            return this.customFont.getStringHeight(text);
+            return this.customFont.getStringHeight();
         }
         return OyVey.INSTANCE.mc.fontRenderer.FONT_HEIGHT;
     }

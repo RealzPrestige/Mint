@@ -1,22 +1,22 @@
-package me.alpha432.oyvey.gui.components.items.buttons;
+package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.gui.OyVeyGui;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.client.ClickGui;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ChatAllowedCharacters;
 
-public class StringButton
-        extends Button {
+public class StringFrame
+        extends ButtonFrame {
     private final Setting setting;
     public boolean isListening;
     private CurrentString currentString = new CurrentString("");
 
-    public StringButton(Setting setting) {
+    public StringFrame(Setting setting) {
         super(setting.getName());
         this.setting = setting;
         this.width = 15;
@@ -59,7 +59,7 @@ public class StringButton
                     this.enterString();
                 }
                 case 14: {
-                    this.setString(StringButton.removeLastChar(this.currentString.getString()));
+                    this.setString(StringFrame.removeLastChar(this.currentString.getString()));
                 }
             }
             if (ChatAllowedCharacters.isAllowedCharacter(typedChar)) {

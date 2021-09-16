@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.gui.font;
+package me.alpha432.oyvey.clickgui.impl.font;
 
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
@@ -102,7 +102,7 @@ public class CFont {
         GL11.glVertex2d(x + width, y);
     }
 
-    public int getStringHeight(String text) {
+    public int getStringHeight() {
         return this.getHeight();
     }
 
@@ -113,16 +113,11 @@ public class CFont {
     public int getStringWidth(String text) {
         int width = 0;
         for (char c : text.toCharArray()) {
-            if (c >= this.charData.length || c < '\u0000') continue;
+            if (c >= this.charData.length) continue;
             width += this.charData[c].width - 8 + this.charOffset;
         }
         return width / 2;
     }
-
-    public boolean isAntiAlias() {
-        return this.antiAlias;
-    }
-
     public void setAntiAlias(boolean antiAlias) {
         if (this.antiAlias != antiAlias) {
             this.antiAlias = antiAlias;

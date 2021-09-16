@@ -4,7 +4,7 @@ import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.events.Render2DEvent;
 import me.alpha432.oyvey.events.Render3DEvent;
 import me.alpha432.oyvey.modules.Feature;
-import me.alpha432.oyvey.gui.OyVeyGui;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.Module;
 import me.alpha432.oyvey.modules.client.ClickGui;
 import me.alpha432.oyvey.modules.client.FontMod;

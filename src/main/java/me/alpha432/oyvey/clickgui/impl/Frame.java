@@ -1,8 +1,8 @@
-package me.alpha432.oyvey.gui.components.items;
+package me.alpha432.oyvey.clickgui.impl;
 
 import me.alpha432.oyvey.modules.Feature;
 
-public class Item
+public class Frame
         extends Feature {
     protected float x;
     protected float y;
@@ -10,7 +10,7 @@ public class Item
     protected int height;
     private boolean hidden;
 
-    public Item(String name) {
+    public Frame(String name) {
         super(name);
     }
 

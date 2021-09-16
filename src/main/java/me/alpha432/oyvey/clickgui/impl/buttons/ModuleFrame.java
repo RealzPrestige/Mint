@@ -1,24 +1,24 @@
-package me.alpha432.oyvey.gui.components.items.buttons;
+package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.gui.components.Component;
-import me.alpha432.oyvey.gui.components.items.Item;
+import me.alpha432.oyvey.clickgui.impl.Component;
+import me.alpha432.oyvey.clickgui.impl.Frame;
 import me.alpha432.oyvey.modules.Module;
-import me.alpha432.oyvey.gui.setting.Bind;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Bind;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleButton
-        extends Button {
+public class ModuleFrame
+        extends ButtonFrame {
     private final Module module;
-    private List<Item> items = new ArrayList<Item>();
+    private List<Frame> items = new ArrayList<Frame>();
     private boolean subOpen;
 
-    public ModuleButton(Module module) {
+    public ModuleFrame(Module module) {
         super(module.getName());
         this.module = module;
         this.initSettings();
@@ -26,27 +26,27 @@ public class ModuleButton
 
 
     public void initSettings() {
-        ArrayList<Item> newItems = new ArrayList<Item>();
+        ArrayList<Frame> newItems = new ArrayList<Frame>();
         if (!this.module.getSettings().isEmpty()) {
             for (Setting setting : this.module.getSettings()) {
                 if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled")) {
-                    newItems.add(new BooleanButton(setting));
+                    newItems.add(new BooleanFrame(setting));
                 }
                 if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind") && !this.module.getName().equalsIgnoreCase("Hud")) {
-                    newItems.add(new BindButton(setting));
+                    newItems.add(new BindFrame(setting));
                 }
                 if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName")) {
-                    newItems.add(new StringButton(setting));
+                    newItems.add(new StringFrame(setting));
                 }
                 if (setting.isNumberSetting() && setting.hasRestriction()) {
-                    newItems.add(new Slider(setting));
+                    newItems.add(new IntegerFrame(setting));
                     continue;
                 }
                 if (!setting.isEnumSetting()) continue;
-                newItems.add(new EnumButton(setting));
+                newItems.add(new EnumFrame(setting));
             }
         }
-        newItems.add(new BindButton(this.module.getSettingByName("Keybind")));
+        newItems.add(new BindFrame(this.module.getSettingByName("Keybind")));
         this.items = newItems;
     }
 
@@ -56,7 +56,7 @@ public class ModuleButton
         if (!this.items.isEmpty()) {
             if (this.subOpen) {
                 float height = 1.0f;
-                for (Item item : this.items) {
+                for (Frame item : this.items) {
                     Component.counter1[0] = Component.counter1[0] + 1;
                     if (!item.isHidden()) {
                         item.setLocation(this.x + 1.0f, this.y + (height += 15.0f));
@@ -79,7 +79,7 @@ public class ModuleButton
                 OyVey.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
             }
             if (this.subOpen) {
-                for (Item item : this.items) {
+                for (Frame item : this.items) {
                     if (item.isHidden()) continue;
                     item.mouseClicked(mouseX, mouseY, mouseButton);
                 }
@@ -91,7 +91,7 @@ public class ModuleButton
     public void onKeyTyped(char typedChar, int keyCode) {
         super.onKeyTyped(typedChar, keyCode);
         if (!this.items.isEmpty() && this.subOpen) {
-            for (Item item : this.items) {
+            for (Frame item : this.items) {
                 if (item.isHidden()) continue;
                 item.onKeyTyped(typedChar, keyCode);
             }
@@ -102,7 +102,7 @@ public class ModuleButton
     public int getHeight() {
         if (this.subOpen) {
             int height = 14;
-            for (Item item : this.items) {
+            for (Frame item : this.items) {
                 if (item.isHidden()) continue;
                 height += item.getHeight() + 1;
             }

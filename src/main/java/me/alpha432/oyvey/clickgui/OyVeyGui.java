@@ -1,10 +1,10 @@
-package me.alpha432.oyvey.gui;
+package me.alpha432.oyvey.clickgui;
 
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.modules.Feature;
-import me.alpha432.oyvey.gui.components.Component;
-import me.alpha432.oyvey.gui.components.items.Item;
-import me.alpha432.oyvey.gui.components.items.buttons.ModuleButton;
+import me.alpha432.oyvey.clickgui.impl.Component;
+import me.alpha432.oyvey.clickgui.impl.Frame;
+import me.alpha432.oyvey.clickgui.impl.buttons.ModuleFrame;
 import me.alpha432.oyvey.modules.Module;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
@@ -45,16 +45,16 @@ public class OyVeyGui
     }
 
     private void load() {
-        int x = -84;
+        int x = -50;
         for (final Module.Category category : OyVey.moduleManager.getCategories()) {
-            this.components.add(new Component(category.getName(), x += 90, 4, true) {
+            this.components.add(new Component(category.getName(), x += 90, 2, true) {
 
                 @Override
                 public void setupItems() {
                     counter1 = new int[]{1};
                     OyVey.moduleManager.getModulesByCategory(category).forEach(module -> {
                         if (!module.hidden) {
-                            this.addButton(new ModuleButton(module));
+                            this.addButton(new ModuleFrame(module));
                         }
                     });
                 }
@@ -65,9 +65,9 @@ public class OyVeyGui
 
     public void updateModule(Module module) {
         for (Component component : this.components) {
-            for (Item item : component.getItems()) {
-                if (!(item instanceof ModuleButton)) continue;
-                ModuleButton button = (ModuleButton) item;
+            for (Frame item : component.getItems()) {
+                if (!(item instanceof ModuleFrame)) continue;
+                ModuleFrame button = (ModuleFrame) item;
                 Module mod = button.getModule();
                 if (module == null || !module.equals(mod)) continue;
                 button.initSettings();

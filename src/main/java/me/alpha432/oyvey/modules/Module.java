@@ -6,8 +6,8 @@ import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.events.Render2DEvent;
 import me.alpha432.oyvey.events.Render3DEvent;
 import me.alpha432.oyvey.commands.Command;
-import me.alpha432.oyvey.gui.setting.Bind;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Bind;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 

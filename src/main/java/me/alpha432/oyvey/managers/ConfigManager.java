@@ -4,9 +4,9 @@ import com.google.gson.*;
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.modules.Module;
-import me.alpha432.oyvey.gui.setting.Bind;
-import me.alpha432.oyvey.gui.setting.EnumConverter;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Bind;
+import me.alpha432.oyvey.clickgui.setting.EnumConverter;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 
 import java.io.*;
 import java.nio.file.Files;

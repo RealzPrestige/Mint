@@ -1,22 +1,22 @@
-package me.alpha432.oyvey.gui.components.items.buttons;
+package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.gui.OyVeyGui;
-import me.alpha432.oyvey.gui.components.Component;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
+import me.alpha432.oyvey.clickgui.impl.Component;
 import me.alpha432.oyvey.modules.client.ClickGui;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.utils.RenderUtil;
 import org.lwjgl.input.Mouse;
 
-public class Slider
-        extends Button {
+public class IntegerFrame
+        extends ButtonFrame {
     private final Number min;
     private final Number max;
     private final int difference;
     public Setting setting;
 
-    public Slider(Setting setting) {
+    public IntegerFrame(Setting setting) {
         super(setting.getName());
         this.setting = setting;
         this.min = (Number) setting.getMin();

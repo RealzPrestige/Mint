@@ -36,7 +36,7 @@ public class Bind
             Bind.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
-        module.bind.setValue(new me.alpha432.oyvey.gui.setting.Bind(key));
+        module.bind.setValue(new me.alpha432.oyvey.clickgui.setting.Bind(key));
         Bind.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }

@@ -1,8 +1,8 @@
 package me.alpha432.oyvey.modules;
 
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.gui.OyVeyGui;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.managers.TextManager;
 
 import java.util.ArrayList;

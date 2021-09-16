@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.gui.font;
+package me.alpha432.oyvey.clickgui.impl.font;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;

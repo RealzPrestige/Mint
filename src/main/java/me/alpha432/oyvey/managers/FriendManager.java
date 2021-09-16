@@ -1,7 +1,7 @@
 package me.alpha432.oyvey.managers;
 
 import me.alpha432.oyvey.modules.Feature;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.utils.PlayerUtil;
 import net.minecraft.entity.player.EntityPlayer;
 

@@ -1,23 +1,22 @@
-package me.alpha432.oyvey.gui.components.items.buttons;
+package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import me.alpha432.oyvey.OyVey;
-import me.alpha432.oyvey.gui.OyVeyGui;
-import me.alpha432.oyvey.gui.components.Component;
-import me.alpha432.oyvey.gui.components.items.Item;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
+import me.alpha432.oyvey.clickgui.impl.Component;
+import me.alpha432.oyvey.clickgui.impl.Frame;
 import me.alpha432.oyvey.modules.client.ClickGui;
 import me.alpha432.oyvey.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
-public class Button
-        extends Item {
+public class ButtonFrame
+        extends Frame {
     private boolean state;
 
-    public Button(String name) {
+    public ButtonFrame(String name) {
         super(name);
         this.height = 15;
     }
-
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? OyVey.colorManager.getColorWithAlpha(OyVey.moduleManager.getModuleByClass(ClickGui.class).hoverAlpha.getValue()) : OyVey.colorManager.getColorWithAlpha(OyVey.moduleManager.getModuleByClass(ClickGui.class).alpha.getValue())) : (!this.isHovering(mouseX, mouseY) ? 0x11555555 : -2007673515));

@@ -5,7 +5,7 @@ import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
 import me.alpha432.oyvey.modules.Module;
-import me.alpha432.oyvey.gui.setting.Setting;
+import me.alpha432.oyvey.clickgui.setting.Setting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;

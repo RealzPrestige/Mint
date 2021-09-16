@@ -1,10 +1,9 @@
-package me.alpha432.oyvey.gui.components;
+package me.alpha432.oyvey.clickgui.impl;
 
 import me.alpha432.oyvey.OyVey;
 import me.alpha432.oyvey.modules.Feature;
-import me.alpha432.oyvey.gui.OyVeyGui;
-import me.alpha432.oyvey.gui.components.items.Item;
-import me.alpha432.oyvey.gui.components.items.buttons.Button;
+import me.alpha432.oyvey.clickgui.OyVeyGui;
+import me.alpha432.oyvey.clickgui.impl.buttons.ButtonFrame;
 import me.alpha432.oyvey.modules.client.ClickGui;
 import me.alpha432.oyvey.utils.ColorUtil;
 import me.alpha432.oyvey.utils.RenderUtil;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 public class Component
         extends Feature {
     public static int[] counter1 = new int[]{1};
-    private final ArrayList<Item> items = new ArrayList();
+    private final ArrayList<Frame> items = new ArrayList();
     public boolean drag;
     private int x;
     private int y;
@@ -61,7 +60,7 @@ public class Component
         OyVey.textManager.drawStringWithShadow(this.getName(), (float) this.x + 3.0f, (float) this.y - 4.0f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);
         if (this.open) {
             float y = (float) (this.getY() + this.getHeight()) - 3.0f;
-            for (Item item : this.getItems()) {
+            for (Frame item : this.getItems()) {
                 Component.counter1[0] = counter1[0] + 1;
                 if (item.isHidden()) continue;
                 item.setLocation((float) this.x + 2.0f, y);
@@ -112,7 +111,7 @@ public class Component
         this.getItems().forEach(item -> item.onKeyTyped(typedChar, keyCode));
     }
 
-    public void addButton(Button button) {
+    public void addButton(ButtonFrame button) {
         this.items.add(button);
     }
 
@@ -160,7 +159,7 @@ public class Component
         return this.open;
     }
 
-    public final ArrayList<Item> getItems() {
+    public final ArrayList<Frame> getItems() {
         return this.items;
     }
 
@@ -170,7 +169,7 @@ public class Component
 
     private float getTotalItemHeight() {
         float height = 0.0f;
-        for (Item item : this.getItems()) {
+        for (Frame item : this.getItems()) {
             height += (float) item.getHeight() + 1.5f;
         }
         return height;

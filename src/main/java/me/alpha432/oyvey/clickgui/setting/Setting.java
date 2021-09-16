@@ -1,8 +1,6 @@
-package me.alpha432.oyvey.gui.setting;
+package me.alpha432.oyvey.clickgui.setting;
 
 import me.alpha432.oyvey.events.ClientEvent;
-import me.alpha432.oyvey.gui.setting.Bind;
-import me.alpha432.oyvey.gui.setting.EnumConverter;
 import me.alpha432.oyvey.modules.Feature;
 import net.minecraftforge.common.MinecraftForge;
 

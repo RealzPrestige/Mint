@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.gui.setting;
+package me.alpha432.oyvey.clickgui.setting;
 
 import com.google.common.base.Converter;
 import com.google.gson.JsonElement;
