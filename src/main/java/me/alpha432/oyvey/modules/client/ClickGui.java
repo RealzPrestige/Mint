@@ -3,6 +3,7 @@ package me.alpha432.oyvey.modules.client;
 import com.google.common.primitives.Booleans;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.event.events.Render2DEvent;
 import me.alpha432.oyvey.clickgui.impl.buttons.ParentFrame;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
@@ -43,6 +44,10 @@ public class ClickGui
     public Setting<Integer> stateTrueBooleanGreen = register(new Setting<>("BoolEnabledGreen", 255, 0, 255));
     public Setting<Integer> stateTrueBooleanBlue = register(new Setting<>("BoolEnabledBlue", 0, 0, 255));
     public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
+    public Setting<Boolean> gradient = this.register(new Setting<>("Gradient", true));
+    public Setting<Integer> gradientAlpha = this.register(new Setting<>("G-Alpha", 150, 0, 255, v -> gradient.getValue()));
+    public Setting<Array> gradientType = this.register(new Setting<>("GradientType", Array.FromBottom, v -> gradient.getValue()));
+
 
 
     public ClickGui() {
@@ -61,7 +66,11 @@ public class ClickGui
     private void setInstance() {
         INSTANCE = this;
     }
-
+        
+    public enum Array {
+        FromTop,
+        FromBottom
+    }
     @Override
     public void onDisable() {
         OyVey.configManager.saveConfig("Default");
@@ -75,7 +84,21 @@ public class ClickGui
             }
         }
     }
-
+        @Override
+        public void onRender2D(Render2DEvent event) {
+                 if (gradient.getValue()) {
+            if (gradientType.getValue() == Array.FromBottom) {
+                if (mc.currentScreen instanceof OyVeyGui) {
+                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(), ClickGui.getInstance().rainbow.getValue() ? new Color(rainbowCol.getRed(), rainbowCol.getGreen(), rainbowCol.getBlue(), gradientAlpha.getValue()).getRGB() : new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
+                }
+            }
+            if (gradientType.getValue() == Array.FromTop) {
+                if (mc.currentScreen instanceof OyVeyGui) {
+                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(),  ClickGui.getInstance().rainbow.getValue() ? new Color(rainbowCol.getRed(), rainbowCol.getGreen(), rainbowCol.getBlue(), gradientAlpha.getValue()).getRGB() : new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
+                }
+            }
+        }       
+        }
     @Override
     public void onEnable() {
         OyVey.INSTANCE.mc.displayGuiScreen(OyVeyGui.getClickGui());
