@@ -111,7 +111,7 @@ jar {
                 'tweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
                 'TweakOrder': 0,
                 'FMLCorePluginContainsFMLMod': 'true',
-                'FMLCorePlugin': 'me.alpha432.oyvey.mixin.loader.OyVeyLoader',
+                'FMLCorePlugin': 'me.alpha432.oyvey.mixin.loader.Loader',
                 'ForceLoadAsMod': 'true',
                 'FMLAT': 'oyvey_at.cfg'
         )

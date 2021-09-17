@@ -9,14 +9,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
 
-@Mod(modid = "oyvey", name = "OyVey", version = "0.0.3")
+@Mod(modid = "mint", name = "Mint", version = "0.1.1")
 public class Mint {
     public Minecraft mc = Minecraft.getMinecraft();
     public static Mint INSTANCE = new Mint();
-    public static final String MODID = "oyvey";
-    public static final String MODNAME = "OyVey";
-    public static final String MODVER = "0.0.3";
-    public static final Logger LOGGER = LogManager.getLogger("OyVey");
     public static CommandManager commandManager;
     public static FriendManager friendManager;
     public static ModuleManager moduleManager;
@@ -50,18 +46,6 @@ public class Mint {
         moduleManager.onLoad();
     }
 
-    public static void unload() {
-        Mint.onUnload();
-        eventManager = null;
-        friendManager = null;
-        configManager = null;
-        commandManager = null;
-        colorManager = null;
-        fileManager = null;
-        moduleManager = null;
-        textManager = null;
-    }
-
     public static void onUnload() {
         if (!unloaded) {
             eventManager.onUnload();
@@ -74,7 +58,7 @@ public class Mint {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        Display.setTitle("OyVey v0.0.3");
+        Display.setTitle("Mint 0.1.1");
         Mint.load();
     }
 }

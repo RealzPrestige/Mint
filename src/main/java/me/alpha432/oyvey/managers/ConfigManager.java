@@ -51,7 +51,6 @@ public class ConfigManager  {
                 }
                 return;
         }
-        Mint.LOGGER.error("Unknown Setting type for: " + feature.getName() + " : " + setting.getName());
     }
 
     private static void loadFile(JsonObject input, Feature feature) {
@@ -184,7 +183,6 @@ public class ConfigManager  {
         this.features.add(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
-        Mint.LOGGER.info("Config loaded.");
     }
 
     private void loadSettings(Feature feature) throws IOException {
@@ -200,7 +198,6 @@ public class ConfigManager  {
         try {
             loadFile((new JsonParser()).parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
         } catch (IllegalStateException e) {
-            Mint.LOGGER.error("Bad Config File for: " + feature.getName() + ". Resetting...");
             loadFile(new JsonObject(), feature);
         }
         stream.close();

@@ -1,6 +1,5 @@
 package me.alpha432.oyvey.mixin.loader;
 
-import me.alpha432.oyvey.Mint;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -8,16 +7,14 @@ import org.spongepowered.asm.mixin.Mixins;
 
 import java.util.Map;
 
-public class OyVeyLoader
+public class Loader
         implements IFMLLoadingPlugin {
     private static boolean isObfuscatedEnvironment = false;
 
-    public OyVeyLoader() {
-        Mint.LOGGER.info("\n\nLoading Mixins");
+    public Loader() {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.oyvey.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
-        Mint.LOGGER.info(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());
     }
 
     public String[] getASMTransformerClass() {
