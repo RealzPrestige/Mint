@@ -6,6 +6,7 @@
   "mixins": [
     "MixinMinecraft",
     "MixinNetworkManager",
-    "MixinWorld"
+    "MixinWorld",
+    "MixinFontRenderer"
   ]
 }
