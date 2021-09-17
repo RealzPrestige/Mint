@@ -13,6 +13,7 @@ import java.awt.*;
 public class FontChanger
         extends Module {
     private static FontChanger INSTANCE = new FontChanger();
+    public Setting<Boolean> override = this.register(new Setting<>("Full", false));
     public Setting<Integer> fontSize = this.register(new Setting<>("Size", 17, 15, 20));
     public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD));
     public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}

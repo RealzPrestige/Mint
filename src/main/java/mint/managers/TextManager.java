@@ -5,6 +5,7 @@ import mint.modules.Feature;
 import mint.clickgui.impl.font.CustomFont;
 import mint.modules.client.FontChanger;
 import mint.utils.Timer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import java.awt.*;
 
@@ -61,6 +62,18 @@ public class TextManager
             return;
         }
         Mint.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, shadow);
+    }
+    public float drawStringFull(String text, float x, float y, int color, boolean shadow) {
+        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
+            if (shadow) {
+                this.customFont.drawStringWithShadow(text, x, y, color);
+            } else {
+                this.customFont.drawString(text, x, y, color);
+            }
+            return x;
+        }
+        Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color, shadow);
+        return x;
     }
 
     public int getStringWidth(String text) {
