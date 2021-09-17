@@ -21,7 +21,7 @@ public class ButtonFrame
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, getState() ? ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().alpha.getValue() - 20 : Gui.getInstance().alpha.getValue()) : -2007673515);
-        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 3.0f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
     }
 
     @Override

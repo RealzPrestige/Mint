@@ -43,6 +43,10 @@ public class Gui extends Module {
     public Setting<Integer> sideGreen = register(new Setting<>("SideGreen", 255, 0, 255));
     public Setting<Integer> sideBlue = register(new Setting<>("SideBlue", 255, 0, 255));
     public Setting<Integer> sideAlpha = register(new Setting<>("SideAlpha", 255, 0, 255));
+    public Setting<Boolean> gradient = register(new Setting<>("Gradient", true));
+    public Setting<GradientMode> gradientType = register(new Setting<>("Type", GradientMode.FromBottom, v -> gradient.getValue()));
+    public Setting<Integer> gradientAlpha = register(new Setting<>("GradientAlpha", 150, 0, 255, v -> gradient.getValue()));
+    /*
     public Setting<Integer> stateFalseBooleanRed = register(new Setting<>("BoolDisabledRed", 255, 0, 255));
     public Setting<Integer> stateFalseBooleanGreen = register(new Setting<>("BoolDisabledGreen", 0, 0, 255));
     public Setting<Integer> stateFalseBooleanBlue = register(new Setting<>("BoolDisabledBlue", 0, 0, 255));
@@ -50,10 +54,9 @@ public class Gui extends Module {
     public Setting<Integer> stateTrueBooleanRed = register(new Setting<>("BoolEnabledRed", 0, 0, 255));
     public Setting<Integer> stateTrueBooleanGreen = register(new Setting<>("BoolEnabledGreen", 255, 0, 255));
     public Setting<Integer> stateTrueBooleanBlue = register(new Setting<>("BoolEnabledBlue", 0, 0, 255));
-    public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
-    public Setting<Boolean> gradient = register(new Setting<>("Gradient", true));
-    public Setting<Integer> gradientAlpha = register(new Setting<>("G-Alpha", 150, 0, 255, v -> gradient.getValue()));
-    public Setting<GradientMode> gradientType = register(new Setting<>("GradientType", GradientMode.FromBottom, v -> gradient.getValue()));
+    public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255))
+     */
+
 
 
 
