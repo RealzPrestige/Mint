@@ -1,4 +1,4 @@
-package mint.modules.client;
+package mint.modules.core;
 
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;

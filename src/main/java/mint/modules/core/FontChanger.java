@@ -1,4 +1,4 @@
-package mint.modules.client;
+package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;

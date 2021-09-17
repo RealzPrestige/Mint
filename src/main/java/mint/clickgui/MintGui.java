@@ -6,7 +6,7 @@ import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
 import mint.clickgui.impl.buttons.ModuleFrame;
 import mint.modules.Module;
-import mint.modules.client.Gui;
+import mint.modules.core.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;

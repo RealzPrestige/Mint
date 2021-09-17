@@ -3,7 +3,7 @@ package mint.managers;
 import mint.Mint;
 import mint.modules.Feature;
 import mint.clickgui.impl.font.CustomFont;
-import mint.modules.client.FontChanger;
+import mint.modules.core.FontChanger;
 import mint.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
