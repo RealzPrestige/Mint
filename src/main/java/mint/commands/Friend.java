@@ -7,7 +7,7 @@ import mint.managers.FriendManager;
 public class Friend
         extends Command {
     public Friend() {
-        super("friend", new String[]{"<add/del/name/clear>", "<name>"});
+        super("friend", new String[]{"add/del/name/clear", "name"});
     }
 
     @Override
@@ -42,12 +42,12 @@ public class Friend
             switch (commands[0]) {
                 case "add": {
                     Mint.friendManager.addFriend(commands[1]);
-                    Friend.sendMessage(ChatFormatting.GREEN + commands[1] + " has been friended");
+                    Friend.sendMessage(ChatFormatting.WHITE + commands[1] + " has been friended");
                     return;
                 }
                 case "del": {
                     Mint.friendManager.removeFriend(commands[1]);
-                    Friend.sendMessage(ChatFormatting.RED + commands[1] + " has been unfriended");
+                    Friend.sendMessage(ChatFormatting.WHITE + commands[1] + " has been unfriended");
                     return;
                 }
             }
