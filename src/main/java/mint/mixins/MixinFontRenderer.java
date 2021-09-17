@@ -1,4 +1,4 @@
-package mint.mixins.loader;
+package mint.mixins;
 
 import mint.Mint;
 import mint.modules.client.FontChanger;
