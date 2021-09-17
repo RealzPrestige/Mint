@@ -48,7 +48,7 @@ public class ClickGui
     public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
     public Setting<Boolean> gradient = this.register(new Setting<>("Gradient", true, true));
     public Setting<Integer> gradientAlpha = this.register(new Setting<>("G-Alpha", 150, 0, 255, v -> gradient.getValue()));
-    public Setting<Array> gradientType = this.register(new Setting<>("GradientType", Array.FromBottom, v -> gradient.getValue()));
+    public Setting<GradientMode> gradientType = this.register(new Setting<>("GradientType", GradientMode.FromBottom, v -> gradient.getValue()));
 
 
 
@@ -68,7 +68,7 @@ public class ClickGui
     private void setInstance() {
         INSTANCE = this;
     }
-    public enum Array {
+    public enum GradientMode {
         FromTop,
         FromBottom
     }
@@ -90,12 +90,12 @@ public class ClickGui
             final Minecraft mc = Minecraft.getMinecraft();
             ScaledResolution resolution = new ScaledResolution(mc);
             if (gradient.getValue()) {
-            if (gradientType.getValue() == Array.FromBottom) {
+            if (gradientType.getValue() == GradientMode.FromBottom) {
                 if (mc.currentScreen instanceof OyVeyGui) {
                     OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(),new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
                 }
             }
-            if (gradientType.getValue() == Array.FromTop) {
+            if (gradientType.getValue() == GradientMode.FromTop) {
                 if (mc.currentScreen instanceof OyVeyGui) {
                     OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
                 }
