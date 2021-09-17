@@ -10,29 +10,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 
-public class FontMod
+public class FontChanger
         extends Module {
-    private static FontMod INSTANCE = new FontMod();
-    public Setting<String> fontName = this.register(new Setting<>("FontName", "Arial", "Name of the font."));
-    public Setting<Integer> fontSize = this.register(new Setting<>("Size", 18, 12, 30, "Size of the font."));
-    public Setting<Integer> fontStyle = this.register(new Setting<>("Style", 0, 0, 3, "Style of the font."));
+    private static FontChanger INSTANCE = new FontChanger();
+    public Setting<Integer> fontSize = this.register(new Setting<>("Size", 17, 15, 20));
+    public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD, false));
+    public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}
     private boolean reloadFont = false;
 
-    public FontMod() {
-        super("Font", "CustomFont for all of the clients text. Use the font command.", Module.Category.CLIENT, true, false, false);
+    public FontChanger() {
+        super("FontChanger", "CustomFont for all of the clients text. Use the font command.", Module.Category.CLIENT, true, false, false);
         this.setInstance();
     }
 
-    public static FontMod getInstance() {
+    public static FontChanger getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new FontMod();
+            INSTANCE = new FontChanger();
         }
         return INSTANCE;
     }
 
     public static boolean checkFont(String font, boolean message) {
-        String[] fonts;
-        for (String s : fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) {
+        for (String s : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) {
             if (!message && s.equals(font)) {
                 return true;
             }
@@ -50,8 +49,8 @@ public class FontMod
     public void onSettingChange(ClientEvent event) {
         Setting setting;
         if (event.getStage() == 2 && (setting = event.getSetting()) != null && setting.getFeature().equals(this)) {
-            if (setting.getName().equals("FontName") && !FontMod.checkFont(setting.getPlannedValue().toString(), false)) {
-                Command.sendMessage(ChatFormatting.RED + "That font doesnt exist.");
+            if (setting.getName().equals("FontName") && !FontChanger.checkFont(setting.getPlannedValue().toString(), false)) {
+                Command.sendMessage(ChatFormatting.WHITE + "That font doesnt exist.");
                 event.setCanceled(true);
                 return;
             }

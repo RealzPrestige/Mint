@@ -3,7 +3,7 @@ package mint.managers;
 import mint.Mint;
 import mint.modules.Feature;
 import mint.clickgui.impl.font.CustomFont;
-import mint.modules.client.FontMod;
+import mint.modules.client.FontChanger;
 import mint.utils.Timer;
 import net.minecraft.util.math.MathHelper;
 import java.awt.*;
@@ -22,11 +22,29 @@ public class TextManager
     }
 
     public void init() {
-        FontMod cFont = Mint.moduleManager.getModuleByClass(FontMod.class);
+        FontChanger cFont = Mint.moduleManager.getModuleByClass(FontChanger.class);
         try {
-            this.setFontRenderer(new Font(cFont.fontName.getValue(), cFont.fontStyle.getValue(), cFont.fontSize.getValue()), false, false);
+            this.setFontRenderer(new Font("Dialog", getStyle(), cFont.fontSize.getValue()), true, true);
         } catch (Exception ignored) {
         }
+    }
+
+    public int getStyle(){
+        switch(FontChanger.getInstance().style.getValue()) {
+            case NORMAL: {
+                return 0;
+            }
+            case ITALIC: {
+                return 2;
+            }
+            case BOLD: {
+                return 1;
+            }
+            case ITALICBOLD: {
+                return 3;
+            }
+        }
+        return 0;
     }
 
     public void drawStringWithShadow(String text, float x, float y, int color) {
@@ -34,7 +52,7 @@ public class TextManager
     }
 
     public void drawString(String text, float x, float y, int color, boolean shadow) {
-        if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
+        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
             if (shadow) {
                 this.customFont.drawStringWithShadow(text, x, y, color);
             } else {
@@ -46,14 +64,14 @@ public class TextManager
     }
 
     public int getStringWidth(String text) {
-        if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
+        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
             return this.customFont.getStringWidth(text);
         }
         return Mint.INSTANCE.mc.fontRenderer.getStringWidth(text);
     }
 
     public int getFontHeight() {
-        if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
+        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
             return this.customFont.getStringHeight();
         }
         return Mint.INSTANCE.mc.fontRenderer.FONT_HEIGHT;

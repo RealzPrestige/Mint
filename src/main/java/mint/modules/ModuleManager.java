@@ -5,7 +5,7 @@ import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
 import mint.modules.client.Gui;
-import mint.modules.client.FontMod;
+import mint.modules.client.FontChanger;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -24,7 +24,7 @@ public class ModuleManager
 
     public void init() {
         this.modules.add(new Gui());
-        this.modules.add(new FontMod());
+        this.modules.add(new FontChanger());
     }
 
     public Module getModuleByName(String name) {
