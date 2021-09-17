@@ -21,18 +21,11 @@ public class BooleanFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int booleancolor = ColorUtil.toARGB(0,0,0, 50);
-        int falseboolean = ColorUtil.toARGB(Gui.getInstance().stateFalseBooleanRed.getValue(), Gui.getInstance().stateFalseBooleanGreen.getValue(), Gui.getInstance().stateFalseBooleanBlue.getValue(), Gui.getInstance().stateFalseBooleanAlpha.getValue());
-        int trueboolean = ColorUtil.toARGB(Gui.getInstance().stateTrueBooleanRed.getValue(), Gui.getInstance().stateTrueBooleanGreen.getValue(), Gui.getInstance().stateTrueBooleanBlue.getValue(), Gui.getInstance().stateTrueBooleanAlpha.getValue());
-        int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
+       int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
         RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
+        RenderUtil.drawRect(this.x + 1, this.y, this.x + this.width + 9, this.y + (float) this.height + 0.5f, getState() ? ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()) : ColorUtil.toRGBA(0,0,0,0));
         Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
-        RenderUtil.drawRect(this.x + 85, this.y + 5, this.x + 105, this.y + 13, booleancolor);
-            if(getState()) {
-                RenderUtil.drawRect(this.x + 95, this.y + 6, this.x + 104, this.y + 12, trueboolean);
-            } else {
-                RenderUtil.drawRect(this.x + 85, this.y + 6, this.x + 94, this.y + 12, falseboolean);
-        }
+
     }
 
     @Override
