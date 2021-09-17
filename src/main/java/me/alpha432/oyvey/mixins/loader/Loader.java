@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.mixin.loader;
+package me.alpha432.oyvey.mixins.loader;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;

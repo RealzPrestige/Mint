@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.mixin;
+package me.alpha432.oyvey.mixins;
 
 import me.alpha432.oyvey.Mint;
 import net.minecraft.client.Minecraft;

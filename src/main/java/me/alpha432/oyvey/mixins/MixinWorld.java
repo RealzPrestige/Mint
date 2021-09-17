@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.mixin;
+package me.alpha432.oyvey.mixins;
 
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;

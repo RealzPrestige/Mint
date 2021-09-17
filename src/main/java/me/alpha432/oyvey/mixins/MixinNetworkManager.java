@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.mixin;
+package me.alpha432.oyvey.mixins;
 
 import io.netty.channel.ChannelHandlerContext;
 import me.alpha432.oyvey.events.PacketEvent;
