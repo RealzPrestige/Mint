@@ -2,7 +2,7 @@
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "package": "mint.mixins",
-  "refmap": "mixins.oyvey.refmap.json",
+  "refmap": "mixins.mint.refmap.json",
   "mixins": [
     "MixinMinecraft",
     "MixinNetworkManager",
