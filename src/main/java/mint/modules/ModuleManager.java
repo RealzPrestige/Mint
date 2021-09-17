@@ -7,6 +7,7 @@ import mint.clickgui.MintGui;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
+import mint.modules.visual.ChorusViewer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -24,9 +25,21 @@ public class ModuleManager
     public List<String> sortedModulesABC = new ArrayList<String>();
 
     public void init() {
+        /** Core **/
         moduleList.add(new Gui());
         moduleList.add(new FontChanger());
         moduleList.add(new Descriptions());
+
+        /** Combat **/
+
+        /** Miscellaneous **/
+
+        /** Movement **/
+
+        /** Player **/
+
+        /** Visual **/
+        moduleList.add(new ChorusViewer());
     }
 
     public Module getModuleByName(String name) {

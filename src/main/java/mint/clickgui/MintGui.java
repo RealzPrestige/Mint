@@ -47,7 +47,13 @@ public class MintGui
             mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
         }
     }
-            public static MintGui getClickGui() {
+
+    public void onGuiClosed() {
+        if (this.mc.entityRenderer.getShaderGroup() != null)
+            this.mc.entityRenderer.getShaderGroup().deleteShaderGroup();
+    }
+
+    public static MintGui getClickGui() {
         return MintGui.getInstance();
     }
 

@@ -1,7 +1,7 @@
 package mint.mixins;
 
 import mint.Mint;
-import mint.modules.client.FontChanger;
+import mint.modules.core.FontChanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.spongepowered.asm.mixin.Mixin;
