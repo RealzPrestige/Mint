@@ -44,7 +44,6 @@ public class Mint {
         textManager.init(true);
         moduleManager.onLoad();
     }
-
     public static void onUnload() {
         if (!unloaded) {
             eventManager.onUnload();
