@@ -1,7 +1,7 @@
 package mint.clickgui.impl.buttons;
 
 import mint.Mint;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.modules.client.Gui;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
@@ -26,9 +26,9 @@ public class BindFrame
         int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
         RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         if (this.isListening) {
-            Mint.textManager.drawStringWithShadow("Listening...", this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);
+            Mint.textManager.drawStringWithShadow("Listening...", this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), -1);
         } else {
-            Mint.textManager.drawStringWithShadow(this.setting.getName() + " " + this.setting.getValue().toString().toUpperCase(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+            Mint.textManager.drawStringWithShadow(this.setting.getName() + " " + this.setting.getValue().toString().toUpperCase(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
         }
     }
 

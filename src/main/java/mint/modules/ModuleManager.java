@@ -3,7 +3,7 @@ package mint.modules;
 import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.modules.client.Gui;
 import mint.modules.client.FontMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -171,7 +171,7 @@ public class ModuleManager
     }
 
     public void onKeyPressed(int eventKey) {
-        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
+        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
             return;
         }
         this.modules.forEach(module -> {

@@ -1,7 +1,7 @@
 package mint.clickgui.impl.buttons;
 
 import mint.Mint;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
 import mint.modules.Module;
@@ -58,7 +58,7 @@ public class ModuleFrame
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (!this.items.isEmpty()) {
-            Mint.textManager.drawString((this.subOpen ? "v" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) OyVeyGui.getClickGui().getTextOffset(), -1, false);
+            Mint.textManager.drawString((this.subOpen ? "v" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), -1, false);
             if (this.subOpen) {
                 float height = 1.0f;
                 for (Frame item : this.items) {

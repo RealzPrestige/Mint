@@ -13,30 +13,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class OyVeyGui
+public class MintGui
         extends GuiScreen {
-    private static OyVeyGui INSTANCE;
+    private static MintGui INSTANCE;
 
     static {
-        INSTANCE = new OyVeyGui();
+        INSTANCE = new MintGui();
     }
 
     private final ArrayList<Component> components = new ArrayList();
 
-    public OyVeyGui() {
+    public MintGui() {
         this.setInstance();
         this.load();
     }
 
-    public static OyVeyGui getInstance() {
+    public static MintGui getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new OyVeyGui();
+            INSTANCE = new MintGui();
         }
         return INSTANCE;
     }
 
-    public static OyVeyGui getClickGui() {
-        return OyVeyGui.getInstance();
+    public static MintGui getClickGui() {
+        return MintGui.getInstance();
     }
 
     private void setInstance() {

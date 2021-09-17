@@ -1,7 +1,7 @@
 package mint.clickgui.impl.buttons;
 
 import mint.Mint;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.modules.client.Gui;
 import mint.clickgui.setting.Setting;
 import mint.utils.ColorUtil;
@@ -21,7 +21,7 @@ public class ParentFrame extends ButtonFrame {
         int trueboolean = ColorUtil.toARGB(Gui.getInstance().stateTrueBooleanRed.getValue(), Gui.getInstance().stateTrueBooleanGreen.getValue(), Gui.getInstance().stateTrueBooleanBlue.getValue(), Gui.getInstance().stateTrueBooleanAlpha.getValue());
         int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
         RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
-        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
         RenderUtil.drawRect(this.x + 85, this.y + 5, this.x + 105, this.y + 13, booleancolor);
         if(getState()) {
             RenderUtil.drawRect(this.x + 95, this.y + 6, this.x + 104, this.y + 12, trueboolean);

@@ -1,7 +1,7 @@
 package mint.modules;
 
 import mint.Mint;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.clickgui.setting.Setting;
 import mint.managers.TextManager;
 
@@ -54,8 +54,8 @@ public class Feature {
     public Setting register(Setting setting) {
         setting.setFeature(this);
         this.settings.add(setting);
-        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
-            OyVeyGui.getInstance().updateModule((Module) this);
+        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
+            MintGui.getInstance().updateModule((Module) this);
         }
         return setting;
     }
@@ -69,8 +69,8 @@ public class Feature {
         if (!removeList.isEmpty()) {
             this.settings.removeAll(removeList);
         }
-        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
-            OyVeyGui.getInstance().updateModule((Module) this);
+        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
+            MintGui.getInstance().updateModule((Module) this);
         }
     }
 

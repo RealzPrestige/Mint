@@ -2,7 +2,7 @@ package mint.clickgui.impl;
 
 import mint.Mint;
 import mint.modules.Feature;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.clickgui.impl.buttons.ButtonFrame;
 import mint.modules.client.Gui;
 import mint.utils.ColorUtil;
@@ -59,7 +59,7 @@ public class Component
                 RenderUtil.drawBorder(this.x + 1, this.y + 12.2F, this.width - 2, height + getTotalItemHeight() - 15, new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
             }
          }
-        Mint.textManager.drawStringWithShadow(this.getName(), (float) this.x + 3.0f, (float) this.y - 4.0f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);
+        Mint.textManager.drawStringWithShadow(this.getName(), (float) this.x + 3.0f, (float) this.y - 4.0f - (float) MintGui.getClickGui().getTextOffset(), -1);
         if (this.open) {
             float y = (float) (this.getY() + this.getHeight()) - 3.0f;
             for (mint.clickgui.impl.Frame item : this.getItems()) {
@@ -77,7 +77,7 @@ public class Component
         if (mouseButton == 0 && this.isHovering(mouseX, mouseY)) {
             this.x2 = this.x - mouseX;
             this.y2 = this.y - mouseY;
-            OyVeyGui.getClickGui().getComponents().forEach(component -> {
+            MintGui.getClickGui().getComponents().forEach(component -> {
                 if (component.drag) {
                     component.drag = false;
                 }

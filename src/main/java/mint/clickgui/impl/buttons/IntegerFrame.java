@@ -2,7 +2,7 @@ package mint.clickgui.impl.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.modules.client.Gui;
 import mint.clickgui.setting.Setting;
@@ -46,7 +46,7 @@ public class IntegerFrame
 
     @Override
     public boolean isHovering(int mouseX, int mouseY) {
-        for (Component component : OyVeyGui.getClickGui().getComponents()) {
+        for (Component component : MintGui.getClickGui().getComponents()) {
             if (!component.drag) continue;
             return false;
         }

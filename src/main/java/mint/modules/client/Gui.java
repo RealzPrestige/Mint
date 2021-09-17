@@ -5,7 +5,7 @@ import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.ClientEvent;
 import mint.commands.Command;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.modules.Module;
 import mint.clickgui.setting.Setting;
 import net.minecraft.client.Minecraft;
@@ -89,20 +89,20 @@ public class Gui extends Module {
             ScaledResolution resolution = new ScaledResolution(mc);
             if (gradient.getValue()) {
             if (gradientType.getValue() == GradientMode.FromBottom) {
-                if (mc.currentScreen instanceof OyVeyGui) {
-                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(),new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
+                if (mc.currentScreen instanceof MintGui) {
+                    MintGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(),new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
                 }
             }
             if (gradientType.getValue() == GradientMode.FromTop) {
-                if (mc.currentScreen instanceof OyVeyGui) {
-                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
+                if (mc.currentScreen instanceof MintGui) {
+                    MintGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
                 }
             }
         }       
         }
     @Override
     public void onEnable() {
-        Mint.INSTANCE.mc.displayGuiScreen(OyVeyGui.getClickGui());
+        Mint.INSTANCE.mc.displayGuiScreen(MintGui.getClickGui());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class Gui extends Module {
 
     @Override
     public void onTick() {
-        if (!(Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui)) {
+        if (!(Mint.INSTANCE.mc.currentScreen instanceof MintGui)) {
             this.disable();
         }
     }

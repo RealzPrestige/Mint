@@ -1,7 +1,7 @@
 package mint.clickgui.impl.buttons;
 
 import mint.Mint;
-import mint.clickgui.OyVeyGui;
+import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
 import mint.modules.client.Gui;
@@ -21,7 +21,7 @@ public class ButtonFrame
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, getState() ? ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().alpha.getValue() - 20 : Gui.getInstance().alpha.getValue()) : -2007673515);
-        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 2.0f - (float) OyVeyGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ButtonFrame
     }
 
     public boolean isHovering(int mouseX, int mouseY) {
-        for (Component component : OyVeyGui.getClickGui().getComponents()) {
+        for (Component component : MintGui.getClickGui().getComponents()) {
             if (!component.drag) continue;
             return false;
         }
