@@ -54,7 +54,7 @@ public class Component
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
         net.minecraft.client.gui.Gui.drawRect(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ColorUtil.toARGB(Gui.getInstance().topRed.getValue(), Gui.getInstance().topGreen.getValue(), Gui.getInstance().topBlue.getValue(), Gui.getInstance().topAlpha.getValue()));
          if (this.open) {
-            RenderUtil.drawRect(this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, 0x77000000);
+            RenderUtil.drawRect(this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, ColorUtil.toRGBA(Gui.getInstance().backgroundRed.getValue(), Gui.getInstance().backgroundGreen.getValue(), Gui.getInstance().backgroundBlue.getValue(), Gui.getInstance().backgroundAlpha.getValue()));
             if(Gui.getInstance().outline.getValue()) {
                 RenderUtil.drawBorder(this.x + 1, this.y + 12.2F, this.width - 2, height + getTotalItemHeight() - 15, new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
             }

@@ -23,7 +23,6 @@ public class FileManager
     private final Path config = this.getMkDirectory(this.base, "config");
 
     public FileManager() {
-        this.getMkDirectory(this.base, "pvp");
         for (Module.Category category : Mint.moduleManager.getCategories()) {
             this.getMkDirectory(this.config, category.getName());
         }

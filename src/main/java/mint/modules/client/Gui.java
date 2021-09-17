@@ -19,15 +19,18 @@ public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
     public Setting<String> prefix = register(new Setting<>("Prefix", ".", false));
     public Setting<Boolean> outline = register(new Setting<>("Outline", false, false));
-    public Setting<Boolean> color = register(new Setting<>("Color", false, true));
-    public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255, v-> color.getValue()));
-    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255, v-> color.getValue()));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255, v-> color.getValue()));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 180, 0, 255, v-> color.getValue()));
+    public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
+    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255));
+    public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 180, 0, 255));
     public Setting<Integer> topRed = register(new Setting<>("TopRed", 0, 0, 255));
     public Setting<Integer> topGreen = register(new Setting<>("TopGreen", 0, 0, 255));
     public Setting<Integer> topBlue = register(new Setting<>("TopBlue", 150, 0, 255));
     public Setting<Integer> topAlpha = register(new Setting<>("TopAlpha", 180, 0, 255));
+    public Setting<Integer> backgroundRed = register(new Setting<>("BackGroundRed", 0, 0, 255));
+    public Setting<Integer> backgroundGreen = register(new Setting<>("BackGroundGreen", 0, 0, 255));
+    public Setting<Integer> backgroundBlue = register(new Setting<>("BackGroundBlue", 0, 0, 255));
+    public Setting<Integer> backgroundAlpha = register(new Setting<>("BackGroundAlpha", 30, 0, 255));
     public Setting<Integer> sliderBgRed = register(new Setting<>("SliderBgRed", 120, 0, 255));
     public Setting<Integer> sliderBgGreen = register(new Setting<>("SliderBgGreen", 120, 0, 255));
     public Setting<Integer> sliderBgBlue = register(new Setting<>("SliderBgBlue", 120, 0, 255));
@@ -72,7 +75,7 @@ public class Gui extends Module {
     }
     @Override
     public void onDisable() {
-        Mint.configManager.saveConfig("Default");
+        Mint.configManager.saveConfig("Config");
     }
     @SubscribeEvent
     public void onSettingChange(ClientEvent event) {
