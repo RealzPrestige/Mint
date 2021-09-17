@@ -28,6 +28,10 @@ public class Gui extends Module {
     public Setting<Integer> topGreen = register(new Setting<>("TopGreen", 255, 0, 255));
     public Setting<Integer> topBlue = register(new Setting<>("TopBlue", 255, 0, 255));
     public Setting<Integer> topAlpha = register(new Setting<>("TopAlpha", 255, 0, 255));
+    public Setting<Integer> disabledRed = register(new Setting<>("DisabledRed", 50, 0, 255));
+    public Setting<Integer> disabledGreen = register(new Setting<>("DisabledGreen", 50, 0, 255));
+    public Setting<Integer> disabledBlue = register(new Setting<>("DisabledBlue", 50, 0, 255));
+    public Setting<Integer> disabledAlpha = register(new Setting<>("DisabledAlpha", 100, 0, 255));
     public Setting<Integer> backgroundRed = register(new Setting<>("BackGroundRed", 255, 0, 255));
     public Setting<Integer> backgroundGreen = register(new Setting<>("BackGroundGreen", 255, 0, 255));
     public Setting<Integer> backgroundBlue = register(new Setting<>("BackGroundBlue", 255, 0, 255));
@@ -39,8 +43,6 @@ public class Gui extends Module {
     public Setting<Boolean> gradient = register(new Setting<>("Gradient", true));
     public Setting<GradientMode> gradientType = register(new Setting<>("Type", GradientMode.FromBottom, v -> gradient.getValue()));
     public Setting<Integer> gradientAlpha = register(new Setting<>("GradientAlpha", 150, 0, 255, v -> gradient.getValue()));
-
-
 
     public Gui() {
         super("Gui", Category.CORE,"opens the client's sexy custom clickgui interface.");

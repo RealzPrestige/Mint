@@ -7,12 +7,14 @@ import mint.clickgui.impl.Frame;
 import mint.clickgui.impl.buttons.ModuleFrame;
 import mint.modules.Module;
 import mint.modules.core.Gui;
+import mint.utils.RenderUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
