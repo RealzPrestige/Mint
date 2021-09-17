@@ -1,4 +1,4 @@
-package me.alpha432.oyvey.managers;
+package me.alpha432.oyvey.modules;
 
 import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.events.Render2DEvent;

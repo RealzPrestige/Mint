@@ -2,11 +2,10 @@ package me.alpha432.oyvey;
 
 import me.alpha432.oyvey.commands.CommandManager;
 import me.alpha432.oyvey.managers.*;
+import me.alpha432.oyvey.modules.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
