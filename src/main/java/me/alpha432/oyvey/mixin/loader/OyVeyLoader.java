@@ -13,7 +13,7 @@ public class OyVeyLoader
     private static boolean isObfuscatedEnvironment = false;
 
     public OyVeyLoader() {
-        OyVey.LOGGER.info("\n\nLoading mixins by Alpha432");
+        OyVey.LOGGER.info("\n\nLoading Mixins");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.oyvey.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");

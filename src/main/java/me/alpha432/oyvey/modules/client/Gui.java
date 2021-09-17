@@ -2,17 +2,23 @@ package me.alpha432.oyvey.modules.client;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.events.Render2DEvent;
+import me.alpha432.oyvey.clickgui.impl.buttons.ParentFrame;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.modules.Module;
 import me.alpha432.oyvey.clickgui.setting.Setting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-public class Gui
+import java.awt.*;
+
+public class ClickGui
         extends Module {
-    private static Gui INSTANCE = new Gui();
+    private static ClickGui INSTANCE = new ClickGui();
     public Setting<String> prefix = register(new Setting<>("Prefix", ".", false));
     public Setting<Boolean> outline = register(new Setting<>("Outline", false, false));
     public Setting<Boolean> color = register(new Setting<>("Color", false, true));
@@ -40,17 +46,21 @@ public class Gui
     public Setting<Integer> stateTrueBooleanGreen = register(new Setting<>("BoolEnabledGreen", 255, 0, 255));
     public Setting<Integer> stateTrueBooleanBlue = register(new Setting<>("BoolEnabledBlue", 0, 0, 255));
     public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
+    public Setting<Boolean> gradient = this.register(new Setting<>("Gradient", true, true));
+    public Setting<Integer> gradientAlpha = this.register(new Setting<>("G-Alpha", 150, 0, 255, v -> gradient.getValue()));
+    public Setting<GradientMode> gradientType = this.register(new Setting<>("GradientType", GradientMode.FromBottom, v -> gradient.getValue()));
 
 
-    public Gui() {
-        super("ClickGui", "Opens the ClickGui", Module.Category.CLIENT, true, false, false);
+
+    public ClickGui() {
+        super("GUI", "opens the client's sexy custom clickgui interface.", Module.Category.CLIENT, true, false, false);
         setBind(Keyboard.KEY_O);
         this.setInstance();
     }
 
-    public static Gui getInstance() {
+    public static ClickGui getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new Gui();
+            INSTANCE = new ClickGui();
         }
         return INSTANCE;
     }
@@ -58,7 +68,10 @@ public class Gui
     private void setInstance() {
         INSTANCE = this;
     }
-
+    public enum GradientMode {
+        FromTop,
+        FromBottom
+    }
     @Override
     public void onDisable() {
         OyVey.configManager.saveConfig("Default");
@@ -72,7 +85,23 @@ public class Gui
             }
         }
     }
-
+        @Override
+        public void onRender2D(Render2DEvent event) {
+            final Minecraft mc = Minecraft.getMinecraft();
+            ScaledResolution resolution = new ScaledResolution(mc);
+            if (gradient.getValue()) {
+            if (gradientType.getValue() == GradientMode.FromBottom) {
+                if (mc.currentScreen instanceof OyVeyGui) {
+                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(),new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
+                }
+            }
+            if (gradientType.getValue() == GradientMode.FromTop) {
+                if (mc.currentScreen instanceof OyVeyGui) {
+                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
+                }
+            }
+        }       
+        }
     @Override
     public void onEnable() {
         OyVey.INSTANCE.mc.displayGuiScreen(OyVeyGui.getClickGui());

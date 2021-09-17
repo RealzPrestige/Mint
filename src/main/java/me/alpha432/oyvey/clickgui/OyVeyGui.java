@@ -76,7 +76,7 @@ public class OyVeyGui
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.checkMouseWheel();
-        this.drawDefaultBackground();
+        //this.drawDefaultBackground();
         this.components.forEach(components -> components.drawScreen(mouseX, mouseY, partialTicks));
     }
 
@@ -120,6 +120,9 @@ public class OyVeyGui
     public void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
         this.components.forEach(component -> component.onKeyTyped(typedChar, keyCode));
+    }
+            public void drawGradient(double left, double top, double right, double bottom, int startColor, int endColor) {
+        drawGradientRect((int)left, (int)top, (int)right, (int)bottom, startColor, endColor);
     }
 }
 
