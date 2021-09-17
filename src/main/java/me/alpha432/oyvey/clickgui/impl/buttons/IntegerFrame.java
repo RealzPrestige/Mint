@@ -1,7 +1,7 @@
 package me.alpha432.oyvey.clickgui.impl.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.clickgui.impl.Component;
 import me.alpha432.oyvey.modules.client.Gui;
@@ -33,7 +33,7 @@ public class IntegerFrame
         RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
         RenderUtil.drawRect(this.x, this.y + ((height / 4) * 3) - 1, this.x + (this.width+ 7.4f), this.y + ((height / 4) * 3) + 2 , ColorUtil.toRGBA(Gui.getInstance().sliderBgRed.getValue(), Gui.getInstance().sliderBgGreen.getValue(), Gui.getInstance().sliderBgBlue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().sliderBgAlpha.getValue() - 20 : Gui.getInstance().sliderBgAlpha.getValue()));
         RenderUtil.drawRect(((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier() - 2, this.y + ((height / 4) * 3) - 2, ((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier(), this.y + ((height / 4) * 3) + 3 , -1);
-        OyVey.textManager.drawStringWithShadow(this.getName() + " " + ChatFormatting.GRAY + (this.setting.getValue() instanceof Float ? this.setting.getValue() : Double.valueOf(((Number) this.setting.getValue()).doubleValue())), this.x + 2.3f, this.y, -1);
+        Mint.textManager.drawStringWithShadow(this.getName() + " " + ChatFormatting.GRAY + (this.setting.getValue() instanceof Float ? this.setting.getValue() : Double.valueOf(((Number) this.setting.getValue()).doubleValue())), this.x + 2.3f, this.y, -1);
     }
 
     @Override

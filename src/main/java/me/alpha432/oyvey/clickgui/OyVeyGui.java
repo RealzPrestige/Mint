@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.clickgui;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.clickgui.impl.Component;
 import me.alpha432.oyvey.clickgui.impl.Frame;
@@ -45,13 +45,13 @@ public class OyVeyGui
 
     private void load() {
         int x = -119;
-        for (final Module.Category category : OyVey.moduleManager.getCategories()) {
+        for (final Module.Category category : Mint.moduleManager.getCategories()) {
             this.components.add(new Component(category.getName(), x += 121, 2, true) {
 
                 @Override
                 public void setupItems() {
                     counter1 = new int[]{1};
-                    OyVey.moduleManager.getModulesByCategory(category).forEach(module -> {
+                    Mint.moduleManager.getModulesByCategory(category).forEach(module -> {
                         if (!module.hidden) {
                             this.addButton(new ModuleFrame(module));
                         }

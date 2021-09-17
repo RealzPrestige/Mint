@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.managers;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.events.Render2DEvent;
 import me.alpha432.oyvey.events.Render3DEvent;
 import me.alpha432.oyvey.modules.Feature;
@@ -173,7 +173,7 @@ public class ModuleManager
     }
 
     public void onKeyPressed(int eventKey) {
-        if (eventKey == 0 || !Keyboard.getEventKeyState() || OyVey.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
+        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
             return;
         }
         this.modules.forEach(module -> {

@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.modules;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
 import me.alpha432.oyvey.clickgui.setting.Setting;
 import me.alpha432.oyvey.managers.TextManager;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Feature {
     public List<Setting> settings = new ArrayList<>();
-    public TextManager renderer = OyVey.textManager;
+    public TextManager renderer = Mint.textManager;
     private String name;
 
     public Feature() {
@@ -21,11 +21,11 @@ public class Feature {
     }
 
     public static boolean nullCheck() {
-        return OyVey.INSTANCE.mc.player == null;
+        return Mint.INSTANCE.mc.player == null;
     }
 
     public static boolean fullNullCheck() {
-        return OyVey.INSTANCE.mc.player == null || OyVey.INSTANCE.mc.world == null;
+        return Mint.INSTANCE.mc.player == null || Mint.INSTANCE.mc.world == null;
     }
 
     public String getName() {
@@ -54,7 +54,7 @@ public class Feature {
     public Setting register(Setting setting) {
         setting.setFeature(this);
         this.settings.add(setting);
-        if (this instanceof Module && OyVey.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
+        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
             OyVeyGui.getInstance().updateModule((Module) this);
         }
         return setting;
@@ -69,7 +69,7 @@ public class Feature {
         if (!removeList.isEmpty()) {
             this.settings.removeAll(removeList);
         }
-        if (this instanceof Module && OyVey.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
+        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui) {
             OyVeyGui.getInstance().updateModule((Module) this);
         }
     }

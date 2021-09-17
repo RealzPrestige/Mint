@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.utils;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +17,7 @@ public class BlockUtil {
         ArrayList<EnumFacing> facings = new ArrayList<>();
         for (EnumFacing side : EnumFacing.values()) {
             BlockPos neighbour = pos.offset(side);
-            if (!OyVey.INSTANCE.mc.world.getBlockState(neighbour).getBlock().canCollideCheck(OyVey.INSTANCE.mc.world.getBlockState(neighbour), false) || OyVey.INSTANCE.mc.world.getBlockState(neighbour).getMaterial().isReplaceable())
+            if (!Mint.INSTANCE.mc.world.getBlockState(neighbour).getBlock().canCollideCheck(Mint.INSTANCE.mc.world.getBlockState(neighbour), false) || Mint.INSTANCE.mc.world.getBlockState(neighbour).getMaterial().isReplaceable())
                 continue;
             facings.add(side);
         }

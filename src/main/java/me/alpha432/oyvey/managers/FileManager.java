@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.managers;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.modules.Module;
 
@@ -24,7 +24,7 @@ public class FileManager
 
     public FileManager() {
         this.getMkDirectory(this.base, "pvp");
-        for (Module.Category category : OyVey.moduleManager.getCategories()) {
+        for (Module.Category category : Mint.moduleManager.getCategories()) {
             this.getMkDirectory(this.config, category.getName());
         }
     }

@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.managers;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Feature;
 import net.minecraft.network.Packet;
 
@@ -14,7 +14,7 @@ public class PacketManager
     public void sendPacketNoEvent(Packet<?> packet) {
         if (packet != null && !PacketManager.nullCheck()) {
             this.noEventPackets.add(packet);
-            OyVey.INSTANCE.mc.player.connection.sendPacket(packet);
+            Mint.INSTANCE.mc.player.connection.sendPacket(packet);
         }
     }
 

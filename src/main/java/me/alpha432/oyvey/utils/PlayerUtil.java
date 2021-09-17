@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.util.UUIDTypeAdapter;
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.commands.Command;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -123,7 +123,7 @@ public class PlayerUtil {
         public void run() {
             NetworkPlayerInfo profile;
             try {
-                ArrayList<NetworkPlayerInfo> infoMap = new ArrayList<>(Objects.requireNonNull(OyVey.INSTANCE.mc.getConnection()).getPlayerInfoMap());
+                ArrayList<NetworkPlayerInfo> infoMap = new ArrayList<>(Objects.requireNonNull(Mint.INSTANCE.mc.getConnection()).getPlayerInfoMap());
                 profile = infoMap.stream().filter(networkPlayerInfo -> networkPlayerInfo.getGameProfile().getName().equalsIgnoreCase(this.name)).findFirst().orElse(null);
                 assert profile != null;
                 this.uuid = profile.getGameProfile().getId();

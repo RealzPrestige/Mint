@@ -1,7 +1,7 @@
 package me.alpha432.oyvey.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Feature;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentBase;
@@ -27,18 +27,18 @@ public abstract class Command
     }
 
     public static void sendMessage(String message) {
-        Command.sendSilentMessage(OyVey.commandManager.getClientMessage() + " " + ChatFormatting.GRAY + message);
+        Command.sendSilentMessage(Mint.commandManager.getClientMessage() + " " + ChatFormatting.GRAY + message);
     }
 
     public static void sendSilentMessage(String message) {
         if (Command.nullCheck()) {
             return;
         }
-        OyVey.INSTANCE.mc.player.sendMessage(new ChatMessage(message));
+        Mint.INSTANCE.mc.player.sendMessage(new ChatMessage(message));
     }
 
     public static String getCommandPrefix() {
-        return OyVey.commandManager.getPrefix();
+        return Mint.commandManager.getPrefix();
     }
 
     public abstract void execute(String[] var1);

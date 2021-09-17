@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.utils;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -138,9 +138,9 @@ public class MathUtil {
     }
 
     public static double[] directionSpeed(double speed) {
-        float forward = OyVey.INSTANCE.mc.player.movementInput.moveForward;
-        float side = OyVey.INSTANCE.mc.player.movementInput.moveStrafe;
-        float yaw = OyVey.INSTANCE.mc.player.prevRotationYaw + (OyVey.INSTANCE.mc.player.rotationYaw - OyVey.INSTANCE.mc.player.prevRotationYaw) * OyVey.INSTANCE.mc.getRenderPartialTicks();
+        float forward = Mint.INSTANCE.mc.player.movementInput.moveForward;
+        float side = Mint.INSTANCE.mc.player.movementInput.moveStrafe;
+        float yaw = Mint.INSTANCE.mc.player.prevRotationYaw + (Mint.INSTANCE.mc.player.rotationYaw - Mint.INSTANCE.mc.player.prevRotationYaw) * Mint.INSTANCE.mc.getRenderPartialTicks();
         if (forward != 0.0f) {
             if (side > 0.0f) {
                 yaw += (float) (forward > 0.0f ? -45 : 45);

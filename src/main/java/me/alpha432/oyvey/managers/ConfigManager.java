@@ -1,7 +1,7 @@
 package me.alpha432.oyvey.managers;
 
 import com.google.gson.*;
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.modules.Module;
 import me.alpha432.oyvey.clickgui.setting.Bind;
@@ -51,7 +51,7 @@ public class ConfigManager  {
                 }
                 return;
         }
-        OyVey.LOGGER.error("Unknown Setting type for: " + feature.getName() + " : " + setting.getName());
+        Mint.LOGGER.error("Unknown Setting type for: " + feature.getName() + " : " + setting.getName());
     }
 
     private static void loadFile(JsonObject input, Feature feature) {
@@ -60,7 +60,7 @@ public class ConfigManager  {
             JsonElement element = entry.getValue();
             if (feature instanceof FriendManager) {
                 try {
-                    OyVey.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
+                    Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,7 +88,7 @@ public class ConfigManager  {
         } else {
             this.config = "oyvey/config/";
         }
-        OyVey.friendManager.onLoad();
+        Mint.friendManager.onLoad();
         for (Feature feature : this.features) {
             try {
                 loadSettings(feature);
@@ -109,7 +109,7 @@ public class ConfigManager  {
         File path = new File(this.config);
         if (!path.exists())
             path.mkdir();
-        OyVey.friendManager.saveFriends();
+        Mint.friendManager.saveFriends();
         for (Feature feature : this.features) {
             try {
                 saveSettings(feature);
@@ -180,11 +180,11 @@ public class ConfigManager  {
     }
 
     public void init() {
-        this.features.addAll(OyVey.moduleManager.modules);
-        this.features.add(OyVey.friendManager);
+        this.features.addAll(Mint.moduleManager.modules);
+        this.features.add(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
-        OyVey.LOGGER.info("Config loaded.");
+        Mint.LOGGER.info("Config loaded.");
     }
 
     private void loadSettings(Feature feature) throws IOException {
@@ -200,7 +200,7 @@ public class ConfigManager  {
         try {
             loadFile((new JsonParser()).parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
         } catch (IllegalStateException e) {
-            OyVey.LOGGER.error("Bad Config File for: " + feature.getName() + ". Resetting...");
+            Mint.LOGGER.error("Bad Config File for: " + feature.getName() + ". Resetting...");
             loadFile(new JsonObject(), feature);
         }
         stream.close();

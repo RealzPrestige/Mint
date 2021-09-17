@@ -1,9 +1,8 @@
 package me.alpha432.oyvey.modules.client;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.events.Render2DEvent;
-import me.alpha432.oyvey.clickgui.impl.buttons.ParentFrame;
 import me.alpha432.oyvey.events.ClientEvent;
 import me.alpha432.oyvey.commands.Command;
 import me.alpha432.oyvey.clickgui.OyVeyGui;
@@ -16,9 +15,8 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
-public class ClickGui
-        extends Module {
-    private static ClickGui INSTANCE = new ClickGui();
+public class Gui extends Module {
+    private static Gui INSTANCE = new Gui();
     public Setting<String> prefix = register(new Setting<>("Prefix", ".", false));
     public Setting<Boolean> outline = register(new Setting<>("Outline", false, false));
     public Setting<Boolean> color = register(new Setting<>("Color", false, true));
@@ -52,15 +50,15 @@ public class ClickGui
 
 
 
-    public ClickGui() {
+    public Gui() {
         super("GUI", "opens the client's sexy custom clickgui interface.", Module.Category.CLIENT, true, false, false);
         setBind(Keyboard.KEY_O);
         this.setInstance();
     }
 
-    public static ClickGui getInstance() {
+    public static Gui getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ClickGui();
+            INSTANCE = new Gui();
         }
         return INSTANCE;
     }
@@ -74,14 +72,14 @@ public class ClickGui
     }
     @Override
     public void onDisable() {
-        OyVey.configManager.saveConfig("Default");
+        Mint.configManager.saveConfig("Default");
     }
     @SubscribeEvent
     public void onSettingChange(ClientEvent event) {
         if (event.getStage() == 2 && event.getSetting().getFeature().equals(this)) {
             if (event.getSetting().equals(this.prefix)) {
-                OyVey.commandManager.setPrefix(this.prefix.getPlannedValue());
-                Command.sendMessage("Prefix set to " + ChatFormatting.DARK_GRAY + OyVey.commandManager.getPrefix());
+                Mint.commandManager.setPrefix(this.prefix.getPlannedValue());
+                Command.sendMessage("Prefix set to " + ChatFormatting.DARK_GRAY + Mint.commandManager.getPrefix());
             }
         }
     }
@@ -92,29 +90,29 @@ public class ClickGui
             if (gradient.getValue()) {
             if (gradientType.getValue() == GradientMode.FromBottom) {
                 if (mc.currentScreen instanceof OyVeyGui) {
-                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(),new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
+                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(),new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
                 }
             }
             if (gradientType.getValue() == GradientMode.FromTop) {
                 if (mc.currentScreen instanceof OyVeyGui) {
-                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(ClickGui.getInstance().red.getValue(), ClickGui.getInstance().green.getValue(), ClickGui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
+                    OyVeyGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0,0,0,0).getRGB());
                 }
             }
         }       
         }
     @Override
     public void onEnable() {
-        OyVey.INSTANCE.mc.displayGuiScreen(OyVeyGui.getClickGui());
+        Mint.INSTANCE.mc.displayGuiScreen(OyVeyGui.getClickGui());
     }
 
     @Override
     public void onLoad() {
-        OyVey.commandManager.setPrefix(this.prefix.getValue());
+        Mint.commandManager.setPrefix(this.prefix.getValue());
     }
 
     @Override
     public void onTick() {
-        if (!(OyVey.INSTANCE.mc.currentScreen instanceof OyVeyGui)) {
+        if (!(Mint.INSTANCE.mc.currentScreen instanceof OyVeyGui)) {
             this.disable();
         }
     }

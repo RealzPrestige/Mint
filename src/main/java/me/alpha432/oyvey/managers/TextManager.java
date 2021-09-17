@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.managers;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Feature;
 import me.alpha432.oyvey.clickgui.impl.font.CustomFont;
 import me.alpha432.oyvey.modules.client.FontMod;
@@ -23,7 +23,7 @@ public class TextManager
     }
 
     public void init(boolean startup) {
-        FontMod cFont = OyVey.moduleManager.getModuleByClass(FontMod.class);
+        FontMod cFont = Mint.moduleManager.getModuleByClass(FontMod.class);
         try {
             this.setFontRenderer(new Font(cFont.fontName.getValue(), cFont.fontStyle.getValue(), cFont.fontSize.getValue()), cFont.antiAlias.getValue(), cFont.fractionalMetrics.getValue());
         } catch (Exception exception) {
@@ -36,7 +36,7 @@ public class TextManager
     }
 
     public void drawString(String text, float x, float y, int color, boolean shadow) {
-        if (OyVey.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
+        if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
             if (shadow) {
                 this.customFont.drawStringWithShadow(text, x, y, color);
             } else {
@@ -44,22 +44,22 @@ public class TextManager
             }
             return;
         }
-        OyVey.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, shadow);
+        Mint.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, shadow);
     }
 
     public int getStringWidth(String text) {
-        if (OyVey.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
+        if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
             return this.customFont.getStringWidth(text);
         }
-        return OyVey.INSTANCE.mc.fontRenderer.getStringWidth(text);
+        return Mint.INSTANCE.mc.fontRenderer.getStringWidth(text);
     }
 
     public int getFontHeight() {
-        if (OyVey.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
+        if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
             String text = "A";
             return this.customFont.getStringHeight();
         }
-        return OyVey.INSTANCE.mc.fontRenderer.FONT_HEIGHT;
+        return Mint.INSTANCE.mc.fontRenderer.FONT_HEIGHT;
     }
 
     public void setFontRenderer(Font font, boolean antiAlias, boolean fractionalMetrics) {
@@ -71,11 +71,11 @@ public class TextManager
     }
 
     public void updateResolution() {
-        this.scaledWidth = OyVey.INSTANCE.mc.displayWidth;
-        this.scaledHeight = OyVey.INSTANCE.mc.displayHeight;
+        this.scaledWidth = Mint.INSTANCE.mc.displayWidth;
+        this.scaledHeight = Mint.INSTANCE.mc.displayHeight;
         this.scaleFactor = 1;
-        boolean flag = OyVey.INSTANCE.mc.isUnicode();
-        int i = OyVey.INSTANCE.mc.gameSettings.guiScale;
+        boolean flag = Mint.INSTANCE.mc.isUnicode();
+        int i = Mint.INSTANCE.mc.gameSettings.guiScale;
         if (i == 0) {
             i = 1000;
         }

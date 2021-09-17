@@ -34,7 +34,7 @@ minecraft {
     version = project.forgeVersion
     runDir = 'run'
     mappings = project.mcpVersion
-    coreMod = 'me.alpha432.oyvey.mixin.loader.OyVeyLoader'
+    coreMod = 'ye fuck fucking mixins in runClient yea fuck u bitch'
     makeObfSourceJar = false
 }
 
@@ -57,7 +57,6 @@ dependencies {
     }
 
     compile 'club.minnced:java-discord-rpc:2.0.2'
-    //compile 'com.googlecode.json-simple:json-simple:1.1.1'
 
 }
 

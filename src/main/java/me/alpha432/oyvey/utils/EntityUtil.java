@@ -1,6 +1,6 @@
 package me.alpha432.oyvey.utils;
 
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class EntityUtil  {
     public static Vec3d getEyesPos() {
-        return new Vec3d(OyVey.INSTANCE.mc.player.posX, OyVey.INSTANCE.mc.player.posY + (double) OyVey.INSTANCE.mc.player.getEyeHeight(), OyVey.INSTANCE.mc.player.posZ);
+        return new Vec3d(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + (double) Mint.INSTANCE.mc.player.getEyeHeight(), Mint.INSTANCE.mc.player.posZ);
     }
     public static BlockPos getPlayerPos(EntityPlayer player) {
         return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
@@ -23,7 +23,7 @@ public class EntityUtil  {
         ArrayList<Vec3d> vec3ds = new ArrayList<>();
         for (Vec3d vector : EntityUtil.getOffsets(height, floor)) {
             BlockPos targetPos = new BlockPos(pos).add(vector.x, vector.y, vector.z);
-            Block block = OyVey.INSTANCE.mc.world.getBlockState(targetPos).getBlock();
+            Block block = Mint.INSTANCE.mc.world.getBlockState(targetPos).getBlock();
             if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid) && !(block instanceof BlockTallGrass) && !(block instanceof BlockFire) && !(block instanceof BlockDeadBush) && !(block instanceof BlockSnow))
                 continue;
             vec3ds.add(vector);
@@ -70,7 +70,7 @@ public class EntityUtil  {
         return !EntityUtil.isAlive(entity);
     }
     public static boolean isMoving() {
-        return (double) OyVey.INSTANCE.mc.player.moveForward != 0.0 || (double) OyVey.INSTANCE.mc.player.moveStrafing != 0.0;
+        return (double) Mint.INSTANCE.mc.player.moveForward != 0.0 || (double) Mint.INSTANCE.mc.player.moveStrafing != 0.0;
     }
 }
 

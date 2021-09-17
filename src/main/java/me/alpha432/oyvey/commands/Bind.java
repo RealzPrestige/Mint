@@ -1,7 +1,7 @@
 package me.alpha432.oyvey.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.alpha432.oyvey.OyVey;
+import me.alpha432.oyvey.Mint;
 import me.alpha432.oyvey.modules.Module;
 import org.lwjgl.input.Keyboard;
 
@@ -19,7 +19,7 @@ public class Bind
         }
         String rkey = commands[1];
         String moduleName = commands[0];
-        Module module = OyVey.moduleManager.getModuleByName(moduleName);
+        Module module = Mint.moduleManager.getModuleByName(moduleName);
         if (module == null) {
             Bind.sendMessage("Unknown module '" + module + "'!");
             return;
