@@ -113,7 +113,7 @@ public class EventManager extends Feature {
     public void onWorldRender(RenderWorldLastEvent event) {
         if (event.isCanceled())
             return;
-        Mint.INSTANCE.mc.profiler.startSection("oyvey");
+        Mint.INSTANCE.mc.profiler.startSection("mint");
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();

@@ -20,7 +20,7 @@ public class ConfigManager  {
 
     public String config = "mint/config/";
 
-    public static void setValueFromJson(Feature feature, Setting setting, JsonElement element) {
+    public static void setValueFromJson(Setting setting, JsonElement element) {
         String str;
         switch (setting.getType()) {
             case "Boolean":
@@ -69,7 +69,7 @@ public class ConfigManager  {
             for (Setting setting : feature.getSettings()) {
                 if (settingName.equals(setting.getName())) {
                     try {
-                        setValueFromJson(feature, setting, element);
+                        setValueFromJson(setting, element);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -81,7 +81,7 @@ public class ConfigManager  {
     }
 
     public void loadConfig(String name) {
-        final List<File> files = Arrays.stream(Objects.requireNonNull(new File("oyvey").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
+        final List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
         if (files.contains(new File("mint/" + name + "/"))) {
             this.config = "mint/" + name + "/";
         } else {
