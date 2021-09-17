@@ -6,7 +6,6 @@ import mint.clickgui.impl.font.CustomFont;
 import mint.modules.client.FontMod;
 import mint.utils.Timer;
 import net.minecraft.util.math.MathHelper;
-
 import java.awt.*;
 
 public class TextManager
@@ -22,12 +21,11 @@ public class TextManager
         this.updateResolution();
     }
 
-    public void init(boolean startup) {
+    public void init() {
         FontMod cFont = Mint.moduleManager.getModuleByClass(FontMod.class);
         try {
-            this.setFontRenderer(new Font(cFont.fontName.getValue(), cFont.fontStyle.getValue(), cFont.fontSize.getValue()), cFont.antiAlias.getValue(), cFont.fractionalMetrics.getValue());
-        } catch (Exception exception) {
-            // empty catch block
+            this.setFontRenderer(new Font(cFont.fontName.getValue(), cFont.fontStyle.getValue(), cFont.fontSize.getValue()), false, false);
+        } catch (Exception ignored) {
         }
     }
 
@@ -56,7 +54,6 @@ public class TextManager
 
     public int getFontHeight() {
         if (Mint.moduleManager.isModuleEnabled(FontMod.getInstance().getName())) {
-            String text = "A";
             return this.customFont.getStringHeight();
         }
         return Mint.INSTANCE.mc.fontRenderer.FONT_HEIGHT;
@@ -64,10 +61,6 @@ public class TextManager
 
     public void setFontRenderer(Font font, boolean antiAlias, boolean fractionalMetrics) {
         this.customFont = new CustomFont(font, antiAlias, fractionalMetrics);
-    }
-
-    public Font getCurrentFont() {
-        return this.customFont.getFont();
     }
 
     public void updateResolution() {
@@ -85,8 +78,8 @@ public class TextManager
         if (flag && this.scaleFactor % 2 != 0 && this.scaleFactor != 1) {
             --this.scaleFactor;
         }
-        double scaledWidthD = this.scaledWidth / this.scaleFactor;
-        double scaledHeightD = this.scaledHeight / this.scaleFactor;
+        double scaledWidthD = scaledWidth / scaleFactor;
+        double scaledHeightD = scaledHeight / scaleFactor;
         this.scaledWidth = MathHelper.ceil(scaledWidthD);
         this.scaledHeight = MathHelper.ceil(scaledHeightD);
     }

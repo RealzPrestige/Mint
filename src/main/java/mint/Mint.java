@@ -41,7 +41,7 @@ public class Mint {
         configManager = new ConfigManager();
         moduleManager.init();
         eventManager.init();
-        textManager.init(true);
+        textManager.init();
         moduleManager.onLoad();
     }
     public static void onUnload() {
