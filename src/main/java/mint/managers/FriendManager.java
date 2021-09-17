@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class FriendManager
         extends Feature {
-    private List<Friend> friends = new ArrayList<Friend>();
+    private List<Friend> friends = new ArrayList<>();
 
     public FriendManager() {
         super("Friends");
@@ -53,7 +53,7 @@ public class FriendManager
         this.clearSettings();
         this.cleanFriends();
         for (Friend friend : this.friends) {
-            this.register(new Setting<>(friend.getUuid().toString(), friend.getUsername(), false));
+            this.register(new Setting<>(friend.getUuid().toString(), friend.getUsername()));
         }
     }
 

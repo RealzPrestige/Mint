@@ -15,16 +15,16 @@ public class Module
         extends Feature {
     private final String description;
     private final Category category;
-    public Setting<Boolean> enabled = register(new Setting<>("Enabled", false, false));
+    public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));
     public boolean drawn = false;
-    public Setting<BindSetting> bind = register(new Setting<>("Keybind", new BindSetting(-1), false));
+    public Setting<BindSetting> bind = register(new Setting<>("Keybind", new BindSetting(-1)));
     public Setting<String> displayName;
     public boolean hidden;
     public boolean sliding;
 
     public Module(String name, Category category, String description) {
         super(name);
-        this.displayName = register(new Setting<>("DisplayName", name, false));
+        this.displayName = register(new Setting<>("DisplayName", name));
         this.description = description;
         this.category = category;
     }

@@ -19,6 +19,7 @@ public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
 
     public Setting<String> prefix = register(new Setting<>("Prefix", "."));
+    public Setting<Boolean> blur = register(new Setting<>("Blur", false));
     public Setting<Boolean> outline = register(new Setting<>("Outline", false));
     public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
     public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255));

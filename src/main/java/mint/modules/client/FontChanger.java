@@ -14,7 +14,7 @@ public class FontChanger
         extends Module {
     private static FontChanger INSTANCE = new FontChanger();
     public Setting<Integer> fontSize = this.register(new Setting<>("Size", 17, 15, 20));
-    public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD, false));
+    public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD));
     public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}
     private boolean reloadFont = false;
 

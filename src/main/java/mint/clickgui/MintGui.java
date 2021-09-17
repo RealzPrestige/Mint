@@ -6,7 +6,11 @@ import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
 import mint.clickgui.impl.buttons.ModuleFrame;
 import mint.modules.Module;
+import mint.modules.client.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -34,8 +38,16 @@ public class MintGui
         }
         return INSTANCE;
     }
-
-    public static MintGui getClickGui() {
+    @Override
+    public void initGui() {
+        if (OpenGlHelper.shadersSupported && mc.getRenderViewEntity() instanceof EntityPlayer && Gui.getInstance().blur.getValue()) {
+            if (mc.entityRenderer.getShaderGroup() != null) {
+                mc.entityRenderer.getShaderGroup().deleteShaderGroup();
+            }
+            mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
+        }
+    }
+            public static MintGui getClickGui() {
         return MintGui.getInstance();
     }
 
