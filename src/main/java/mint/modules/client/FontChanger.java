@@ -19,7 +19,7 @@ public class FontChanger
     private boolean reloadFont = false;
 
     public FontChanger() {
-        super("FontChanger", "CustomFont for all of the clients text. Use the font command.", Module.Category.CLIENT, true, false, false);
+        super("FontChanger", Category.CORE, "Changes the way the Font looks.");
         this.setInstance();
     }
 

@@ -19,19 +19,14 @@ public class Module
     public boolean drawn = false;
     public Setting<BindSetting> bind = register(new Setting<>("Keybind", new BindSetting(-1), false));
     public Setting<String> displayName;
-    public boolean hasListener;
-    public boolean alwaysListening;
     public boolean hidden;
     public boolean sliding;
 
-    public Module(String name, String description, Category category, boolean hasListener, boolean hidden, boolean alwaysListening) {
+    public Module(String name, Category category, String description) {
         super(name);
-        this.displayName = this.register(new Setting<>("DisplayName", name, false));
+        this.displayName = register(new Setting<>("DisplayName", name, false));
         this.description = description;
         this.category = category;
-        this.hasListener = hasListener;
-        this.hidden = hidden;
-        this.alwaysListening = alwaysListening;
     }
 
     public boolean isSliding() {
@@ -92,25 +87,21 @@ public class Module
     }
 
     public void enable() {
-        this.enabled.setValue(Boolean.TRUE);
-        this.onToggle();
-        this.onEnable();
+        enabled.setValue(Boolean.TRUE);
+        onToggle();
+        onEnable();
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + " " + ChatFormatting.GREEN + this.getDisplayName() + " enabled.");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
-        if (this.isOn() && this.hasListener && !this.alwaysListening) {
-            MinecraftForge.EVENT_BUS.register(this);
-        }
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public void disable() {
-        if (this.hasListener && !this.alwaysListening) {
-            MinecraftForge.EVENT_BUS.unregister(this);
-        }
-        this.enabled.setValue(false);
+        MinecraftForge.EVENT_BUS.unregister(this);
+        enabled.setValue(false);
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + " " + ChatFormatting.RED + this.getDisplayName() + " disabled.");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
-        this.onToggle();
-        this.onDisable();
+        onToggle();
+        onDisable();
     }
 
     public void toggle() {
@@ -125,16 +116,6 @@ public class Module
         return this.displayName.getValue();
     }
 
-    public void setDisplayName(String name) {
-        Module module = Mint.moduleManager.getModuleByDisplayName(name);
-        Module originalModule = Mint.moduleManager.getModuleByName(name);
-        if (module == null && originalModule == null) {
-            Command.sendMessage(this.getDisplayName() + ", name: " + this.getName() + ", has been renamed to: " + name);
-            this.displayName.setValue(name);
-            return;
-        }
-        Command.sendMessage(ChatFormatting.RED + "A module of this name already exists.");
-    }
 
     public String getDescription() {
         return this.description;
@@ -155,9 +136,6 @@ public class Module
         return this.category;
     }
 
-    public String getInfo() {
-        return null;
-    }
 
     public BindSetting getBind() {
         return this.bind.getValue();
@@ -168,7 +146,7 @@ public class Module
     }
 
     public boolean listening() {
-        return this.hasListener && this.isOn() || this.alwaysListening;
+        return true;
     }
 
     public String getFullArrayString() {
@@ -177,11 +155,11 @@ public class Module
 
     public enum Category {
         COMBAT("Combat"),
-        MISC("Misc"),
-        RENDER("Render"),
+        MISCELLANEOUS("Miscellaneous"),
+        VISUAL("Visual"),
         MOVEMENT("Movement"),
         PLAYER("Player"),
-        CLIENT("Client");
+        CORE("Core");
 
         private final String name;
 

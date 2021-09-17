@@ -54,7 +54,7 @@ public class Gui extends Module {
 
 
     public Gui() {
-        super("Gui", "opens the client's sexy custom clickgui interface.", Module.Category.CLIENT, true, false, false);
+        super("Gui", Category.CORE,"opens the client's sexy custom clickgui interface.");
         setBind(Keyboard.KEY_O);
         this.setInstance();
     }
