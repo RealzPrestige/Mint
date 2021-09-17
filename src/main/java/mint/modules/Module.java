@@ -95,7 +95,7 @@ public class Module
         this.enabled.setValue(Boolean.TRUE);
         this.onToggle();
         this.onEnable();
-        TextComponentString text = new TextComponentString(Mint.commandManager.getClientMessage() + " " + ChatFormatting.GREEN + this.getDisplayName() + " toggled on.");
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + " " + ChatFormatting.GREEN + this.getDisplayName() + " enabled.");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         if (this.isOn() && this.hasListener && !this.alwaysListening) {
             MinecraftForge.EVENT_BUS.register(this);
@@ -107,7 +107,7 @@ public class Module
             MinecraftForge.EVENT_BUS.unregister(this);
         }
         this.enabled.setValue(false);
-        TextComponentString text = new TextComponentString(Mint.commandManager.getClientMessage() + " " + ChatFormatting.RED + this.getDisplayName() + " toggled off.");
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + " " + ChatFormatting.RED + this.getDisplayName() + " disabled.");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         this.onToggle();
         this.onDisable();

@@ -13,7 +13,7 @@ public class Loader
 
     public Loader() {
         MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.oyvey.json");
+        Mixins.addConfiguration("mixins.mint.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
     }
 
