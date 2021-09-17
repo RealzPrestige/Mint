@@ -6,7 +6,7 @@ import mint.events.ClientEvent;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.commands.Command;
-import mint.clickgui.setting.Bind;
+import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,7 +17,7 @@ public class Module
     private final Category category;
     public Setting<Boolean> enabled = this.register(new Setting<>("Enabled", false, false));
     public Setting<Boolean> drawn = this.register(new Setting<>("Drawn", true, false));
-    public Setting<Bind> bind = this.register(new Setting<>("Keybind", new Bind(-1), false));
+    public Setting<BindSetting> bind = this.register(new Setting<>("Keybind", new BindSetting(-1), false));
     public Setting<String> displayName;
     public boolean hasListener;
     public boolean alwaysListening;
@@ -156,12 +156,12 @@ public class Module
         return null;
     }
 
-    public Bind getBind() {
+    public BindSetting getBind() {
         return this.bind.getValue();
     }
 
     public void setBind(int key) {
-        this.bind.setValue(new Bind(key));
+        this.bind.setValue(new BindSetting(key));
     }
 
     public boolean listening() {

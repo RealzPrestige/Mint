@@ -2,6 +2,7 @@ package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.clickgui.setting.BindSetting;
 import mint.modules.Module;
 import org.lwjgl.input.Keyboard;
 
@@ -36,7 +37,7 @@ public class Bind
             Bind.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
-        module.bind.setValue(new mint.clickgui.setting.Bind(key));
+        module.bind.setValue(new BindSetting(key));
         Bind.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }

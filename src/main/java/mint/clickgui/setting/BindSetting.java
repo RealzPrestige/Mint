@@ -5,15 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.lwjgl.input.Keyboard;
 
-public class Bind {
+public class BindSetting {
     private int key;
 
-    public Bind(int key) {
+    public BindSetting(int key) {
         this.key = key;
     }
 
-    public static Bind none() {
-        return new Bind(-1);
+    public static BindSetting none() {
+        return new BindSetting(-1);
     }
 
     public int getKey() {
@@ -44,15 +44,15 @@ public class Bind {
     }
 
     public static class BindConverter
-            extends Converter<Bind, JsonElement> {
-        public JsonElement doForward(Bind bind) {
+            extends Converter<BindSetting, JsonElement> {
+        public JsonElement doForward(BindSetting bind) {
             return new JsonPrimitive(bind.toString());
         }
 
-        public Bind doBackward(JsonElement jsonElement) {
+        public BindSetting doBackward(JsonElement jsonElement) {
             String s = jsonElement.getAsString();
             if (s.equalsIgnoreCase("None")) {
-                return Bind.none();
+                return BindSetting.none();
             }
             int key = -1;
             try {
@@ -61,9 +61,9 @@ public class Bind {
                 // empty catch block
             }
             if (key == 0) {
-                return Bind.none();
+                return BindSetting.none();
             }
-            return new Bind(key);
+            return new BindSetting(key);
         }
     }
 }

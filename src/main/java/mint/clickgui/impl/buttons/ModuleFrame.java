@@ -5,7 +5,7 @@ import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
 import mint.modules.Module;
-import mint.clickgui.setting.Bind;
+import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -32,7 +32,7 @@ public class ModuleFrame
                 if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled")) {
                     newItems.add(new BooleanFrame(setting));
                 }
-                if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind") && !this.module.getName().equalsIgnoreCase("Hud")) {
+                if (setting.getValue() instanceof BindSetting && !setting.getName().equalsIgnoreCase("Keybind") && !this.module.getName().equalsIgnoreCase("Hud")) {
                     newItems.add(new BindFrame(setting));
                 }
                 if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName")) {

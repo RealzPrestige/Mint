@@ -4,8 +4,8 @@ import com.google.gson.*;
 import mint.Mint;
 import mint.modules.Feature;
 import mint.modules.Module;
-import mint.clickgui.setting.Bind;
-import mint.clickgui.setting.EnumConverter;
+import mint.clickgui.setting.BindSetting;
+import mint.clickgui.setting.EnumSetting;
 import mint.clickgui.setting.Setting;
 
 import java.io.*;
@@ -40,11 +40,11 @@ public class ConfigManager  {
                 setting.setValue(str.replace("_", " "));
                 return;
             case "Bind":
-                setting.setValue((new Bind.BindConverter()).doBackward(element));
+                setting.setValue((new BindSetting.BindConverter()).doBackward(element));
                 return;
             case "Enum":
                 try {
-                    EnumConverter converter = new EnumConverter(((Enum) setting.getValue()).getClass());
+                    EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
                     Enum value = converter.doBackward(element);
                     setting.setValue((value == null) ? setting.getDefaultValue() : value);
                 } catch (Exception exception) {
@@ -208,7 +208,7 @@ public class ConfigManager  {
         JsonParser jp = new JsonParser();
         for (Setting setting : feature.getSettings()) {
             if (setting.isEnumSetting()) {
-                EnumConverter converter = new EnumConverter(((Enum) setting.getValue()).getClass());
+                EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
                 object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
                 continue;
             }

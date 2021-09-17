@@ -4,11 +4,11 @@ import com.google.common.base.Converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-public class EnumConverter
+public class EnumSetting
         extends Converter<Enum, JsonElement> {
     private final Class<? extends Enum> clazz;
 
-    public EnumConverter(Class<? extends Enum> clazz) {
+    public EnumSetting(Class<? extends Enum> clazz) {
         this.clazz = clazz;
     }
 
@@ -22,7 +22,7 @@ public class EnumConverter
     }
 
     public static Enum increaseEnum(Enum clazz) {
-        int index = EnumConverter.currentEnum(clazz);
+        int index = EnumSetting.currentEnum(clazz);
         for (int i = 0; i < clazz.getClass().getEnumConstants().length; ++i) {
             Enum e = clazz.getClass().getEnumConstants()[i];
             if (i != index + 1) continue;

@@ -180,15 +180,15 @@ public class Setting<T> {
     }
 
     public String currentEnumName() {
-        return EnumConverter.getProperName((Enum) this.value);
+        return EnumSetting.getProperName((Enum) this.value);
     }
 
     public int currentEnum() {
-        return EnumConverter.currentEnum((Enum) this.value);
+        return EnumSetting.currentEnum((Enum) this.value);
     }
 
     public void increaseEnum() {
-        this.plannedValue = (T) EnumConverter.increaseEnum((Enum) this.value);
+        this.plannedValue = (T) EnumSetting.increaseEnum((Enum) this.value);
         ClientEvent event = new ClientEvent(this);
         MinecraftForge.EVENT_BUS.post(event);
         if (!event.isCanceled()) {
@@ -199,7 +199,7 @@ public class Setting<T> {
     }
 
     public void increaseEnumNoEvent() {
-        this.value = (T) EnumConverter.increaseEnum((Enum) this.value);
+        this.value = (T) EnumSetting.increaseEnum((Enum) this.value);
     }
 
     public String getType() {
@@ -225,7 +225,7 @@ public class Setting<T> {
     }
 
     public boolean isEnumSetting() {
-        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof Bind) && !(this.value instanceof Character) && !(this.value instanceof Boolean);
+        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof BindSetting) && !(this.value instanceof Character) && !(this.value instanceof Boolean);
     }
 
     public boolean isStringSetting() {
