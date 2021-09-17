@@ -8,6 +8,7 @@ import mint.commands.Command;
 import mint.modules.Module;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
+import mint.modules.client.Descriptions;
 import mint.modules.client.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -74,6 +75,15 @@ public class ModuleFrame
                 }
             }
         }
+        if(isHovering(mouseX, mouseY) && Descriptions.getInstance().isEnabled()){
+            if(Descriptions.getInstance().rect.getValue()) {
+                RenderUtil.drawRect(Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 0 : mouseX + 10, Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 530 : mouseY, mouseX + 10 + renderer.getStringWidth(module.getDescription()), mouseY + 10, ColorUtil.toRGBA(0, 0, 0, 100));
+            }
+            if(Descriptions.getInstance().outline.getValue()) {
+                RenderUtil.drawBorder(Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 0 : mouseX + 10, Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 530 : mouseY, renderer.getStringWidth(module.getDescription()), 10, new Color(ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), 255)));
+            }
+            renderer.drawStringWithShadow(module.getDescription(), Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 0 : mouseX + 10, Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 530 : mouseY, -1);
+        }
     }
 
     @Override
@@ -100,11 +110,6 @@ public class ModuleFrame
                     item.mouseClicked(mouseX, mouseY, mouseButton);
                 }
             }
-        }
-        if(isHovering(mouseX, mouseY)){
-            RenderUtil.drawRect(mouseX + 10, mouseY, mouseX + 10 + renderer.getStringWidth(module.getDescription()), mouseY + 10, ColorUtil.toRGBA(0,0,0, 50));
-            RenderUtil.drawBorder(mouseX + 10, mouseY, renderer.getStringWidth(module.getDescription()), 10, new Color(ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), 30 / 255)));
-            renderer.drawStringWithShadow(module.getDescription(), mouseX + 10, mouseY, -1);
         }
     }
 

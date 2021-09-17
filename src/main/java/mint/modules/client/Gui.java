@@ -17,6 +17,8 @@ import java.awt.*;
 
 public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
+    public Setting<Integer> x = register(new Setting<>("X", 0, 0, 1000));
+    public Setting<Integer> y = register(new Setting<>("Y", 0, 0, 1000));
 
     public Setting<String> prefix = register(new Setting<>("Prefix", "."));
     public Setting<Boolean> blur = register(new Setting<>("Blur", false));

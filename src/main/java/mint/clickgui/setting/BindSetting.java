@@ -29,7 +29,7 @@ public class BindSetting {
     }
 
     public String toString() {
-        return this.isEmpty() ? "None" : (this.key < 0 ? "None" : this.capitalise(Keyboard.getKeyName(this.key)));
+        return this.isEmpty() ? "None" : (this.key < 0 ? "None" : Keyboard.getKeyName(this.key));
     }
 
     public boolean isDown() {

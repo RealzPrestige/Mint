@@ -4,6 +4,7 @@ import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
+import mint.modules.client.Descriptions;
 import mint.modules.client.Gui;
 import mint.modules.client.FontChanger;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,17 +19,18 @@ import java.util.stream.Collectors;
 
 public class ModuleManager
         extends Feature {
-    public ArrayList<Module> modules = new ArrayList();
+    public ArrayList<Module> moduleList = new ArrayList();
     public List<Module> sortedModules = new ArrayList<Module>();
     public List<String> sortedModulesABC = new ArrayList<String>();
 
     public void init() {
-        this.modules.add(new Gui());
-        this.modules.add(new FontChanger());
+        moduleList.add(new Gui());
+        moduleList.add(new FontChanger());
+        moduleList.add(new Descriptions());
     }
 
     public Module getModuleByName(String name) {
-        for (Module module : this.modules) {
+        for (Module module : this.moduleList) {
             if (!module.getName().equalsIgnoreCase(name)) continue;
             return module;
         }
@@ -36,7 +38,7 @@ public class ModuleManager
     }
 
     public <T extends Module> T getModuleByClass(Class<T> clazz) {
-        for (Module module : this.modules) {
+        for (Module module : this.moduleList) {
             if (!clazz.isInstance(module)) continue;
             return (T) module;
         }
@@ -82,7 +84,7 @@ public class ModuleManager
     }
 
     public Module getModuleByDisplayName(String displayName) {
-        for (Module module : this.modules) {
+        for (Module module : this.moduleList) {
             if (!module.getDisplayName().equalsIgnoreCase(displayName)) continue;
             return module;
         }
@@ -91,7 +93,7 @@ public class ModuleManager
 
     public ArrayList<Module> getEnabledModules() {
         ArrayList<Module> enabledModules = new ArrayList<Module>();
-        for (Module module : this.modules) {
+        for (Module module : this.moduleList) {
             if (!module.isEnabled()) continue;
             enabledModules.add(module);
         }
@@ -100,7 +102,7 @@ public class ModuleManager
 
     public ArrayList<String> getEnabledModulesName() {
         ArrayList<String> enabledModules = new ArrayList<String>();
-        for (Module module : this.modules) {
+        for (Module module : this.moduleList) {
             if (!module.isEnabled() || !module.isDrawn()) continue;
             enabledModules.add(module.getFullArrayString());
         }
@@ -109,7 +111,7 @@ public class ModuleManager
 
     public ArrayList<Module> getModulesByCategory(Module.Category category) {
         ArrayList<Module> modulesCategory = new ArrayList<Module>();
-        this.modules.forEach(module -> {
+        this.moduleList.forEach(module -> {
             if (module.getCategory() == category) {
                 modulesCategory.add(module);
             }
@@ -122,24 +124,24 @@ public class ModuleManager
     }
 
     public void onLoad() {
-        this.modules.stream().filter(Module::listening).forEach(((EventBus) MinecraftForge.EVENT_BUS)::register);
-        this.modules.forEach(Module::onLoad);
+        this.moduleList.stream().filter(Module::listening).forEach(((EventBus) MinecraftForge.EVENT_BUS)::register);
+        this.moduleList.forEach(Module::onLoad);
     }
 
     public void onUpdate() {
-        this.modules.stream().filter(Feature::isEnabled).forEach(Module::onUpdate);
+        this.moduleList.stream().filter(Feature::isEnabled).forEach(Module::onUpdate);
     }
 
     public void onTick() {
-        this.modules.stream().filter(Feature::isEnabled).forEach(Module::onTick);
+        this.moduleList.stream().filter(Feature::isEnabled).forEach(Module::onTick);
     }
 
     public void onRender2D(Render2DEvent event) {
-        this.modules.stream().filter(Feature::isEnabled).forEach(module -> module.onRender2D(event));
+        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.onRender2D(event));
     }
 
     public void onRender3D(Render3DEvent event) {
-        this.modules.stream().filter(Feature::isEnabled).forEach(module -> module.onRender3D(event));
+        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.onRender3D(event));
     }
 
     public void sortModules(boolean reverse) {
@@ -152,20 +154,20 @@ public class ModuleManager
     }
 
     public void onLogout() {
-        this.modules.forEach(Module::onLogout);
+        this.moduleList.forEach(Module::onLogout);
     }
 
     public void onLogin() {
-        this.modules.forEach(Module::onLogin);
+        this.moduleList.forEach(Module::onLogin);
     }
 
     public void onUnload() {
-        this.modules.forEach(MinecraftForge.EVENT_BUS::unregister);
-        this.modules.forEach(Module::onUnload);
+        this.moduleList.forEach(MinecraftForge.EVENT_BUS::unregister);
+        this.moduleList.forEach(Module::onUnload);
     }
 
     public void onUnloadPost() {
-        for (Module module : this.modules) {
+        for (Module module : this.moduleList) {
             module.enabled.setValue(false);
         }
     }
@@ -174,7 +176,7 @@ public class ModuleManager
         if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
             return;
         }
-        this.modules.forEach(module -> {
+        this.moduleList.forEach(module -> {
             if (module.getBind().getKey() == eventKey) {
                 module.toggle();
             }

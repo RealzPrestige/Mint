@@ -90,7 +90,7 @@ public class Module
         enabled.setValue(Boolean.TRUE);
         onToggle();
         onEnable();
-        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.WHITE + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.BOLD + "" + ChatFormatting.GREEN + "on!");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -98,7 +98,7 @@ public class Module
     public void disable() {
         MinecraftForge.EVENT_BUS.unregister(this);
         enabled.setValue(false);
-        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.WHITE + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.BOLD + "" + ChatFormatting.RED + "off!");
         //TextComponentString text = new TextComponentString(ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + " " + ChatFormatting.RED + this.getDisplayName() + " disabled.");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         onToggle();

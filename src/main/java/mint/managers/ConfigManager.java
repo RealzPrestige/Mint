@@ -179,7 +179,7 @@ public class ConfigManager  {
     }
 
     public void init() {
-        this.features.addAll(Mint.moduleManager.modules);
+        this.features.addAll(Mint.moduleManager.moduleList);
         this.features.add(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
