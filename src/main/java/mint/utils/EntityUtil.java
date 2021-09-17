@@ -4,7 +4,6 @@ import mint.Mint;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -14,9 +13,6 @@ import java.util.List;
 public class EntityUtil  {
     public static Vec3d getEyesPos() {
         return new Vec3d(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + (double) Mint.INSTANCE.mc.player.getEyeHeight(), Mint.INSTANCE.mc.player.posZ);
-    }
-    public static BlockPos getPlayerPos(EntityPlayer player) {
-        return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
     }
 
     public static List<Vec3d> getUnsafeBlocksFromVec3d(Vec3d pos, int height, boolean floor) {
@@ -49,14 +45,6 @@ public class EntityUtil  {
         return offsets.toArray(array);
     }
 
-    public static Vec3d[] getHeightOffsets(int min, int max) {
-        ArrayList<Vec3d> offsets = new ArrayList<>();
-        for (int i = min; i <= max; ++i) {
-            offsets.add(new Vec3d(0.0, i, 0.0));
-        }
-        Vec3d[] array = new Vec3d[offsets.size()];
-        return offsets.toArray(array);
-    }
 
     public static boolean isLiving(Entity entity) {
         return entity instanceof EntityLivingBase;

@@ -4,7 +4,7 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
-import mint.modules.client.Gui;
+import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;

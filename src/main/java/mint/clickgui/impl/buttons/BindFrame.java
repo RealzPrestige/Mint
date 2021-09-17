@@ -2,7 +2,7 @@ package mint.clickgui.impl.buttons;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
-import mint.modules.client.Gui;
+import mint.modules.core.Gui;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.utils.ColorUtil;

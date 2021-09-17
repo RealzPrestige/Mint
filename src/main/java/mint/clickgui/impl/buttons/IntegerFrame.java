@@ -4,7 +4,7 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
-import mint.modules.client.Gui;
+import mint.modules.core.Gui;
 import mint.clickgui.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
