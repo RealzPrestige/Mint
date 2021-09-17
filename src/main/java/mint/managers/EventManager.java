@@ -3,18 +3,17 @@ package mint.managers;
 import com.google.common.base.Strings;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.events.ConnectionEvent;
-import mint.events.PacketEvent;
-import mint.events.Render2DEvent;
-import mint.events.Render3DEvent;
+import mint.events.*;
 import mint.modules.Feature;
 import mint.commands.Command;
 import mint.utils.Timer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -32,7 +31,7 @@ import java.util.UUID;
 
 public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
-
+    private final Timer timer = new Timer();
     public void init() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -106,6 +105,11 @@ public class EventManager extends Feature {
                                 break;
                         }
                     });
+        } else if (event.getPacket() instanceof SPacketSoundEffect && ((SPacketSoundEffect) event.getPacket()).getSound() == SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT) {
+            if (!timer.passedMs(100)) {
+                MinecraftForge.EVENT_BUS.post(new ChorusEvent(((SPacketSoundEffect) event.getPacket()).getX(), ((SPacketSoundEffect) event.getPacket()).getY(), ((SPacketSoundEffect) event.getPacket()).getZ()));
+                timer.reset();
+            }
         }
     }
 
