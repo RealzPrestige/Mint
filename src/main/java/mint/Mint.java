@@ -48,7 +48,7 @@ public class Mint {
         if (!unloaded) {
             eventManager.onUnload();
             moduleManager.onUnload();
-            configManager.saveConfig(Mint.configManager.config.replaceFirst("oyvey/", ""));
+            configManager.saveConfig(Mint.configManager.config.replaceFirst("mint/", ""));
             moduleManager.onUnloadPost();
             unloaded = true;
         }

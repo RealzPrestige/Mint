@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ConfigManager  {
     public ArrayList<Feature> features = new ArrayList<>();
 
-    public String config = "oyvey/config/";
+    public String config = "mint/config/";
 
     public static void setValueFromJson(Feature feature, Setting setting, JsonElement element) {
         String str;
@@ -82,10 +82,10 @@ public class ConfigManager  {
 
     public void loadConfig(String name) {
         final List<File> files = Arrays.stream(Objects.requireNonNull(new File("oyvey").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
-        if (files.contains(new File("oyvey/" + name + "/"))) {
-            this.config = "oyvey/" + name + "/";
+        if (files.contains(new File("mint/" + name + "/"))) {
+            this.config = "mint/" + name + "/";
         } else {
-            this.config = "oyvey/config/";
+            this.config = "mint/config/";
         }
         Mint.friendManager.onLoad();
         for (Feature feature : this.features) {
@@ -99,12 +99,12 @@ public class ConfigManager  {
     }
 
     public boolean configExists(String name) {
-        final List<File> files = Arrays.stream(Objects.requireNonNull(new File("oyvey").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
-        return files.contains(new File("oyvey/" + name + "/"));
+        final List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
+        return files.contains(new File("mint/" + name + "/"));
     }
 
     public void saveConfig(String name) {
-        this.config = "oyvey/" + name + "/";
+        this.config = "mint/" + name + "/";
         File path = new File(this.config);
         if (!path.exists())
             path.mkdir();
@@ -120,18 +120,18 @@ public class ConfigManager  {
     }
 
     public void saveCurrentConfig() {
-        File currentConfig = new File("oyvey/currentconfig.txt");
+        File currentConfig = new File("mint/currentconfig.txt");
         try {
             if (currentConfig.exists()) {
                 FileWriter writer = new FileWriter(currentConfig);
                 String tempConfig = this.config.replaceAll("/", "");
-                writer.write(tempConfig.replaceAll("oyvey", ""));
+                writer.write(tempConfig.replaceAll("mint", ""));
                 writer.close();
             } else {
                 currentConfig.createNewFile();
                 FileWriter writer = new FileWriter(currentConfig);
                 String tempConfig = this.config.replaceAll("/", "");
-                writer.write(tempConfig.replaceAll("oyvey", ""));
+                writer.write(tempConfig.replaceAll("mint", ""));
                 writer.close();
             }
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class ConfigManager  {
     }
 
     public String loadCurrentConfig() {
-        File currentConfig = new File("oyvey/currentconfig.txt");
+        File currentConfig = new File("mint/currentconfig.txt");
         String name = "config";
         try {
             if (currentConfig.exists()) {
