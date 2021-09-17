@@ -17,15 +17,13 @@ public class Setting<T> {
     private Predicate<T> visibility;
     private String description;
     private Feature feature;
-    public boolean isParent;
 
-    public Setting(String name, T defaultValue, boolean isParent) {
+    public Setting(String name, T defaultValue) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.value = defaultValue;
         this.plannedValue = defaultValue;
         this.description = "";
-        this.isParent = isParent;
 
     }
 

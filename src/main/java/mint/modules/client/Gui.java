@@ -17,8 +17,9 @@ import java.awt.*;
 
 public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
-    public Setting<String> prefix = register(new Setting<>("Prefix", ".", false));
-    public Setting<Boolean> outline = register(new Setting<>("Outline", false, false));
+
+    public Setting<String> prefix = register(new Setting<>("Prefix", "."));
+    public Setting<Boolean> outline = register(new Setting<>("Outline", false));
     public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
     public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255));
     public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255));
@@ -47,9 +48,9 @@ public class Gui extends Module {
     public Setting<Integer> stateTrueBooleanGreen = register(new Setting<>("BoolEnabledGreen", 255, 0, 255));
     public Setting<Integer> stateTrueBooleanBlue = register(new Setting<>("BoolEnabledBlue", 0, 0, 255));
     public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255));
-    public Setting<Boolean> gradient = this.register(new Setting<>("Gradient", true, true));
-    public Setting<Integer> gradientAlpha = this.register(new Setting<>("G-Alpha", 150, 0, 255, v -> gradient.getValue()));
-    public Setting<GradientMode> gradientType = this.register(new Setting<>("GradientType", GradientMode.FromBottom, v -> gradient.getValue()));
+    public Setting<Boolean> gradient = register(new Setting<>("Gradient", true));
+    public Setting<Integer> gradientAlpha = register(new Setting<>("G-Alpha", 150, 0, 255, v -> gradient.getValue()));
+    public Setting<GradientMode> gradientType = register(new Setting<>("GradientType", GradientMode.FromBottom, v -> gradient.getValue()));
 
 
 
