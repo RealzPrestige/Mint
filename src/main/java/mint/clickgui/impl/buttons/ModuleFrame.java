@@ -4,6 +4,7 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
+import mint.commands.Command;
 import mint.modules.Module;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
@@ -81,6 +82,16 @@ public class ModuleFrame
         if (!this.items.isEmpty()) {
             if (mouseButton == 1 && this.isHovering(mouseX, mouseY)) {
                 this.subOpen = !this.subOpen;
+                Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
+            }
+            if (mouseButton == 2 && this.isHovering(mouseX, mouseY)) {
+                if(module.isDrawn()) {
+                    module.setUndrawn();
+                    Command.sendMessage(module.getName() + " is no longer Drawn.");
+                } else {
+                    module.setDrawn();
+                    Command.sendMessage(module.getName() + " is now Drawn.");
+                }
                 Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
             }
             if (this.subOpen) {

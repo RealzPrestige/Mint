@@ -15,9 +15,9 @@ public class Module
         extends Feature {
     private final String description;
     private final Category category;
-    public Setting<Boolean> enabled = this.register(new Setting<>("Enabled", false, false));
-    public Setting<Boolean> drawn = this.register(new Setting<>("Drawn", true, false));
-    public Setting<BindSetting> bind = this.register(new Setting<>("Keybind", new BindSetting(-1), false));
+    public Setting<Boolean> enabled = register(new Setting<>("Enabled", false, false));
+    public boolean drawn = false;
+    public Setting<BindSetting> bind = register(new Setting<>("Keybind", new BindSetting(-1), false));
     public Setting<String> displayName;
     public boolean hasListener;
     public boolean alwaysListening;
@@ -141,11 +141,14 @@ public class Module
     }
 
     public boolean isDrawn() {
-        return this.drawn.getValue();
+        return this.drawn;
     }
 
-    public void setDrawn(boolean drawn) {
-        this.drawn.setValue(drawn);
+    public void setDrawn() {
+        this.drawn = true;
+    }
+    public void setUndrawn() {
+        this.drawn = false;
     }
 
     public Category getCategory() {
