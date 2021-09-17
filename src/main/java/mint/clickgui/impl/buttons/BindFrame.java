@@ -23,9 +23,7 @@ public class BindFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
-        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
-        if (this.isListening) {
+      if (this.isListening) {
             Mint.textManager.drawStringWithShadow("Listening...", this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), -1);
         } else {
             Mint.textManager.drawStringWithShadow(this.setting.getName() + " " + this.setting.getValue().toString().toUpperCase(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);

@@ -8,7 +8,10 @@ import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.SoundEvents;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -52,11 +55,14 @@ public class Component
         this.drag(mouseX, mouseY);
         counter1 = new int[]{1};
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
-        net.minecraft.client.gui.Gui.drawRect(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ColorUtil.toARGB(Gui.getInstance().topRed.getValue(), Gui.getInstance().topGreen.getValue(), Gui.getInstance().topBlue.getValue(), Gui.getInstance().topAlpha.getValue()));
+        net.minecraft.client.gui.Gui.drawRect(this.x, this.y, this.x + this.width, this.y + this.height - 5, ColorUtil.toARGB(Gui.getInstance().topRed.getValue(), Gui.getInstance().topGreen.getValue(), Gui.getInstance().topBlue.getValue(), Gui.getInstance().topAlpha.getValue()));
          if (this.open) {
-            RenderUtil.drawRect(this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, ColorUtil.toRGBA(Gui.getInstance().backgroundRed.getValue(), Gui.getInstance().backgroundGreen.getValue(), Gui.getInstance().backgroundBlue.getValue(), Gui.getInstance().backgroundAlpha.getValue()));
+            RenderUtil.drawRect(this.x + 1, (float) this.y + 13.0f, this.x + this.width - 1, (float) (this.y + this.height) + totalItemHeight, ColorUtil.toRGBA(Gui.getInstance().backgroundRed.getValue(), Gui.getInstance().backgroundGreen.getValue(), Gui.getInstance().backgroundBlue.getValue(), Gui.getInstance().backgroundAlpha.getValue()));
             if(Gui.getInstance().outline.getValue()) {
-                RenderUtil.drawBorder(this.x + 1, this.y + 12.2F, this.width - 2, height + getTotalItemHeight() - 15, new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+                RenderUtil.drawRect(this.x + 1, this.y + 13.0f, this.x + 2, height + getTotalItemHeight(), ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+                RenderUtil.drawRect(this.x + width - 2, this.y + 13.0f, this.x + width - 1, height + getTotalItemHeight(), ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+                RenderUtil.drawRect(this.x + 1, height + getTotalItemHeight(), this.x + width - 1, height + getTotalItemHeight() + 1, ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+
             }
          }
         Mint.textManager.drawStringWithShadow(this.getName(), (float) this.x + 3.0f, (float) this.y - 4.0f - (float) MintGui.getClickGui().getTextOffset(), -1);

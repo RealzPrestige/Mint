@@ -22,7 +22,7 @@ import java.util.List;
 public class ModuleFrame
         extends ButtonFrame {
     private final Module module;
-    private List<Frame> items = new ArrayList<Frame>();
+    private List<Frame> items = new ArrayList<>();
     private boolean subOpen;
     public ModuleFrame(Module module) {
         super(module.getName());
@@ -63,7 +63,7 @@ public class ModuleFrame
             Mint.textManager.drawString((this.subOpen ? "v" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), -1, false);
             if (this.subOpen) {
                 float height = 1.0f;
-                for (Frame item : this.items) {
+                 for (Frame item : this.items) {
                     Component.counter1[0] = Component.counter1[0] + 1;
                     if (!item.isHidden()) {
                         item.setLocation(this.x + 1.0f, this.y + (height += 15.0f));

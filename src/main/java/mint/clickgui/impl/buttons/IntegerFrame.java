@@ -4,8 +4,8 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
-import mint.modules.core.Gui;
 import mint.clickgui.setting.Setting;
+import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import org.lwjgl.input.Mouse;
@@ -29,11 +29,9 @@ public class IntegerFrame
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.dragSetting(mouseX, mouseY);
-        int sidecolor = ColorUtil.toARGB(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
-        RenderUtil.drawRect(this.x, this.y, this.x + 1, this.y + (float) this.height + 0.5f, sidecolor);
-        RenderUtil.drawRect(this.x, this.y + ((height / 4) * 3) - 1, this.x + (this.width+ 7.4f), this.y + ((height / 4) * 3) + 2 , ColorUtil.toRGBA(Gui.getInstance().sliderBgRed.getValue(), Gui.getInstance().sliderBgGreen.getValue(), Gui.getInstance().sliderBgBlue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().sliderBgAlpha.getValue() - 20 : Gui.getInstance().sliderBgAlpha.getValue()));
-        RenderUtil.drawRect(((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier() - 2, this.y + ((height / 4) * 3) - 2, ((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier(), this.y + ((height / 4) * 3) + 3 , -1);
-        Mint.textManager.drawStringWithShadow(this.getName() + " " + ChatFormatting.GRAY + (this.setting.getValue() instanceof Float ? this.setting.getValue() : Double.valueOf(((Number) this.setting.getValue()).doubleValue())), this.x + 2.3f, this.y, -1);
+        RenderUtil.drawRect(this.x, this.y, ((Number) this.setting.getValue()).floatValue() <= this.min.floatValue() ? this.x : this.x + ((float) this.width + 7.4f) * this.partialMultiplier(), this.y + (float) this.height - 0.5f, ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), -1);
+        Mint.textManager.drawStringWithShadow("" + (this.setting.getValue() instanceof Float ? this.setting.getValue() : Double.valueOf(((Number) this.setting.getValue()).doubleValue())), this.x + this.width - renderer.getStringWidth(this.setting.getValue() instanceof Float ? this.setting.getValue() + "" : ((Number) this.setting.getValue()).doubleValue() + ""), this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), - 1);
     }
 
     @Override

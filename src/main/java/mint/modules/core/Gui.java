@@ -17,28 +17,21 @@ import java.awt.*;
 
 public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
-    public Setting<Integer> x = register(new Setting<>("X", 0, 0, 1000));
-    public Setting<Integer> y = register(new Setting<>("Y", 0, 0, 1000));
-
     public Setting<String> prefix = register(new Setting<>("Prefix", "."));
-    public Setting<Boolean> blur = register(new Setting<>("Blur", false));
-    public Setting<Boolean> outline = register(new Setting<>("Outline", false));
+    public Setting<Boolean> blur = register(new Setting<>("Blur", true));
+    public Setting<Boolean> outline = register(new Setting<>("Outline", true));
     public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
-    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255));
+    public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255));
     public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 180, 0, 255));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 255, 0, 255));
     public Setting<Integer> topRed = register(new Setting<>("TopRed", 0, 0, 255));
-    public Setting<Integer> topGreen = register(new Setting<>("TopGreen", 0, 0, 255));
-    public Setting<Integer> topBlue = register(new Setting<>("TopBlue", 150, 0, 255));
-    public Setting<Integer> topAlpha = register(new Setting<>("TopAlpha", 180, 0, 255));
-    public Setting<Integer> backgroundRed = register(new Setting<>("BackGroundRed", 0, 0, 255));
-    public Setting<Integer> backgroundGreen = register(new Setting<>("BackGroundGreen", 0, 0, 255));
-    public Setting<Integer> backgroundBlue = register(new Setting<>("BackGroundBlue", 0, 0, 255));
-    public Setting<Integer> backgroundAlpha = register(new Setting<>("BackGroundAlpha", 30, 0, 255));
-    public Setting<Integer> sliderBgRed = register(new Setting<>("SliderBgRed", 120, 0, 255));
-    public Setting<Integer> sliderBgGreen = register(new Setting<>("SliderBgGreen", 120, 0, 255));
-    public Setting<Integer> sliderBgBlue = register(new Setting<>("SliderBgBlue", 120, 0, 255));
-    public Setting<Integer> sliderBgAlpha = register(new Setting<>("SliderBgAlpha", 55, 0, 255));
+    public Setting<Integer> topGreen = register(new Setting<>("TopGreen", 255, 0, 255));
+    public Setting<Integer> topBlue = register(new Setting<>("TopBlue", 255, 0, 255));
+    public Setting<Integer> topAlpha = register(new Setting<>("TopAlpha", 255, 0, 255));
+    public Setting<Integer> backgroundRed = register(new Setting<>("BackGroundRed", 255, 0, 255));
+    public Setting<Integer> backgroundGreen = register(new Setting<>("BackGroundGreen", 255, 0, 255));
+    public Setting<Integer> backgroundBlue = register(new Setting<>("BackGroundBlue", 255, 0, 255));
+    public Setting<Integer> backgroundAlpha = register(new Setting<>("BackGroundAlpha", 100, 0, 255));
     public Setting<Integer> sideRed = register(new Setting<>("SideRed", 255, 0, 255));
     public Setting<Integer> sideGreen = register(new Setting<>("SideGreen", 255, 0, 255));
     public Setting<Integer> sideBlue = register(new Setting<>("SideBlue", 255, 0, 255));
@@ -46,17 +39,6 @@ public class Gui extends Module {
     public Setting<Boolean> gradient = register(new Setting<>("Gradient", true));
     public Setting<GradientMode> gradientType = register(new Setting<>("Type", GradientMode.FromBottom, v -> gradient.getValue()));
     public Setting<Integer> gradientAlpha = register(new Setting<>("GradientAlpha", 150, 0, 255, v -> gradient.getValue()));
-    /*
-    public Setting<Integer> stateFalseBooleanRed = register(new Setting<>("BoolDisabledRed", 255, 0, 255));
-    public Setting<Integer> stateFalseBooleanGreen = register(new Setting<>("BoolDisabledGreen", 0, 0, 255));
-    public Setting<Integer> stateFalseBooleanBlue = register(new Setting<>("BoolDisabledBlue", 0, 0, 255));
-    public Setting<Integer> stateFalseBooleanAlpha = register(new Setting<>("BoolDisabledAlpha", 255, 0, 255));
-    public Setting<Integer> stateTrueBooleanRed = register(new Setting<>("BoolEnabledRed", 0, 0, 255));
-    public Setting<Integer> stateTrueBooleanGreen = register(new Setting<>("BoolEnabledGreen", 255, 0, 255));
-    public Setting<Integer> stateTrueBooleanBlue = register(new Setting<>("BoolEnabledBlue", 0, 0, 255));
-    public Setting<Integer> stateTrueBooleanAlpha = register(new Setting<>("BoolEnabledAlpha", 255, 0, 255))
-     */
-
 
 
 
@@ -82,7 +64,7 @@ public class Gui extends Module {
     }
     @Override
     public void onDisable() {
-        Mint.configManager.saveConfig("Config");
+        Mint.configManager.saveConfig("Default");
     }
     @SubscribeEvent
     public void onSettingChange(ClientEvent event) {

@@ -94,7 +94,6 @@ public class MintGui
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.checkMouseWheel();
-        //this.drawDefaultBackground();
         this.components.forEach(components -> components.drawScreen(mouseX, mouseY, partialTicks));
     }
 
