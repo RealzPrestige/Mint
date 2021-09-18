@@ -4,6 +4,7 @@ import mint.Mint;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -59,6 +60,13 @@ public class EntityUtil  {
     }
     public static boolean isMoving() {
         return (double) Mint.INSTANCE.mc.player.moveForward != 0.0 || (double) Mint.INSTANCE.mc.player.moveStrafing != 0.0;
+    }
+
+    public static void packetJump(boolean offground) {
+        Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + 0.4199999, Mint.INSTANCE.mc.player.posZ, offground));
+        Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + 0.7531999, Mint.INSTANCE.mc.player.posZ, offground));
+        Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + 1.0013359, Mint.INSTANCE.mc.player.posZ, offground));
+        Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + 1.1661092, Mint.INSTANCE.mc.player.posZ, offground));
     }
 }
 
