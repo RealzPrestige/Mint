@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FileManager extends Feature {
+public class FileManager
+        extends Feature {
     private final Path base = this.getMkDirectory(this.getRoot(), "mint");
     private final Path config = this.getMkDirectory(this.base, "config");
 
@@ -122,5 +123,3 @@ public class FileManager extends Feature {
         return this.getMkDirectory(this.getConfig(), this.expandPaths(names).collect(Collectors.joining(File.separator)));
     }
 }
-
-

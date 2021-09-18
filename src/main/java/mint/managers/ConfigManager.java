@@ -2,12 +2,11 @@ package mint.managers;
 
 import com.google.gson.*;
 import mint.Mint;
-import mint.modules.Feature;
-import mint.modules.Module;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.EnumSetting;
 import mint.clickgui.setting.Setting;
-
+import mint.modules.Feature;
+import mint.modules.Module;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,12 +14,12 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ConfigManager  {
+public class ConfigManager {
     public ArrayList<Feature> features = new ArrayList<>();
 
     public String config = "mint/config/";
 
-    public static void setValueFromJson(Setting setting, JsonElement element) {
+    public static void setValueFromJson(Feature feature, Setting setting, JsonElement element) {
         String str;
         switch (setting.getType()) {
             case "Boolean":
@@ -69,7 +68,7 @@ public class ConfigManager  {
             for (Setting setting : feature.getSettings()) {
                 if (settingName.equals(setting.getName())) {
                     try {
-                        setValueFromJson(setting, element);
+                        setValueFromJson(feature, setting, element);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

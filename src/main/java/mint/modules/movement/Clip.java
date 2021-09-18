@@ -37,7 +37,6 @@ public class Clip extends Module {
 
         //todo oml what is dis,
         switch (mc.player.getPosition().getY()) {
-
             case 6:
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -7.4, mc.player.posZ, true));
                 break;

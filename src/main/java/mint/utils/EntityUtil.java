@@ -4,14 +4,57 @@ import mint.Mint;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityUtil  {
+
+    public static float[] getLegitRotations(Vec3d vec) {
+        Vec3d eyesPos = getEyesPos();
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
+        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+        float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0f;
+        float pitch = (float) (-Math.toDegrees(Math.atan2(diffY, diffXZ)));
+        return new float[]{Mint.INSTANCE.mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - Mint.INSTANCE.mc.player.rotationYaw), Mint.INSTANCE.mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - Mint.INSTANCE.mc.player.rotationPitch)};
+    }
+
+    public static EntityPlayer getTarget(final float range) {
+        EntityPlayer currentTarget = null;
+        for (int size = Mint.INSTANCE.mc.world.playerEntities.size(), i = 0; i < size; ++i) {
+            final EntityPlayer player = Mint.INSTANCE.mc.world.playerEntities.get(i);
+            if (!EntityUtil.isntValid(player, range)) {
+                if (currentTarget == null) {
+                    currentTarget = player;
+                }
+                else if (Mint.INSTANCE.mc.player.getDistanceSq( player ) < Mint.INSTANCE.mc.player.getDistanceSq( currentTarget )) {
+                    currentTarget = player;
+                }
+            }
+        }
+        return currentTarget;
+    }
+    public static boolean isntValid(Entity entity, double range) {
+        return entity == null || EntityUtil.isDead(entity) || entity.equals(Mint.INSTANCE.mc.player) || entity instanceof EntityPlayer && Mint.friendManager.isFriend(entity.getName()) || Mint.INSTANCE.mc.player.getDistanceSq(entity) > MathUtil.square(range);
+    }
+    public static List<Vec3d> getUnsafeBlocks(Entity entity, int height, boolean floor) {
+        return EntityUtil.getUnsafeBlocksFromVec3d(entity.getPositionVector(), height, floor);
+    }
+    public static boolean isSafe(Entity entity, int height, boolean floor) {
+        return EntityUtil.getUnsafeBlocks(entity, height, floor).size() == 0;
+    }
+
+    public static boolean isSafe(Entity entity) {
+        return EntityUtil.isSafe(entity, 0, false);
+    }
+
     public static Vec3d getEyesPos() {
         return new Vec3d(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + (double) Mint.INSTANCE.mc.player.getEyeHeight(), Mint.INSTANCE.mc.player.posZ);
     }

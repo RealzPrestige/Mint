@@ -10,6 +10,10 @@ import mint.Mint;
 import mint.commands.Command;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -20,6 +24,10 @@ import java.util.*;
 public class PlayerUtil {
     private static final JsonParser PARSER = new JsonParser();
 
+    public static void faceVector(Vec3d vec, boolean normalizeAngle) {
+        float[] rotations = EntityUtil.getLegitRotations(vec);
+        Mint.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], normalizeAngle ? (float) MathHelper.normalizeAngle((int) rotations[1], 360) : rotations[1], Mint.INSTANCE.mc.player.onGround));
+    }
     public static UUID getUUIDFromName(String name) {
         try {
             lookUpUUID process = new lookUpUUID(name);

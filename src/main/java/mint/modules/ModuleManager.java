@@ -4,6 +4,7 @@ import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
+import mint.modules.combat.HoleFiller;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
@@ -36,6 +37,7 @@ public class ModuleManager
         moduleList.add(new Notifications());
 
         /** Combat **/
+        moduleList.add(new HoleFiller());
 
         /** Miscellaneous **/
         moduleList.add(new ChorusPredict());

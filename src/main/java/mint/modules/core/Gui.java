@@ -71,6 +71,7 @@ public class Gui extends Module {
         FromTop,
         FromBottom
     }
+
     @Override
     public void onDisable() {
         Mint.configManager.saveConfig("Default");

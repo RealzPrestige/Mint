@@ -30,6 +30,46 @@ public class RenderUtil {
         camera = new Frustum();
     }
 
+    public static void drawBoxESP(BlockPos pos, Color color, boolean secondC, Color secondColor, float lineWidth, boolean outline, boolean box, int boxAlpha, boolean air) {
+        if (box) {
+            RenderUtil.drawBox(pos, new Color(color.getRed(), color.getGreen(), color.getBlue(), boxAlpha));
+        }
+        if (outline) {
+            RenderUtil.drawBlockOutline(pos, secondC ? secondColor : color, lineWidth, air);
+        }
+    }
+
+    public static void drawBlockOutline(final BlockPos pos, final Color color, final float linewidth, final boolean air) {
+        final IBlockState iblockstate = RenderUtil.mc.world.getBlockState(pos);
+        if ((air || iblockstate.getMaterial() != Material.AIR) && RenderUtil.mc.world.getWorldBorder().contains(pos)) {
+            final Vec3d interp = interpolateEntity( RenderUtil.mc.player , RenderUtil.mc.getRenderPartialTicks());
+            drawBlockOutline(iblockstate.getSelectedBoundingBox( RenderUtil.mc.world , pos).grow(0.0020000000949949026).offset(-interp.x, -interp.y, -interp.z), color, linewidth);
+        }
+    }
+
+
+    public static void drawBox(final BlockPos pos, final Color color) {
+        final AxisAlignedBB bb = new AxisAlignedBB(pos.getX() - RenderUtil.mc.getRenderManager().viewerPosX, pos.getY() - RenderUtil.mc.getRenderManager().viewerPosY, pos.getZ() - RenderUtil.mc.getRenderManager().viewerPosZ, pos.getX() + 1 - RenderUtil.mc.getRenderManager().viewerPosX, pos.getY() + 1 - RenderUtil.mc.getRenderManager().viewerPosY, pos.getZ() + 1 - RenderUtil.mc.getRenderManager().viewerPosZ);
+        RenderUtil.camera.setPosition(Objects.requireNonNull(RenderUtil.mc.getRenderViewEntity()).posX, RenderUtil.mc.getRenderViewEntity().posY, RenderUtil.mc.getRenderViewEntity().posZ);
+        if (RenderUtil.camera.isBoundingBoxInFrustum(new AxisAlignedBB(bb.minX + RenderUtil.mc.getRenderManager().viewerPosX, bb.minY + RenderUtil.mc.getRenderManager().viewerPosY, bb.minZ + RenderUtil.mc.getRenderManager().viewerPosZ, bb.maxX + RenderUtil.mc.getRenderManager().viewerPosX, bb.maxY + RenderUtil.mc.getRenderManager().viewerPosY, bb.maxZ + RenderUtil.mc.getRenderManager().viewerPosZ))) {
+            GlStateManager.pushMatrix();
+            GlStateManager.enableBlend();
+            GlStateManager.disableDepth();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 0, 1);
+            GlStateManager.disableTexture2D();
+            GlStateManager.depthMask(false);
+            GL11.glEnable(2848);
+            GL11.glHint(3154, 4354);
+            RenderGlobal.renderFilledBox(bb, color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
+            GL11.glDisable(2848);
+            GlStateManager.depthMask(true);
+            GlStateManager.enableDepth();
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
+        }
+    }
+
     public static void drawGradientRect(final double leftpos, final double top, final double right, final double bottom, final int col1, final int col2) {
         final float f = (col1 >> 24 & 0xFF) / 255.0f;
         final float f2 = (col1 >> 16 & 0xFF) / 255.0f;
