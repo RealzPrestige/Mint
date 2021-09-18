@@ -8,7 +8,7 @@ import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
 import mint.modules.miscellaneous.ChorusPredict;
-import mint.modules.visual.StaticHands;
+import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -41,7 +41,7 @@ public class ModuleManager
         /** Player **/
 
         /** Visual **/
-        moduleList.add(new StaticHands());
+        moduleList.add(new SwingAnimations());
     }
 
     public Module getModuleByName(String name) {
