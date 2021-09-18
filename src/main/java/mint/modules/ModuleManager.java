@@ -50,6 +50,7 @@ public class ModuleManager
         /** Movement **/
         moduleList.add(new Clip());
         moduleList.add(new Step());
+        //moduleList.add(new Strafe());
 
         /** Player **/
         moduleList.add(new AntiAim());

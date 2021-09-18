@@ -24,8 +24,8 @@ public class HoleESP extends Module {
     HashSet<BlockPos> obsidianholes = Sets.newHashSet();
     public Setting<Integer> updateDelay = register(new Setting<>("UpdateDelay", 1, 0, 30));
     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
-    public Setting<Integer> range = register(new Setting<>("X-Range", 0, 1, 20, v-> rangesParent.getValue()));
-    public Setting<Integer> rangeY = register(new Setting<>("Y-Range", 0, 1, 20, v-> rangesParent.getValue()));
+    public Setting<Integer> range = register(new Setting<>("X-Range", 8, 1, 20, v-> rangesParent.getValue()));
+    public Setting<Integer> rangeY = register(new Setting<>("Y-Range", 6, 1, 20, v-> rangesParent.getValue()));
     public Setting<Boolean> bedrockParent = register(new Setting("Bedrock", true, false));
     public Setting<Boolean> bedrockBox = register(new Setting("Box", true, v-> bedrockParent.getValue()));
     public Setting<Integer> bedrockBoxRed = register(new Setting<>( "BoxRed", 0, 0, 255, v-> bedrockBox.getValue() && bedrockParent.getValue()));
