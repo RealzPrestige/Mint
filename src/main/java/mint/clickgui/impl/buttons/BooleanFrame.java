@@ -33,6 +33,11 @@ public class BooleanFrame
         }
         if(setting.isParent()){
             RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 5.4f, this.y + (float) this.height - 0.5f, ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+            if(getState()){
+                RenderUtil.drawArrow(this.x - 1 + (float) this.width - 5, this.y - 2.5f - (float) MintGui.getClickGui().getTextOffset(),5f, 1, 20, 1, true);
+            } else {
+                RenderUtil.drawArrow(this.x - 1 + (float) this.width - 2.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),5f, 1, 20, 1, false);
+            }
         }
         int sideColor = ColorUtil.toRGBA(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue()); RenderUtil.drawRect(this.x, this.y - 2, this.x + 1, this.y + this.height, sideColor);
         RenderUtil.drawRect(this.x, this.y - 2, this.x + 1, this.y + this.height, sideColor);
@@ -41,10 +46,6 @@ public class BooleanFrame
             Mint.textManager.drawStringWithShadow(this.getName(), this.x + (this.width / 2) - (renderer.getStringWidth(this.getName()) / 2), this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), setting.isParent() ? -1 : this.getState() ? -1 : -5592406);
         } else {
             Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), setting.isParent() ? -1 : this.getState() ? -1 : -5592406);
-        }
-        if (setting.isParent()) {
-            Mint.textManager.drawString((this.getState() ? "V" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), -1, false);
-
         }
     }
 

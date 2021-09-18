@@ -1,6 +1,7 @@
 package mint.utils;
 
 import mint.Mint;
+import mint.modules.core.Gui;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,25 +32,52 @@ public class RenderUtil {
 
     public static void drawArrow(float x, float y, float size, float widthDiv, float heightDiv, float outlineWidth, boolean isOpen) {
         boolean blend = GL11.glIsEnabled(3042);
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
-        GL11.glPushMatrix();
-        GL11.glLineWidth(outlineWidth);
-        GL11.glBegin(2);
-        GL11.glVertex2d(x, y);
-        GL11.glVertex2d(x - size / widthDiv, y - size);
-        GL11.glVertex2d(x, y - size / heightDiv);
-        GL11.glVertex2d(x + size / widthDiv, y - size);
-        GL11.glVertex2d(x, y);
-        GL11.glEnd();
-        GL11.glPopMatrix();
-        GL11.glEnable(3553);
-        if (!blend) {
-            GL11.glDisable(3042);
+            if (isOpen) {
+                GL11.glPushMatrix();
+                GL11.glScaled(1.3, 1.3, 1.3);
+                y -= 1.5f;
+                x += 2;
+                x /= 1.3;
+                y /= 1.3;
+                GL11.glEnable(GL11.GL_LINE_SMOOTH);
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glLineWidth(1);
+                GL11.glColor4f(255, 255, 255, 255);
+                GL11.glBegin(GL11.GL_LINES);
+                GL11.glVertex2d(x, y);
+                GL11.glVertex2d(x + 4, y + 3);
+                GL11.glEnd();
+                GL11.glBegin(GL11.GL_LINES);
+                GL11.glVertex2d(x + 4, y + 3);
+                GL11.glVertex2d(x, y + 6);
+                GL11.glEnd();
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GL11.glDisable(GL11.GL_LINE_SMOOTH);
+                GL11.glPopMatrix();
+            } else {
+                GL11.glEnable(3042);
+                GL11.glDisable(3553);
+                GL11.glBlendFunc(770, 771);
+                GL11.glEnable(2848);
+                GL11.glPushMatrix();
+                GL11.glLineWidth(outlineWidth);
+                GL11.glBegin(2);
+                GL11.glColor4f(255, 255, 255, 255);
+                GL11.glVertex2d(x, y);
+                GL11.glVertex2d(x - size / widthDiv, y - size);
+                GL11.glVertex2d(x, y - size / heightDiv);
+                GL11.glVertex2d(x + size / widthDiv, y - size);
+                GL11.glVertex2d(x, y);
+                GL11.glEnd();
+                GL11.glPopMatrix();
+                GL11.glEnable(3553);
+                if (!blend) {
+                    GL11.glDisable(3042);
+                }
+                GL11.glDisable(2848);
         }
-        GL11.glDisable(2848);
     }
 
     public static void drawBoxESPFlat(BlockPos pos, Color color, boolean secondC, Color secondColor, float lineWidth, boolean outline, boolean box, int boxAlpha, boolean air) {

@@ -61,9 +61,9 @@ public class ModuleFrame
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (!this.items.isEmpty()) {
            if(subOpen){
-               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),  5f, 1, 2, 1, true);
+               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 10, this.y - 2.5f - (float) MintGui.getClickGui().getTextOffset(),5f, 1, 20, 1, true);
            } else {
-               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),  5f, 1, 2, 1, false);
+               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),5f, 1, 20, 1, false);
            }
             if (this.subOpen) {
                 float height = 1.0f;
