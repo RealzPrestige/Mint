@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 public class SelfFill extends Module {
 
     public SelfFill () {
-        super("SelfFill ", Category.COMBAT, "Rubberbands you in a block.");
+        super("Self Fill ", Category.COMBAT, "Rubberbands you in a block.");
     }
 
     public Setting<Block> prefer = register(new Setting("Prefer", Block.EChest));
