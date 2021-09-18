@@ -7,7 +7,8 @@ import mint.clickgui.MintGui;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
-import mint.modules.visual.ChorusViewer;
+import mint.modules.miscellaneous.ChorusViewer;
+import mint.modules.visual.StaticHands;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -33,13 +34,14 @@ public class ModuleManager
         /** Combat **/
 
         /** Miscellaneous **/
+        moduleList.add(new ChorusViewer());
 
         /** Movement **/
 
         /** Player **/
 
         /** Visual **/
-        moduleList.add(new ChorusViewer());
+        moduleList.add(new StaticHands());
     }
 
     public Module getModuleByName(String name) {

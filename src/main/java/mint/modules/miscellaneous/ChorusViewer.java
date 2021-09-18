@@ -1,4 +1,4 @@
-package mint.modules.visual;
+package mint.modules.miscellaneous;
 
 import mint.clickgui.setting.Setting;
 import mint.events.ChorusEvent;
