@@ -8,11 +8,12 @@ import mint.events.Render3DEvent;
 import mint.commands.Command;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 
-public class Module
-        extends Feature {
+public class Module extends Feature {
+    public Minecraft mc = Minecraft.getMinecraft();
     private final String description;
     private final Category category;
     public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));

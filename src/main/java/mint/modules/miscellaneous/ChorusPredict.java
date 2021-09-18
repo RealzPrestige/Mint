@@ -11,7 +11,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 
-public class ChorusViewer extends Module {
+public class ChorusPredict extends Module {
     private final Setting<Integer> time = this.register(new Setting<>("Duration", 500, 50, 3000));
     private final Setting<Boolean> box = this.register(new Setting<>("Box", true));
     private final Setting<Boolean> outline = this.register(new Setting<>("Outline", true));
@@ -29,7 +29,7 @@ public class ChorusViewer extends Module {
     private double y;
     private double z;
 
-    public ChorusViewer() {
+    public ChorusPredict() {
         super("Chorus Predict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
     }
 

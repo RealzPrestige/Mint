@@ -20,6 +20,5 @@ public class StaticHands extends Module {
         Mint.INSTANCE.mc.entityRenderer.itemRenderer.equippedProgressOffHand = 1.0f;
         Mint.INSTANCE.mc.entityRenderer.itemRenderer.itemStackMainHand = Mint.INSTANCE.mc.player.getHeldItem(EnumHand.MAIN_HAND);
         Mint.INSTANCE.mc.entityRenderer.itemRenderer.itemStackOffHand = Mint.INSTANCE.mc.player.getHeldItem(EnumHand.OFF_HAND);
-
     }
 }

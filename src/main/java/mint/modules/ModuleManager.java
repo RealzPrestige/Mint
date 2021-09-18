@@ -7,7 +7,7 @@ import mint.clickgui.MintGui;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
-import mint.modules.miscellaneous.ChorusViewer;
+import mint.modules.miscellaneous.ChorusPredict;
 import mint.modules.visual.StaticHands;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -34,7 +34,7 @@ public class ModuleManager
         /** Combat **/
 
         /** Miscellaneous **/
-        moduleList.add(new ChorusViewer());
+        moduleList.add(new ChorusPredict());
 
         /** Movement **/
 
