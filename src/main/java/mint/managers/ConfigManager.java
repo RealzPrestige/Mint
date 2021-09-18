@@ -23,16 +23,16 @@ public class ConfigManager {
         String str;
         switch (setting.getType()) {
             case "Boolean":
-                setting.setValue(Boolean.valueOf(element.getAsBoolean()));
+                setting.setValue(element.getAsBoolean());
                 return;
             case "Double":
-                setting.setValue(Double.valueOf(element.getAsDouble()));
+                setting.setValue(element.getAsDouble());
                 return;
             case "Float":
-                setting.setValue(Float.valueOf(element.getAsFloat()));
+                setting.setValue(element.getAsFloat());
                 return;
             case "Integer":
-                setting.setValue(Integer.valueOf(element.getAsInt()));
+                setting.setValue(element.getAsInt());
                 return;
             case "String":
                 str = element.getAsString();

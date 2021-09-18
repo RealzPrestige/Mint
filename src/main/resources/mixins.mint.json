@@ -4,9 +4,10 @@
   "package": "mint.mixins",
   "refmap": "mixins.mint.refmap.json",
   "mixins": [
+    "MixinFontRenderer",
     "MixinMinecraft",
     "MixinNetworkManager",
-    "MixinWorld",
-    "MixinFontRenderer"
+    "MixinRenderPlayer",
+    "MixinWorld"
   ]
 }

@@ -10,6 +10,7 @@ import mint.Mint;
 import mint.commands.Command;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.item.*;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -24,6 +25,18 @@ import java.util.*;
 public class PlayerUtil {
     private static final JsonParser PARSER = new JsonParser();
 
+    public static float getDamageInPercent(final ItemStack stack) {
+        final float green = (stack.getMaxDamage() - (float)stack.getItemDamage()) / stack.getMaxDamage();
+        final float red = 1.0f - green;
+        return (float)(100 - (int)(red * 100.0f));
+    }
+    public static int getRoundedDamage(ItemStack stack) {
+        return (int) getDamageInPercent(stack);
+    }
+    public static boolean hasDurability(ItemStack stack) {
+        Item item = stack.getItem();
+        return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemShield;
+    }
     public static void faceVector(Vec3d vec, boolean normalizeAngle) {
         float[] rotations = EntityUtil.getLegitRotations(vec);
         Mint.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], normalizeAngle ? (float) MathHelper.normalizeAngle((int) rotations[1], 360) : rotations[1], Mint.INSTANCE.mc.player.onGround));

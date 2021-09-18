@@ -15,6 +15,31 @@ import java.util.List;
 
 public class EntityUtil  {
 
+    public static boolean isInFov(Entity entity) {
+        return entity != null && (Mint.INSTANCE.mc.player.getDistanceSq(entity) < 4.0 || yawDist(entity) < (double) (getFov() + 2.0f));
+    }
+
+    public static double yawDist(Entity e) {
+        if (e != null) {
+            Vec3d difference = e.getPositionVector().add(0.0, e.getEyeHeight() / 2.0f, 0.0).subtract(Mint.INSTANCE.mc.player.getPositionEyes(Mint.INSTANCE.mc.getRenderPartialTicks()));
+            double d = Math.abs((double) Mint.INSTANCE.mc.player.rotationYaw - (Math.toDegrees(Math.atan2(difference.z, difference.x)) - 90.0)) % 360.0;
+            return d > 180.0 ? 360.0 - d : d;
+        }
+        return 0.0;
+    }
+
+    public static float getFov() {
+        return Mint.INSTANCE.mc.gameSettings.fovSetting;
+    }
+
+
+    public static float getHealth(Entity entity) {
+        if (EntityUtil.isLiving(entity)) {
+            EntityLivingBase livingBase = (EntityLivingBase) entity;
+            return livingBase.getHealth() + livingBase.getAbsorptionAmount();
+        }
+        return 0.0f;
+    }
     public static float[] getLegitRotations(Vec3d vec) {
         Vec3d eyesPos = getEyesPos();
         double diffX = vec.x - eyesPos.x;

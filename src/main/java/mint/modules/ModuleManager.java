@@ -15,6 +15,7 @@ import mint.modules.movement.Clip;
 import mint.modules.movement.Step;
 import mint.modules.player.AntiAim;
 import mint.modules.visual.HoleESP;
+import mint.modules.visual.NameTags;
 import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -30,7 +31,6 @@ public class ModuleManager
         extends Feature {
     public ArrayList<Module> moduleList = new ArrayList();
     public List<Module> sortedModules = new ArrayList<>();
-    public List<String> sortedModulesABC = new ArrayList<>();
 
     public void init() {
         /** Core **/
@@ -56,6 +56,7 @@ public class ModuleManager
         /** Visual **/
         moduleList.add(new SwingAnimations());
         moduleList.add(new HoleESP());
+        moduleList.add(new NameTags());
     }
 
     public Module getModuleByName(String name) {

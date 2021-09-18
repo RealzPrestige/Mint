@@ -30,6 +30,27 @@ public class RenderUtil {
         camera = new Frustum();
     }
 
+    public static void drawOutlineRect(final float x, final float y, final float w, final float h, final Color color) {
+        final float alpha = (color.getAlpha() >> 24 & 0xFF) / 255.0f;
+        final float red = (color.getRed() >> 16 & 0xFF) / 255.0f;
+        final float green = (color.getGreen() >> 8 & 0xFF) / 255.0f;
+        final float blue = (color.getBlue() & 0xFF) / 255.0f;
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.glLineWidth(1.0f);
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        bufferbuilder.begin(2, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos((double)x, (double)h, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)w, (double)h, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)w, (double)y, 0.0).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos((double)x, (double)y, 0.0).color(red, green, blue, alpha).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
     public static void drawBoxESP(BlockPos pos, Color color, boolean secondC, Color secondColor, float lineWidth, boolean outline, boolean box, int boxAlpha, boolean air) {
         if (box) {
             RenderUtil.drawBox(pos, new Color(color.getRed(), color.getGreen(), color.getBlue(), boxAlpha));
