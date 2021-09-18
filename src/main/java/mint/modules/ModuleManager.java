@@ -5,12 +5,15 @@ import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
 import mint.modules.combat.HoleFiller;
+import mint.modules.combat.SelfFill;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
 import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.ChorusPredict;
 import mint.modules.movement.Clip;
+import mint.modules.movement.Step;
+import mint.modules.player.AntiAim;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,14 +41,17 @@ public class ModuleManager
 
         /** Combat **/
         moduleList.add(new HoleFiller());
+        moduleList.add(new SelfFill());
 
         /** Miscellaneous **/
         moduleList.add(new ChorusPredict());
 
         /** Movement **/
         moduleList.add(new Clip());
+        moduleList.add(new Step());
 
         /** Player **/
+        moduleList.add(new AntiAim());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());
