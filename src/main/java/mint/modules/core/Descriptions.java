@@ -8,7 +8,6 @@ public class Descriptions extends Module {
     public Setting<Mode> mode = register(new Setting("Mode", Mode.HOVER));
     public enum Mode{BOTTOMLEFT, HOVER}
     public Setting<Boolean> rect = register(new Setting("Rectangle", false));
-    public Setting<Boolean> example = register(new Setting("Example", true,true));
     public Setting<Boolean> outline = register(new Setting("Outline", false));
     public Descriptions(){
         super("Descriptions", Category.CORE, "Shows descriptions when you hover over a Module");

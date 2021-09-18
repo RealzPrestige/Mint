@@ -12,18 +12,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 
 public class ChorusPredict extends Module {
-    private final Setting<Integer> time = this.register(new Setting<>("Duration", 500, 50, 3000));
-    private final Setting<Boolean> box = this.register(new Setting<>("Box", true));
-    private final Setting<Boolean> outline = this.register(new Setting<>("Outline", true));
-    private final Setting<Integer> boxRed = this.register(new Setting<>("BoxRed", 255, 0, 255, v -> this.box.getValue()));
-    private final Setting<Integer> boxGreen = this.register(new Setting<>("BoxGreen", 255, 0, 255, v -> this.box.getValue()));
-    private final Setting<Integer> boxBlue = this.register(new Setting<>("BoxBlue", 255, 0, 255, v -> this.box.getValue()));
-    private final Setting<Integer> boxAlpha = this.register(new Setting<>("BoxAlpha", 120, 0, 255, v -> this.box.getValue()));
-    private final Setting<Float> lineWidth = this.register(new Setting<>("LineWidth", 1.0f, 0.1f, 5.0f, v -> this.outline.getValue()));
-    private final Setting<Integer> outlineRed = this.register(new Setting<>("OutlineRed", 255, 0, 255, v -> this.outline.getValue()));
-    private final Setting<Integer> outlineGreen = this.register(new Setting<>("OutlineGreen", 255, 0, 255, v -> this.outline.getValue()));
-    private final Setting<Integer> outlineBlue = this.register(new Setting<>("OutlineBlue", 255, 0, 255, v -> this.outline.getValue()));
-    private final Setting<Integer> outlineAlpha = this.register(new Setting<>("OutlineAlpha", 255, 0, 255, v -> this.outline.getValue()));
+    private final Setting<Integer> time = register(new Setting<>("Duration", 500, 50, 3000));
+    private final Setting<Boolean> boxParent = register(new Setting<>("Box", true, false));
+    private final Setting<Boolean> box = register(new Setting("BoxSetting", true, v-> boxParent.getValue()));
+    private final Setting<Integer> boxRed = register(new Setting<>("BoxRed", 255, 0, 255, v -> box.getValue() && boxParent.getValue()));
+    private final Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v -> box.getValue() && boxParent.getValue()));
+    private final Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v -> box.getValue() && boxParent.getValue()));
+    private final Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v -> box.getValue() && boxParent.getValue()));
+    private final Setting<Boolean> outlineParent = register(new Setting<>("Outline", true, false));
+    private final Setting<Boolean> outline = register(new Setting<>("OutlineSetting", true, false, v-> outlineParent.getValue()));
+    private final Setting<Integer> outlineRed = register(new Setting<>("OutlineRed", 255, 0, 255, v -> outline.getValue() && outlineParent.getValue()));
+    private final Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v -> outline.getValue() && outlineParent.getValue()));
+    private final Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v -> outline.getValue() && outlineParent.getValue()));
+    private final Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 255, 0, 255, v -> outline.getValue() && outlineParent.getValue()));
+    private final Setting<Float> lineWidth = register(new Setting<>("LineWidth", 1.0f, 0.1f, 5.0f, v -> outline.getValue() && outlineParent.getValue()));
     private final Timer timer = new Timer();
     private double x;
     private double y;
@@ -34,28 +36,28 @@ public class ChorusPredict extends Module {
     }
 
     public void onLogin(){
-        if(this.isEnabled()) {
-            this.disable();
-            this.enable();
+        if(isEnabled()) {
+            disable();
+            enable();
         }
     }
     @SubscribeEvent
     public void onEntityChorus(ChorusEvent event) {
-        this.x = event.getEventPosX();
-        this.y = event.getEventY();
-        this.z = event.getEventZ();
-        this.timer.reset();
+        x = event.getEventPosX();
+        y = event.getEventY();
+        z = event.getEventZ();
+        timer.reset();
     }
 
     @Override
     public void onRender3D(Render3DEvent render3DEvent) {
         if (timer.passedMs(time.getValue())) return;
         AxisAlignedBB pos = RenderUtil.interpolateAxis(new AxisAlignedBB(x - 0.3, y, z - 0.3, x + 0.3, y + 1.8, z + 0.3));
-        if (this.outline.getValue()) {
-            RenderUtil.drawBlockOutline(pos, new Color(this.outlineRed.getValue(), this.outlineGreen.getValue(), this.outlineBlue.getValue(), this.outlineAlpha.getValue()), this.lineWidth.getValue());
+        if (outline.getValue()) {
+            RenderUtil.drawBlockOutline(pos, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), lineWidth.getValue());
         }
-        if (this.box.getValue()) {
-            RenderUtil.drawFilledBox(pos, ColorUtil.toRGBA(this.boxRed.getValue(), this.boxGreen.getValue(), this.boxBlue.getValue(), this.boxAlpha.getValue()));
+        if (box.getValue()) {
+            RenderUtil.drawFilledBox(pos, ColorUtil.toRGBA(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()));
         }
     }
 }

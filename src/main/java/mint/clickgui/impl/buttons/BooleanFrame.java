@@ -30,9 +30,14 @@ public class BooleanFrame
         int sideColor = ColorUtil.toRGBA(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue()); RenderUtil.drawRect(this.x, this.y - 2, this.x + 1, this.y + this.height, sideColor);
         RenderUtil.drawRect(this.x, this.y - 2, this.x + 1, this.y + this.height, sideColor);
         RenderUtil.drawRect(this.x + 113, this.y - 2, this.x + 114, this.y + this.height, sideColor);
-        Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+        if(setting.isParent()){
+            Mint.textManager.drawStringWithShadow(this.getName(), this.x + (this.width / 2) - (renderer.getStringWidth(this.getName()) / 2), this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), setting.isParent() ? -1 : this.getState() ? -1 : -5592406);
+        } else {
+            Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), setting.isParent() ? -1 : this.getState() ? -1 : -5592406);
+        }
         if (setting.isParent()) {
             Mint.textManager.drawString((this.getState() ? "V" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), -1, false);
+
         }
     }
 
@@ -47,6 +52,7 @@ public class BooleanFrame
         if (this.isHovering(mouseX, mouseY) && !setting.isParent()) {
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }else if (this.isHovering(mouseX, mouseY) && mouseButton == 1 && setting.isParent()) {
+            this.toggle();
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
     }
