@@ -30,7 +30,7 @@ public class ChorusViewer extends Module {
     private double z;
 
     public ChorusViewer() {
-        super("ChorusPredict", Category.MISCELLANEOUS, "Renders a box and outline where a player's chorus will go to.");
+        super("Chorus Predict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
     }
 
     public void onLogin(){
