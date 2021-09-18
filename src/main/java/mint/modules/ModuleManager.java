@@ -14,6 +14,7 @@ import mint.modules.miscellaneous.ChorusPredict;
 import mint.modules.movement.Clip;
 import mint.modules.movement.Step;
 import mint.modules.player.AntiAim;
+import mint.modules.player.FakePlayer;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
@@ -52,6 +53,7 @@ public class ModuleManager
 
         /** Player **/
         moduleList.add(new AntiAim());
+        moduleList.add(new FakePlayer());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());

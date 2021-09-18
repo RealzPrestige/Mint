@@ -53,7 +53,7 @@ public class HoleESP extends Module {
     public Setting<Integer> obsidianOutlineLineWidth = register(new Setting<>("OutlineLineWidth", 1, 0, 5, v-> obsidianOutline.getValue() && obsidianParent.getValue()));
 
     public HoleESP() {
-        super("Hole ESP", Category.VISUAL, "Shows where safe holes are.");
+        super("Hole ESP", Category.VISUAL, "Draws a box around safe holes for crystal PVP.");
     }
 
     public void onTick() {
