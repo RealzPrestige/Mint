@@ -27,26 +27,26 @@ public class HoleESP extends Module {
     public Setting<Integer> rangeY = register(new Setting<>("Y-Range", 0, 1, 20, v-> holes.getValue()));
     public Setting<Integer> updateDelay = register(new Setting<>("UpdateDelay", 1, 0, 30, v-> holes.getValue()));
 
-    public Setting<Boolean> bedrockBox = register(new Setting<>("BedrockBox", true, v-> holes.getValue()));
-    public Setting<Boolean> bedrockFlat = register(new Setting<>("BedrockFlat", true, v-> holes.getValue()));
+    public Setting<Boolean> bedrockBox = register(new Setting("BedrockBox", true, v-> holes.getValue()));
+    public Setting<Boolean> bedrockFlat = register(new Setting("BedrockFlat", true, v-> holes.getValue()));
     public Setting<Integer> bedrockBoxRed = register(new Setting<>( "BedrockBoxRed", 0, 0, 255, v-> holes.getValue() && bedrockBox.getValue()));
     public Setting<Integer> bedrockBoxGreen = register(new Setting<>("BedrockBoxGreen", 255, 0, 255, v-> holes.getValue() && bedrockBox.getValue()));
     public Setting<Integer> bedrockBoxBlue = register(new Setting<>("BedrockBoxBlue", 0, 0, 255, v-> holes.getValue() && bedrockBox.getValue()));
     public Setting<Integer> bedrockBoxAlpha = register(new Setting<>("BedrockBoxAlpha", 120, 0, 255, v-> holes.getValue() && bedrockBox.getValue()));
-    public Setting<Boolean> bedrockOutline = register(new Setting<>("BedrockOutline", true, v-> holes.getValue()));
+    public Setting<Boolean> bedrockOutline = register(new Setting("BedrockOutline", true, v-> holes.getValue()));
     public Setting<Integer> bedrockOutlineRed = register(new Setting<>( "BedrockOutlineRed", 0, 0, 255, v-> holes.getValue() && bedrockOutline.getValue()));
     public Setting<Integer> bedrockOutlineGreen = register(new Setting<>("BedrockOutlineGreen", 255, 0, 255, v-> holes.getValue() && bedrockOutline.getValue()));
     public Setting<Integer> bedrockOutlineBlue = register(new Setting<>("BedrockOutlineBlue", 0, 0, 255, v-> holes.getValue() && bedrockOutline.getValue()));
     public Setting<Integer> bedrockOutlineAlpha = register(new Setting<>("BedrockOutlineAlpha", 255, 0, 255, v-> holes.getValue() && bedrockOutline.getValue()));
     public Setting<Integer> bedrockOutlineLineWidth = register(new Setting<>("BedrockOutlineLineWidth", 1, 0, 5, v-> holes.getValue() && bedrockOutline.getValue()));
 
-    public Setting<Boolean> obsidianBox = register(new Setting<>("ObsidianBox", true, v-> holes.getValue()));
-    public Setting<Boolean> obsidianFlat = register(new Setting<>("ObsidianFlat", false, v-> holes.getValue()));
+    public Setting<Boolean> obsidianBox = register(new Setting("ObsidianBox", true, v-> holes.getValue()));
+    public Setting<Boolean> obsidianFlat = register(new Setting("ObsidianFlat", false, v-> holes.getValue()));
     public Setting<Integer> obsidianBoxRed = register(new Setting<>( "ObsidianBoxRed", 255, 0, 255, v-> holes.getValue() && obsidianBox.getValue()));
     public Setting<Integer> obsidianBoxGreen = register(new Setting<>("ObsidianBoxGreen", 0, 0, 255, v-> holes.getValue() && obsidianBox.getValue()));
     public Setting<Integer> obsidianBoxBlue = register(new Setting<>("ObsidianBoxBlue", 0, 0, 255, v-> holes.getValue() && obsidianBox.getValue()));
     public Setting<Integer> obsidianBoxAlpha = register(new Setting<>("ObsidianBoxAlpha", 120, 0, 255, v-> holes.getValue() && obsidianBox.getValue()));
-    public Setting<Boolean> obsidianOutline = register(new Setting<>("ObsidianOutline", true, v-> holes.getValue()));
+    public Setting<Boolean> obsidianOutline = register(new Setting("ObsidianOutline", true, v-> holes.getValue()));
     public Setting<Integer> obsidianOutlineRed = register(new Setting<>( "ObsidianOutlineRed", 255, 0, 255, v-> holes.getValue() && obsidianOutline.getValue()));
     public Setting<Integer> obsidianOutlineGreen = register(new Setting<>("ObsidianOutlineGreen", 0, 0, 255, v-> holes.getValue() && obsidianOutline.getValue()));
     public Setting<Integer> obsidianOutlineBlue = register(new Setting<>("ObsidianOutlineBlue", 0, 0, 255, v-> holes.getValue() && obsidianOutline.getValue()));

@@ -14,6 +14,7 @@ public class Setting<T> {
     private T min;
     private T max;
     private boolean hasRestriction;
+    private boolean isParent;
     private Predicate<T> visibility;
     private String description;
     private Feature feature;
@@ -25,6 +26,32 @@ public class Setting<T> {
         this.plannedValue = defaultValue;
         this.description = "";
 
+    }
+
+    public Setting(String name, T defaultValue, Boolean parent, Predicate<T> visibility) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.value = defaultValue;
+        this.visibility = visibility;
+        this.plannedValue = defaultValue;
+        this.isParent = parent;
+    }
+
+    public Setting(String name, Boolean parent, T defaultValue) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.value = defaultValue;
+        this.plannedValue = defaultValue;
+        this.description = "";
+        this.isParent = parent;
+    }
+
+    public Setting(String name, T defaultValue, Predicate<T> visibility) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.value = defaultValue;
+        this.visibility = visibility;
+        this.plannedValue = defaultValue;
     }
 
     public Setting(String name, T defaultValue, String description) {
@@ -81,13 +108,6 @@ public class Setting<T> {
         this.hasRestriction = true;
     }
 
-    public Setting(String name, T defaultValue, Predicate<T> visibility) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.visibility = visibility;
-        this.plannedValue = defaultValue;
-    }
 
     public String getName() {
         return this.name;
@@ -240,6 +260,10 @@ public class Setting<T> {
 
     public boolean hasRestriction() {
         return this.hasRestriction;
+    }
+
+    public boolean isParent() {
+        return this.isParent;
     }
 
     public void setVisibility(Predicate<T> visibility) {
