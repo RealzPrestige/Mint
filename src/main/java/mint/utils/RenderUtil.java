@@ -30,6 +30,36 @@ public class RenderUtil {
         camera = new Frustum();
     }
 
+    public static void drawGradientRect(final double leftpos, final double top, final double right, final double bottom, final int col1, final int col2) {
+        final float f = (col1 >> 24 & 0xFF) / 255.0f;
+        final float f2 = (col1 >> 16 & 0xFF) / 255.0f;
+        final float f3 = (col1 >> 8 & 0xFF) / 255.0f;
+        final float f4 = (col1 & 0xFF) / 255.0f;
+        final float f5 = (col2 >> 24 & 0xFF) / 255.0f;
+        final float f6 = (col2 >> 16 & 0xFF) / 255.0f;
+        final float f7 = (col2 >> 8 & 0xFF) / 255.0f;
+        final float f8 = (col2 & 0xFF) / 255.0f;
+        GL11.glEnable(3042);
+        GL11.glDisable(3553);
+        GL11.glBlendFunc(770, 771);
+        GL11.glEnable(2848);
+        GL11.glShadeModel(7425);
+        GL11.glPushMatrix();
+        GL11.glBegin(7);
+        GL11.glColor4f(f2, f3, f4, f);
+        GL11.glVertex2d(leftpos, top);
+        GL11.glVertex2d(leftpos, bottom);
+        GL11.glColor4f(f6, f7, f8, f5);
+        GL11.glVertex2d(right, bottom);
+        GL11.glVertex2d(right, top);
+        GL11.glEnd();
+        GL11.glPopMatrix();
+        GL11.glEnable(3553);
+        GL11.glDisable(3042);
+        GL11.glDisable(2848);
+        GL11.glShadeModel(7424);
+    }
+
     public static void drawArrow(float x, float y, float size, float widthDiv, float heightDiv, float outlineWidth, boolean isOpen) {
         boolean blend = GL11.glIsEnabled(3042);
             if (isOpen) {

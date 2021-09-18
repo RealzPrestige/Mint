@@ -7,6 +7,7 @@ import mint.clickgui.MintGui;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
+import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.ChorusPredict;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.SwingAnimations;
@@ -31,6 +32,7 @@ public class ModuleManager
         moduleList.add(new Gui());
         moduleList.add(new FontChanger());
         moduleList.add(new Descriptions());
+        moduleList.add(new Notifications());
 
         /** Combat **/
 

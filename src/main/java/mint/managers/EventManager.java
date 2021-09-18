@@ -6,6 +6,7 @@ import mint.Mint;
 import mint.events.*;
 import mint.modules.Feature;
 import mint.commands.Command;
+import mint.modules.core.Notifications;
 import mint.utils.Timer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
+import javax.management.NotificationFilter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -72,6 +74,14 @@ public class EventManager extends Feature {
         if(clickAlpha > 0){
             clickAlpha = clickAlpha - 3;
         }
+        for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
+            if (player == null || player.getHealth() > 0.0F) {
+                continue;
+            }
+            if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
+                Notifications.getInstance().onDeath(player);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -82,6 +92,9 @@ public class EventManager extends Feature {
             SPacketEntityStatus packet = event.getPacket();
             if (packet.getOpCode() == 35 && packet.getEntity(Mint.INSTANCE.mc.world) instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) packet.getEntity(Mint.INSTANCE.mc.world);
+                if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
+                    Notifications.getInstance().onTotemPop(player);
+                }
             }
         }
         if (event.getPacket() instanceof SPacketPlayerListItem && !fullNullCheck() && this.logoutTimer.passedS(1.0D)) {

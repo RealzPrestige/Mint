@@ -8,9 +8,13 @@ import mint.events.Render3DEvent;
 import mint.commands.Command;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
+import mint.modules.core.Notifications;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
+import scala.tools.nsc.transform.patmat.Logic;
+
+import javax.management.NotificationFilter;
 
 public class Module extends Feature {
     public Minecraft mc = Minecraft.getMinecraft();
@@ -92,7 +96,15 @@ public class Module extends Feature {
         onToggle();
         onEnable();
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
-        Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
+        if(Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+            Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
+        }
+        if(Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue()  && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+            Notifications.getInstance().notification.clear();
+            Notifications.getInstance().hasReachedEndState = false;
+            Notifications.getInstance().waitTime = 0;
+            Notifications.getInstance().notification.put(this.getName() + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!", 1000);
+        }
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -100,9 +112,17 @@ public class Module extends Feature {
         MinecraftForge.EVENT_BUS.unregister(this);
         enabled.setValue(false);
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
-        Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
+        if(Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+            Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
+        }
         onToggle();
         onDisable();
+        if(Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+            Notifications.getInstance().notification.clear();
+            Notifications.getInstance().hasReachedEndState = false;
+            Notifications.getInstance().waitTime = 0;
+            Notifications.getInstance().notification.put(this.getName() + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!", 1000);
+        }
     }
 
     public void toggle() {

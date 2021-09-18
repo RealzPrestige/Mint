@@ -6,10 +6,7 @@ import mint.modules.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
-import org.spongepowered.asm.mixin.MixinEnvironment;
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
 public class Mint {
@@ -25,6 +22,7 @@ public class Mint {
     public static EventManager eventManager;
     public static TextManager textManager;
     private static boolean unloaded;
+
     static {
         unloaded = false;
     }
