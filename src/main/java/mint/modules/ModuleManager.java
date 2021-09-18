@@ -8,6 +8,7 @@ import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
 import mint.modules.miscellaneous.ChorusPredict;
+import mint.modules.visual.HoleESP;
 import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
 public class ModuleManager
         extends Feature {
     public ArrayList<Module> moduleList = new ArrayList();
-    public List<Module> sortedModules = new ArrayList<Module>();
-    public List<String> sortedModulesABC = new ArrayList<String>();
+    public List<Module> sortedModules = new ArrayList<>();
+    public List<String> sortedModulesABC = new ArrayList<>();
 
     public void init() {
         /** Core **/
@@ -42,6 +43,7 @@ public class ModuleManager
 
         /** Visual **/
         moduleList.add(new SwingAnimations());
+        moduleList.add(new HoleESP());
     }
 
     public Module getModuleByName(String name) {
@@ -163,10 +165,6 @@ public class ModuleManager
         this.sortedModules = this.getEnabledModules().stream().filter(Module::isDrawn).sorted(Comparator.comparing(module -> this.renderer.getStringWidth(module.getFullArrayString()) * (reverse ? -1 : 1))).collect(Collectors.toList());
     }
 
-    public void sortModulesABC() {
-        this.sortedModulesABC = new ArrayList<String>(this.getEnabledModulesName());
-        this.sortedModulesABC.sort(String.CASE_INSENSITIVE_ORDER);
-    }
 
     public void onLogout() {
         this.moduleList.forEach(Module::onLogout);
