@@ -100,7 +100,6 @@ public class Module extends Feature {
         MinecraftForge.EVENT_BUS.unregister(this);
         enabled.setValue(false);
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName() + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
-        //TextComponentString text = new TextComponentString(ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + " " + ChatFormatting.RED + this.getDisplayName() + " disabled.");
         Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         onToggle();
         onDisable();
@@ -158,9 +157,9 @@ public class Module extends Feature {
     public enum Category {
         COMBAT("Combat"),
         MISCELLANEOUS("Miscellaneous"),
-        VISUAL("Visual"),
         MOVEMENT("Movement"),
         PLAYER("Player"),
+        VISUAL("Visual"),
         CORE("Core");
 
         private final String name;

@@ -29,6 +29,29 @@ public class RenderUtil {
         camera = new Frustum();
     }
 
+    public static void drawArrow(float x, float y, float size, float widthDiv, float heightDiv, float outlineWidth, boolean isOpen) {
+        boolean blend = GL11.glIsEnabled(3042);
+        GL11.glEnable(3042);
+        GL11.glDisable(3553);
+        GL11.glBlendFunc(770, 771);
+        GL11.glEnable(2848);
+        GL11.glPushMatrix();
+        GL11.glLineWidth(outlineWidth);
+        GL11.glBegin(2);
+        GL11.glVertex2d(x, y);
+        GL11.glVertex2d(x - size / widthDiv, y - size);
+        GL11.glVertex2d(x, y - size / heightDiv);
+        GL11.glVertex2d(x + size / widthDiv, y - size);
+        GL11.glVertex2d(x, y);
+        GL11.glEnd();
+        GL11.glPopMatrix();
+        GL11.glEnable(3553);
+        if (!blend) {
+            GL11.glDisable(3042);
+        }
+        GL11.glDisable(2848);
+    }
+
     public static void drawBoxESPFlat(BlockPos pos, Color color, boolean secondC, Color secondColor, float lineWidth, boolean outline, boolean box, int boxAlpha, boolean air) {
         if (box) {
             RenderUtil.drawBoxFlat(pos, new Color(color.getRed(), color.getGreen(), color.getBlue(), boxAlpha));

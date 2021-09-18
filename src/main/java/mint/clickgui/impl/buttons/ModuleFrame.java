@@ -60,7 +60,11 @@ public class ModuleFrame
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (!this.items.isEmpty()) {
-            Mint.textManager.drawString((this.subOpen ? "v" : ">"), this.x - 1.5f + (float) this.width - 7.4f, this.y - 2.0f - (float) MintGui.getClickGui().getTextOffset(), -1, false);
+           if(subOpen){
+               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),  5f, 1, 2, 1, true);
+           } else {
+               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),  5f, 1, 2, 1, false);
+           }
             if (this.subOpen) {
                 float height = 1.0f;
                  for (Frame item : this.items) {

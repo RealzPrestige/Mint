@@ -8,6 +8,9 @@ import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class BooleanFrame
         extends ButtonFrame {
@@ -21,12 +24,16 @@ public class BooleanFrame
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        if (getState() || setting.isParent()) {
-            RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 5.4f, this.y + (float) this.height - 0.5f, ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+        if (getState()) {
+            RenderUtil.drawBorder(this.x + width - 4, this.y + (this.height / 2) - 3, 7, this.height / 2 + 1, new Color(0,0,0,100));
+            RenderUtil.drawRect(this.x + 110, this.y + 12, this.x + 103, this.y + 4, ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), 255));
+            drawCheckmark(this.x + width - 4, this.y + (this.height / 2), new Color(255, 255, 255));
         }else{
-            RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 5.4f, this.y + (float) this.height - 0.5f, ColorUtil.toRGBA(0,0,0,0));
+            RenderUtil.drawBorder(this.x + width - 4, this.y + (this.height / 2) - 3, 7, this.height / 2 + 1, new Color(0,0,0,150));
         }
-
+        if(setting.isParent()){
+            RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 5.4f, this.y + (float) this.height - 0.5f, ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+        }
         int sideColor = ColorUtil.toRGBA(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue()); RenderUtil.drawRect(this.x, this.y - 2, this.x + 1, this.y + this.height, sideColor);
         RenderUtil.drawRect(this.x, this.y - 2, this.x + 1, this.y + this.height, sideColor);
         RenderUtil.drawRect(this.x + 113, this.y - 2, this.x + 114, this.y + this.height, sideColor);
@@ -41,6 +48,26 @@ public class BooleanFrame
         }
     }
 
+    public static void drawCheckmark(float x, float y, Color color) {
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        GL11.glLineWidth(2);
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex2d(x + 1, y + 1);
+        GL11.glVertex2d(x + 3, y + 4);
+        GL11.glEnd();
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex2d(x + 3, y + 4);
+        GL11.glVertex2d(x + 6, y - 2);
+        GL11.glEnd();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glPopMatrix();
+    }
     @Override
     public void update() {
         this.setHidden(!this.setting.isVisible());

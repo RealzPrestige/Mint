@@ -20,6 +20,7 @@ public class Gui extends Module {
     public Setting<String> prefix = register(new Setting<>("Prefix", "."));
     public Setting<Boolean> blur = register(new Setting<>("Blur", true));
     public Setting<Boolean> outline = register(new Setting<>("Outline", true));
+    public Setting<Integer> x = register(new Setting<>("X", 0, -200, 200));
     public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
     public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255));
     public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255));
