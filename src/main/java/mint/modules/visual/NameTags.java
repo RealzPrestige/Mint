@@ -22,6 +22,8 @@ import java.util.Objects;
 
 public class NameTags extends Module {
     private static NameTags INSTANCE = new NameTags();
+    private final Setting<Integer> bottom = register(new Setting<>("Bottom", 0, 0, 20));
+    private final Setting<Integer> y = register(new Setting<>("Y", 0, 0, 20));
 
     private final Setting<Boolean> boxParent = register(new Setting<>("Rect", true, false));
     private final Setting<Boolean> rect = register(new Setting("RectSetting", true, v-> boxParent.getValue()));
@@ -29,6 +31,7 @@ public class NameTags extends Module {
     private final Setting<Integer> rectGreen = register(new Setting<>("RectGreen", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
     private final Setting<Integer> rectBlue = register(new Setting<>("RectBlue", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
     private final Setting<Integer> rectAlpha = register(new Setting<>("RectAlpha", 50, 0, 255, v -> rect.getValue() && boxParent.getValue()));
+    private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
 
     public NameTags() {
         super("Nametags", Category.VISUAL, "Draws info about an entity above their head.");
@@ -90,7 +93,14 @@ public class NameTags extends Module {
         GlStateManager.disableDepth();
         GlStateManager.enableBlend();
         GlStateManager.enableBlend();
-        RenderUtil.drawRect(-width - 1, -9, (float) width + 2.0f, 0.5f, ColorUtil.toRGBA(rectRed.getValue(), rectGreen.getValue(), rectBlue.getValue(), rectAlpha.getValue()));
+        if(rect.getValue()) {
+            RenderUtil.drawRect(-width - 1, -9, (float) width + 2.0f, 0.5f, ColorUtil.toRGBA(rectRed.getValue(), rectGreen.getValue(), rectBlue.getValue(), rectAlpha.getValue()));
+        }
+        if (healthLine.getValue()){
+            final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
+            final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
+            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), (float) width + 2.0f + healthAmount * -2.0f, 0, lineColor, lineColor);
+        }
         GlStateManager.disableBlend();
         ItemStack renderMainHand = player.getHeldItemMainhand().copy();
         if (renderMainHand.hasEffect() && (renderMainHand.getItem() instanceof ItemTool || renderMainHand.getItem() instanceof ItemArmor)) {

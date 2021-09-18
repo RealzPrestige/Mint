@@ -44,15 +44,17 @@ public class FakePlayer extends Module {
         fake_player.rotationYawHead = mc.player.rotationYawHead;
         if (inv.getValue()) {
             fake_player.inventory = mc.player.inventory;
-            //fake_player.inventory.copyInventory(mc.player.inventory);
         }
+        fake_player.setHealth(36);
         mc.world.addEntityToWorld(-100, fake_player);
     }
     public void onLogout() {
-        //chingychingy
         if (this.isOn()) {
             this.disable();
         }
+    }
+    public void onLogin(){
+        disable();
     }
     @Override
     public String getDisplayInfo() {

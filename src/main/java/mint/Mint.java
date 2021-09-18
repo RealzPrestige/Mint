@@ -41,6 +41,7 @@ public class Mint {
         moduleManager.init();
         eventManager.init();
         textManager.init();
+        configManager.init();
         moduleManager.onLoad();
     }
     public static void onUnload() {
