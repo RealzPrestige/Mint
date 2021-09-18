@@ -39,7 +39,6 @@ public class SelfFill extends Module {
         }
 
         int originalSlot = mc.player.inventory.currentItem;
-        //todo omh InventoryUtil.findItemInHotbar
         int ecSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ENDER_CHEST));
         int obbySlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
         if (ecSlot == -1 && obbySlot == -1) {

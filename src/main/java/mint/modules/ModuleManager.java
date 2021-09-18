@@ -14,6 +14,7 @@ import mint.modules.miscellaneous.ChorusPredict;
 import mint.modules.movement.Clip;
 import mint.modules.movement.Step;
 import mint.modules.player.AntiAim;
+import mint.modules.player.FakePlayer;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.NameTags;
 import mint.modules.visual.SwingAnimations;
@@ -49,9 +50,11 @@ public class ModuleManager
         /** Movement **/
         moduleList.add(new Clip());
         moduleList.add(new Step());
+        //moduleList.add(new Strafe());
 
         /** Player **/
         moduleList.add(new AntiAim());
+        moduleList.add(new FakePlayer());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());
