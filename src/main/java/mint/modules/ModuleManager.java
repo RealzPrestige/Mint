@@ -14,7 +14,7 @@ import mint.modules.miscellaneous.ChorusPredict;
 import mint.modules.movement.Clip;
 import mint.modules.movement.Step;
 import mint.modules.player.AntiAim;
-import mint.modules.player.FakePlayer;
+import mint.modules.miscellaneous.FakePlayer;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.NameTags;
 import mint.modules.visual.SwingAnimations;

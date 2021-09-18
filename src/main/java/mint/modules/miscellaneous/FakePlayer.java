@@ -1,4 +1,4 @@
-package mint.modules.player;
+package mint.modules.miscellaneous;
 
 import com.mojang.authlib.GameProfile;
 import mint.Mint;
@@ -33,7 +33,7 @@ public class FakePlayer extends Module {
     private EntityOtherPlayerMP fake_player;
 
     public FakePlayer() {
-        super("Fake Player", Category.PLAYER, "Spawns a fake entity to test combat modules on.");
+        super("Fake Player", Category.MISCELLANEOUS, "Spawns a fake entity to test combat modules on.");
     }
 
     @Override
