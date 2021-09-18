@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 public class Clip extends Module {
 
     public Clip() {
-        super("Clip", Module.Category.VISUAL, "VClip bypass for crystalpvp cc.");
+        super("Clip", Module.Category.MOVEMENT, "VClip bypass for crystalpvp cc.");
     }
 
     public BlockPos startPos = null;
