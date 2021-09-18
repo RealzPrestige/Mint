@@ -8,6 +8,7 @@ import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
 import mint.modules.miscellaneous.ChorusPredict;
+import mint.modules.movement.Clip;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,6 +39,7 @@ public class ModuleManager
         moduleList.add(new ChorusPredict());
 
         /** Movement **/
+        moduleList.add(new Clip());
 
         /** Player **/
 
