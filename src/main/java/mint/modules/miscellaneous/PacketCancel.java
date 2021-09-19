@@ -28,8 +28,6 @@ public class PacketCancel extends Module {
     //public Setting<Boolean> cp = register(new Setting(" ", false, v -> clientParent.getValue()));
     //public Setting<Boolean> cpP = register(new Setting(" ", false, v -> clientParent.getValue()));
 
-    //nigga wtf cp u tripping zenov? - kambing
-
 
 
     public Setting<Boolean> serverParent = register(new Setting("Server", true, false));
@@ -39,6 +37,9 @@ public class PacketCancel extends Module {
     //todo add all server packets, add settings for client packets, add more parent settings(Client>Entity, Player, etc. Server>ChunkData, etc
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive e) {
+        if (!isEnabled()) {
+            return;
+        }
         //if (event.getStage() == EventStageable.EventStage.PRE) {
         if (e.getPacket() instanceof SPacketChunkData && spChunkData.getValue()) {
             e.setCanceled(true);
@@ -47,6 +48,9 @@ public class PacketCancel extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
+        if (!isEnabled()) {
+            return;
+        }
         if (e.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && cpPlayerTryUseItemOnBlock.getValue()) {
             e.setCanceled(true);
         }
