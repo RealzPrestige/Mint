@@ -34,7 +34,7 @@ minecraft {
     version = project.forgeVersion
     runDir = 'run'
     mappings = project.mcpVersion
-    coreMod = 'mint.mixins.loader.Loader'
+    coreMod = 'fuck u bitch'
     makeObfSourceJar = false
 }
 
