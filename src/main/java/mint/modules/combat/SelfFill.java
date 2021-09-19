@@ -6,22 +6,30 @@ import mint.modules.Module;
 import mint.utils.BlockUtil;
 import mint.utils.EntityUtil;
 import mint.utils.InventoryUtil;
+import mint.utils.Timer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.server.SPacketDisconnect;
+import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 public class SelfFill extends Module {
 
-    public SelfFill () {
+    public SelfFill() {
         super("Self Fill ", Category.COMBAT, "Rubberbands you in a block.");
     }
 
     public Setting<Block> prefer = register(new Setting("Prefer", Block.EChest));
-    public Setting<LagMode> lagBack= register(new Setting("LagBack", LagMode.Teleport));
+    public Setting<LagMode> lagBack = register(new Setting("LagBack", LagMode.Teleport));
+    public Setting<Boolean> offground = register(new Setting("OffGround", true, v -> lagBack.getValue() == LagMode.Strict));
     public BlockPos startPos = null;
+    Timer timer = new Timer();
 
     @Override
     public void onEnable() {
@@ -80,6 +88,27 @@ public class SelfFill extends Module {
                 mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + 2.35, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
             }
+            case Strict: {
+                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, !this.offground.getValue()));
+                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, !this.offground.getValue()));
+                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, !this.offground.getValue()));
+                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, !this.offground.getValue()));
+            }
+            case Jump: {
+                mc.player.jump();
+                if (timer.passedMs(200)) {
+                    mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
+                }
+            }
+            case Kambing: {
+                mc.player.posY = 100;
+                fakePop(mc.player);
+                fakePop(mc.player);
+                fakePop(mc.player);
+                fakePop(mc.player);
+                Minecraft.getMinecraft().getConnection().handleDisconnect(new SPacketDisconnect(new TextComponentString("Left the server with 1.0 hp")));
+                this.disable();
+            }
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
 
@@ -94,10 +123,21 @@ public class SelfFill extends Module {
         EChest,
         Obsidian
     }
+
     public enum LagMode {
         Packet,
         YMotion,
         Teleport,
-        LagFall
+        LagFall,
+        Strict,
+        Jump,
+        Kambing
+    }
+
+    public void fakePop(EntityPlayer player) {
+        try {
+            mc.player.connection.handleEntityStatus(new SPacketEntityStatus(player, (byte) 35));
+        } catch (Exception e) {
+        }
     }
 }

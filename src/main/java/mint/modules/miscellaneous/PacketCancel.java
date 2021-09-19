@@ -28,6 +28,8 @@ public class PacketCancel extends Module {
     //public Setting<Boolean> cp = register(new Setting(" ", false, v -> clientParent.getValue()));
     //public Setting<Boolean> cpP = register(new Setting(" ", false, v -> clientParent.getValue()));
 
+    //nigga wtf cp u tripping zenov? - kambing
+
 
 
     public Setting<Boolean> serverParent = register(new Setting("Server", true, false));
