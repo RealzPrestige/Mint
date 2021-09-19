@@ -35,7 +35,7 @@ public class  PopChams extends Module {
     public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 255));
 
     public PopChams() {
-        super("PopChams", Category.VISUAL, "ur mom chams");
+        super("Pop Chams", Category.VISUAL, "ur mom chams");
     }
 
     public static PopChams getInstance() {
