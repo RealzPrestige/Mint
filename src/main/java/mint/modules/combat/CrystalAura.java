@@ -1,5 +1,6 @@
 package mint.modules.combat;
 
+import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
@@ -46,6 +47,14 @@ public class CrystalAura extends Module {
     public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v-> boxParent.getValue()));
     public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v-> boxParent.getValue()));
     public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v-> boxParent.getValue()));
+
+    public Setting<Boolean> parentFacePlace = register(new Setting("FacePlace", true, false));
+    public Setting<Boolean> health = register(new Setting("Health", false, false, v-> parentFacePlace.getValue()));
+    public Setting<Integer> healthAmount = register(new Setting("HealthAmount", 10, 1, 36, v -> parentFacePlace.getValue() && health.getValue()));
+    public Setting<Boolean> armor = register(new Setting("Armor", false, false, v-> parentFacePlace.getValue()));
+    public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
+    public Setting<Boolean> bind = register(new Setting("Bind", false, false, v-> parentFacePlace.getValue()));
+    public Setting<BindSetting> facePlaceBind = register(new Setting<>("FaceplaceBind:", new BindSetting(1), v-> !parentFacePlace.getValue() && bind.getValue()));
 
     public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
     public Setting<Boolean> autoSwitch = register(new Setting("AutoSwitch", false, false, v-> parentMisc.getValue()));
