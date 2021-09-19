@@ -17,7 +17,7 @@ public class MixinWorld {
     public <T extends Entity> void getEntitiesOfTypeWithinAABBHook(Chunk chunk, Class<? extends T> entityClass, AxisAlignedBB aabb, List<T> listToFill, Predicate<? super T> filter) {
         try {
             chunk.getEntitiesOfTypeWithinAABB(entityClass, aabb, listToFill, filter);
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
     }
 }
