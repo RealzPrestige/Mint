@@ -1,9 +1,7 @@
 package mint.modules.combat;
 
-import mint.Mint;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
-import mint.commands.Command;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
@@ -20,7 +18,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
-
 import java.awt.*;
 import java.util.List;
 
@@ -88,8 +85,8 @@ public class CrystalAura extends Module {
 
     public Timer resetTimer = new Timer();
     public EntityPlayer target;
-    public BlockPos finalPos;
-
+    public BlockPos finalPlacePos;
+    public BlockPos finalBreakPos;
     @Override
     public void onToggle() {
         target = EntityUtil.getTarget(targetRange.getValue());
@@ -124,7 +121,7 @@ public class CrystalAura extends Module {
                     }
                     if (targetDamage > minDamage) {
                         placePos = pos;
-                        finalPos = placePos;
+                        finalPlacePos = placePos;
                     }
                 }
             }
@@ -132,56 +129,36 @@ public class CrystalAura extends Module {
         if (placePos != null){
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, swing.getValue() == Swing.OFFHAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
         }
-
     }
+
     public void doBreak() {
+        BlockPos breakPos;
         target = EntityUtil.getTarget(targetRange.getValue());
         for (Entity crystal : mc.world.loadedEntityList) {
             if (crystal instanceof EntityEnderCrystal) {
-
-                if (crystal.isDead) {
-                    continue;
-                }
-
-                if ((mc.player.canEntityBeSeen(crystal) ? breakRange.getValue() : breakRangeWall.getValue()) > mc.player.getDistance(crystal)) {
-                    continue;
-                }
-
-                float targetDamage = EntityUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, target);
-                float selfDamage = EntityUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, mc.player);
-
-                if (selfDamage > targetDamage && allowSuicide.getValue()) {
-                    continue;
-                }
-
-                if (targetDamage <= breakMinDmg.getValue()) {
-                    continue;
-                }
-
-                if (selfDamage < breakMaxSelf.getValue()) {
-                    continue;
-                }
-
-                if (EntityUtil.getHealth(mc.player) >= breakMinHp.getValue()) {
-                    continue;
-                }
-
-
-                if (packetBreak.getValue()) {
-                    mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
-                } else {
-                    mc.playerController.attackEntity(mc.player, crystal);
+                BlockPos crystalPos = crystal.getPosition();
+                float selfDamage = calculatePos(crystalPos, mc.player);
+                float targetDamage = calculatePos(crystalPos, target);
+                float minDamage = breakMinDmg.getValue();
+                float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
+                if(selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue())) {
+                    if (packetBreak.getValue()) {
+                        mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
+                        breakPos = crystalPos;
+                        finalBreakPos = breakPos;
+                    } else {
+                        mc.playerController.attackEntity(mc.player, crystal);
+                    }
                 }
             }
         }
     }
 
-
     @SubscribeEvent
-    public void onPacketSend(PacketEvent.Send e) {
-        if (e.getPacket() instanceof SPacketSpawnObject && predictBreak.getValue()) {
-            final SPacketSpawnObject packet = e.getPacket();
-            if (packet.getType() == 51 && finalPos != null && target != null) {
+    public void onPacketSend(PacketEvent.Send event) {
+        if (event.getPacket() instanceof SPacketSpawnObject && predictBreak.getValue()) {
+            final SPacketSpawnObject packet = event.getPacket();
+            if (packet.getType() == 51 && finalPlacePos != null && target != null) {
                 final CPacketUseEntity predict = new CPacketUseEntity();
                 predict.entityId = packet.getEntityID();
                 predict.action = CPacketUseEntity.Action.ATTACK;
@@ -192,8 +169,13 @@ public class CrystalAura extends Module {
     }
 
     public void onRender3D(Render3DEvent event) {
-        if (finalPos != null) {
-            RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), false, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, true, true, boxAlpha.getValue(), false);
+        if (finalPlacePos != null) {
+            if(boxSetting.getValue()) {
+                RenderUtil.drawBoxESP(finalPlacePos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), false, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, true, true, boxAlpha.getValue(), false);
+            }
+            if(boxSetting.getValue()) {
+                RenderUtil.drawBoxESP(finalBreakPos, new Color(255, 0, 0, boxAlpha.getValue()), false, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, true, true, boxAlpha.getValue(), false);
+            }
             if (damageRender.getValue()) {
                 //todo oml drawText,,,,,,,,,
             }
