@@ -116,6 +116,7 @@ public class SelfFill extends Module {
             mc.player.inventory.currentItem = originalSlot;
             mc.playerController.updateController();
         }
+        timer.reset();
         disable();
     }
 
