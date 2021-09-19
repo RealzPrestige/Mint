@@ -1,6 +1,7 @@
 package mint.managers;
 
 import com.google.common.base.Strings;
+import com.mojang.authlib.GameProfile;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.events.*;
@@ -9,13 +10,17 @@ import mint.commands.Command;
 import mint.modules.core.Notifications;
 import mint.modules.visual.PopChams;
 import mint.utils.Timer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -27,15 +32,24 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import javax.management.NotificationFilter;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+
 public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
     public int clickAlpha;
+    EntityPlayer player = null;
+    ModelPlayer playerModel = null;
+    long startTime;
+    public final static Minecraft mc = Minecraft.getMinecraft();
+
     public void init() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -48,7 +62,7 @@ public class EventManager extends Feature {
     public void onUpdate(LivingEvent.LivingUpdateEvent event) {
         if (!fullNullCheck() && (event.getEntity().getEntityWorld()).isRemote && event.getEntityLiving().equals(Mint.INSTANCE.mc.player)) {
             Mint.moduleManager.onUpdate();
-                Mint.moduleManager.sortModules(true);
+            Mint.moduleManager.sortModules(true);
         }
     }
 
@@ -72,14 +86,14 @@ public class EventManager extends Feature {
             if (player == null || player.getHealth() > 0.0F)
                 continue;
         }
-        if(clickAlpha > 0){
+        if (clickAlpha > 0) {
             clickAlpha = clickAlpha - 3;
         }
         for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
             if (player == null || player.getHealth() > 0.0F) {
                 continue;
             }
-            if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
+            if (Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                 Notifications.getInstance().onDeath(player);
             }
         }
@@ -94,9 +108,15 @@ public class EventManager extends Feature {
             if (packet.getOpCode() == 35 && packet.getEntity(Mint.INSTANCE.mc.world) instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) packet.getEntity(Mint.INSTANCE.mc.world);
                 if (PopChams.INSTANCE.isEnabled()) {
-                    PopChams.INSTANCE.k(player); //TODO: for some reason i hope this works but if it doesnt please find a way..
+                    if (PopChams.getInstance().self.getValue() || player != mc.player) {
+                        GameProfile profile = new GameProfile(mc.player.getUniqueID(), "");
+                        player = new EntityOtherPlayerMP(mc.world, profile);
+                        player.copyLocationAndAnglesFrom(player);
+                        startTime = System.currentTimeMillis();
+                    }
+
                 }
-                if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
+                if (Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                     Notifications.getInstance().onTotemPop(player);
                 }
             }
@@ -139,6 +159,43 @@ public class EventManager extends Feature {
     public void onWorldRender(RenderWorldLastEvent event) {
         if (event.isCanceled())
             return;
+        playerModel = new ModelPlayer(0, false);
+
+        GL11.glLineWidth(1);
+
+        int fillA = PopChams.getInstance().alpha.getValue();
+        int lineA = 255;
+
+        if (System.currentTimeMillis() - startTime > PopChams.getInstance().fadeStart.getValue()) {
+            long time = System.currentTimeMillis() - startTime - PopChams.getInstance().fadeStart.getValue();
+            double normal = normalize(((double) time), 0, PopChams.getInstance().fadeStart.getValue());
+            normal = MathHelper.clamp(normal, 0, 1);
+            normal = (-normal) + 1;
+            lineA = (int) (normal * lineA);
+            fillA = (int) (normal * fillA);
+        }
+        if (player != null && lineA > 0) {
+            //TODO:add solid
+            PopChams.RenderTesselator.prepareGL();
+            if (PopChams.getInstance().outline.getValue()) {
+                GlStateManager.pushMatrix();
+                GL11.glPushAttrib(1048575);
+                GL11.glPolygonMode(1032, 6913);
+                glDisable(3553);
+                glDisable(2896);
+                glDisable(2929);
+                glEnable(2848);
+                glEnable(3042);
+                GL11.glBlendFunc(770, 771);
+                GL11.glColor4f(PopChams.getInstance().red.getValue() / 255.0f, PopChams.getInstance().green.getValue() / 255.0f, PopChams.getInstance().blue.getValue() / 255.0f, lineA / 255.0f);
+                mc.getRenderManager().renderEntityStatic(player, event.getPartialTicks(), false);
+                glEnable(2896);
+                GlStateManager.popAttrib();
+                GlStateManager.popMatrix();
+            }
+            PopChams.RenderTesselator.releaseGL();
+        }
+
         Mint.INSTANCE.mc.profiler.startSection("mint");
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
@@ -202,5 +259,9 @@ public class EventManager extends Feature {
                 Command.sendMessage(ChatFormatting.RED + "An error occurred while running this command. Check the log!");
             }
         }
+    }
+
+    double normalize(double value, double min, double max) {
+        return ((value - min) / (max - min));
     }
 }

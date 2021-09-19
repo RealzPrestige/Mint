@@ -17,9 +17,7 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
 public class PopChams extends Module {
-    EntityPlayer player = null;
-    ModelPlayer playerModel = null;
-    long startTime;
+
     public static PopChams INSTANCE = new PopChams();
 
     /**
@@ -37,84 +35,23 @@ public class PopChams extends Module {
     public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 255));
 
     public PopChams() {
-        super("PopChams" , Category.VISUAL, "ur mom chams");}
+        super("PopChams", Category.VISUAL, "ur mom chams");
+    }
+
+    public static PopChams getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PopChams();
+        }
+        return INSTANCE;
+    }
+
 
     /**
      *so this is how it works. on totem pop it will render a static entity from
      * minecraft render manager. its still in wip tho (TODO: ytravel)
      */
 
-    public void k(EntityPlayer poppedPlayer) {
-        if (self.getValue() || poppedPlayer != mc.player) {
-                GameProfile profile = new GameProfile(mc.player.getUniqueID(), "");
-                player = new EntityOtherPlayerMP(mc.world, profile);
-                player.copyLocationAndAnglesFrom(poppedPlayer);
-                startTime = System.currentTimeMillis();
-            }
-        }
 
-    @Override
-    public void onUpdate(){
-        for (EntityPlayer entity : mc.world.playerEntities) {
-            //debugging purposes
-            if (entity.getName().equals("MintClient")) {
-                k(entity);
-            }
-
-        }
-
-    }
-
-    @Override
-    public void onRender3D(Render3DEvent event) {
-            playerModel = new ModelPlayer(0, false);
-
-            GL11.glLineWidth(1);
-
-            int fillA = alpha.getValue();
-            int lineA = 255;
-
-            if (System.currentTimeMillis() - startTime > fadeStart.getValue()) {
-                long time = System.currentTimeMillis() - startTime - fadeStart.getValue();
-                double normal = normalize(((double) time), 0, fadeStart.getValue());
-                normal = MathHelper.clamp(normal, 0, 1);
-                normal = (-normal) + 1;
-                lineA = (int) (normal * lineA);
-                fillA = (int) (normal * fillA);
-            }
-            if (player != null && lineA > 0) {
-                //TODO:add solid
-                RenderTesselator.prepareGL();
-                if (outline.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GL11.glPushAttrib(1048575);
-                    GL11.glPolygonMode(1032, 6913);
-                    glDisable(3553);
-                    glDisable(2896);
-                    glDisable(2929);
-                    glEnable(2848);
-                    glEnable(3042);
-                    GL11.glBlendFunc(770, 771);
-                    GL11.glColor4f(red.getValue() / 255.0f, green.getValue() / 255.0f, blue.getValue() / 255.0f, lineA / 255.0f);
-                    mc.getRenderManager().renderEntityStatic(player, event.getPartialTicks(),false);
-                    glEnable(2896);
-                    GlStateManager.popAttrib();
-                    GlStateManager.popMatrix();
-                }
-                RenderTesselator.releaseGL();
-            }
-        }
-    
-
-    double normalize(double value, double min, double max) {
-        return ((value - min) / (max - min));
-
-    }
-    @Override
-    public void onEnable(){
-        //debugging purposes
-        k(mc.player);
-    }
     public static class RenderTesselator extends Tessellator {
 
         public static RenderTesselator INSTANCE = new RenderTesselator();

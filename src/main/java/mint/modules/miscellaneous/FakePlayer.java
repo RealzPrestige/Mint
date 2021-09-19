@@ -6,6 +6,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.modules.core.Notifications;
+import mint.modules.visual.PopChams;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
