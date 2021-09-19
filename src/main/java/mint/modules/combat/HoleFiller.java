@@ -73,8 +73,8 @@ public class HoleFiller extends Module {
     }
 
     public void onTick() {
-            fillableHoles.clear();
-            findFillableHoles();
+        fillableHoles.clear();
+        findFillableHoles();
     }
 
     @Override

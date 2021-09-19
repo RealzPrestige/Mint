@@ -15,7 +15,7 @@ public class ReverseStep extends Module {
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));
     public Setting<Boolean> sneak = register(new Setting("NoDesync", true));
     public Setting<Float> vanillaSpeed = register(new Setting("VanillaSpeed", 9.0f, 0.1f, 9.0f, v -> mode.getValue() == Mode.Vanilla));
-    public Setting<Float> strictSpeed = register(new Setting("StrictSpeed", 1.75f, 0.01f, 2.00f));
+    public Setting<Float> strictSpeed = register(new Setting("StrictSpeed", 1.75f, 0.01f, 2.00f, v -> mode.getValue() == Mode.Strict));
 
     @Override
     public void onUpdate() {

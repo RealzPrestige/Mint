@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
-public class PopChams extends Module {
+public class  PopChams extends Module {
 
     public static PopChams INSTANCE = new PopChams();
 
@@ -35,7 +35,7 @@ public class PopChams extends Module {
     public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 255));
 
     public PopChams() {
-        super("PopChams", Category.VISUAL, "ur mom chams");
+        super("Pop Chams", Category.VISUAL, "ur mom chams");
     }
 
     public static PopChams getInstance() {

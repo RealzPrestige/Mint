@@ -71,11 +71,15 @@ public class SelfFill extends Module {
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
 
+        //a player jumps(otherwise u wont be able to place the block and lag back into it
         EntityUtil.packetJump(true);
+
+        //places the block while the player is in air
         BlockUtil.placeBlock(startPos, EnumHand.MAIN_HAND, false, true, false, true, EnumHand.MAIN_HAND);
+
+        //after placing u have to cause a lag back
         switch (lagBack.getValue()) {
             case Packet: {
-                //todo nigga what the fuck is this - kambing | orble,m? - zenov
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
             }
             case YMotion: {
@@ -89,10 +93,8 @@ public class SelfFill extends Module {
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
             }
             case Strict: {
-                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, !this.offground.getValue()));
-                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, !this.offground.getValue()));
-                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, !this.offground.getValue()));
-                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, !this.offground.getValue()));
+                //its the same as before but using an existing method
+                EntityUtil.packetJump(offground.getValue());
             }
             case Jump: {
                 mc.player.jump();
@@ -116,6 +118,7 @@ public class SelfFill extends Module {
             mc.player.inventory.currentItem = originalSlot;
             mc.playerController.updateController();
         }
+        timer.reset();
         disable();
     }
 
