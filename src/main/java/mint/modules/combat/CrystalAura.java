@@ -8,6 +8,8 @@ import mint.utils.BlockUtil;
 import mint.utils.EntityUtil;
 import mint.utils.PlayerUtil;
 import mint.utils.Timer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -27,11 +29,12 @@ public class CrystalAura extends Module {
     }
 
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
-    public Setting<Boolean> breakIgnoreSelf = register(new Setting("PlaceIgnoreSelf", false,  v-> parentBreak.getValue()));
+    public Setting<Boolean> breakIgnoreSelf = register(new Setting("BreakIgnoreSelf", false,  v-> parentBreak.getValue()));
     public Setting<Float> breakRange = register(new Setting("BreakRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
     public Setting<Float> breakRangeWall = register(new Setting("BreakWallRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 12.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 12.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Boolean> packetBreak = register(new Setting("PacketBreak", true, v-> parentBreak.getValue()));
     public Setting<Boolean> predictBreak = register(new Setting("Predict", true, v-> parentBreak.getValue()));
     public Setting<Float> breakMinHp = register(new Setting("BreakMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
 
@@ -39,8 +42,8 @@ public class CrystalAura extends Module {
     public Setting<Boolean> placeIgnoreSelf = register(new Setting("PlaceIgnoreSelf", false,  v-> parentPlace.getValue()));
     public Setting<Float> placeRange = register(new Setting("PlaceRange", 5.0f, 0.1f, 6.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeRangeWall = register(new Setting("PlaceWallRange", 6.0f, 0.1f, 6.0f, v -> parentPlace.getValue()));
-    public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 6.0f, 0.1f, 12.0f, v -> parentPlace.getValue()));
-    public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 12.0f, v -> parentPlace.getValue()));
+    public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 6.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
+    public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMinHp = register(new Setting("PlaceMinHp", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
@@ -75,6 +78,7 @@ public class CrystalAura extends Module {
     public Setting<BindSetting> facePlaceBind = register(new Setting<>("FaceplaceBind:", new BindSetting(1), v-> parentFacePlace.getValue() && bind.getValue()));
 
     public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
+    public Setting<Boolean> allowSuicide = register(new Setting("AllowSuicide", true, v -> parentMisc.getValue()));
     public Setting<Boolean> autoSwitch = register(new Setting("AutoSwitch", false, v-> parentMisc.getValue()));
     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
     public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
@@ -104,30 +108,69 @@ public class CrystalAura extends Module {
         BlockPos placePos = null;
         target = EntityUtil.getTarget(targetRange.getValue());
         final List<BlockPos> sphere = BlockUtil.getSphere(placeRange.getValue(), true);
+
         for (int size = sphere.size(), i = 0; i < size; ++i) {
             BlockPos pos = sphere.get(i);
-            if(BlockUtil.canPlaceCrystal(pos, true)){
+            if (BlockUtil.canPlaceCrystal(pos, true)){
                 float selfDamage = calculatePos(pos, mc.player);
                 float targetDamage = calculatePos(pos, target);
                 float minDamage = placeMinDmg.getValue();
-                if(placeMinHp.getValue() > EntityUtil.getHealth(mc.player) && selfDamage < (placeIgnoreSelf.getValue() ? 0 : placeMaxSelf.getValue())){
-                    if((EntityUtil.getHealth(target) < healthAmount.getValue()) || (bind.getValue() && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (PlayerUtil.isArmorLow(target, armorPercent.getValue()))){
+                if (placeMinHp.getValue() > EntityUtil.getHealth(mc.player) && selfDamage < (placeIgnoreSelf.getValue() ? 0 : placeMaxSelf.getValue())){
+                    if ((EntityUtil.getHealth(target) < healthAmount.getValue()) || (bind.getValue() && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (PlayerUtil.isArmorLow(target, armorPercent.getValue()))){
                         minDamage = 2;
                     }
-                    if(targetDamage > minDamage){
+                    if (targetDamage > minDamage) {
                         placePos = pos;
                         finalPos = placePos;
                     }
                 }
             }
         }
-        if(placePos != null){
+        if (placePos != null){
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, swing.getValue() == Swing.OFFHAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
         }
 
     }
     public void doBreak() {
         target = EntityUtil.getTarget(targetRange.getValue());
+        for (Entity crystal : mc.world.loadedEntityList) {
+            if (crystal instanceof EntityEnderCrystal) {
+
+                if (crystal.isDead) {
+                    continue;
+                }
+
+                if ((mc.player.canEntityBeSeen(crystal) ? breakRange.getValue() : breakRangeWall.getValue()) > mc.player.getDistance(crystal)) {
+                    continue;
+                }
+
+                float targetDamage = EntityUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, target);
+                float selfDamage = EntityUtil.calculate(crystal.posX, crystal.posY, crystal.posZ, mc.player);
+
+                if (selfDamage > targetDamage && allowSuicide.getValue()) {
+                    continue;
+                }
+
+                if (targetDamage <= breakMinDmg.getValue()) {
+                    continue;
+                }
+
+                if (selfDamage < breakMaxSelf.getValue()) {
+                    continue;
+                }
+
+                if (EntityUtil.getHealth(mc.player) >= breakMinHp.getValue()) {
+                    continue;
+                }
+
+
+                if (packetBreak.getValue()) {
+                    mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
+                } else {
+                    mc.playerController.attackEntity(mc.player, crystal);
+                }
+            }
+        }
     }
 
 

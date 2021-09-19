@@ -41,17 +41,21 @@ public class PlayerUtil {
         final float red = 1.0f - green;
         return (float)(100 - (int)(red * 100.0f));
     }
+
     public static int getRoundedDamage(ItemStack stack) {
         return (int) getDamageInPercent(stack);
     }
+
     public static boolean hasDurability(ItemStack stack) {
         Item item = stack.getItem();
         return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemShield;
     }
+
     public static void faceVector(Vec3d vec, boolean normalizeAngle) {
         float[] rotations = EntityUtil.getLegitRotations(vec);
         Mint.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], normalizeAngle ? (float) MathHelper.normalizeAngle((int) rotations[1], 360) : rotations[1], Mint.INSTANCE.mc.player.onGround));
     }
+    
     public static UUID getUUIDFromName(String name) {
         try {
             lookUpUUID process = new lookUpUUID(name);
