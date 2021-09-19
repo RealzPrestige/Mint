@@ -67,16 +67,16 @@ public class CrystalAura extends Module {
 
 
     public Setting<Boolean> parentFacePlace = register(new Setting("FacePlace", true, false));
-    public Setting<Boolean> health = register(new Setting("Health", false, false, v-> parentFacePlace.getValue()));
+    public Setting<Boolean> health = register(new Setting("Health", false,  v-> parentFacePlace.getValue()));
     public Setting<Integer> healthAmount = register(new Setting("HealthAmount", 10, 1, 36, v -> parentFacePlace.getValue() && health.getValue()));
-    public Setting<Boolean> armor = register(new Setting("Armor", false, false, v-> parentFacePlace.getValue()));
+    public Setting<Boolean> armor = register(new Setting("Armor", false,  v-> parentFacePlace.getValue()));
     public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
-    public Setting<Boolean> bind = register(new Setting("Bind", false, false, v-> parentFacePlace.getValue()));
+    public Setting<Boolean> bind = register(new Setting("Bind", false, v-> parentFacePlace.getValue()));
     public Setting<BindSetting> facePlaceBind = register(new Setting<>("FaceplaceBind:", new BindSetting(1), v-> parentFacePlace.getValue() && bind.getValue()));
 
     public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
-    public Setting<Boolean> autoSwitch = register(new Setting("AutoSwitch", false, false, v-> parentMisc.getValue()));
-    public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false, false, v-> parentMisc.getValue()));
+    public Setting<Boolean> autoSwitch = register(new Setting("AutoSwitch", false, v-> parentMisc.getValue()));
+    public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
     public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
 
 
