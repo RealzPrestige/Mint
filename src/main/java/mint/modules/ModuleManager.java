@@ -17,6 +17,7 @@ import mint.modules.player.AntiAim;
 import mint.modules.miscellaneous.FakePlayer;
 import mint.modules.visual.HoleESP;
 import mint.modules.visual.NameTags;
+import mint.modules.visual.PopChams;
 import mint.modules.visual.SwingAnimations;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -60,6 +61,7 @@ public class ModuleManager
         moduleList.add(new SwingAnimations());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
+        moduleList.add(new PopChams());
     }
 
     public Module getModuleByName(String name) {

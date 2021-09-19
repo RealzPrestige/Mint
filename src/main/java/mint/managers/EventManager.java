@@ -7,6 +7,7 @@ import mint.events.*;
 import mint.modules.Feature;
 import mint.commands.Command;
 import mint.modules.core.Notifications;
+import mint.modules.visual.PopChams;
 import mint.utils.Timer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -92,6 +93,9 @@ public class EventManager extends Feature {
             SPacketEntityStatus packet = event.getPacket();
             if (packet.getOpCode() == 35 && packet.getEntity(Mint.INSTANCE.mc.world) instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) packet.getEntity(Mint.INSTANCE.mc.world);
+                if (PopChams.INSTANCE.isEnabled()) {
+                    PopChams.INSTANCE.k(player); //TODO: for some reason i hope this works but if it doesnt please find a way..
+                }
                 if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                     Notifications.getInstance().onTotemPop(player);
                 }

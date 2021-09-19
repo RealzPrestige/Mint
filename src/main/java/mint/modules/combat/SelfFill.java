@@ -66,6 +66,7 @@ public class SelfFill extends Module {
         //todo BlockUtil.placeBlock();
         switch (lagBack.getValue()) {
             case Packet: {
+                //todo nigga what the fuck is this - kambing
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
             }
             case YMotion: {
