@@ -2,6 +2,15 @@ package mint.utils;
 
 public class Timer {
     private long time = -1L;
+    private final long current;
+
+    public Timer() {
+        current = -1;
+    }
+    public final boolean hasReached(final long delay) {
+        return System.currentTimeMillis() - this.current >= delay;
+    }
+
 
     public boolean passedS(double s) {
         return this.getMs(System.nanoTime() - this.time) >= (long) (s * 1000.0);

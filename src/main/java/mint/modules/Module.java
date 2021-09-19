@@ -5,16 +5,12 @@ import mint.Mint;
 import mint.events.ClientEvent;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
-import mint.commands.Command;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.modules.core.Notifications;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
-import scala.tools.nsc.transform.patmat.Logic;
-
-import javax.management.NotificationFilter;
 
 public class Module extends Feature {
     public Minecraft mc = Minecraft.getMinecraft();
@@ -34,6 +30,9 @@ public class Module extends Feature {
         this.category = category;
     }
 
+    public Minecraft getMc(){
+        return Minecraft.getMinecraft();
+    }
     public boolean isSliding() {
         return this.sliding;
     }

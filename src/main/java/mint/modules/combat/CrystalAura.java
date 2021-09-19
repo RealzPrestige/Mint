@@ -1,11 +1,14 @@
 package mint.modules.combat;
 
+import mint.Mint;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
+import mint.commands.Command;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
 import mint.utils.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +29,7 @@ public class CrystalAura extends Module {
     public CrystalAura(){
         super("Crystal Aura", Module.Category.COMBAT, "Automatically places and breaks crystals.");
     }
-
+    private static Minecraft mc = Minecraft.getMinecraft();
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
     public Setting<Boolean> breakIgnoreSelf = register(new Setting("BreakIgnoreSelf", false,  v-> parentBreak.getValue()));
     public Setting<Float> breakRange = register(new Setting("BreakRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
@@ -89,18 +92,18 @@ public class CrystalAura extends Module {
 
     @Override
     public void onToggle() {
+        target = EntityUtil.getTarget(targetRange.getValue());
         target = null;
     }
 
     @Override
     public void onUpdate() {
-        if (resetTimer.passedMs(resetDelay.getValue())) {
-            target = null;
+        target = EntityUtil.getTarget(targetRange.getValue());
+        if(target == null) {
+            return;
         }
-        if(target != null) {
             doPlace();
             doBreak();
-        }
     }
 
     public void doPlace() {
@@ -114,7 +117,8 @@ public class CrystalAura extends Module {
                 float selfDamage = calculatePos(pos, mc.player);
                 float targetDamage = calculatePos(pos, target);
                 float minDamage = placeMinDmg.getValue();
-                if (placeMinHp.getValue() > EntityUtil.getHealth(mc.player) && selfDamage < (placeIgnoreSelf.getValue() ? 0 : placeMaxSelf.getValue())){
+                float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
+                if (selfDamage < (placeIgnoreSelf.getValue() ? 36 : placeMaxSelf.getValue()) && selfDamage < selfHp && minDamage < targetDamage && selfDamage < placeMaxSelf.getValue()){
                     if ((EntityUtil.getHealth(target) < healthAmount.getValue()) || (bind.getValue() && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (PlayerUtil.isArmorLow(target, armorPercent.getValue()))){
                         minDamage = 2;
                     }
@@ -199,4 +203,20 @@ public class CrystalAura extends Module {
     private float calculatePos(final BlockPos pos, final EntityPlayer entity) {
         return EntityUtil.calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
     }
+    public static EntityPlayer getTarget(final float range) {
+        EntityPlayer currentTarget = null;
+        for (int size = mc.world.playerEntities.size(), i = 0; i < size; ++i) {
+            final EntityPlayer player = mc.world.playerEntities.get(i);
+            if (!EntityUtil.isntValid(player, range)) {
+                if (currentTarget == null) {
+                    currentTarget = player;
+                }
+                else if (mc.player.getDistanceSq(player) < mc.player.getDistanceSq(currentTarget)) {
+                    currentTarget = player;
+                }
+            }
+        }
+        return currentTarget;
+    }
+
 }
