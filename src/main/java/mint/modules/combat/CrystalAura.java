@@ -33,7 +33,7 @@ public class CrystalAura extends Module {
     public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 12.0f, v -> parentBreak.getValue()));
     public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 12.0f, v -> parentBreak.getValue()));
     public Setting<Boolean> predictBreak = register(new Setting("Predict", true, v-> parentBreak.getValue()));
-    public Setting<Float> breakMinHp = register(new Setting("PlaceMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakMinHp = register(new Setting("BreakMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
 
     public Setting<Boolean> parentPlace = register(new Setting("Place", true, false));
     public Setting<Boolean> placeIgnoreSelf = register(new Setting("PlaceIgnoreSelf", false,  v-> parentPlace.getValue()));
