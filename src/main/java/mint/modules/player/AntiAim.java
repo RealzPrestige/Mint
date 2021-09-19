@@ -16,7 +16,7 @@ public class AntiAim extends Module {
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Custom));
     public Setting<Integer> yaw = register(new Setting("Yaw", 90, -90, 90, v -> mode.getValue() == Mode.Custom));
     public Setting<Integer> pitch = register(new Setting("Pitch", 90, -90, 90, v -> mode.getValue() == Mode.Custom));
-    public Setting<Integer> spinSpeed = register(new Setting("SpinSpeed", 10, 0, 50));
+    public Setting<Integer> spinSpeed = register(new Setting("SpinSpeed", 10, 0, 50, v -> mode.getValue() == Mode.Spin));
     int nextValue;
 
     @Override

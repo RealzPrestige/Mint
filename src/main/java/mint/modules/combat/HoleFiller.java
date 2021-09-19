@@ -142,9 +142,7 @@ public class HoleFiller extends Module {
             int lastSlot = mc.player.inventory.currentItem;
             if(autoSwitch.getValue()) {
                 if (silentSwitch.getValue()) {
-                    mc.player.inventory.currentItem = blockSlot;
-                    mc.playerController.updateController();
-
+                    InventoryUtil.SilentSwitchToSlot(blockSlot);
                 } else {
                     mc.player.inventory.currentItem = blockSlot;
                 }
@@ -188,8 +186,7 @@ public class HoleFiller extends Module {
                 blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
                 if(autoSwitch.getValue()) {
                     if (silentSwitch.getValue()) {
-                        mc.player.inventory.currentItem = blockSlot;
-                        mc.playerController.updateController();
+                        InventoryUtil.SilentSwitchToSlot(blockSlot);
                     } else {
                         mc.player.inventory.currentItem = blockSlot;
                     }

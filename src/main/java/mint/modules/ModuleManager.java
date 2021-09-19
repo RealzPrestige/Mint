@@ -11,7 +11,9 @@ import mint.modules.core.Gui;
 import mint.modules.core.FontChanger;
 import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.ChorusPredict;
+import mint.modules.miscellaneous.PacketCancel;
 import mint.modules.movement.Clip;
+import mint.modules.movement.ReverseStep;
 import mint.modules.movement.Step;
 import mint.modules.player.AntiAim;
 import mint.modules.miscellaneous.FakePlayer;
@@ -46,16 +48,18 @@ public class ModuleManager
         moduleList.add(new SelfFill());
 
         /** Miscellaneous **/
+        moduleList.add(new FakePlayer());
         moduleList.add(new ChorusPredict());
+        moduleList.add(new PacketCancel());
 
         /** Movement **/
         moduleList.add(new Clip());
+        moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         //moduleList.add(new Strafe());
 
         /** Player **/
         moduleList.add(new AntiAim());
-        moduleList.add(new FakePlayer());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());
