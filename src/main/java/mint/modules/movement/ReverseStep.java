@@ -21,47 +21,36 @@ public class ReverseStep extends Module {
     public void onUpdate() {
         if (fullNullCheck() || mc.player.isInWater() || mc.player.isInLava() || mc.player.isOnLadder() || mc.gameSettings.keyBindJump.isKeyDown() || mc.player.isDead || Mint.moduleManager.isModuleEnabled("SelfFill")) {
             return;
-        }
-
-        if (mc.player != null && mc.player.onGround && !mc.player.isInWater() && !mc.player.isOnLadder()) {
+        } else {
             switch (mode.getValue()) {
-
                 case Vanilla:
+                    if (sneak.getValue()) {
+                        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+                    }
                     for (float y = 0.0f; y < 3.0f; y += 0.01f) {
                         if (!mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0.0, -y, 0.0)).isEmpty()) {
-
-                            if (sneak.getValue()) {
-                                mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
-                            }
-
                             mc.player.motionY = -vanillaSpeed.getValue();
-
-                            if (sneak.getValue()) {
-                                mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
-                            }
+                            break;
                         }
+                    }
+                    if (sneak.getValue()) {
+                        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                     }
                     break;
 
                 case Strict:
-                    for (float y = 0.0f; y < 3.0f; y += 0.01f) {
-                        if (!mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0.0, -y, 0.0)).isEmpty()) {
+                    if (mc.player.onGround) {
+                        for (float y = 0.0f; y < 3.0f; y += 0.01f) {
+                            if (!mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0.0D, -y, 0.0D)).isEmpty()) {
 
-                            if (sneak.getValue()) {
-                                mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
-                            }
-
-                            mc.player.connection.sendPacket(new CPacketPlayer(mc.player.onGround));
-                            mc.player.motionY *= strictSpeed.getValue();
-                            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY, mc.player.posZ, false));
-
-                            if (sneak.getValue()) {
-                                mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+                                mc.player.connection.sendPacket(new CPacketPlayer(mc.player.onGround));
+                                mc.player.motionY *= 1.75D;
+                                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY, mc.player.posZ, true));
+                                break;
                             }
                         }
                     }
                     break;
-
             }
         }
     }

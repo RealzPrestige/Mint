@@ -9,6 +9,7 @@ import mint.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSpawnObject;
@@ -65,7 +66,7 @@ public class CrystalAura extends Module {
 
     public Setting<Boolean> swingParent = register(new Setting("Swing", true, false));
     public Setting<Swing> swing = register(new Setting("SwingMode", Swing.MAINHAND, v-> swingParent.getValue()));
-    public enum Swing{OFFHAND, MAINHAND}
+    public enum Swing {OFFHAND, MAINHAND}
 
 
     public Setting<Boolean> parentFacePlace = register(new Setting("FacePlace", true, false));
@@ -90,14 +91,17 @@ public class CrystalAura extends Module {
     @Override
     public void onToggle() {
         target = null;
+        finalPos = null;
+        resetTimer.reset();
     }
 
     @Override
     public void onUpdate() {
         if (resetTimer.passedMs(resetDelay.getValue())) {
             target = null;
+            finalPos = null;
         }
-        if(target != null) {
+        if (target != null) {
             doPlace();
             doBreak();
         }
@@ -107,7 +111,8 @@ public class CrystalAura extends Module {
         BlockPos placePos = null;
         target = EntityUtil.getTarget(targetRange.getValue());
         final List<BlockPos> sphere = BlockUtil.getSphere(placeRange.getValue(), true);
-
+        int originalSlot = mc.player.inventory.currentItem;
+        int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
         for (int size = sphere.size(), i = 0; i < size; ++i) {
             BlockPos pos = sphere.get(i);
             if (BlockUtil.canPlaceCrystal(pos, true)){
@@ -125,11 +130,18 @@ public class CrystalAura extends Module {
                 }
             }
         }
-        if (placePos != null){
+        if (placePos != null) {
+            if (silentSwitch.getValue()) {
+                InventoryUtil.SilentSwitchToSlot(crystalSlot);
+            }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, swing.getValue() == Swing.OFFHAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-        }
 
+            if (silentSwitch.getValue()) {
+                mc.player.inventory.currentItem = originalSlot;
+            }
+        }
     }
+
     public void doBreak() {
         target = EntityUtil.getTarget(targetRange.getValue());
         for (Entity crystal : mc.world.loadedEntityList) {
