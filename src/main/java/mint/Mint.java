@@ -2,7 +2,7 @@ package mint;
 
 import mint.commands.CommandManager;
 import mint.managers.*;
-import mint.modules.ModuleManager;
+import mint.managers.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
