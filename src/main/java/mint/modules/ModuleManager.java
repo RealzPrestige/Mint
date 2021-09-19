@@ -35,6 +35,7 @@ public class ModuleManager
         /** Combat **/
         moduleList.add(new HoleFiller());
         moduleList.add(new SelfFill());
+        moduleList.add(new CrystalAura());
 
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());

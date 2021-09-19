@@ -10,6 +10,7 @@ import mint.Mint;
 import mint.commands.Command;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.MathHelper;
@@ -24,6 +25,16 @@ import java.util.*;
 
 public class PlayerUtil {
     private static final JsonParser PARSER = new JsonParser();
+
+    public static boolean isArmorLow(final EntityPlayer player, final int durability) {
+        for (final ItemStack piece : player.inventory.armorInventory) {
+            if (piece != null && getDamageInPercent(piece) >= durability) {
+                continue;
+            }
+            return true;
+        }
+        return false;
+    }
 
     public static float getDamageInPercent(final ItemStack stack) {
         final float green = (stack.getMaxDamage() - (float)stack.getItemDamage()) / stack.getMaxDamage();

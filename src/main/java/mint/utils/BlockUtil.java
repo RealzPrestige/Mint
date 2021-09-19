@@ -2,11 +2,14 @@ package mint.utils;
 
 import mint.Mint;
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
@@ -20,6 +23,36 @@ public class BlockUtil {
     public static final List<net.minecraft.block.Block> shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
     public static final List<net.minecraft.block.Block> blackList = Arrays.asList(Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER, Blocks.TRAPDOOR, Blocks.ENCHANTING_TABLE);
 
+    public static boolean canPlaceCrystal(final BlockPos blockPos, boolean check) {
+        final BlockPos boost = blockPos.add(0, 1, 0);
+        if (Mint.INSTANCE.mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && Mint.INSTANCE.mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN) {
+            return false;
+        }
+
+        final BlockPos boost2 = blockPos.add(0, 2, 0);
+        if (Mint.INSTANCE.mc.world.getBlockState(boost).getBlock() != Blocks.AIR || Mint.INSTANCE.mc.world.getBlockState(boost2).getBlock() != Blocks.AIR) {
+            return false;
+        }
+
+        for (Entity entity : Mint.INSTANCE.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
+            if (entity.isDead || entity instanceof EntityEnderCrystal)
+                continue;
+
+            return false;
+        }
+
+        if (check) {
+            for (final Entity entity : Mint.INSTANCE.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2))) {
+                if (entity.isDead || entity instanceof EntityEnderCrystal)
+                    continue;
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static List<EnumFacing> getPossibleSides(BlockPos pos) {
         ArrayList<EnumFacing> facings = new ArrayList<>();
         for (EnumFacing side : EnumFacing.values()) {
@@ -31,8 +64,25 @@ public class BlockUtil {
         return facings;
     }
 
-    public static Vec3d[] getHelpingBlocks(Vec3d vec3d) {
-        return new Vec3d[]{new Vec3d(vec3d.x, vec3d.y - 1.0, vec3d.z), new Vec3d(vec3d.x != 0.0 ? vec3d.x * 2.0 : vec3d.x, vec3d.y, vec3d.x != 0.0 ? vec3d.z : vec3d.z * 2.0), new Vec3d(vec3d.x == 0.0 ? vec3d.x + 1.0 : vec3d.x, vec3d.y, vec3d.x == 0.0 ? vec3d.z : vec3d.z + 1.0), new Vec3d(vec3d.x == 0.0 ? vec3d.x - 1.0 : vec3d.x, vec3d.y, vec3d.x == 0.0 ? vec3d.z : vec3d.z - 1.0), new Vec3d(vec3d.x, vec3d.y + 1.0, vec3d.z)};
+    public static List<BlockPos> getSphere(final double radius, final boolean ignoreAir) {
+        final ArrayList<BlockPos> sphere = new ArrayList<>();
+        final BlockPos pos = new BlockPos(Mint.INSTANCE.mc.player.getPositionVector());
+        final int posX = pos.getX();
+        final int posY = pos.getY();
+        final int posZ = pos.getZ();
+        final int radiuss = (int)radius;
+        for (int x = posX - radiuss; x <= posX + radius; ++x) {
+            for (int z = posZ - radiuss; z <= posZ + radius; ++z) {
+                for (int y = posY - radiuss; y < posY + radius; ++y) {
+                    final double dist = (posX - x) * (posX - x) + (posZ - z) * (posZ - z) + (posY - y) * (posY - y);
+                    final BlockPos position;
+                    if (dist < radius * radius && (Mint.INSTANCE.mc.world.getBlockState(position = new BlockPos(x, y, z)).getBlock() != Blocks.AIR || !ignoreAir)) {
+                        sphere.add(position);
+                    }
+                }
+            }
+        }
+        return sphere;
     }
 
 
