@@ -1,5 +1,6 @@
 package mint.modules.combat;
 
+import com.google.common.collect.Sets;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
@@ -19,31 +20,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import java.awt.*;
+import java.util.HashSet;
 import java.util.List;
 
 public class CrystalAura extends Module {
-
-    public CrystalAura(){
-        super("Crystal Aura", Module.Category.COMBAT, "Automatically places and breaks crystals.");
-    }
     private static Minecraft mc = Minecraft.getMinecraft();
+
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
     public Setting<Boolean> breakIgnoreSelf = register(new Setting("BreakIgnoreSelf", false,  v-> parentBreak.getValue()));
     public Setting<Float> breakRange = register(new Setting("BreakRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakRangeWall = register(new Setting("BreakWallRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
     public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
     public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
     public Setting<Boolean> packetBreak = register(new Setting("PacketBreak", true, v-> parentBreak.getValue()));
     public Setting<Boolean> predictBreak = register(new Setting("Predict", true, v-> parentBreak.getValue()));
     public Setting<Float> breakMinHp = register(new Setting("BreakMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Integer> breakDelay = register(new Setting("BreakDelay", 70, 0, 200, v -> parentBreak.getValue()));
+
 
     public Setting<Boolean> parentPlace = register(new Setting("Place", true, false));
     public Setting<Boolean> placeIgnoreSelf = register(new Setting("PlaceIgnoreSelf", false,  v-> parentPlace.getValue()));
     public Setting<Float> placeRange = register(new Setting("PlaceRange", 5.0f, 0.1f, 6.0f, v -> parentPlace.getValue()));
-    public Setting<Float> placeRangeWall = register(new Setting("PlaceWallRange", 6.0f, 0.1f, 6.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 6.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMinHp = register(new Setting("PlaceMinHp", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
+    public Setting<Integer> placeDelay = register(new Setting("PlaceDelay", 70, 0, 200, v -> parentPlace.getValue()));
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
     public Setting<Float> targetRange = register(new Setting("TargetRange", 12.0f, 0.1f, 15.0f, v -> targetParent.getValue()));
@@ -51,17 +51,17 @@ public class CrystalAura extends Module {
     public Setting<Boolean> parentVisual = register(new Setting("Visual", true, false));
     public Setting<Boolean> damageRender = register(new Setting("DamageText", false, v-> parentVisual.getValue()));
     public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v-> parentVisual.getValue()));
-    public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v-> boxParent.getValue()));
-    public Setting<Integer> boxRed = register(new Setting<>( "BoxRed", 255, 0, 255, v-> boxParent.getValue()));
-    public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v-> boxParent.getValue()));
-    public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v-> boxParent.getValue()));
-    public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v-> boxParent.getValue()));
+    public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v-> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxRed = register(new Setting<>( "BoxRed", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, v-> parentVisual.getValue()));
-    public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v-> boxParent.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>( "OutlineRed", 255, 0, 255, v-> boxParent.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v-> boxParent.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v-> boxParent.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v-> boxParent.getValue()));
+    public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v-> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineRed = register(new Setting<>( "OutlineRed", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
 
     public Setting<Boolean> swingParent = register(new Setting("Swing", true, false));
     public Setting<Swing> swing = register(new Setting("SwingMode", Swing.MAINHAND, v-> swingParent.getValue()));
@@ -82,11 +82,16 @@ public class CrystalAura extends Module {
     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
     public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
 
-
     public Timer resetTimer = new Timer();
     public EntityPlayer target;
     public BlockPos finalPlacePos;
     public BlockPos finalBreakPos;
+    public Timer placeTimer = new Timer();
+    public Timer breakTimer = new Timer();
+
+    public CrystalAura(){
+        super("Crystal Aura", Module.Category.COMBAT, "Automatically places and breaks crystals.");
+    }
     @Override
     public void onToggle() {
         target = EntityUtil.getTarget(targetRange.getValue());
@@ -95,12 +100,22 @@ public class CrystalAura extends Module {
 
     @Override
     public void onUpdate() {
+        if (resetTimer.passedMs(resetDelay.getValue())) {
+            finalPlacePos = null;
+            finalBreakPos = null;
+        }
         target = EntityUtil.getTarget(targetRange.getValue());
         if(target == null) {
             return;
         }
+        if(placeTimer.passedMs(placeDelay.getValue())) {
             doPlace();
+            placeTimer.reset();
+        }
+        if(breakTimer.passedMs(breakDelay.getValue())) {
             doBreak();
+            breakTimer.reset();
+        }
     }
 
     public void doPlace() {
@@ -112,10 +127,11 @@ public class CrystalAura extends Module {
             BlockPos pos = sphere.get(i);
             if (BlockUtil.canPlaceCrystal(pos, true)){
                 float selfDamage = calculatePos(pos, mc.player);
+                float oldDamage = finalPlacePos != null ? calculatePos(finalPlacePos, target) : 0;
                 float targetDamage = calculatePos(pos, target);
                 float minDamage = placeMinDmg.getValue();
                 float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
-                if (selfDamage < (placeIgnoreSelf.getValue() ? 36 : placeMaxSelf.getValue()) && selfDamage < selfHp && minDamage < targetDamage && selfDamage < placeMaxSelf.getValue()){
+                if (selfDamage < (placeIgnoreSelf.getValue() ? 36 : placeMaxSelf.getValue()) && selfDamage < selfHp && minDamage < targetDamage && selfDamage < placeMaxSelf.getValue() && oldDamage < targetDamage && placeMinHp.getValue() < selfHp){
                     if ((EntityUtil.getHealth(target) < healthAmount.getValue()) || (bind.getValue() && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (PlayerUtil.isArmorLow(target, armorPercent.getValue()))){
                         minDamage = 2;
                     }
@@ -141,13 +157,15 @@ public class CrystalAura extends Module {
                 float targetDamage = calculatePos(crystalPos, target);
                 float minDamage = breakMinDmg.getValue();
                 float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
-                if(selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue())) {
-                    if (packetBreak.getValue()) {
-                        mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
-                        breakPos = crystalPos;
-                        finalBreakPos = breakPos;
-                    } else {
-                        mc.playerController.attackEntity(mc.player, crystal);
+                if(selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue()) && breakMinHp.getValue() < selfHp) {
+                    if(crystal.getDistance(mc.player) < MathUtil.square(breakRange.getValue())) {
+                        if (packetBreak.getValue()) {
+                            mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
+                            breakPos = crystalPos;
+                            finalBreakPos = breakPos;
+                        } else {
+                            mc.playerController.attackEntity(mc.player, crystal);
+                        }
                     }
                 }
             }
@@ -169,18 +187,20 @@ public class CrystalAura extends Module {
     }
 
     public void onRender3D(Render3DEvent event) {
+        if(finalBreakPos != null && finalPlacePos != null) {
+            if (boxSetting.getValue() && finalBreakPos.down() != finalPlacePos) {
+                RenderUtil.drawBoxESP(finalBreakPos.down(), new Color(255, 0, 0, boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
+            }
+        }
         if (finalPlacePos != null) {
-            if(boxSetting.getValue()) {
-                RenderUtil.drawBoxESP(finalPlacePos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), false, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, true, true, boxAlpha.getValue(), false);
+            if (boxSetting.getValue()) {
+                RenderUtil.drawBoxESP(finalPlacePos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
             }
-            if(boxSetting.getValue()) {
-                RenderUtil.drawBoxESP(finalBreakPos, new Color(255, 0, 0, boxAlpha.getValue()), false, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, true, true, boxAlpha.getValue(), false);
-            }
+        }
             if (damageRender.getValue()) {
                 //todo oml drawText,,,,,,,,,
             }
         }
-    }
 
     private float calculatePos(final BlockPos pos, final EntityPlayer entity) {
         return EntityUtil.calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
