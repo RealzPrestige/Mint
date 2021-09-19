@@ -1,15 +1,17 @@
-package mint.modules;
+package mint.managers;
 
 import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
+import mint.modules.Feature;
+import mint.modules.Module;
+import mint.modules.visual.*;
 import mint.modules.combat.*;
 import mint.modules.core.*;
-import mint.modules.miscellaneous.*;
 import mint.modules.movement.*;
+import mint.modules.miscellaneous.*;
 import mint.modules.player.*;
-import mint.modules.visual.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -56,6 +58,7 @@ public class ModuleManager
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
         moduleList.add(new PopChams());
+        moduleList.add(new LogoutSpots());
     }
 
     public Module getModuleByName(String name) {
