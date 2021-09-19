@@ -34,7 +34,6 @@ import java.util.UUID;
 public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
-    public int clickAlpha;
     public void init() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -70,9 +69,6 @@ public class EventManager extends Feature {
         for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
             if (player == null || player.getHealth() > 0.0F)
                 continue;
-        }
-        if(clickAlpha > 0){
-            clickAlpha = clickAlpha - 3;
         }
         for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
             if (player == null || player.getHealth() > 0.0F) {

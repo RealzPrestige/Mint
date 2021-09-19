@@ -27,9 +27,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.UUID;
 
 public class FakePlayer extends Module {
-    public Setting<Boolean> inv = this.register(new Setting<>("Inv", true));
-    public Setting<Boolean> pop = this.register(new Setting<>("Pop", true));
-    public Setting<String> name = this.register(new Setting<>("Name", "MintClient"));
+    public Setting<Boolean> inv = register(new Setting<>("Inv", true));
+    public Setting<Boolean> pop = register(new Setting<>("Pop", true));
+    public Setting<String> name = register(new Setting<>("Name", "MintClient"));
     private EntityOtherPlayerMP fake_player;
 
     public FakePlayer() {
@@ -54,7 +54,9 @@ public class FakePlayer extends Module {
         }
     }
     public void onLogin(){
-        disable();
+        if(isEnabled()) {
+            disable();
+        }
     }
     @Override
     public String getDisplayInfo() {
@@ -76,7 +78,7 @@ public class FakePlayer extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if (pop.getValue()) {
+        if (pop.getValue() && isEnabled()) {
             if (event.getPacket() instanceof SPacketDestroyEntities) {
                 final SPacketDestroyEntities packet = event.getPacket();
 

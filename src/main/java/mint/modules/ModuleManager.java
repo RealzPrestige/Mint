@@ -1,4 +1,4 @@
-package mint.managers;
+package mint.modules;
 
 import mint.Mint;
 import mint.events.Render2DEvent;
@@ -42,7 +42,6 @@ public class ModuleManager
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());
         moduleList.add(new ChorusPredict());
-        moduleList.add(new PacketCancel());
 
         /** Movement **/
         moduleList.add(new Clip());
@@ -57,8 +56,8 @@ public class ModuleManager
         moduleList.add(new SwingAnimations());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
-        moduleList.add(new PopChams());
         moduleList.add(new LogoutSpots());
+        moduleList.add(new PopChams());
     }
 
     public Module getModuleByName(String name) {
