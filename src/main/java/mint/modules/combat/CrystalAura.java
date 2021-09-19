@@ -5,12 +5,8 @@ import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
-import mint.utils.InventoryUtil;
 import mint.utils.Timer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemEndCrystal;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.util.EnumHand;
@@ -25,14 +21,14 @@ public class CrystalAura extends Module {
 
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
     public Setting<Float> breakRange = register(new Setting("BreakRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.5f, 0.1f, 36.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 13.5f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 12.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 12.0f, v -> parentBreak.getValue()));
     public Setting<Boolean> predictBreak = register(new Setting("Predict", true, v-> parentBreak.getValue()));
 
     public Setting<Boolean> parentPlace = register(new Setting("Place", true, false));
     public Setting<Float> placeRange = register(new Setting("PlaceRange", 5.0f, 0.1f, 6.0f, v -> parentPlace.getValue()));
-    public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 6.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
-    public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
+    public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 6.0f, 0.1f, 12.0f, v -> parentPlace.getValue()));
+    public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 12.0f, v -> parentPlace.getValue()));
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
     public Setting<Float> targetRange = register(new Setting("TargetRange", 12.0f, 0.1f, 15.0f, v -> targetParent.getValue()));
@@ -54,21 +50,21 @@ public class CrystalAura extends Module {
 
     public Setting<Boolean> parentFacePlace = register(new Setting("FacePlace", true, false));
     public Setting<Boolean> health = register(new Setting("Health", false, false, v-> parentFacePlace.getValue()));
-    public Setting<Float> healthAmount = register(new Setting("HealthAmount", 7.4f, 0.1f, 36.0f, v -> parentFacePlace.getValue() && health.getValue()));
+    public Setting<Integer> healthAmount = register(new Setting("HealthAmount", 10, 1, 36, v -> parentFacePlace.getValue() && health.getValue()));
     public Setting<Boolean> armor = register(new Setting("Armor", false, false, v-> parentFacePlace.getValue()));
-    public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 20, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
+    public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
     public Setting<Boolean> bind = register(new Setting("Bind", false, false, v-> parentFacePlace.getValue()));
     public Setting<BindSetting> facePlaceBind = register(new Setting<>("FaceplaceBind:", new BindSetting(1), v-> !parentFacePlace.getValue() && bind.getValue()));
 
     public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
-    public Setting<AutoSwitch> autoSwitch = register(new Setting("AutoSwitch", AutoSwitch.None));
+    public Setting<Boolean> autoSwitch = register(new Setting("AutoSwitch", false, false, v-> parentMisc.getValue()));
+    public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false, false, v-> parentMisc.getValue()));
     public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
+
 
     private final Timer resetTimer = new Timer();
     public EntityPlayer Target;
     private BlockPos Position;
-    int originalSlot;
-    int crystalSlot;
 
     @Override
     public void onToggle() {
@@ -91,40 +87,15 @@ public class CrystalAura extends Module {
         if (Target == null) {
             return;
         }
-
-        //do break
     }
 
     public void doPlace() {
         Target = EntityUtil.getTarget(targetRange.getValue());
-        crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
-        originalSlot = mc.player.inventory.currentItem;
         if (Target == null) {
             return;
         }
-
-        switch (autoSwitch.getValue()) {
-            case Silent:
-                InventoryUtil.SilentSwitchToSlot(crystalSlot);
-                break;
-
-            case Normal:
-        }
-
-        //do placing here
-
-        switch (autoSwitch.getValue()) {
-            case Silent:
-                mc.player.inventory.currentItem = originalSlot;
-                mc.playerController.updateController();
-                break;
-
-            case Normal:
-        }
-
-
-    }
         //Position == ;
+    }
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
@@ -139,11 +110,5 @@ public class CrystalAura extends Module {
                 mc.player.swingArm(EnumHand.MAIN_HAND);
             }
         }
-    }
-
-    public enum AutoSwitch {
-        None,
-        Silent,
-        Normal
     }
 }
