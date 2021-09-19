@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
-public class PopChams extends Module {
+public class  PopChams extends Module {
 
     public static PopChams INSTANCE = new PopChams();
 
