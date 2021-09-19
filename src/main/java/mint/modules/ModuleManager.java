@@ -42,6 +42,7 @@ public class ModuleManager
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());
         moduleList.add(new ChorusPredict());
+        moduleList.add(new PacketCancel());
 
         /** Movement **/
         moduleList.add(new Clip());

@@ -93,7 +93,6 @@ public class SelfFill extends Module {
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
             }
             case Strict: {
-                //its the same as before but using an existing method
                 EntityUtil.packetJump(offground.getValue());
             }
             case Jump: {
@@ -109,7 +108,7 @@ public class SelfFill extends Module {
                 fakePop(mc.player);
                 fakePop(mc.player);
                 Minecraft.getMinecraft().getConnection().handleDisconnect(new SPacketDisconnect(new TextComponentString("Left the server with 1.0 hp")));
-                this.disable();
+                disable();
             }
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));

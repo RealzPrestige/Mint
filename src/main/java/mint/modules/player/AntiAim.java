@@ -26,6 +26,9 @@ public class AntiAim extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
+        if (!isEnabled()) {
+            return;
+        }
         if (event.getPacket() instanceof CPacketPlayer && !Mint.INSTANCE.mc.player.isHandActive()) {
             switch (mode.getValue()) {
                 case Custom:
@@ -42,7 +45,7 @@ public class AntiAim extends Module {
     }
 
     public String hudInfoString(){
-        return "Y" +yaw.getValue() + " P" + pitch.getValue();
+        return "Y" + yaw.getValue() + " P" + pitch.getValue();
     }
 
     public enum Mode {
