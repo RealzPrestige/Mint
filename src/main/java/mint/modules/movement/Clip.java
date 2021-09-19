@@ -21,7 +21,9 @@ public class Clip extends Module {
             disable();
             return;
         }
-        //todo return if freecam is enabled, a player is using elyta
+        if (mc.player.isElytraFlying()) {
+            return;
+        }
         startPos = new BlockPos(mc.player.getPositionVector());
     }
 

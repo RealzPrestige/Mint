@@ -26,7 +26,7 @@ public class AntiAim extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
-        if (event.getPacket() instanceof CPacketPlayer && Mint.INSTANCE.mc.player.isHandActive()) {
+        if (event.getPacket() instanceof CPacketPlayer && !Mint.INSTANCE.mc.player.isHandActive()) {
             switch (mode.getValue()) {
                 case Custom:
                 ((CPacketPlayer) event.getPacket()).yaw = yaw.getValue();

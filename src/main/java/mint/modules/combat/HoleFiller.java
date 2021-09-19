@@ -151,7 +151,7 @@ public class HoleFiller extends Module {
             }
             if(throughWalls.getValue()) {
                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
-                        placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                         if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                             if (!filledFadeHoles.containsKey(pos)) {
                                 filledFadeHoles.put(pos, startAlpha.getValue());
@@ -160,7 +160,7 @@ public class HoleFiller extends Module {
                 }
             } else if(canBlockBeSeen(pos)) {
                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
-                        placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                         if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                             if (!filledFadeHoles.containsKey(pos)) {
                                 filledFadeHoles.put(pos, startAlpha.getValue());
@@ -199,7 +199,7 @@ public class HoleFiller extends Module {
                         if(getPlayerTarget(targetRange.getValue()) != null && !EntityUtil.isSafe(getPlayerTarget(targetRange.getValue()))) {
                             if(throughWalls.getValue()) {
                                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
-                                    placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                     if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
@@ -208,7 +208,7 @@ public class HoleFiller extends Module {
                                 }
                             } else if (canBlockBeSeen(pos)){
                                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
-                                    placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                     if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
@@ -220,7 +220,7 @@ public class HoleFiller extends Module {
                     } else {
                         if(throughWalls.getValue()) {
                                 if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
-                                placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                 if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                     if (!filledFadeHoles.containsKey(pos)) {
                                         filledFadeHoles.put(pos, startAlpha.getValue());
@@ -229,7 +229,7 @@ public class HoleFiller extends Module {
                             }
                         } else if (canBlockBeSeen(pos)){
                                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
-                                    placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                     if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
@@ -299,50 +299,5 @@ public class HoleFiller extends Module {
 
     public static boolean canBlockBeSeen(final BlockPos blockPos) {
         return Mint.INSTANCE.mc.world.rayTraceBlocks(new Vec3d(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + Mint.INSTANCE.mc.player.getEyeHeight(), Mint.INSTANCE.mc.player.posZ), new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()), false, true, false) == null;
-    }
-    public static boolean placeBlock(BlockPos pos, EnumHand hand, boolean rotate, boolean packet, boolean isSneaking, boolean swing, EnumHand renderHand) {
-        boolean sneaking = false;
-        EnumFacing side = getFirstFacing(pos);
-        if (side == null) {
-            return isSneaking;
-        }
-        BlockPos neighbour = pos.offset(side);
-        EnumFacing opposite = side.getOpposite();
-        Vec3d hitVec = new Vec3d(neighbour).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
-        net.minecraft.block.Block neighbourBlock = Mint.INSTANCE.mc.world.getBlockState(neighbour).getBlock();
-        if (!Mint.INSTANCE.mc.player.isSneaking() && (blackList.contains(neighbourBlock) || shulkerList.contains(neighbourBlock))) {
-            Mint.INSTANCE.mc.player.connection.sendPacket(new CPacketEntityAction(Mint.INSTANCE.mc.player, CPacketEntityAction.Action.START_SNEAKING));
-            Mint.INSTANCE.mc.player.setSneaking(true);
-            sneaking = true;
-        }
-        if (rotate) {
-            PlayerUtil.faceVector(hitVec, true);
-        }
-        rightClickBlock(neighbour, hitVec, hand, opposite, packet);
-        if(swing) {
-            Mint.INSTANCE.mc.player.swingArm(renderHand);
-        }
-        Mint.INSTANCE.mc.rightClickDelayTimer = 4;
-        return sneaking || isSneaking;
-    }
-    public static void rightClickBlock(BlockPos pos, Vec3d vec, EnumHand hand, EnumFacing direction, boolean packet) {
-        if (packet) {
-            float f = (float) (vec.x - (double) pos.getX());
-            float f1 = (float) (vec.y - (double) pos.getY());
-            float f2 = (float) (vec.z - (double) pos.getZ());
-            Mint.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, direction, hand, f, f1, f2));
-        } else {
-            Mint.INSTANCE.mc.playerController.processRightClickBlock(Mint.INSTANCE.mc.player, Mint.INSTANCE.mc.world, pos, direction, vec, hand);
-        }
-        Mint.INSTANCE.mc.player.swingArm(EnumHand.MAIN_HAND);
-        Mint.INSTANCE.mc.rightClickDelayTimer = 4;
-    }
-    public static EnumFacing getFirstFacing(BlockPos pos) {
-        Iterator<EnumFacing> iterator = BlockUtil.getPossibleSides(pos).iterator();
-        if (iterator.hasNext()) {
-            EnumFacing facing = iterator.next();
-            return facing;
-        }
-        return null;
     }
 }

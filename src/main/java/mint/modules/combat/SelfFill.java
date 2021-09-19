@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
 public class SelfFill extends Module {
@@ -63,10 +64,10 @@ public class SelfFill extends Module {
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
 
         EntityUtil.packetJump(true);
-        //todo BlockUtil.placeBlock();
+        BlockUtil.placeBlock(startPos, EnumHand.MAIN_HAND, false, true, false, true, EnumHand.MAIN_HAND);
         switch (lagBack.getValue()) {
             case Packet: {
-                //todo nigga what the fuck is this - kambing
+                //todo nigga what the fuck is this - kambing | orble,m? - zenov
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
             }
             case YMotion: {
