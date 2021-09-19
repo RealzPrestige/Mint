@@ -3,11 +3,9 @@ package mint.modules.combat;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
+import mint.events.Render3DEvent;
 import mint.modules.Module;
-import mint.utils.BlockUtil;
-import mint.utils.EntityUtil;
-import mint.utils.PlayerUtil;
-import mint.utils.Timer;
+import mint.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.util.List;
 
 public class CrystalAura extends Module {
@@ -184,6 +183,15 @@ public class CrystalAura extends Module {
                 predict.action = CPacketUseEntity.Action.ATTACK;
                 mc.getConnection().sendPacket(predict);
                 mc.player.swingArm(EnumHand.MAIN_HAND);
+            }
+        }
+    }
+
+    public void onRender3D(Render3DEvent event) {
+        if (finalPos != null) {
+            RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), false, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, true, true, boxAlpha.getValue(), false);
+            if (damageRender.getValue()) {
+                //todo oml drawText,,,,,,,,,
             }
         }
     }
