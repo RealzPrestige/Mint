@@ -1,5 +1,6 @@
 package mint.modules.combat;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
@@ -32,13 +33,14 @@ public class CrystalAura extends Module {
     private static Minecraft mc = Minecraft.getMinecraft();
 
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
-    public Setting<Boolean> breakIgnoreSelf = register(new Setting("BreakIgnoreSelf", false,  v-> parentBreak.getValue()));
-    public Setting<Float> breakRange = register(new Setting("BreakRange", 5.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
-    public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Boolean> instantBreak = register(new Setting("InstantBreak", true, v-> parentBreak.getValue()));
+    public Setting<Boolean> breakIgnoreSelf = register(new Setting("BreakIgnoreSelf", false,  v-> parentBreak.getValue() && !instantBreak.getValue()));
+    public Setting<Float> breakRange = register(new Setting("BreakRange", 5.0f, 0.1f, 6.0f, v -> parentBreak.getValue() && !instantBreak.getValue()));
+    public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 36.0f, v -> parentBreak.getValue() && !instantBreak.getValue()));
+    public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue() && !instantBreak.getValue()));
     public Setting<Boolean> packetBreak = register(new Setting("PacketBreak", true, v-> parentBreak.getValue()));
     public Setting<Boolean> predictBreak = register(new Setting("Predict", true, v-> parentBreak.getValue()));
-    public Setting<Float> breakMinHp = register(new Setting("BreakMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakMinHp = register(new Setting("BreakMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue() && !instantBreak.getValue()));
     public Setting<Integer> breakDelay = register(new Setting("BreakDelay", 70, 0, 200, v -> parentBreak.getValue()));
 
     public Setting<Boolean> parentPlace = register(new Setting("Place", true, false));
@@ -101,6 +103,7 @@ public class CrystalAura extends Module {
     public CrystalAura(){
         super("Crystal Aura", Module.Category.COMBAT, "Automatically places and breaks crystals.");
     }
+
     @Override
     public void onToggle() {
         target = EntityUtil.getTarget(targetRange.getValue());
@@ -203,7 +206,7 @@ public class CrystalAura extends Module {
                 float targetDamage = calculatePos(crystalPos, target);
                 float minDamage = breakMinDmg.getValue();
                 float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
-                if(selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue()) && breakMinHp.getValue() < selfHp) {
+                if((instantBreak.getValue()) || (selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue()) && breakMinHp.getValue() < selfHp)) {
                     if(crystal.getDistance(mc.player) < MathUtil.square(breakRange.getValue())) {
                         if (packetBreak.getValue()) {
                             mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
@@ -255,9 +258,9 @@ public class CrystalAura extends Module {
                     RenderUtil.drawBoxESP(finalPlacePos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
                 }
             }
-            if (damageRender.getValue()) {
-                //todo oml drawText,,,,,,,,,
-            }
+        }
+        if(damageRender.getValue() && finalPlacePos != null){
+            RenderUtil.drawText(finalPlacePos, "" + ChatFormatting.RED + MathUtil.round(calculatePos(finalPlacePos, target), 0) + ChatFormatting.WHITE + " | " + ChatFormatting.GREEN + MathUtil.round(calculatePos(finalPlacePos, mc.player), 0)  , -1);
         }
     }
 

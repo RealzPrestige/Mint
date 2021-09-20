@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,7 @@ import java.util.Objects;
 public class RenderUtil {
     public static RenderItem itemRender;
     public static ICamera camera;
-   public static Minecraft mc = Minecraft.getMinecraft();
+    public static Minecraft mc = Minecraft.getMinecraft();
 
     static {
         Minecraft mc = Minecraft.getMinecraft();
@@ -30,27 +31,34 @@ public class RenderUtil {
         camera = new Frustum();
     }
 
-    public static void drawOutlineRect(final float x, final float y, final float w, final float h, final Color color) {
-        final float alpha = (color.getAlpha() >> 24 & 0xFF) / 255.0f;
-        final float red = (color.getRed() >> 16 & 0xFF) / 255.0f;
-        final float green = (color.getGreen() >> 8 & 0xFF) / 255.0f;
-        final float blue = (color.getBlue() & 0xFF) / 255.0f;
-        final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.glLineWidth(1.0f);
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        bufferbuilder.begin(2, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double)x, (double)h, 0.0).color(red, green, blue, alpha).endVertex();
-        bufferbuilder.pos((double)w, (double)h, 0.0).color(red, green, blue, alpha).endVertex();
-        bufferbuilder.pos((double)w, (double)y, 0.0).color(red, green, blue, alpha).endVertex();
-        bufferbuilder.pos((double)x, (double)y, 0.0).color(red, green, blue, alpha).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+    public static void drawText(BlockPos pos, String text, int color) {
+        GlStateManager.pushMatrix();
+        RenderUtil.glBillboardDistanceScaled((float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f, mc.player, 1.0f);
+        GlStateManager.disableDepth();
+        GlStateManager.translate(-((double) Mint.textManager.getStringWidth(text) / 2.0), 0.0, 0.0);
+        Mint.textManager.drawStringWithShadow(text, 0.0f, 0.0f, color);
+        GlStateManager.popMatrix();
     }
 
+    public static void glBillboard(float x, float y, float z) {
+        float scale = 0.02666667f;
+        GlStateManager.translate((double) x - mc.getRenderManager().renderPosX, (double) y - mc.getRenderManager().renderPosY, (double) z - mc.getRenderManager().renderPosZ);
+        GlStateManager.glNormal3f(0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(-mc.player.rotationYaw, 0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(mc.player.rotationPitch, mc.gameSettings.thirdPersonView == 2 ? -1.0f : 1.0f, 0.0f, 0.0f);
+        GlStateManager.scale(-scale, -scale, scale);
+    }
+
+
+    public static void glBillboardDistanceScaled(float x, float y, float z, EntityPlayer player, float scale) {
+        RenderUtil.glBillboard(x, y, z);
+        int distance = (int) player.getDistance(x, y, z);
+        float scaleDistance = (float) distance / 2.0f / (2.0f + (2.0f - scale));
+        if (scaleDistance < 1.0f) {
+            scaleDistance = 1.0f;
+        }
+        GlStateManager.scale(scaleDistance, scaleDistance, scaleDistance);
+    }
     public static void drawBoxESP(BlockPos pos, Color color, boolean secondC, Color secondColor, float lineWidth, boolean outline, boolean box, int boxAlpha, boolean air) {
         if (box) {
             RenderUtil.drawBox(pos, new Color(color.getRed(), color.getGreen(), color.getBlue(), boxAlpha));
