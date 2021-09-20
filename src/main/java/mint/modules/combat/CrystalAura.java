@@ -1,13 +1,11 @@
 package mint.modules.combat;
 
-import com.google.common.collect.Sets;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
 import mint.utils.*;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -15,27 +13,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 public class CrystalAura extends Module {
+
     private static Minecraft mc = Minecraft.getMinecraft();
 
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
     public Setting<Boolean> breakIgnoreSelf = register(new Setting("BreakIgnoreSelf", false,  v-> parentBreak.getValue()));
-    public Setting<Float> breakRange = register(new Setting("BreakRange", 6.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
+    public Setting<Float> breakRange = register(new Setting("BreakRange", 5.0f, 0.1f, 6.0f, v -> parentBreak.getValue()));
     public Setting<Float> breakMinDmg = register(new Setting("BreakMinDamage", 6.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
     public Setting<Float> breakMaxSelf = register(new Setting("BreakMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue()));
     public Setting<Boolean> packetBreak = register(new Setting("PacketBreak", true, v-> parentBreak.getValue()));
@@ -46,13 +44,27 @@ public class CrystalAura extends Module {
     public Setting<Boolean> parentPlace = register(new Setting("Place", true, false));
     public Setting<Boolean> placeIgnoreSelf = register(new Setting("PlaceIgnoreSelf", false,  v-> parentPlace.getValue()));
     public Setting<Float> placeRange = register(new Setting("PlaceRange", 5.0f, 0.1f, 6.0f, v -> parentPlace.getValue()));
-    public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 6.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
+    public Setting<Float> placeMinDmg = register(new Setting("PlaceMinDamage", 5.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMinHp = register(new Setting("PlaceMinHp", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Integer> placeDelay = register(new Setting("PlaceDelay", 70, 0, 200, v -> parentPlace.getValue()));
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
     public Setting<Float> targetRange = register(new Setting("TargetRange", 12.0f, 0.1f, 15.0f, v -> targetParent.getValue()));
+
+    public Setting<Boolean> parentFacePlace = register(new Setting("FacePlace", true, false));
+    public Setting<Boolean> health = register(new Setting("Health", false,  v-> parentFacePlace.getValue()));
+    public Setting<Integer> healthAmount = register(new Setting("HealthAmount", 10, 1, 36, v -> parentFacePlace.getValue() && health.getValue()));
+    public Setting<Boolean> armor = register(new Setting("Armor", false,  v-> parentFacePlace.getValue()));
+    public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
+    public Setting<Boolean> bind = register(new Setting("Bind", false, v-> parentFacePlace.getValue()));
+    public Setting<BindSetting> facePlaceBind = register(new Setting<>("FacePlaceBind:", new BindSetting(1), v-> parentFacePlace.getValue() && bind.getValue()));
+
+    public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
+    public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
+    public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
+    public Setting<Integer> maxCrystals = register(new Setting("MaxCrystals", 3, 1, 10, v -> parentMisc.getValue()));
+    public Setting<Integer> maxCrystalResetDelay = register(new Setting("MaxCrystalResetDelay", 2, 1, 10, v -> parentMisc.getValue()));
 
     public Setting<Boolean> parentVisual = register(new Setting("Visual", true, false));
     public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.FADE, v-> parentVisual.getValue()));
@@ -75,24 +87,6 @@ public class CrystalAura extends Module {
     public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
 
-    public Setting<Boolean> swingParent = register(new Setting("Swing", true, false));
-    public Setting<Swing> swing = register(new Setting("SwingMode", Swing.MAINHAND, v-> swingParent.getValue()));
-    public enum Swing{OFFHAND, MAINHAND}
-
-    public Setting<Boolean> parentFacePlace = register(new Setting("FacePlace", true, false));
-    public Setting<Boolean> health = register(new Setting("Health", false,  v-> parentFacePlace.getValue()));
-    public Setting<Integer> healthAmount = register(new Setting("HealthAmount", 10, 1, 36, v -> parentFacePlace.getValue() && health.getValue()));
-    public Setting<Boolean> armor = register(new Setting("Armor", false,  v-> parentFacePlace.getValue()));
-    public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
-    public Setting<Boolean> bind = register(new Setting("Bind", false, v-> parentFacePlace.getValue()));
-    public Setting<BindSetting> facePlaceBind = register(new Setting<>("FaceplaceBind:", new BindSetting(1), v-> parentFacePlace.getValue() && bind.getValue()));
-
-    public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
-     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
-    public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
-    public Setting<Integer> maxCrystals = register(new Setting("MaxCrystals", 3, 1, 10, v -> parentMisc.getValue()));
-    public Setting<Integer> maxCrystalResetDelay = register(new Setting("MaxCrystalResetDelay", 2, 1, 10, v -> parentMisc.getValue()));
-
     public Timer resetTimer = new Timer();
     public EntityPlayer target;
     public BlockPos finalPlacePos;
@@ -101,6 +95,7 @@ public class CrystalAura extends Module {
     public Timer breakTimer = new Timer();
     public int crystalAmount;
     public int ticks;
+    boolean forceFacePlace;
     HashMap<BlockPos, Integer> renderPosses = new HashMap();
 
     public CrystalAura(){
@@ -129,9 +124,21 @@ public class CrystalAura extends Module {
         if(target == null) {
             return;
         }
-        if(placeTimer.passedMs(placeDelay.getValue()) && crystalAmount < maxCrystals.getValue()) {
-            doPlace();
-            placeTimer.reset();
+        if((bind.getValue() && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (armor.getValue() && PlayerUtil.isArmorLow(target, armorPercent.getValue())) || (health.getValue() && EntityUtil.getHealth(target) <= healthAmount.getValue())){
+            if(isPlayerSafe(target)) {
+                doFacePlace(target, silentSwitch.getValue());
+                forceFacePlace = true;
+            } else {
+                forceFacePlace = false;
+            }
+        } else {
+            forceFacePlace = false;
+        }
+        if(!forceFacePlace) {
+            if (placeTimer.passedMs(placeDelay.getValue()) && crystalAmount < maxCrystals.getValue()) {
+                doPlace();
+                placeTimer.reset();
+            }
         }
         if(breakTimer.passedMs(breakDelay.getValue())) {
             doBreak();
@@ -143,19 +150,20 @@ public class CrystalAura extends Module {
         BlockPos placePos = null;
         target = EntityUtil.getTarget(targetRange.getValue());
         final List<BlockPos> sphere = BlockUtil.getSphere(placeRange.getValue(), true);
-
         for (int size = sphere.size(), i = 0; i < size; ++i) {
             BlockPos pos = sphere.get(i);
             if (BlockUtil.canPlaceCrystal(pos, true)){
                 float selfDamage = calculatePos(pos, mc.player);
                 float oldDamage = finalPlacePos != null ? calculatePos(finalPlacePos, target) : 0;
                 float targetDamage = calculatePos(pos, target);
-                float minDamage = placeMinDmg.getValue();
+                float minDamage;
+                if ((EntityUtil.getHealth(target) < healthAmount.getValue()) || (bind.getValue() && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (PlayerUtil.isArmorLow(target, armorPercent.getValue()))){
+                    minDamage = 2;
+                } else {
+                    minDamage = placeMinDmg.getValue();
+                }
                 float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
-                if (selfDamage < (placeIgnoreSelf.getValue() ? 36 : placeMaxSelf.getValue()) && selfDamage < selfHp && minDamage < targetDamage && selfDamage < placeMaxSelf.getValue() && oldDamage < targetDamage && placeMinHp.getValue() < selfHp){
-                    if ((EntityUtil.getHealth(target) < healthAmount.getValue()) || (bind.getValue() && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (PlayerUtil.isArmorLow(target, armorPercent.getValue()))){
-                        minDamage = 2;
-                    }
+                if (selfDamage < (placeIgnoreSelf.getValue() ? 36 : placeMaxSelf.getValue()) && selfDamage < selfHp && placeMinDmg.getValue() < targetDamage && selfDamage < placeMaxSelf.getValue() && oldDamage < targetDamage && placeMinHp.getValue() < selfHp){
                     if (targetDamage > minDamage) {
                         placePos = pos;
                         finalPlacePos = placePos;
@@ -279,5 +287,86 @@ public class CrystalAura extends Module {
             return z;
         }
         return -1;
+    }
+
+    public void doFacePlace(EntityPlayer target, boolean silentSwitch){
+        boolean canPlaceNorth = false;
+        boolean canPlaceEast = false;
+        boolean canPlaceSouth = false;
+        boolean canPlaceWest = false;
+        int crystalSlot = getItemHotbar(Items.END_CRYSTAL);
+        int oldSlot = mc.player.inventory.currentItem;
+        BlockPos playerPos = getPlayerPos(target);
+        if(isPlayerSafe(target)){
+            if(mc.world.getBlockState(playerPos.north().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.north().up()).getBlock() == Blocks.AIR){
+                canPlaceNorth = true;
+            }
+            if(mc.world.getBlockState(playerPos.east().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.east().up()).getBlock() == Blocks.AIR){
+                canPlaceEast = true;
+            }
+            if(mc.world.getBlockState(playerPos.south().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.south().up()).getBlock() == Blocks.AIR){
+                canPlaceSouth = true;
+            }
+            if(mc.world.getBlockState(playerPos.west().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.west().up()).getBlock() == Blocks.AIR){
+                canPlaceWest = true;
+            }
+        }
+        if(canPlaceNorth){
+            if(silentSwitch){
+                InventoryUtil.SilentSwitchToSlot(crystalSlot);
+            }
+            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.north(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            if(silentSwitch){
+                mc.player.inventory.currentItem = oldSlot;
+                mc.playerController.updateController();
+            }
+        } else if(canPlaceEast){
+            if(silentSwitch){
+                InventoryUtil.SilentSwitchToSlot(crystalSlot);
+            }
+            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.east(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            if(silentSwitch){
+                mc.player.inventory.currentItem = oldSlot;
+                mc.playerController.updateController();
+            }
+        } else if(canPlaceSouth){
+            if(silentSwitch){
+                InventoryUtil.SilentSwitchToSlot(crystalSlot);
+            }
+            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.south(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            if(silentSwitch){
+                mc.player.inventory.currentItem = oldSlot;
+                mc.playerController.updateController();
+            }
+        } else if(canPlaceWest){
+            if(silentSwitch){
+                InventoryUtil.SilentSwitchToSlot(crystalSlot);
+            }
+            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.west(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            if(silentSwitch){
+                mc.player.inventory.currentItem = oldSlot;
+                mc.playerController.updateController();
+            }
+        }
+    }
+
+    public static BlockPos getPlayerPos(EntityPlayer player) {
+        return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
+    }
+
+    public boolean isPlayerSafe(EntityPlayer target){
+        BlockPos playerPos = getPlayerPos(target);
+        if((mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.BEDROCK) &&
+                (mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.BEDROCK) &&
+                (mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.BEDROCK) &&
+                (mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.BEDROCK) &&
+                (mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK)){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean canBlockBeSeen(final BlockPos blockPos) {
+        return mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()), false, true, false) == null;
     }
 }
