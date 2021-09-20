@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 public class Setting<T> {
     private final String name;
     private final T defaultValue;
-    private T value;
+    public T value;
     private T plannedValue;
     private T min;
     private T max;
