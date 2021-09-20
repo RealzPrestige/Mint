@@ -168,13 +168,14 @@ public class CrystalAura extends Module {
             int oldSlot = mc.player.inventory.currentItem;
             if(mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
                 if(silentSwitch.getValue()){
-                    switchToSlot(crystalSlot, true);
+                    InventoryUtil.SilentSwitchToSlot(crystalSlot);
                 }
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
             if(mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
                 if(silentSwitch.getValue()){
-                    switchToSlot(oldSlot, true);
+                    mc.player.inventory.currentItem = oldSlot;
+                    mc.playerController.updateController();
                 }
             }
             if(renderMode.getValue() == RenderMode.FADE){
@@ -271,24 +272,11 @@ public class CrystalAura extends Module {
         return currentTarget;
     }
 
-    public static void switchToSlot(int slot, boolean silent) {
-        if (mc.player.inventory.currentItem == slot || slot < 0) {
-            return;
-        }
-        if (silent) {
-            mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
-            mc.playerController.updateController();
-        } else {
-            mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
-            mc.player.inventory.currentItem = slot;
-            mc.playerController.updateController();
-        }
-    }
     public static int getItemHotbar(Item input) {
-        for (int i = 0; i < 9; ++i) {
-            Item item = mc.player.inventory.getStackInSlot(i).getItem();
+        for (int z = 0; z < 9; ++z) {
+            Item item = mc.player.inventory.getStackInSlot(z).getItem();
             if (Item.getIdFromItem(item) != Item.getIdFromItem(input)) continue;
-            return i;
+            return z;
         }
         return -1;
     }
