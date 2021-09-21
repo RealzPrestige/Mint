@@ -1,5 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.3.71'
     repositories {
         mavenCentral()
         jcenter()
@@ -16,12 +15,10 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'kotlin'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.github.johnrengelman.shadow'
 
@@ -37,7 +34,7 @@ minecraft {
     version = project.forgeVersion
     runDir = 'run'
     mappings = project.mcpVersion
-    coreMod = 'fuck u bitch'
+    coreMod = 'ye fuck fucking mixins in runClient yea fuck u bitch'
     makeObfSourceJar = false
 }
 
@@ -58,10 +55,7 @@ dependencies {
         exclude module: 'gson'
         exclude module: 'commons-io'
     }
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    //compile "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+
     compile 'club.minnced:java-discord-rpc:2.0.2'
 
 }
@@ -91,10 +85,6 @@ shadowJar {
         include(dependency('club.minnced:java-discord-rpc'))
         include(dependency('com.googlecode.json-simple:json-simple:1.1.1'))
         include(dependency('org.spongepowered:mixin'))
-        include(dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7"))
-        //include(dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8"))
-        include(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
-        //include(dependency("org.jetbrains.kotlin:kotlin-stdlib-common"))
     }
     exclude 'dummyThing'
     exclude 'LICENSE.txt'
@@ -129,9 +119,3 @@ jar {
 }
 
 build.dependsOn(shadowJar)
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}

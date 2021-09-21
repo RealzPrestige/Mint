@@ -23,16 +23,16 @@ public class ConfigManager {
         String str;
         switch (setting.getType()) {
             case "Boolean":
-                setting.setValue(element.getAsBoolean());
+                setting.setValue( element.getAsBoolean ( ) );
                 return;
             case "Double":
-                setting.setValue(element.getAsDouble());
+                setting.setValue( element.getAsDouble ( ) );
                 return;
             case "Float":
-                setting.setValue(element.getAsFloat());
+                setting.setValue( element.getAsFloat ( ) );
                 return;
             case "Integer":
-                setting.setValue(element.getAsInt());
+                setting.setValue( element.getAsInt ( ) );
                 return;
             case "String":
                 str = element.getAsString();
@@ -46,7 +46,7 @@ public class ConfigManager {
                     EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
                     Enum value = converter.doBackward(element);
                     setting.setValue((value == null) ? setting.getDefaultValue() : value);
-                } catch (Exception exception) {
+                } catch (Exception ignored ) {
                 }
                 return;
         }

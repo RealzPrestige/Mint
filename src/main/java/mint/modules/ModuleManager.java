@@ -59,7 +59,6 @@ public class ModuleManager
         moduleList.add(new NameTags());
         moduleList.add(new LogoutSpots());
         moduleList.add(new PopChams());
-        moduleList.add(Fullbright.INSTANCE);
     }
 
     public Module getModuleByName(String name) {
