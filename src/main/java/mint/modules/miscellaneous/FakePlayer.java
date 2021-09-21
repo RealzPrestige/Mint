@@ -177,41 +177,41 @@ public class FakePlayer extends Module {
             fake_player.moveForward = mc.player.moveForward + (random.nextInt(5) / 10F);
             fake_player.moveStrafing = mc.player.moveStrafing + (random.nextInt(5) / 10F);
             if (moving.getValue()) {
-                travel(fake_player.moveStrafing, fake_player.moveVertical, fake_player.moveForward);
+                moveFakePlayer(fake_player.moveStrafing, fake_player.moveVertical, fake_player.moveForward);
             }
         }
     }
 
-    public void travel(float strafe, float vertical, float forward) {
-        double d0 = fake_player.posY;
-        float f1 = 0.8F;
-        float f2 = 0.02F;
-        float f3 = (float) EnchantmentHelper.getDepthStriderModifier(fake_player);
+    public void moveFakePlayer(float strafe, float vertical, float forward) {
+        double moveFactor0 = fake_player.posY;
+        float moveFactor1 = 0.8F;
+        float moveFactor2 = 0.02F;
+        float moveFactor3 = (float) EnchantmentHelper.getDepthStriderModifier(fake_player);
 
-        if (f3 > 3.0F) {
-            f3 = 3.0F;
+        if (moveFactor3 > 3.0F) {
+            moveFactor3 = 3.0F;
         }
 
         if (!fake_player.onGround) {
-            f3 *= 0.5F;
+            moveFactor3 *= 0.5F;
         }
 
-        if (f3 > 0.0F) {
-            f1 += (0.54600006F - f1) * f3 / 3.0F;
-            f2 += (fake_player.getAIMoveSpeed() - f2) * f3 / 4.0F;
+        if (moveFactor3 > 0.0F) {
+            moveFactor1 += (0.54600006F - moveFactor1) * moveFactor3 / 3.0F;
+            moveFactor2 += (fake_player.getAIMoveSpeed() - moveFactor2) * moveFactor3 / 4.0F;
         }
 
-        fake_player.moveRelative(strafe, vertical, forward, f2);
+        fake_player.moveRelative(strafe, vertical, forward, moveFactor2);
         fake_player.move(MoverType.SELF, fake_player.motionX, fake_player.motionY, fake_player.motionZ);
-        fake_player.motionX *= (double) f1;
+        fake_player.motionX *= moveFactor1;
         fake_player.motionY *= 0.800000011920929D;
-        fake_player.motionZ *= (double) f1;
+        fake_player.motionZ *= moveFactor1;
 
         if (!fake_player.hasNoGravity()) {
-            fake_player.motionY -= 0.02D;
+            fake_player.motionY -= 0.03D;
         }
 
-        if (fake_player.collidedHorizontally && fake_player.isOffsetPositionInLiquid(fake_player.motionX, fake_player.motionY + 0.6000000238418579D - fake_player.posY + d0, fake_player.motionZ)) {
+        if (fake_player.collidedHorizontally && fake_player.isOffsetPositionInLiquid(fake_player.motionX, fake_player.motionY + 0.6000000238418579D - fake_player.posY + moveFactor0, fake_player.motionZ)) {
             fake_player.motionY = 0.30000001192092896D;
         }
     }
