@@ -1,6 +1,7 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import mint.Mint;
 import mint.clickgui.setting.BindSetting;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
@@ -8,17 +9,21 @@ import mint.events.Render3DEvent;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -42,6 +47,7 @@ public class CrystalAura extends Module {
     public Setting<Boolean> predictBreak = register(new Setting("Predict", true, v-> parentBreak.getValue()));
     public Setting<Float> breakMinHp = register(new Setting("BreakMinHp", 8.0f, 0.1f, 36.0f, v -> parentBreak.getValue() && !instantBreak.getValue()));
     public Setting<Integer> breakDelay = register(new Setting("BreakDelay", 70, 0, 200, v -> parentBreak.getValue()));
+    public Setting<Boolean> soundPredict = register(new Setting("SoundPredict", true, v-> parentBreak.getValue()));
 
     public Setting<Boolean> parentPlace = register(new Setting("Place", true, false));
     public Setting<Boolean> placeIgnoreSelf = register(new Setting("PlaceIgnoreSelf", false,  v-> parentPlace.getValue()));
@@ -50,6 +56,10 @@ public class CrystalAura extends Module {
     public Setting<Float> placeMaxSelf = register(new Setting("PlaceMaxSelfDamage", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Float> placeMinHp = register(new Setting("PlaceMinHp", 8.0f, 0.1f, 36.0f, v -> parentPlace.getValue()));
     public Setting<Integer> placeDelay = register(new Setting("PlaceDelay", 70, 0, 200, v -> parentPlace.getValue()));
+    public Setting<Boolean> uzimode = register(new Setting("UziMode", false, v-> parentPlace.getValue()));
+    public Setting<Integer> uziSpeed = register(new Setting("UziSpeed", 1, 0, 3, v-> parentPlace.getValue() && uzimode.getValue()));
+    public Setting<Boolean> uziSound = register(new Setting("UziSound", false, v-> parentPlace.getValue() && uzimode.getValue()));
+    public Setting<Integer> uziRemoveDelay = register(new Setting("UziRemoveDelay", 10, 1, 50, v-> parentPlace.getValue() && uzimode.getValue()));
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
     public Setting<Float> targetRange = register(new Setting("TargetRange", 12.0f, 0.1f, 15.0f, v -> targetParent.getValue()));
@@ -98,6 +108,16 @@ public class CrystalAura extends Module {
     public int crystalAmount;
     public int ticks;
     boolean forceFacePlace;
+
+    int entityIdg;
+
+    int entityId1;
+    int entityId2;
+
+    int entityId11;
+    int entityId22;
+    int entityId33;
+
     HashMap<BlockPos, Integer> renderPosses = new HashMap();
 
     public CrystalAura(){
@@ -108,6 +128,18 @@ public class CrystalAura extends Module {
     public void onToggle() {
         target = EntityUtil.getTarget(targetRange.getValue());
         target = null;
+        mc.world.removeEntityFromWorld(entityIdg);
+        entityIdg = 0;
+        mc.world.removeEntityFromWorld(entityId1);
+        entityId1 = 0;
+        mc.world.removeEntityFromWorld(entityId2);
+        entityId2 = 0;
+        mc.world.removeEntityFromWorld(entityId11);
+        entityId11 = 0;
+        mc.world.removeEntityFromWorld(entityId22);
+        entityId22 = 0;
+        mc.world.removeEntityFromWorld(entityId33);
+        entityId33 = 0;
     }
 
     public void onTick(){
@@ -170,6 +202,7 @@ public class CrystalAura extends Module {
                     if (targetDamage > minDamage) {
                         placePos = pos;
                         finalPlacePos = placePos;
+
                     }
                 }
             }
@@ -183,6 +216,79 @@ public class CrystalAura extends Module {
                 }
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            //ghost appeared
+            if(uzimode.getValue()) {
+                if(uziSpeed.getValue() == 1) {
+                    Timer ghostTimer = new Timer();
+                    EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
+                    mc.world.addEntityToWorld(entityIdg, crystal);
+                    ghostTimer.reset();
+                    if (ghostTimer.passedMs(uziRemoveDelay.getValue())) {
+                        mc.world.removeEntityFromWorld(entityIdg);
+                        if(uziSound.getValue()){
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
+                        }
+                        ++entityIdg;
+                    }
+                } else if(uziSpeed.getValue() == 2){
+                    Timer firstTimer = new Timer();
+                    EntityEnderCrystal crystal1 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
+                    mc.world.addEntityToWorld(entityId1, crystal1);
+                    firstTimer.reset();
+                    if (firstTimer.passedMs(uziRemoveDelay.getValue())) {
+                        mc.world.removeEntityFromWorld(entityId1);
+                        if(uziSound.getValue()){
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
+                        }
+                        ++entityId1;
+                    }
+                    Timer secondTimer = new Timer();
+                    EntityEnderCrystal crystal2 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
+                    mc.world.addEntityToWorld(entityId2, crystal2);
+                    secondTimer.reset();
+                    if (secondTimer.passedMs(uziRemoveDelay.getValue())) {
+                        mc.world.removeEntityFromWorld(entityId2);
+                        if(uziSound.getValue()){
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
+                        }
+                        ++entityId2;
+                    }
+                } else if(uziSpeed.getValue() == 3){
+                    Timer firstTimer = new Timer();
+                    EntityEnderCrystal crystal1 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
+                    mc.world.addEntityToWorld(entityId11, crystal1);
+                    firstTimer.reset();
+                    if (firstTimer.passedMs(uziRemoveDelay.getValue())) {
+                        mc.world.removeEntityFromWorld(entityId11);
+                        if(uziSound.getValue()){
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
+                        }
+                        ++entityId11;
+                    }
+                    Timer secondTimer = new Timer();
+                    EntityEnderCrystal crystal2 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
+                    mc.world.addEntityToWorld(entityId22, crystal2);
+                    secondTimer.reset();
+                    if (secondTimer.passedMs(uziRemoveDelay.getValue())) {
+                        mc.world.removeEntityFromWorld(entityId22);
+                        if(uziSound.getValue()){
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
+                        }
+                        ++entityId22;
+                    }
+                    Timer thirdTimer = new Timer();
+                    EntityEnderCrystal crystal3 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
+                    mc.world.addEntityToWorld(entityId33, crystal3);
+                    thirdTimer.reset();
+                    if (thirdTimer.passedMs(uziRemoveDelay.getValue())) {
+                        mc.world.removeEntityFromWorld(entityId33);
+                        if(uziSound.getValue()){
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
+                        }
+                        ++entityId33;
+                    }
+                }
+            }
             if(mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
                 if(silentSwitch.getValue()){
                     mc.player.inventory.currentItem = oldSlot;
@@ -201,6 +307,7 @@ public class CrystalAura extends Module {
         target = EntityUtil.getTarget(targetRange.getValue());
         for (Entity crystal : mc.world.loadedEntityList) {
             if (crystal instanceof EntityEnderCrystal) {
+                if(crystal.getEntityId() != entityId1 && crystal.getEntityId() != entityId2 && crystal.getEntityId() != entityId11 && crystal.getEntityId() != entityId22 && crystal.getEntityId() != entityIdg && crystal.getEntityId() != entityId33){
                 BlockPos crystalPos = crystal.getPosition();
                 float selfDamage = calculatePos(crystalPos, mc.player);
                 float targetDamage = calculatePos(crystalPos, target);
@@ -215,6 +322,7 @@ public class CrystalAura extends Module {
                         } else {
                             mc.playerController.attackEntity(mc.player, crystal);
                         }
+                      }
                     }
                 }
             }
@@ -231,6 +339,24 @@ public class CrystalAura extends Module {
                 predict.action = CPacketUseEntity.Action.ATTACK;
                 mc.getConnection().sendPacket(predict);
                 mc.player.swingArm(EnumHand.MAIN_HAND);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPacketReceive(PacketEvent.Receive event){
+        if (event.getPacket() instanceof SPacketSoundEffect) {
+            final SPacketSoundEffect packet = event.getPacket();
+            if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
+                for (Entity entityCrystal : mc.world.loadedEntityList) {
+                    if (entityCrystal instanceof EntityEnderCrystal) {
+                        if (entityCrystal.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue()) {
+                            if(soundPredict.getValue()) {
+                                entityCrystal.setDead();
+                            }
+                        }
+                    }
+                }
             }
         }
     }

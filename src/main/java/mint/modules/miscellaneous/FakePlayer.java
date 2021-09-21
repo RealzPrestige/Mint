@@ -10,6 +10,7 @@ import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,11 +25,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class FakePlayer extends Module {
-    public Setting<Boolean> inv = register(new Setting<>("Inv", true));
-    public Setting<Boolean> pop = register(new Setting<>("Pop", true));
+    public Setting<Boolean> inv = register(new Setting<>("Inv", false));
+    public Setting<Boolean> pop = register(new Setting<>("Pop", false));
+    public Setting<Boolean> moving = register(new Setting<>("Moving", false));
     public Setting<String> name = register(new Setting<>("Name", "MintClient"));
     private EntityOtherPlayerMP fake_player;
 
@@ -81,10 +84,8 @@ public class FakePlayer extends Module {
         if (pop.getValue() && isEnabled()) {
             if (event.getPacket() instanceof SPacketDestroyEntities) {
                 final SPacketDestroyEntities packet = event.getPacket();
-
                 for (int id : packet.getEntityIDs()) {
                     final Entity entity = mc.world.getEntityByID(id);
-
                     if (entity instanceof EntityEnderCrystal) {
                         if (entity.getDistanceSq(fake_player) < 144) {
                             final float rawDamage = calculateDamage(entity.posX, entity.posY, entity.posZ, fake_player);
@@ -107,7 +108,6 @@ public class FakePlayer extends Module {
                                     mc.player.connection.handleEntityStatus(new SPacketEntityStatus(fake_player, (byte) 35));
                                 } catch (Exception e) {
                                 }
-                                // why tf cant this client have a normal popcounter module
                                 if (Notifications.TotemPopCounter.containsKey(fake_player)) {
                                     int times = Notifications.TotemPopCounter.get(fake_player) + 1;
                                     Notifications.TotemPopCounter.remove(fake_player);
@@ -169,6 +169,51 @@ public class FakePlayer extends Module {
     public static float getDamageMultiplied(float damage) {
         int diff = Mint.INSTANCE.mc.world.getDifficulty().getId();
         return damage * (diff == 0 ? 0.0f : (diff == 2 ? 1.0f : (diff == 1 ? 0.5f : 1.5f)));
+    }
+
+    public void onTick() {
+        if (fake_player != null) {
+            Random random = new Random();
+            fake_player.moveForward = mc.player.moveForward + (random.nextInt(5) / 10F);
+            fake_player.moveStrafing = mc.player.moveStrafing + (random.nextInt(5) / 10F);
+            if (moving.getValue()) {
+                travel(fake_player.moveStrafing, fake_player.moveVertical, fake_player.moveForward);
+            }
+        }
+    }
+
+    public void travel(float strafe, float vertical, float forward) {
+        double d0 = fake_player.posY;
+        float f1 = 0.8F;
+        float f2 = 0.02F;
+        float f3 = (float) EnchantmentHelper.getDepthStriderModifier(fake_player);
+
+        if (f3 > 3.0F) {
+            f3 = 3.0F;
+        }
+
+        if (!fake_player.onGround) {
+            f3 *= 0.5F;
+        }
+
+        if (f3 > 0.0F) {
+            f1 += (0.54600006F - f1) * f3 / 3.0F;
+            f2 += (fake_player.getAIMoveSpeed() - f2) * f3 / 4.0F;
+        }
+
+        fake_player.moveRelative(strafe, vertical, forward, f2);
+        fake_player.move(MoverType.SELF, fake_player.motionX, fake_player.motionY, fake_player.motionZ);
+        fake_player.motionX *= (double) f1;
+        fake_player.motionY *= 0.800000011920929D;
+        fake_player.motionZ *= (double) f1;
+
+        if (!fake_player.hasNoGravity()) {
+            fake_player.motionY -= 0.02D;
+        }
+
+        if (fake_player.collidedHorizontally && fake_player.isOffsetPositionInLiquid(fake_player.motionX, fake_player.motionY + 0.6000000238418579D - fake_player.posY + d0, fake_player.motionZ)) {
+            fake_player.motionY = 0.30000001192092896D;
+        }
     }
 }
 
