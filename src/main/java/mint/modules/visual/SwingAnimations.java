@@ -16,6 +16,7 @@ public class SwingAnimations extends Module {
     private enum Swing {MAINHAND, OFFHAND, CANCEL}
     private final Setting<Speed> speed = this.register(new Setting<>("Speed", Speed.NORMAL));
     private enum Speed {SLOW, NORMAL, FAST}
+    private final Setting<Integer> amplifier = this.register(new Setting<>("Amplifier", 14,1,255));
 
     public SwingAnimations() {
         super("Swing Animations", Category.VISUAL, "Tweaks the way your swing looks.");
@@ -31,14 +32,14 @@ public class SwingAnimations extends Module {
             mc.entityRenderer.itemRenderer.itemStackMainHand = mc.player.getHeldItemMainhand();
         }
         if(speed.getValue() == Speed.SLOW) {
-            mc.player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 10));
+            mc.player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 10,amplifier.getValue()));
             mc.player.removePotionEffect(MobEffects.HASTE);
         } else if(speed.getValue() == Speed.NORMAL){
             mc.player.removePotionEffect(MobEffects.MINING_FATIGUE);
             mc.player.removePotionEffect(MobEffects.HASTE);
         } else if(speed.getValue() == Speed.FAST){
             mc.player.removePotionEffect(MobEffects.MINING_FATIGUE);
-            mc.player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 10));
+            mc.player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 10,amplifier.getValue()));
         }
     }
 
