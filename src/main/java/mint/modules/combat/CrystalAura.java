@@ -1,8 +1,7 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.Mint;
-import mint.clickgui.setting.BindSetting;
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
@@ -16,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSoundEffect;
@@ -25,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import java.awt.*;
@@ -70,7 +67,7 @@ public class CrystalAura extends Module {
     public Setting<Boolean> armor = register(new Setting("Armor", false,  v-> parentFacePlace.getValue()));
     public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
     public Setting<Boolean> bind = register(new Setting("Bind", false, v-> parentFacePlace.getValue()));
-    public Setting<BindSetting> facePlaceBind = register(new Setting<>("FacePlaceBind:", new BindSetting(1), v-> parentFacePlace.getValue() && bind.getValue()));
+    public Setting<Bind> facePlaceBind = register(new Setting<>("FacePlaceBind:", new Bind(1), v-> parentFacePlace.getValue() && bind.getValue()));
 
     public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
