@@ -173,5 +173,8 @@ public class BlockUtil {
         }
         return null;
     }
-}
 
+    public static boolean canBlockBeSeen(final BlockPos blockPos) {
+        return Mint.INSTANCE.mc.world.rayTraceBlocks(new Vec3d(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + Mint.INSTANCE.mc.player.getEyeHeight(), Mint.INSTANCE.mc.player.posZ), new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()), false, true, false) == null;
+    }
+}

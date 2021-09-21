@@ -22,11 +22,15 @@ import net.minecraft.util.text.TextComponentString;
 public class SelfFill extends Module {
 
     public SelfFill() {
-        super("Self Fill ", Category.COMBAT, "Rubberbands you in a block.");
+        super("Self Fill", Category.COMBAT, "Rubberbands you in a block.");
     }
 
     public Setting<Block> prefer = register(new Setting("Prefer", Block.EChest));
+    public enum Block {EChest, Obsidian}
+
     public Setting<LagMode> lagBack = register(new Setting("LagBack", LagMode.Teleport));
+    public enum LagMode {Packet, YMotion, Teleport, LagFall, Strict, Jump, Kambing}
+
     public Setting<Boolean> offground = register(new Setting("OffGround", true, v -> lagBack.getValue() == LagMode.Strict));
     public BlockPos startPos = null;
     Timer timer = new Timer();
@@ -119,21 +123,6 @@ public class SelfFill extends Module {
         }
         timer.reset();
         disable();
-    }
-
-    public enum Block {
-        EChest,
-        Obsidian
-    }
-
-    public enum LagMode {
-        Packet,
-        YMotion,
-        Teleport,
-        LagFall,
-        Strict,
-        Jump,
-        Kambing
     }
 
     public void fakePop(EntityPlayer player) {
