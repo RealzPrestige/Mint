@@ -23,13 +23,13 @@ public class PopESP extends Module {
     private static PopESP INSTANCE = new PopESP();
 
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
-    public Setting<Boolean> solidSetting = register(new Setting("SolidSetting", true, v-> solidParent.getValue()));
+    public Setting<Boolean> solidSetting = register(new Setting("RenderSolid", true, v-> solidParent.getValue()));
     public Setting<Float> red = register(new Setting<>( "SolidRed", 0.0f, 0.0f, 255.0f, v-> solidParent.getValue() && solidSetting.getValue()));
     public Setting<Float> green = register(new Setting<>("SolidGreen", 255.0f, 0.0f, 255.0f, v-> solidParent.getValue() && solidSetting.getValue()));
     public Setting<Float> blue = register(new Setting<>("SolidBlue", 0.0f, 0.0f, 255.0f, v-> solidParent.getValue() && solidSetting.getValue()));
 
     public Setting<Boolean> wireFrameParent = register(new Setting<>("WireFrame", true, false));
-    public Setting<Boolean> wireFrameSetting = register(new Setting("WireFrameSetting", true, v-> wireFrameParent.getValue()));
+    public Setting<Boolean> wireFrameSetting = register(new Setting("RenderWire", true, v-> wireFrameParent.getValue()));
     public Setting<Float> wireRed = register(new Setting<>( "WireRed", 0.0f, 0.0f, 255.0f, v-> wireFrameParent.getValue() && wireFrameSetting.getValue()));
     public Setting<Float> wireGreen = register(new Setting<>("WireGreen", 255.0f, 0.0f, 255.0f, v-> wireFrameParent.getValue() && wireFrameSetting.getValue()));
     public Setting<Float> wireBlue = register(new Setting<>("WireBlue", 0.0f, 0.0f, 255.0f, v-> wireFrameParent.getValue() && wireFrameSetting.getValue()));
@@ -39,11 +39,11 @@ public class PopESP extends Module {
     public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v-> fadeParent.getValue()));
     public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 10, 10, 100, v-> fadeParent.getValue()));
 
-    public Setting<Boolean> yTravelParent = register(new Setting<>("YTravel", true, false));
-    public Setting<Boolean> yTravel = register(new Setting("YTravelSetting",false, v-> yTravelParent.getValue()));
-    public Setting<YTravelMode> yTravelMode = register(new Setting("YTravelMode",YTravelMode.UP, v-> yTravelParent.getValue() && yTravel.getValue()));
+    public Setting<Boolean> yTravelParent = register(new Setting<>("YMovement", true, false));
+    public Setting<Boolean> yTravel = register(new Setting("YTravel",false, v-> yTravelParent.getValue()));
+    public Setting<YTravelMode> yTravelMode = register(new Setting("TravelMode",YTravelMode.UP, v-> yTravelParent.getValue() && yTravel.getValue()));
     public enum YTravelMode{UP, DOWN}
-    public Setting<Double> yTravelSpeed = register(new Setting<>("YTravelSpeed", 0.1, 0.0, 2.0, v-> yTravel.getValue()));
+    public Setting<Double> yTravelSpeed = register(new Setting<>("TravelSpeed", 0.1, 0.0, 2.0, v-> yTravel.getValue()));
 
     public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
     public Setting<Boolean> onDeath = register(new Setting("OnDeath", false, v-> miscParent.getValue()));
