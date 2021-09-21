@@ -243,7 +243,7 @@ public class Setting<T> {
     }
 
     public boolean isEnumSetting() {
-        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof BindSetting) && !(this.value instanceof Character) && !(this.value instanceof Boolean);
+        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof Bind) && !(this.value instanceof Character) && !(this.value instanceof Boolean);
     }
 
     public boolean isStringSetting() {

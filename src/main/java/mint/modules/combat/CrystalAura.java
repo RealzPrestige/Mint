@@ -1,8 +1,7 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.Mint;
-import mint.clickgui.setting.BindSetting;
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
@@ -60,6 +59,7 @@ public class CrystalAura extends Module {
     public Setting<Integer> uziSpeed = register(new Setting("UziSpeed", 1, 0, 3, v-> parentPlace.getValue() && uzimode.getValue()));
     public Setting<Boolean> uziSound = register(new Setting("UziSound", false, v-> parentPlace.getValue() && uzimode.getValue()));
     public Setting<Integer> uziRemoveDelay = register(new Setting("UziRemoveDelay", 10, 1, 50, v-> parentPlace.getValue() && uzimode.getValue()));
+    public Setting<Boolean> recoil = register(new Setting("Recoil", false, v-> parentPlace.getValue() && uzimode.getValue()));
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
     public Setting<Float> targetRange = register(new Setting("TargetRange", 12.0f, 0.1f, 15.0f, v -> targetParent.getValue()));
@@ -70,7 +70,7 @@ public class CrystalAura extends Module {
     public Setting<Boolean> armor = register(new Setting("Armor", false,  v-> parentFacePlace.getValue()));
     public Setting<Integer> armorPercent = register(new Setting("ArmorPercent", 30, 0, 100, v -> parentFacePlace.getValue() && armor.getValue()));
     public Setting<Boolean> bind = register(new Setting("Bind", false, v-> parentFacePlace.getValue()));
-    public Setting<BindSetting> facePlaceBind = register(new Setting<>("FacePlaceBind:", new BindSetting(1), v-> parentFacePlace.getValue() && bind.getValue()));
+    public Setting<Bind> facePlaceBind = register(new Setting<>("FacePlaceBind:", new Bind(1), v-> parentFacePlace.getValue() && bind.getValue()));
 
     public Setting<Boolean> parentMisc = register(new Setting("Misc", true, false));
     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
@@ -392,21 +392,6 @@ public class CrystalAura extends Module {
 
     private float calculatePos(final BlockPos pos, final EntityPlayer entity) {
         return EntityUtil.calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
-    }
-    public static EntityPlayer getTarget(final float range) {
-        EntityPlayer currentTarget = null;
-        for (int size = mc.world.playerEntities.size(), i = 0; i < size; ++i) {
-            final EntityPlayer player = mc.world.playerEntities.get(i);
-            if (!EntityUtil.isntValid(player, range)) {
-                if (currentTarget == null) {
-                    currentTarget = player;
-                }
-                else if (mc.player.getDistanceSq(player) < mc.player.getDistanceSq(currentTarget)) {
-                    currentTarget = player;
-                }
-            }
-        }
-        return currentTarget;
     }
 
     public static int getItemHotbar(Item input) {

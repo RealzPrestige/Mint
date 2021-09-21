@@ -57,8 +57,7 @@ public class ModuleManager
         moduleList.add(new SwingAnimations());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
-        moduleList.add(new LogoutSpots());
-        moduleList.add(new PopChams());
+        moduleList.add(new PopESP());
     }
 
     public Module getModuleByName(String name) {

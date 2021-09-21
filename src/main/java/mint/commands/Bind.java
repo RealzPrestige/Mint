@@ -2,7 +2,6 @@ package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.setting.BindSetting;
 import mint.modules.Module;
 import org.lwjgl.input.Keyboard;
 
@@ -15,18 +14,18 @@ public class Bind
     @Override
     public void execute(String[] commands) {
         if (commands.length == 1) {
-            Bind.sendMessage("Please specify a module.");
+            mint.commands.Bind.sendMessage("Please specify a module.");
             return;
         }
         String rkey = commands[1];
         String moduleName = commands[0];
         Module module = Mint.moduleManager.getModuleByName(moduleName);
         if (module == null) {
-            Bind.sendMessage("Unknown module '" + module + "'!");
+            mint.commands.Bind.sendMessage("Unknown module '" + module + "'!");
             return;
         }
         if (rkey == null) {
-            Bind.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind().toString());
+            mint.commands.Bind.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind().toString());
             return;
         }
         int key = Keyboard.getKeyIndex(rkey.toUpperCase());
@@ -34,11 +33,11 @@ public class Bind
             key = -1;
         }
         if (key == 0) {
-            Bind.sendMessage("Unknown key '" + rkey + "'!");
+            mint.commands.Bind.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
-        module.bind.setValue(new BindSetting(key));
-        Bind.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
+        module.bind.setValue(new mint.clickgui.setting.Bind(key));
+        mint.commands.Bind.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }
 

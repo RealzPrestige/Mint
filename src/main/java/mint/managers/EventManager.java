@@ -7,7 +7,9 @@ import mint.events.*;
 import mint.modules.Feature;
 import mint.commands.Command;
 import mint.modules.core.Notifications;
+import mint.modules.visual.PopESP;
 import mint.utils.Timer;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +30,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
 import javax.management.NotificationFilter;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -74,6 +77,9 @@ public class EventManager extends Feature {
             if (player == null || player.getHealth() > 0.0F) {
                 continue;
             }
+            if(PopESP.getInstance().isEnabled() && PopESP.getInstance().onDeath.getValue()){
+                PopESP.getInstance().onDeath(player.getEntityId());
+            }
             if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                 Notifications.getInstance().onDeath(player);
             }
@@ -88,6 +94,7 @@ public class EventManager extends Feature {
             SPacketEntityStatus packet = event.getPacket();
             if (packet.getOpCode() == 35 && packet.getEntity(Mint.INSTANCE.mc.world) instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) packet.getEntity(Mint.INSTANCE.mc.world);
+                MinecraftForge.EVENT_BUS.post(new PopEvent(player.getEntityId()));
                 if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                     Notifications.getInstance().onTotemPop(player);
                 }

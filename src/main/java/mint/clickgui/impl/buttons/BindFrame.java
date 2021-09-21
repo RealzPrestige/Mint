@@ -3,7 +3,7 @@ package mint.clickgui.impl.buttons;
 import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.modules.core.Gui;
-import mint.clickgui.setting.BindSetting;
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -49,12 +49,12 @@ public class BindFrame
     @Override
     public void onKeyTyped(char typedChar, int keyCode) {
         if (this.isListening) {
-            BindSetting bind = new BindSetting(keyCode);
+            Bind bind = new Bind(keyCode);
             if (bind.toString().equalsIgnoreCase("Escape")) {
                 return;
             }
             if (bind.toString().equalsIgnoreCase("Delete")) {
-                bind = new BindSetting(-1);
+                bind = new Bind(-1);
             }
             this.setting.setValue(bind);
             this.onMouseClick();

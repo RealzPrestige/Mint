@@ -5,7 +5,7 @@ import mint.Mint;
 import mint.events.ClientEvent;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
-import mint.clickgui.setting.BindSetting;
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.modules.core.Notifications;
 import net.minecraft.client.Minecraft;
@@ -18,7 +18,7 @@ public class Module extends Feature {
     private final Category category;
     public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));
     public boolean drawn = false;
-    public Setting<BindSetting> bind = register(new Setting<>("Keybind", new BindSetting(-1)));
+    public Setting<Bind> bind = register(new Setting<>("Keybind", new Bind(-1)));
     public Setting<String> displayName;
     public boolean hidden;
     public boolean sliding;
@@ -157,12 +157,12 @@ public class Module extends Feature {
     }
 
 
-    public BindSetting getBind() {
+    public Bind getBind() {
         return this.bind.getValue();
     }
 
     public void setBind(int key) {
-        this.bind.setValue(new BindSetting(key));
+        this.bind.setValue(new Bind(key));
     }
 
     public boolean listening() {
