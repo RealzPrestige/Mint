@@ -76,7 +76,7 @@ public class CrystalAura extends Module {
     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false,  v-> parentMisc.getValue()));
     public Setting<Integer> resetDelay = register(new Setting("ResetDelay", 100, 1, 250, v -> parentMisc.getValue()));
     public Setting<Integer> maxCrystals = register(new Setting("MaxCrystals", 3, 1, 10, v -> parentMisc.getValue()));
-    public Setting<Integer> maxCrystalResetDelay = register(new Setting("MaxCrystalResetDelay", 2, 1, 10, v -> parentMisc.getValue()));
+    public Setting<Integer> maxCrystalResetDelay = register(new Setting("MaxCrystalResetDelay", 2, 1, 20, v -> parentMisc.getValue()));
 
     public Setting<Boolean> parentVisual = register(new Setting("Visual", true, false));
     public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.FADE, v-> parentVisual.getValue()));
@@ -142,25 +142,28 @@ public class CrystalAura extends Module {
         entityId33 = 0;
     }
 
-    public void onTick(){
-        ++ticks;
-        if(ticks >= maxCrystalResetDelay.getValue()){
+    @Override
+    public void onUpdate() {
+
+        target = EntityUtil.getTarget(targetRange.getValue());
+
+        if (ticks >= maxCrystalResetDelay.getValue()) {
             ticks = 0;
             crystalAmount = 0;
         }
-    }
-    @Override
-    public void onUpdate() {
+        ++ticks;
+
         if (resetTimer.passedMs(resetDelay.getValue())) {
             finalPlacePos = null;
             finalBreakPos = null;
         }
-        target = EntityUtil.getTarget(targetRange.getValue());
-        if(target == null) {
+
+        if (target == null) {
             return;
         }
-        if((bind.getValue() && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (armor.getValue() && PlayerUtil.isArmorLow(target, armorPercent.getValue())) || (health.getValue() && EntityUtil.getHealth(target) <= healthAmount.getValue())){
-            if(isPlayerSafe(target)) {
+
+        if ((bind.getValue() && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey())) || (armor.getValue() && PlayerUtil.isArmorLow(target, armorPercent.getValue())) || (health.getValue() && EntityUtil.getHealth(target) <= healthAmount.getValue())){
+            if (EntityUtil.isPlayerSafe(target)) {
                 doFacePlace(target, silentSwitch.getValue());
                 forceFacePlace = true;
             } else {
@@ -169,13 +172,12 @@ public class CrystalAura extends Module {
         } else {
             forceFacePlace = false;
         }
-        if(!forceFacePlace) {
-            if (placeTimer.passedMs(placeDelay.getValue()) && crystalAmount < maxCrystals.getValue()) {
-                doPlace();
-                placeTimer.reset();
-            }
+
+        if (placeTimer.passedMs(placeDelay.getValue()) && crystalAmount < maxCrystals.getValue() && !forceFacePlace) {
+               doPlace();
+               placeTimer.reset();
         }
-        if(breakTimer.passedMs(breakDelay.getValue())) {
+        if (breakTimer.passedMs(breakDelay.getValue())) {
             doBreak();
             breakTimer.reset();
         }
@@ -208,36 +210,36 @@ public class CrystalAura extends Module {
             }
         }
         if (placePos != null){
-            int crystalSlot = getItemHotbar(Items.END_CRYSTAL);
+            int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
             int oldSlot = mc.player.inventory.currentItem;
-            if(mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
-                if(silentSwitch.getValue()){
+            if (mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
+                if (silentSwitch.getValue()){
                     InventoryUtil.SilentSwitchToSlot(crystalSlot);
                 }
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
             //ghost appeared
-            if(uzimode.getValue()) {
-                if(uziSpeed.getValue() == 1) {
-                    Timer ghostTimer = new Timer();
+            if (uzimode.getValue()) {
+                Timer ghostTimer = new Timer();
+                if (uziSpeed.getValue() == 1) {
                     EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
                     mc.world.addEntityToWorld(entityIdg, crystal);
                     ghostTimer.reset();
                     if (ghostTimer.passedMs(uziRemoveDelay.getValue())) {
                         mc.world.removeEntityFromWorld(entityIdg);
-                        if(uziSound.getValue()){
+                        if (uziSound.getValue()){
                             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
                         }
                         ++entityIdg;
                     }
-                } else if(uziSpeed.getValue() == 2){
+                } else if (uziSpeed.getValue() == 2){
                     Timer firstTimer = new Timer();
                     EntityEnderCrystal crystal1 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
                     mc.world.addEntityToWorld(entityId1, crystal1);
                     firstTimer.reset();
                     if (firstTimer.passedMs(uziRemoveDelay.getValue())) {
                         mc.world.removeEntityFromWorld(entityId1);
-                        if(uziSound.getValue()){
+                        if (uziSound.getValue()){
                             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
                         }
                         ++entityId1;
@@ -248,19 +250,19 @@ public class CrystalAura extends Module {
                     secondTimer.reset();
                     if (secondTimer.passedMs(uziRemoveDelay.getValue())) {
                         mc.world.removeEntityFromWorld(entityId2);
-                        if(uziSound.getValue()){
+                        if (uziSound.getValue()){
                             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
                         }
                         ++entityId2;
                     }
-                } else if(uziSpeed.getValue() == 3){
+                } else if (uziSpeed.getValue() == 3){
                     Timer firstTimer = new Timer();
                     EntityEnderCrystal crystal1 = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
                     mc.world.addEntityToWorld(entityId11, crystal1);
                     firstTimer.reset();
                     if (firstTimer.passedMs(uziRemoveDelay.getValue())) {
                         mc.world.removeEntityFromWorld(entityId11);
-                        if(uziSound.getValue()){
+                        if (uziSound.getValue()){
                             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
                         }
                         ++entityId11;
@@ -271,7 +273,7 @@ public class CrystalAura extends Module {
                     secondTimer.reset();
                     if (secondTimer.passedMs(uziRemoveDelay.getValue())) {
                         mc.world.removeEntityFromWorld(entityId22);
-                        if(uziSound.getValue()){
+                        if (uziSound.getValue()){
                             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
                         }
                         ++entityId22;
@@ -282,20 +284,20 @@ public class CrystalAura extends Module {
                     thirdTimer.reset();
                     if (thirdTimer.passedMs(uziRemoveDelay.getValue())) {
                         mc.world.removeEntityFromWorld(entityId33);
-                        if(uziSound.getValue()){
+                        if (uziSound.getValue()){
                             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f));
                         }
                         ++entityId33;
                     }
                 }
             }
-            if(mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
-                if(silentSwitch.getValue()){
+            if (mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
+                if (silentSwitch.getValue()){
                     mc.player.inventory.currentItem = oldSlot;
                     mc.playerController.updateController();
                 }
             }
-            if(renderMode.getValue() == RenderMode.FADE){
+            if (renderMode.getValue() == RenderMode.FADE){
                 renderPosses.put(placePos, startAlpha.getValue());
             }
             crystalAmount++;
@@ -307,22 +309,24 @@ public class CrystalAura extends Module {
         target = EntityUtil.getTarget(targetRange.getValue());
         for (Entity crystal : mc.world.loadedEntityList) {
             if (crystal instanceof EntityEnderCrystal) {
-                if(crystal.getEntityId() != entityId1 && crystal.getEntityId() != entityId2 && crystal.getEntityId() != entityId11 && crystal.getEntityId() != entityId22 && crystal.getEntityId() != entityIdg && crystal.getEntityId() != entityId33){
-                BlockPos crystalPos = crystal.getPosition();
-                float selfDamage = calculatePos(crystalPos, mc.player);
-                float targetDamage = calculatePos(crystalPos, target);
-                float minDamage = breakMinDmg.getValue();
-                float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
-                if((instantBreak.getValue()) || (selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue()) && breakMinHp.getValue() < selfHp)) {
-                    if(crystal.getDistance(mc.player) < MathUtil.square(breakRange.getValue())) {
-                        if (packetBreak.getValue()) {
-                            mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
-                            breakPos = crystalPos;
-                            finalBreakPos = breakPos;
-                        } else {
-                            mc.playerController.attackEntity(mc.player, crystal);
+                if (crystal.getEntityId() != entityId1 && crystal.getEntityId() != entityId2 && crystal.getEntityId() != entityId11 && crystal.getEntityId() != entityId22 && crystal.getEntityId() != entityIdg && crystal.getEntityId() != entityId33){
+                    BlockPos crystalPos = crystal.getPosition();
+                    float selfDamage = calculatePos(crystalPos, mc.player);
+                    float targetDamage = calculatePos(crystalPos, target);
+                    float minDamage = breakMinDmg.getValue();
+                    float selfHp = mc.player.getHealth() + mc.player.getAbsorptionAmount();
+                    if (instantBreak.getValue() || (selfDamage < (breakIgnoreSelf.getValue() ? 36 : selfHp) && minDamage < targetDamage && selfDamage < (placeIgnoreSelf.getValue() ? 36 : breakMaxSelf.getValue()) && breakMinHp.getValue() < selfHp)) {
+                        if (crystal.getDistance(mc.player) < MathUtil.square(breakRange.getValue())) {
+                            if (packetBreak.getValue()) {
+                                mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
+                                breakPos = crystalPos;
+                                finalBreakPos = breakPos;
+                            } else {
+                                mc.playerController.attackEntity(mc.player, crystal);
+                                breakPos = crystalPos;
+                                finalBreakPos = breakPos;
+                            }
                         }
-                      }
                     }
                 }
             }
@@ -351,7 +355,7 @@ public class CrystalAura extends Module {
                 for (Entity entityCrystal : mc.world.loadedEntityList) {
                     if (entityCrystal instanceof EntityEnderCrystal) {
                         if (entityCrystal.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue()) {
-                            if(soundPredict.getValue()) {
+                            if (soundPredict.getValue()) {
                                 entityCrystal.setDead();
                             }
                         }
@@ -385,7 +389,7 @@ public class CrystalAura extends Module {
                 }
             }
         }
-        if(damageRender.getValue() && finalPlacePos != null){
+        if (damageRender.getValue() && finalPlacePos != null){
             RenderUtil.drawText(finalPlacePos, "" + ChatFormatting.RED + MathUtil.round(calculatePos(finalPlacePos, target), 0) + ChatFormatting.WHITE + " | " + ChatFormatting.GREEN + MathUtil.round(calculatePos(finalPlacePos, mc.player), 0)  , -1);
         }
     }
@@ -393,109 +397,65 @@ public class CrystalAura extends Module {
     private float calculatePos(final BlockPos pos, final EntityPlayer entity) {
         return EntityUtil.calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
     }
-    public static EntityPlayer getTarget(final float range) {
-        EntityPlayer currentTarget = null;
-        for (int size = mc.world.playerEntities.size(), i = 0; i < size; ++i) {
-            final EntityPlayer player = mc.world.playerEntities.get(i);
-            if (!EntityUtil.isntValid(player, range)) {
-                if (currentTarget == null) {
-                    currentTarget = player;
-                }
-                else if (mc.player.getDistanceSq(player) < mc.player.getDistanceSq(currentTarget)) {
-                    currentTarget = player;
-                }
-            }
-        }
-        return currentTarget;
-    }
 
-    public static int getItemHotbar(Item input) {
-        for (int z = 0; z < 9; ++z) {
-            Item item = mc.player.inventory.getStackInSlot(z).getItem();
-            if (Item.getIdFromItem(item) != Item.getIdFromItem(input)) continue;
-            return z;
-        }
-        return -1;
-    }
-
-    public void doFacePlace(EntityPlayer target, boolean silentSwitch){
+    public void doFacePlace(EntityPlayer target, boolean silentSwitch) {
         boolean canPlaceNorth = false;
         boolean canPlaceEast = false;
         boolean canPlaceSouth = false;
         boolean canPlaceWest = false;
-        int crystalSlot = getItemHotbar(Items.END_CRYSTAL);
+        int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
         int oldSlot = mc.player.inventory.currentItem;
-        BlockPos playerPos = getPlayerPos(target);
-        if(isPlayerSafe(target)){
-            if(mc.world.getBlockState(playerPos.north().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.north().up()).getBlock() == Blocks.AIR){
+        BlockPos playerPos = EntityUtil.getPlayerPos(target);
+        if (EntityUtil.isPlayerSafe(target)){
+            if (mc.world.getBlockState(playerPos.north().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.north().up()).getBlock() == Blocks.AIR){
                 canPlaceNorth = true;
             }
-            if(mc.world.getBlockState(playerPos.east().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.east().up()).getBlock() == Blocks.AIR){
+            if (mc.world.getBlockState(playerPos.east().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.east().up()).getBlock() == Blocks.AIR){
                 canPlaceEast = true;
             }
-            if(mc.world.getBlockState(playerPos.south().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.south().up()).getBlock() == Blocks.AIR){
+            if (mc.world.getBlockState(playerPos.south().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.south().up()).getBlock() == Blocks.AIR){
                 canPlaceSouth = true;
             }
-            if(mc.world.getBlockState(playerPos.west().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.west().up()).getBlock() == Blocks.AIR){
+            if (mc.world.getBlockState(playerPos.west().up()).getBlock() == Blocks.AIR && mc.world.getBlockState(playerPos.west().up()).getBlock() == Blocks.AIR){
                 canPlaceWest = true;
             }
         }
-        if(canPlaceNorth){
-            if(silentSwitch){
+        if (canPlaceNorth){
+            if (silentSwitch){
                 InventoryUtil.SilentSwitchToSlot(crystalSlot);
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.north(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            if(silentSwitch){
+            if (silentSwitch){
                 mc.player.inventory.currentItem = oldSlot;
                 mc.playerController.updateController();
             }
-        } else if(canPlaceEast){
-            if(silentSwitch){
+        } else if (canPlaceEast){
+            if (silentSwitch){
                 InventoryUtil.SilentSwitchToSlot(crystalSlot);
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.east(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            if(silentSwitch){
+            if (silentSwitch){
                 mc.player.inventory.currentItem = oldSlot;
                 mc.playerController.updateController();
             }
-        } else if(canPlaceSouth){
-            if(silentSwitch){
+        } else if (canPlaceSouth){
+            if (silentSwitch){
                 InventoryUtil.SilentSwitchToSlot(crystalSlot);
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.south(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            if(silentSwitch){
+            if (silentSwitch){
                 mc.player.inventory.currentItem = oldSlot;
                 mc.playerController.updateController();
             }
-        } else if(canPlaceWest){
-            if(silentSwitch){
+        } else if (canPlaceWest){
+            if (silentSwitch){
                 InventoryUtil.SilentSwitchToSlot(crystalSlot);
             }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(playerPos.west(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            if(silentSwitch){
+            if (silentSwitch){
                 mc.player.inventory.currentItem = oldSlot;
                 mc.playerController.updateController();
             }
         }
-    }
-
-    public static BlockPos getPlayerPos(EntityPlayer player) {
-        return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
-    }
-
-    public boolean isPlayerSafe(EntityPlayer target){
-        BlockPos playerPos = getPlayerPos(target);
-        if((mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.BEDROCK) &&
-                (mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.BEDROCK) &&
-                (mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.BEDROCK) &&
-                (mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.BEDROCK) &&
-                (mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK)){
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean canBlockBeSeen(final BlockPos blockPos) {
-        return mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()), false, true, false) == null;
     }
 }

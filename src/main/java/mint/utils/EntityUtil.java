@@ -246,12 +246,15 @@ public class EntityUtil  {
         }
         return currentTarget;
     }
+
     public static boolean isntValid(Entity entity, double range) {
         return entity == null || EntityUtil.isDead(entity) || entity.equals(Mint.INSTANCE.mc.player) || entity instanceof EntityPlayer && Mint.friendManager.isFriend(entity.getName()) || Mint.INSTANCE.mc.player.getDistanceSq(entity) > MathUtil.square(range);
     }
+
     public static List<Vec3d> getUnsafeBlocks(Entity entity, int height, boolean floor) {
         return EntityUtil.getUnsafeBlocksFromVec3d(entity.getPositionVector(), height, floor);
     }
+
     public static boolean isSafe(Entity entity, int height, boolean floor) {
         return EntityUtil.getUnsafeBlocks(entity, height, floor).size() == 0;
     }
@@ -316,5 +319,28 @@ public class EntityUtil  {
         Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + 1.0013359, Mint.INSTANCE.mc.player.posZ, offground));
         Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + 1.1661092, Mint.INSTANCE.mc.player.posZ, offground));
     }
-}
 
+    public static Vec3d getCenter(double posX, double posY, double posZ) {
+        return new Vec3d(Math.floor(posX) + 0.5D, Math.floor(posY), Math.floor(posZ) + 0.5D);
+    }
+
+    public static BlockPos getRoundedBlockPos(Entity entity) {
+        return new BlockPos(MathUtil.roundVec(entity.getPositionVector(), 0));
+    }
+
+    public static BlockPos getPlayerPos(EntityPlayer player) {
+        return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
+    }
+
+    public static boolean isPlayerSafe(EntityPlayer target) {
+        BlockPos playerPos = getPlayerPos(target);
+        if ((Mint.INSTANCE.mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.BEDROCK) &&
+                (Mint.INSTANCE.mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.BEDROCK) &&
+                (Mint.INSTANCE.mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.BEDROCK) &&
+                (Mint.INSTANCE.mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.BEDROCK) &&
+                (Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK)){
+            return true;
+        }
+        return false;
+    }
+}

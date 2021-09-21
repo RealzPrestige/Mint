@@ -10,6 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -18,8 +21,11 @@ import net.minecraft.util.math.Vec3i;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class HoleFiller extends Module {
+    public static final List<net.minecraft.block.Block> blackList = Arrays.asList(Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER, Blocks.TRAPDOOR, Blocks.ENCHANTING_TABLE);
+    public static final List<net.minecraft.block.Block> shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
     int blockSlot;
     HashMap<BlockPos, Integer> filledFadeHoles = new HashMap();
     HashSet<BlockPos> fillableHoles = Sets.newHashSet();
@@ -134,25 +140,40 @@ public class HoleFiller extends Module {
                 return;
             }
             int lastSlot = mc.player.inventory.currentItem;
-            if(autoSwitch.getValue()) {
-                if (silentSwitch.getValue()) {
-                    InventoryUtil.SilentSwitchToSlot(blockSlot);
-                } else {
-                    mc.player.inventory.currentItem = blockSlot;
-                }
-            }
-            if(throughWalls.getValue()) {
+            if (throughWalls.getValue()) {
                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
+                        if (autoSwitch.getValue()) {
+                            if (silentSwitch.getValue()) {
+                                InventoryUtil.SilentSwitchToSlot(blockSlot);
+                            } else {
+                                mc.player.inventory.currentItem = blockSlot;
+                            }
+                        }
                         BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                        if (autoSwitch.getValue() && silentSwitch.getValue()) {
+                            mc.player.inventory.currentItem = lastSlot;
+                            mc.playerController.updateController();
+                        }
                         if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                             if (!filledFadeHoles.containsKey(pos)) {
                                 filledFadeHoles.put(pos, startAlpha.getValue());
                         }
                     }
                 }
-            } else if(canBlockBeSeen(pos)) {
+            } else if (canBlockBeSeen(pos)) {
                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
+                        if (autoSwitch.getValue()) {
+                            if (silentSwitch.getValue()) {
+                                InventoryUtil.SilentSwitchToSlot(blockSlot);
+                            } else {
+                                mc.player.inventory.currentItem = blockSlot;
+                            }
+                        }
                         BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                        if (autoSwitch.getValue() && silentSwitch.getValue()) {
+                            mc.player.inventory.currentItem = lastSlot;
+                            mc.playerController.updateController();
+                        }
                         if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                             if (!filledFadeHoles.containsKey(pos)) {
                                 filledFadeHoles.put(pos, startAlpha.getValue());
@@ -160,37 +181,37 @@ public class HoleFiller extends Module {
                     }
                 }
             }
-                if (autoSwitch.getValue() && silentSwitch.getValue()) {
-                    mc.player.inventory.currentItem = lastSlot;
-                    mc.playerController.updateController();
-            }
-                if(autoDisable.getValue()){
-                    disable();
+            if (autoDisable.getValue()){
+                disable();
                 }
           }
 
-            if(mode.getValue() == Mode.SMART){
-                if(swordCheck.getValue() && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD){
+            if (mode.getValue() == Mode.SMART){
+                if (swordCheck.getValue() && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD){
                     return;
                 }
-                if (this.blockSlot == -1) {
+                if (blockSlot == -1) {
                     return;
                 }
                 int lastSlot = mc.player.inventory.currentItem;
                 blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
-                if(autoSwitch.getValue()) {
-                    if (silentSwitch.getValue()) {
-                        InventoryUtil.SilentSwitchToSlot(blockSlot);
-                    } else {
-                        mc.player.inventory.currentItem = blockSlot;
-                    }
-                }
                 if(getPlayerTarget(targetRange.getValue()) != null && Objects.requireNonNull(getPlayerTarget(targetRange.getValue())).getDistanceSq(pos) < smartRange.getValue()) {
                     if(targetUnSafe.getValue()) {
                         if(getPlayerTarget(targetRange.getValue()) != null && !EntityUtil.isSafe(getPlayerTarget(targetRange.getValue()))) {
                             if(throughWalls.getValue()) {
                                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
+                                        if (autoSwitch.getValue()) {
+                                            if (silentSwitch.getValue()) {
+                                                InventoryUtil.SilentSwitchToSlot(blockSlot);
+                                            } else {
+                                                mc.player.inventory.currentItem = blockSlot;
+                                            }
+                                        }
                                         BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                        if (autoSwitch.getValue() && silentSwitch.getValue()) {
+                                            mc.player.inventory.currentItem = lastSlot;
+                                            mc.playerController.updateController();
+                                        }
                                     if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
@@ -199,7 +220,18 @@ public class HoleFiller extends Module {
                                 }
                             } else if (canBlockBeSeen(pos)){
                                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
+                                        if (autoSwitch.getValue()) {
+                                            if (silentSwitch.getValue()) {
+                                                InventoryUtil.SilentSwitchToSlot(blockSlot);
+                                            } else {
+                                                mc.player.inventory.currentItem = blockSlot;
+                                            }
+                                        }
                                         BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                        if (autoSwitch.getValue() && silentSwitch.getValue()) {
+                                            mc.player.inventory.currentItem = lastSlot;
+                                            mc.playerController.updateController();
+                                        }
                                     if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
@@ -211,7 +243,18 @@ public class HoleFiller extends Module {
                     } else {
                         if(throughWalls.getValue()) {
                                 if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
+                                    if (autoSwitch.getValue()) {
+                                        if (silentSwitch.getValue()) {
+                                            InventoryUtil.SilentSwitchToSlot(blockSlot);
+                                        } else {
+                                            mc.player.inventory.currentItem = blockSlot;
+                                        }
+                                    }
                                 BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                    if (autoSwitch.getValue() && silentSwitch.getValue()) {
+                                        mc.player.inventory.currentItem = lastSlot;
+                                        mc.playerController.updateController();
+                                    }
                                 if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                     if (!filledFadeHoles.containsKey(pos)) {
                                         filledFadeHoles.put(pos, startAlpha.getValue());
@@ -220,7 +263,18 @@ public class HoleFiller extends Module {
                             }
                         } else if (canBlockBeSeen(pos)){
                                     if (mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty()) {
+                                        if (autoSwitch.getValue()) {
+                                            if (silentSwitch.getValue()) {
+                                                InventoryUtil.SilentSwitchToSlot(blockSlot);
+                                            } else {
+                                                mc.player.inventory.currentItem = blockSlot;
+                                            }
+                                        }
                                         BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                        if (autoSwitch.getValue() && silentSwitch.getValue()) {
+                                            mc.player.inventory.currentItem = lastSlot;
+                                            mc.playerController.updateController();
+                                        }
                                     if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
@@ -236,11 +290,7 @@ public class HoleFiller extends Module {
                         }
                     }
                 }
-                if(autoSwitch.getValue() && silentSwitch.getValue()) {
-                    mc.player.inventory.currentItem = lastSlot;
-                    mc.playerController.updateController();
-                }
-                if(autoDisable.getValue()){
+                if (autoDisable.getValue()){
                     disable();
                 }
             }
@@ -282,7 +332,7 @@ public class HoleFiller extends Module {
 
     public static EntityPlayer getPlayerTarget(int targetRange){
         EntityPlayer target = EntityUtil.getTarget(targetRange);
-        if(target != null){
+        if (target != null){
             return target;
         }
         return null;

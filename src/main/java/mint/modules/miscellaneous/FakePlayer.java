@@ -56,15 +56,17 @@ public class FakePlayer extends Module {
             this.disable();
         }
     }
-    public void onLogin(){
-        if(isEnabled()) {
+    public void onLogin() {
+        if (isEnabled()) {
             disable();
         }
     }
+
     @Override
     public String getDisplayInfo() {
         return name.getValue();
     }
+
     @Override
     public void onUpdate() {
         if (nullCheck()) this.setEnabled(false);
@@ -131,9 +133,7 @@ public class FakePlayer extends Module {
         double blockDensity = 0.0;
         try {
             blockDensity = entity.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
-        } catch (Exception exception) {
-            // empty catch block
-        }
+        } catch (Exception exception) {}
         double v = (1.0 - distancedsize) * blockDensity;
         float damage = (int) ((v * v + v) / 2.0 * 7.0 * (double) doubleExplosionSize + 1.0);
         double finald = 1.0;
@@ -151,9 +151,7 @@ public class FakePlayer extends Module {
             int k = 0;
             try {
                 k = EnchantmentHelper.getEnchantmentModifierDamage(ep.getArmorInventoryList(), ds);
-            } catch (Exception exception) {
-                // empty catch block
-            }
+            } catch (Exception exception) {}
             float f = MathHelper.clamp((float) k, 0.0f, 20.0f);
             damage *= 1.0f - f / 25.0f;
             if (entity.isPotionActive(MobEffects.RESISTANCE)) {
@@ -216,4 +214,3 @@ public class FakePlayer extends Module {
         }
     }
 }
-
