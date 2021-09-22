@@ -18,6 +18,10 @@ import java.util.HashSet;
 
 public class HoleESP extends Module {
 
+    /**
+     * @author zPrestige
+     */
+
     public int updates;
 
     HashSet<BlockPos> bedrockholes = Sets.newHashSet();
@@ -53,7 +57,7 @@ public class HoleESP extends Module {
     public Setting<Integer> obsidianOutlineLineWidth = register(new Setting<>("OutlineLineWidth", 1, 0, 5, v-> obsidianOutline.getValue() && obsidianParent.getValue()));
 
     public HoleESP() {
-        super("Hole ESP", Category.VISUAL, "Draws a box around safe holes for crystal PVP.");
+        super("HoleESP", Category.VISUAL, "Draws a box around safe holes for crystal PVP.");
     }
 
     public void onTick() {

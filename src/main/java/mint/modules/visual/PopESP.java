@@ -20,6 +20,10 @@ import static org.lwjgl.opengl.GL11.glEnable;
 
 public class PopESP extends Module {
 
+    /**
+     * @author zPrestige & kambing
+     */
+
     private static PopESP INSTANCE = new PopESP();
 
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));

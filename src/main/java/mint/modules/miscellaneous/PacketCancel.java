@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class PacketCancel extends Module {
 
     public PacketCancel() {
-        super("Packet Cancel", Module.Category.MISCELLANEOUS, "Cancels chosen packets.");
+        super("PacketCancel", Module.Category.MISCELLANEOUS, "Cancels chosen packets.");
     }
 
     public Setting<Boolean> clientParent = register(new Setting("Client", true, false));

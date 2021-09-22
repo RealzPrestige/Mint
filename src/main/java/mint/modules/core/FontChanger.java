@@ -20,7 +20,7 @@ public class FontChanger
     private boolean reloadFont = false;
 
     public FontChanger() {
-        super("Font Changer", Category.CORE, "Changes the way the Font looks.");
+        super("Font", Category.CORE, "Changes the way the Font looks.");
         this.setInstance();
     }
 

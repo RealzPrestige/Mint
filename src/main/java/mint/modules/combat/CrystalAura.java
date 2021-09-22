@@ -32,6 +32,11 @@ import java.util.Map;
 
 public class CrystalAura extends Module {
 
+    /**
+     * @author zPrestige & kambing
+     * base is custom, some predicts taken off ozark
+     */
+
     private static Minecraft mc = Minecraft.getMinecraft();
 
     public Setting<Boolean> parentBreak = register(new Setting("Break", true, false));
@@ -118,7 +123,7 @@ public class CrystalAura extends Module {
     HashMap<BlockPos, Integer> renderPosses = new HashMap();
 
     public CrystalAura(){
-        super("Crystal Aura", Module.Category.COMBAT, "Automatically places and breaks crystals.");
+        super("CrystalAura", Module.Category.COMBAT, "Automatically places and breaks crystals.");
     }
 
     @Override

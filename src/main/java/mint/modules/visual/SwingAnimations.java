@@ -19,7 +19,7 @@ public class SwingAnimations extends Module {
     private final Setting<Integer> amplifier = this.register(new Setting<>("Amplifier", 14,1,255));
 
     public SwingAnimations() {
-        super("Swing Animations", Category.VISUAL, "Tweaks the way your swing looks.");
+        super("Swing", Category.VISUAL, "Tweaks the way your swing looks.");
     }
     @Override
     public void onUpdate() {
