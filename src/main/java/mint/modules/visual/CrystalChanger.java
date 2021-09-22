@@ -42,12 +42,12 @@ public class CrystalChanger extends Module {
     public Setting<Integer> red = register(new Setting<>("Red", 255, 0, 255, v -> this.chams.getValue() && !sync.getValue()));
     public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255, v -> this.chams.getValue() && !sync.getValue()));
     public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255, v -> this.chams.getValue() && !sync.getValue()));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 150, 0, 255, v -> this.chams.getValue() && !sync.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 150, 0, 255, v -> this.chams.getValue()));
     public Setting<Boolean> wallsSync = register(new Setting("WallsSync", false));
     public Setting<Integer> wallsRed = register(new Setting<>("WallsRed", 255, 0, 255, v -> this.throughwalls.getValue() && !wallsSync.getValue()));
     public Setting<Integer> wallsGreen = register(new Setting<>("WallsGreen", 255, 0, 255, v -> this.throughwalls.getValue() && !wallsSync.getValue()));
     public Setting<Integer> wallsBlue = register(new Setting<>("WallsBlue", 255, 0, 255, v -> this.throughwalls.getValue() && !wallsSync.getValue()));
-    public Setting<Integer> wallsAlpha = register(new Setting<>("WallsAlpha", 150, 0, 255, v -> this.throughwalls.getValue() && !wallsSync.getValue()));
+    public Setting<Integer> wallsAlpha = register(new Setting<>("WallsAlpha", 150, 0, 255, v -> this.throughwalls.getValue()));
 
     public Setting<Double> width = register(new Setting<>("LineWidth", 3.0, 0.1, 5.0));
     public Setting<Double> scale = register(new Setting<>("Scale", 1.0, 0.1, 3.0));
