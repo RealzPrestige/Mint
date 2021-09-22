@@ -1,5 +1,6 @@
 package mint.modules.combat;
 
+import com.google.common.collect.Sets;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
@@ -17,9 +18,11 @@ import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
+import java.util.HashSet;
 import java.util.List;
 
 public class AutoCrystal extends Module {
@@ -38,6 +41,7 @@ public class AutoCrystal extends Module {
     BlockPos finalPos;
     BlockPos finalCrystalPos;
     int crystals;
+    HashSet<AxisAlignedBB> placedPosses = Sets.newHashSet();
 
     public AutoCrystal(){
         super("AutoCrystal", Category.COMBAT, "");
@@ -75,12 +79,16 @@ public class AutoCrystal extends Module {
                     maxDamage = damage;
                     placePos = pos;
                     finalPos = placePos;
+                    AxisAlignedBB rofl = mc.world.getBlockState(finalPos).getSelectedBoundingBox(mc.world, finalPos);
+                    placedPosses.add(rofl);
                 }
             }
 
         }
         if (placePos != null) {
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+
+
 
             Timer timers = new Timer();
                 EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
@@ -121,8 +129,13 @@ public class AutoCrystal extends Module {
     }
 
     public void onRender3D(Render3DEvent event){
-        if(finalPos != null){
-            RenderUtil.drawBox(finalPos, new Color(0, 255, 0, 100));
+        for(AxisAlignedBB bb : placedPosses){
+            //TODO: gerald make shrink fat boy
+            bb = bb.grow(1);
+            if(bb == bb.shrink(0)){
+                placedPosses.remove(bb);
+            }
+            RenderUtil.drawBoxESPBB(bb, new Color(0, 255, 0, 100), new Color(0, 255, 0, 100), 1f, true, true, 1.0f, 1.0f, 1.0f);
         }
         if(finalCrystalPos != null){
             RenderUtil.drawBox(finalCrystalPos, new Color(255, 0, 0, 100));
