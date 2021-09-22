@@ -61,6 +61,7 @@ public class PopESP extends Module {
         super("PopESP", Category.VISUAL, "Renders an Entity where a player pops/dies.");
         this.setInstance();
     }
+
     public static PopESP getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PopESP();
@@ -99,7 +100,6 @@ public class PopESP extends Module {
                 GL11.glBlendFunc(770, 771);
                 GL11.glColor4f(wireRed.getValue() / 255f, wireGreen.getValue() / 255f, wireBlue.getValue() / 255f, pop.getValue() / 255f);
                 renderEntityStatic(pop.getKey(), event.getPartialTicks(), false);
-
                 GL11.glLineWidth(1f);
                 glEnable(2896);
                 GlStateManager.popAttrib();

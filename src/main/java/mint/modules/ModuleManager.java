@@ -60,6 +60,7 @@ public class ModuleManager
         moduleList.add(new PopESP());
         moduleList.add(new Chams());
         moduleList.add(new CrystalChanger());
+        moduleList.add(new Test());
     }
 
     public Module getModuleByName(String name) {
