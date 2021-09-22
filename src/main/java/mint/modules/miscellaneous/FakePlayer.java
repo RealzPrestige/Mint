@@ -6,6 +6,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.modules.core.Notifications;
+import mint.modules.visual.PopESP;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -110,6 +111,7 @@ public class FakePlayer extends Module {
                                     mc.player.connection.handleEntityStatus(new SPacketEntityStatus(fake_player, (byte) 35));
                                 } catch (Exception e) {
                                 }
+                                PopESP.getInstance().handlePopESP(fake_player.entityId);
                                 if (Notifications.TotemPopCounter.containsKey(fake_player)) {
                                     int times = Notifications.TotemPopCounter.get(fake_player) + 1;
                                     Notifications.TotemPopCounter.remove(fake_player);

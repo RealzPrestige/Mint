@@ -26,6 +26,8 @@ public class PopESP extends Module {
 
     private static PopESP INSTANCE = new PopESP();
 
+    public EntityOtherPlayerMP fakeEntity;
+
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
     public Setting<Boolean> solidSetting = register(new Setting("RenderSolid", true, v-> solidParent.getValue()));
     public Setting<Float> red = register(new Setting<>( "SolidRed", 0.0f, 0.0f, 255.0f, v-> solidParent.getValue() && solidSetting.getValue()));
@@ -140,7 +142,7 @@ public class PopESP extends Module {
             final Entity entity = mc.world.getEntityByID(event.getEntityId());
             if (entity instanceof EntityPlayer) {
                 final EntityPlayer player = (EntityPlayer) entity;
-                final EntityOtherPlayerMP fakeEntity = new EntityOtherPlayerMP(mc.world, player.getGameProfile());
+                fakeEntity = new EntityOtherPlayerMP(mc.world, player.getGameProfile());
                 fakeEntity.copyLocationAndAnglesFrom(player);
                 fakeEntity.rotationYawHead = player.rotationYawHead;
                 fakeEntity.prevRotationYawHead = player.rotationYawHead;
@@ -164,7 +166,7 @@ public class PopESP extends Module {
                 final Entity entity = mc.world.getEntityByID(entityId);
                 if (entity instanceof EntityPlayer) {
                     final EntityPlayer player = (EntityPlayer) entity;
-                    final EntityOtherPlayerMP fakeEntity = new EntityOtherPlayerMP(mc.world, player.getGameProfile());
+                    fakeEntity = new EntityOtherPlayerMP(mc.world, player.getGameProfile());
                     fakeEntity.copyLocationAndAnglesFrom(player);
                     fakeEntity.rotationYawHead = player.rotationYawHead;
                     fakeEntity.prevRotationYawHead = player.rotationYawHead;
@@ -182,6 +184,30 @@ public class PopESP extends Module {
             }
         }
     }
+
+    public void handlePopESP(int entityId){
+            if (mc.world.getEntityByID(entityId) != null) {
+                final Entity entity = mc.world.getEntityByID(entityId);
+                if (entity instanceof EntityPlayer) {
+                    final EntityPlayer player = (EntityPlayer) entity;
+                    fakeEntity = new EntityOtherPlayerMP(mc.world, player.getGameProfile());
+                    fakeEntity.copyLocationAndAnglesFrom(player);
+                    fakeEntity.rotationYawHead = player.rotationYawHead;
+                    fakeEntity.prevRotationYawHead = player.rotationYawHead;
+                    fakeEntity.rotationYaw = player.rotationYaw;
+                    fakeEntity.prevRotationYaw = player.rotationYaw;
+                    fakeEntity.rotationPitch = player.rotationPitch;
+                    fakeEntity.prevRotationPitch = player.rotationPitch;
+                    fakeEntity.cameraYaw = fakeEntity.rotationYaw;
+                    fakeEntity.cameraPitch = fakeEntity.rotationPitch;
+                    if(clearListOnDeath.getValue()) {
+                        poppedPlayers.clear();
+                    }
+                    poppedPlayers.put(fakeEntity, startAlpha.getValue());
+                }
+            }
+        }
+
 
     public void renderEntityStatic(Entity entityIn, float partialTicks, boolean p_188388_3_) {
         if (entityIn.ticksExisted == 0) {

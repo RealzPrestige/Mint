@@ -1,7 +1,12 @@
 # Mint 
-`
-Made by zPrestige_, FB, Kambing and ZenovJB.
-Anarchy client made for PvP.`
+- Main devs: zPrestige, Kambing
+- Devs: FB, Zenov
+
+Notable features:
+- Custom PopESP
+- Custom CrystalAura
+- Custom HoleFiller
+- VClip Bypass
 
 [Discord server Soon](https://discordserver.com/Mint!)
 
