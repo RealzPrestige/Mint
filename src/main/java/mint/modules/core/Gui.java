@@ -19,6 +19,8 @@ public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
     public Setting<String> prefix = register(new Setting<>("Prefix", "."));
     public Setting<Boolean> tweaksParent = register(new Setting<>("Tweaks", true, false));
+    public Setting<Float> rainbowBrightness = this.register(new Setting<Object>("Brightness ", 150.0f, 1.0f, 255.0f, v -> tweaksParent.getValue()));
+    public Setting<Float> rainbowSaturation = this.register(new Setting<Object>("Saturation", 150.0f, 1.0f, 255.0f, v ->tweaksParent.getValue()));
     public Setting<Boolean> blur = register(new Setting("Blur", true, v-> tweaksParent.getValue()));
     public Setting<Boolean> outline = register(new Setting("Outline", true, v-> tweaksParent.getValue()));
     public Setting<Boolean> colorParent = register(new Setting<>("Color", true, false));

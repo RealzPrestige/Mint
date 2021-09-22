@@ -6,6 +6,8 @@
   "mixins": [
     "MixinFontRenderer",
     "MixinMinecraft",
+    "MixinRenderLivingBase",
+    "MixinRenderModifiedCrystal",
     "MixinNetworkManager",
     "MixinRenderPlayer",
     "MixinWorld"
