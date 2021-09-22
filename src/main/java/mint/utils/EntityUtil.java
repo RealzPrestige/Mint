@@ -23,6 +23,10 @@ import java.util.List;
 
 public class EntityUtil  {
 
+    public static float calculatePos(final BlockPos pos, final EntityPlayer entity) {
+        return calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
+    }
+
     public static boolean isInFov(Entity entity) {
         return entity != null && (Mint.INSTANCE.mc.player.getDistanceSq(entity) < 4.0 || yawDist(entity) < (double) (getFov() + 2.0f));
     }

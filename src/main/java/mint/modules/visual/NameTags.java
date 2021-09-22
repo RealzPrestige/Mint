@@ -99,7 +99,7 @@ public class NameTags extends Module {
         if (healthLine.getValue()){
             final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
             final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
-            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), (float) width + 2.0f + healthAmount * -2.0f, 0, lineColor, lineColor);
+            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), -width - 1 + healthAmount, 0, lineColor, lineColor);
         }
         GlStateManager.disableBlend();
         ItemStack renderMainHand = player.getHeldItemMainhand().copy();

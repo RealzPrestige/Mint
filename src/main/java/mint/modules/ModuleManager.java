@@ -36,6 +36,7 @@ public class ModuleManager
         moduleList.add(new HoleFiller());
         moduleList.add(new SelfFill());
         moduleList.add(new CrystalAura());
+        moduleList.add(new AutoCrystal());
 
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());
