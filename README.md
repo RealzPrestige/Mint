@@ -1,6 +1,6 @@
 # Mint 
 - Main devs: zPrestige, Kambing
-- Devs: FB, Zenov, gerald0mc (best)
+- Devs: FB, Zenov, gerald0mc
 
 Notable features:
 - Custom PopESP
