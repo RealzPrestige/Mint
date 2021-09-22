@@ -3,6 +3,7 @@ package mint.mixins;
 
 import mint.Mint;
 import mint.modules.visual.Chams;
+import mint.modules.visual.PopESP;
 import mint.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -54,6 +55,8 @@ public abstract class MixinRenderLivingBase<T extends EntityLivingBase> extends 
 
     @Overwrite
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        if (PopESP.getInstance().poppedPlayers.containsKey(entity))
+            return;
         if (!MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Pre(entity, RenderLivingBase.class.cast(this), partialTicks, x, y, z))) {
             GlStateManager.pushMatrix();
             GlStateManager.disableCull();
