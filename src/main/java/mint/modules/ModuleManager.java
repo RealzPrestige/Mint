@@ -58,7 +58,6 @@ public class ModuleManager
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
         moduleList.add(new PopESP());
-        moduleList.add(new Chams());
         moduleList.add(new CrystalChanger());
         moduleList.add(new Test());
     }
