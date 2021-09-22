@@ -1,11 +1,12 @@
 # Mint 
 - Main dev: zPrestige, Kambing
-- Devs: Zenov, FB
+- Devs: FB, Zenov
 
 Notable features:
-- Custom popchams
+- Custom PopChams
 - Custom AutoCrystal
-- Custom holefiller
+- Custom HoleFiller
+- Hclip Bypass
 
 [Discord server Soon](https://discordserver.com/Mint!)
 
