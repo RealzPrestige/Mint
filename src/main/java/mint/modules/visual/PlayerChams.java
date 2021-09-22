@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Test extends Module {
+public class PlayerChams extends Module {
     public Setting<Boolean> transparent = register(new Setting<>("Transparent", false));
     public Setting<Boolean> texture2D = register(new Setting<>("Texture2D", false));
     public Setting<Boolean> walls = register(new Setting<>("Walls", false));
@@ -19,7 +19,7 @@ public class Test extends Module {
     public Setting<Float> blue = register(new Setting<>("Blue", 0.0f, 0.0f, 255.0f));
     public Setting<Float> alpha = register(new Setting<>("Alpha", 0.0f, 0.0f, 255.0f));
 
-    public Test() {
+    public PlayerChams() {
         super("Test", Category.VISUAL, "");
     }
 

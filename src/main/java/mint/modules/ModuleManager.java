@@ -4,8 +4,6 @@ import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
-import mint.modules.Feature;
-import mint.modules.Module;
 import mint.modules.visual.*;
 import mint.modules.combat.*;
 import mint.modules.core.*;
@@ -59,7 +57,7 @@ public class ModuleManager
         moduleList.add(new NameTags());
         moduleList.add(new PopESP());
         moduleList.add(new CrystalChanger());
-        moduleList.add(new Test());
+        moduleList.add(new PlayerChams());
     }
 
     public Module getModuleByName(String name) {
