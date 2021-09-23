@@ -9,8 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSoundEffect;
@@ -42,6 +42,9 @@ public class AutoCrystal extends Module {
     public Setting<Boolean> packetParent = register(new Setting("Packet", true, false));
     public Setting<Boolean> packetBreak = register(new Setting("Packet Break", false, v-> packetParent.getValue()));
 
+    public Setting<Boolean> switchParent = register(new Setting("Switch", true, false));
+    public Setting<Boolean> silentSwitch = register(new Setting("Silent Switch", false, v-> switchParent.getValue()));
+
     public Setting<Boolean> predictParent = register(new Setting("Predict", true, false));
     public Setting<Boolean> breakPredict = register(new Setting("Break Predict", false, v-> predictParent.getValue()));
     public Setting<Boolean> soundPredict = register(new Setting("Sound Predict", false, v-> predictParent.getValue()));
@@ -64,7 +67,7 @@ public class AutoCrystal extends Module {
     EntityPlayer target;
 
     public AutoCrystal(){
-        super("AutoCrystal", Category.COMBAT, "");
+        super("Auto Crystal", Category.COMBAT, "");
     }
 
     public static AutoCrystal getInstance() {
@@ -115,7 +118,20 @@ public class AutoCrystal extends Module {
 
         }
         if (placePos != null) {
+            int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
+            int oldSlot = mc.player.inventory.currentItem;
+            if (mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
+                if (silentSwitch.getValue()){
+                    InventoryUtil.SilentSwitchToSlot(crystalSlot);
+                }
+            }
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            if (mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
+                if (silentSwitch.getValue()){
+                    mc.player.inventory.currentItem = oldSlot;
+                    mc.playerController.updateController();
+                }
+            }
             if(placeSwing.getValue()){
                 mc.player.swingArm(placeSwingMode.getValue());
             }
