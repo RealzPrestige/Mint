@@ -45,7 +45,7 @@ public class AutoCrystal extends Module {
     BlockPos finalCrystalPos;
     public BlockPos placePos = null;
     int crystals;
-    public EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
+    public EntityPlayer target;
     HashSet<AxisAlignedBB> placedPosses = Sets.newHashSet();
 
     public AutoCrystal(){
@@ -62,7 +62,8 @@ public class AutoCrystal extends Module {
     }
     @Override
     public void onUpdate() {
-        if (target!= null) {
+        target = EntityUtil.getTarget(targetRange.getValue());
+        if (target != null) {
             if(placeTimer.passedMs(placeDelay.getValue())) {
                 doPlace();
                 placeTimer.reset();
