@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -20,9 +21,56 @@ import net.minecraft.world.Explosion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 
 public class EntityUtil  {
 
+    public static double getMaxSpeed() {
+        double maxModifier = 0.2873;
+        if (Mint.INSTANCE.mc.player.isPotionActive(Objects.requireNonNull(Potion.getPotionById(1)))) {
+            maxModifier *= 1.0 + 0.2 * (Objects.requireNonNull(Mint.INSTANCE.mc.player.getActivePotionEffect(Objects.requireNonNull(Potion.getPotionById(1)))).getAmplifier() + 1);
+        }
+        return maxModifier;
+    }
+
+
+    public static double getDefaultMoveSpeed() {
+        double baseSpeed = 0.2873;
+        if (Mint.INSTANCE.mc.player != null && Mint.INSTANCE.mc.player.isPotionActive(Potion.getPotionById(1))) {
+            final int amplifier = Mint.INSTANCE.mc.player.getActivePotionEffect(Potion.getPotionById(1)).getAmplifier();
+            baseSpeed *= 1.0 + 0.2 * (amplifier + 1);
+        }
+        return baseSpeed;
+    }
+    public static double[] forward(final double speed) {
+        float forward = Mint.INSTANCE.mc.player.movementInput.moveForward;
+        float side = Mint.INSTANCE.mc.player.movementInput.moveStrafe;
+        float yaw = Mint.INSTANCE.mc.player.prevRotationYaw + (Mint.INSTANCE.mc.player.rotationYaw - Mint.INSTANCE.mc.player.prevRotationYaw) * Mint.INSTANCE.mc.getRenderPartialTicks();
+        if (forward != 0.0f) {
+            if (side > 0.0f) {
+                yaw += ((forward > 0.0f) ? -45 : 45);
+            }
+            else if (side < 0.0f) {
+                yaw += ((forward > 0.0f) ? 45 : -45);
+            }
+            side = 0.0f;
+            if (forward > 0.0f) {
+                forward = 1.0f;
+            }
+            else if (forward < 0.0f) {
+                forward = -1.0f;
+            }
+        }
+        final double sin = Math.sin(Math.toRadians(yaw + 90.0f));
+        final double cos = Math.cos(Math.toRadians(yaw + 90.0f));
+        final double posX = forward * speed * cos + side * speed * sin;
+        final double posZ = forward * speed * sin - side * speed * cos;
+        return new double[] { posX, posZ };
+    }
+    public static boolean isMoving(final EntityLivingBase entity) {
+        return entity.moveForward != 0.0f || entity.moveStrafing != 0.0f;
+    }
     public static float calculatePos(final BlockPos pos, final EntityPlayer entity) {
         return calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
     }
