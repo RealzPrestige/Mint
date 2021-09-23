@@ -9,6 +9,7 @@ import mint.utils.*;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -27,6 +28,8 @@ import java.util.List;
 
 public class AutoCrystal extends Module {
 
+    public static AutoCrystal INSTANCE;
+
     public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f));
 
     public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f));
@@ -40,11 +43,17 @@ public class AutoCrystal extends Module {
     Timer placeTimer = new Timer();
     BlockPos finalPos;
     BlockPos finalCrystalPos;
+    public BlockPos placePos = null;
     int crystals;
+    public EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
     HashSet<AxisAlignedBB> placedPosses = Sets.newHashSet();
 
     public AutoCrystal(){
         super("AutoCrystal", Category.COMBAT, "");
+    }
+
+    public static AutoCrystal getInstance() {
+        return AutoCrystal.INSTANCE;
     }
 
     public void onToggle(){
@@ -53,7 +62,7 @@ public class AutoCrystal extends Module {
     }
     @Override
     public void onUpdate() {
-        if (EntityUtil.getTarget(targetRange.getValue()) != null) {
+        if (target!= null) {
             if(placeTimer.passedMs(placeDelay.getValue())) {
                 doPlace();
                 placeTimer.reset();
@@ -62,7 +71,6 @@ public class AutoCrystal extends Module {
     }
 
     private void doPlace() {
-        BlockPos placePos = null;
         float maxDamage = 0.5f;
         final List<BlockPos> sphere = BlockUtil.getSphere(this.placeRange.getValue(), true);
         for (int size = sphere.size(), i = 0; i < size; ++i) {
@@ -84,6 +92,8 @@ public class AutoCrystal extends Module {
                 }
             }
 
+
+
         }
         if (placePos != null) {
             mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
@@ -100,6 +110,8 @@ public class AutoCrystal extends Module {
             }
         }
     }
+
+
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event){

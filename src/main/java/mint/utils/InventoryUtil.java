@@ -1,10 +1,16 @@
 package mint.utils;
 
 import mint.Mint;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import sun.audio.AudioPlayer;
 
 public class InventoryUtil {
+
+    private static Minecraft mc = Minecraft.getMinecraft();
 
     public static int getItemFromHotbar(final Item item) {
         int slot = -1;
@@ -25,4 +31,18 @@ public class InventoryUtil {
         Mint.INSTANCE.mc.playerController.updateController();
     }
 
+    public static int findHotbarBlock(Class clazz) {
+        for (int i = 0; i < 9; ++i) {
+            Block block;
+            ItemStack stack = mc.player.inventory.getStackInSlot(i);
+            if (stack == ItemStack.EMPTY) continue;
+            if (clazz.isInstance(stack.getItem())) {
+                return i;
+            }
+            if (!(stack.getItem() instanceof ItemBlock) || !clazz.isInstance(block = ((ItemBlock) stack.getItem()).getBlock()))
+                continue;
+            return i;
+        }
+        return -1;
+    }
 }

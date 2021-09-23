@@ -10,11 +10,16 @@ import mint.utils.PlayerUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -32,6 +37,8 @@ public class NameTags extends Module {
     private final Setting<Integer> rectBlue = register(new Setting<>("RectBlue", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
     private final Setting<Integer> rectAlpha = register(new Setting<>("RectAlpha", 50, 0, 255, v -> rect.getValue() && boxParent.getValue()));
     private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
+    private final Setting<Boolean> fullHealthLine = register(new Setting("FullHealthLine", true));
+    private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));
 
     public NameTags() {
         super("Nametags", Category.VISUAL, "Draws info about an entity above their head.");
@@ -100,6 +107,10 @@ public class NameTags extends Module {
             final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
             final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
             RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), -width - 1 + healthAmount, 0, lineColor, lineColor);
+        }else if (fullHealthLine.getValue()) {
+            final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
+            final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
+            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), width + 2, 0, lineColor, lineColor);
         }
         GlStateManager.disableBlend();
         ItemStack renderMainHand = player.getHeldItemMainhand().copy();
@@ -134,7 +145,7 @@ public class NameTags extends Module {
         }
         this.renderItemStack(renderMainHand, xOffset);
         GlStateManager.popMatrix();
-        this.renderer.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 191, 255) : -1);
+        this.renderer.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
         camera.posX = originalPositionX;
         camera.posY = originalPositionY;
         camera.posZ = originalPositionZ;
@@ -169,11 +180,45 @@ public class NameTags extends Module {
     }
 
     private void renderEnchantmentText(ItemStack stack, int x) {
+        int enchantmentY = -28 + 8;
+        if (stack.getItem() == Items.GOLDEN_APPLE && stack.hasEffect()) {
+            this.renderer.drawStringWithShadow("God", x * 2, enchantmentY, -3977919);
+            enchantmentY -= 8;
+        }
+        if (enchant.getValue()) {
+            NBTTagList enchants = stack.getEnchantmentTagList();
+            for (int index = 0; index < enchants.tagCount(); ++index) {
+                short id = enchants.getCompoundTagAt(index).getShort("id");
+                int level = enchants.getCompoundTagAt(index).getShort("lvl");
+                Enchantment enc = Enchantment.getEnchantmentByID(id);
+                if (enc == null) continue;
+                String encName = findStringForEnchants(enc, level);
+                this.renderer.drawStringWithShadow(encName, x * 2, enchantmentY, -1);
+                enchantmentY -= 8;
+            }
+        }
         if (PlayerUtil.hasDurability(stack)) {
             int percent = PlayerUtil.getRoundedDamage(stack);
             String color = percent >= 60 ? "\u00a7a" : (percent >= 25 ? "\u00a7e" : "\u00a7c");
             this.renderer.drawStringWithShadow(color + percent + "%", x * 2, -28, -1);
         }
+    }
+
+    private String findStringForEnchants(Enchantment enchantment, int level) {
+
+        ResourceLocation resourceLocation = Enchantment.REGISTRY.getNameForObject(enchantment);
+
+        String string = resourceLocation == null ? enchantment.getName() : resourceLocation.toString();
+
+        int charCount = (level > 1) ? 12 : 13;
+
+        if (string.length() > charCount) {
+            string = string.substring(10, charCount);
+        }
+
+        return string.substring(0, 1).toUpperCase() + string.substring(1) + TextFormatting.WHITE + ((level > 1) ? level : "");
+
+
     }
 
     private String getDisplayTag(EntityPlayer player) {

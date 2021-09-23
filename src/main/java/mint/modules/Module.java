@@ -13,7 +13,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 
 public class Module extends Feature {
-    public Minecraft mc = Minecraft.getMinecraft();
+    public static Minecraft mc = Minecraft.getMinecraft();
     private final String description;
     private final Category category;
     public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));

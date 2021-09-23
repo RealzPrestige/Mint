@@ -2,26 +2,33 @@ package mint.utils;
 
 import mint.Mint;
 import net.minecraft.block.*;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static mint.utils.EntityUtil.getEyesPos;
+
 public class BlockUtil {
 
-   public static List<Block> unSolidBlocks = Arrays.asList(Blocks.FLOWING_LAVA, Blocks.FLOWER_POT, Blocks.SNOW, Blocks.CARPET, Blocks.END_ROD, Blocks.SKULL, Blocks.FLOWER_POT, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK, Blocks.WOODEN_BUTTON, Blocks.LEVER, Blocks.STONE_BUTTON, Blocks.LADDER, Blocks.UNPOWERED_COMPARATOR, Blocks.POWERED_COMPARATOR, Blocks.UNPOWERED_REPEATER, Blocks.POWERED_REPEATER, Blocks.UNLIT_REDSTONE_TORCH, Blocks.REDSTONE_TORCH, Blocks.REDSTONE_WIRE, Blocks.AIR, Blocks.PORTAL, Blocks.END_PORTAL, Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.SAPLING, Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS, Blocks.REEDS, Blocks.PUMPKIN_STEM, Blocks.MELON_STEM, Blocks.WATERLILY, Blocks.NETHER_WART, Blocks.COCOA, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.TALLGRASS, Blocks.DEADBUSH, Blocks.VINE, Blocks.FIRE, Blocks.RAIL, Blocks.ACTIVATOR_RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL, Blocks.TORCH);
+    public static List<Block> unSolidBlocks = Arrays.asList(Blocks.FLOWING_LAVA, Blocks.FLOWER_POT, Blocks.SNOW, Blocks.CARPET, Blocks.END_ROD, Blocks.SKULL, Blocks.FLOWER_POT, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK, Blocks.WOODEN_BUTTON, Blocks.LEVER, Blocks.STONE_BUTTON, Blocks.LADDER, Blocks.UNPOWERED_COMPARATOR, Blocks.POWERED_COMPARATOR, Blocks.UNPOWERED_REPEATER, Blocks.POWERED_REPEATER, Blocks.UNLIT_REDSTONE_TORCH, Blocks.REDSTONE_TORCH, Blocks.REDSTONE_WIRE, Blocks.AIR, Blocks.PORTAL, Blocks.END_PORTAL, Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.SAPLING, Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS, Blocks.REEDS, Blocks.PUMPKIN_STEM, Blocks.MELON_STEM, Blocks.WATERLILY, Blocks.NETHER_WART, Blocks.COCOA, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.TALLGRASS, Blocks.DEADBUSH, Blocks.VINE, Blocks.FIRE, Blocks.RAIL, Blocks.ACTIVATOR_RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL, Blocks.TORCH);
     public static final List<net.minecraft.block.Block> shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
     public static final List<net.minecraft.block.Block> blackList = Arrays.asList(Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER, Blocks.TRAPDOOR, Blocks.ENCHANTING_TABLE);
+    private static Minecraft mc = Minecraft.getMinecraft();
 
     public static boolean canPlaceCrystal(final BlockPos blockPos, boolean check) {
         final BlockPos boost = blockPos.add(0, 1, 0);
@@ -70,7 +77,7 @@ public class BlockUtil {
         final int posX = pos.getX();
         final int posY = pos.getY();
         final int posZ = pos.getZ();
-        final int radiuss = (int)radius;
+        final int radiuss = (int) radius;
         for (int x = posX - radiuss; x <= posX + radius; ++x) {
             for (int z = posZ - radiuss; z <= posZ + radius; ++z) {
                 for (int y = posY - radiuss; y < posY + radius; ++y) {
@@ -176,5 +183,54 @@ public class BlockUtil {
 
     public static boolean canBlockBeSeen(final BlockPos blockPos) {
         return Mint.INSTANCE.mc.world.rayTraceBlocks(new Vec3d(Mint.INSTANCE.mc.player.posX, Mint.INSTANCE.mc.player.posY + Mint.INSTANCE.mc.player.getEyeHeight(), Mint.INSTANCE.mc.player.posZ), new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()), false, true, false) == null;
+    }
+
+    public static void placeBlock(BlockPos pos) {
+        Vec3d eyesPos = new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ);
+        for (EnumFacing side : EnumFacing.values()) {
+            BlockPos neighbor = pos.offset(side);
+            EnumFacing side2 = side.getOpposite();
+            if (canBeClicked(neighbor)) {
+                Vec3d hitVec = (new Vec3d(neighbor)).add(0.5D, 0.5D, 0.5D).add((new Vec3d(side2.getDirectionVec())).scale(0.5D));
+                if (eyesPos.squareDistanceTo(hitVec) <= 18.0625D) {
+                    faceVectorPacketInstant(hitVec);
+                    processRightClickBlock(neighbor, side2, hitVec);
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                    mc.rightClickDelayTimer = 4;
+
+                    return;
+                }
+            }
+        }
+    }
+
+    public static boolean canBeClicked(BlockPos pos) {
+        return BlockUtil.getBlock(pos).canCollideCheck(BlockUtil.getState(pos), false);
+    }
+
+    private static Block getBlock(BlockPos pos) {
+        return BlockUtil.getState(pos).getBlock();
+    }
+
+    private static IBlockState getState(BlockPos pos) {
+        return mc.world.getBlockState(pos);
+    }
+
+    public static void faceVectorPacketInstant(final Vec3d vec) {
+        final float[] rotations = getNeededRotations2(vec);
+        BlockUtil.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], rotations[1], BlockUtil.mc.player.onGround));
+    }
+    private static float[] getNeededRotations2(final Vec3d vec) {
+        final Vec3d eyesPos = getEyesPos();
+        final double diffX = vec.x - eyesPos.x;
+        final double diffY = vec.y - eyesPos.y;
+        final double diffZ = vec.z - eyesPos.z;
+        final double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+        final float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0f;
+        final float pitch = (float)(-Math.toDegrees(Math.atan2(diffY, diffXZ)));
+        return new float[] { BlockUtil.mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - BlockUtil.mc.player.rotationYaw), BlockUtil.mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - BlockUtil.mc.player.rotationPitch) };
+    }
+    private static void processRightClickBlock(BlockPos pos, EnumFacing side, Vec3d hitVec) {
+        mc.playerController.processRightClickBlock(mc.player, mc.world, pos, side, hitVec, EnumHand.MAIN_HAND);
     }
 }
