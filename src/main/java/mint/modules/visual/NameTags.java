@@ -39,7 +39,7 @@ public class NameTags extends Module {
     private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
     private final Setting<Boolean> fullHealthLine = register(new Setting("FullHealthLine", true));
     private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));
-    private final Setting<Integer> yOff = register(new Setting<>("EnchantYOff", 8, 7, 20,v-> enchant.getValue()));
+    private final Setting<Integer> yOff = register(new Setting<>("EnchantYOff", 8, 1, 20,v-> enchant.getValue()));
 
     public NameTags() {
         super("Nametags", Category.VISUAL, "Draws info about an entity above their head.");
@@ -107,7 +107,7 @@ public class NameTags extends Module {
         if (healthLine.getValue()){
             final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
             final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
-            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), -width - 1 + (healthAmount * 2), 0, lineColor, lineColor);
+            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), (width + healthAmount), 0, lineColor, lineColor);
         }else if (fullHealthLine.getValue()) {
             final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
             final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
