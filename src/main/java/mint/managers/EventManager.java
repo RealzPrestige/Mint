@@ -63,7 +63,7 @@ public class EventManager extends Feature {
     public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         Mint.moduleManager.onLogout();
     }
-
+    
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (fullNullCheck())

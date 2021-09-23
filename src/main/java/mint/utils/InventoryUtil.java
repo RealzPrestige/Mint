@@ -12,6 +12,31 @@ public class InventoryUtil {
 
     private static Minecraft mc = Minecraft.getMinecraft();
 
+    public static int getItemSlot(Item item) {
+        int itemSlot = -1;
+        for (int i = 45; i > 0; --i) {
+            if (mc.player.inventory.getStackInSlot(i).getItem().equals(item)) {
+                itemSlot = i;
+                break;
+            }
+        }
+        return itemSlot;
+    }
+    public static int getStackCount(Item item) {
+        int count = 0;
+        for (int size = mc.player.inventory.mainInventory.size(), i = 0; i < size; ++i) {
+            final ItemStack itemStack = mc.player.inventory.mainInventory.get(i);
+            if (itemStack.getItem() == item) {
+                count += itemStack.getCount();
+            }
+        }
+        final ItemStack offhandStack = mc.player.getHeldItemOffhand();
+        if (offhandStack.getItem() == item) {
+            count += offhandStack.getCount();
+        }
+        return count;
+    }
+
     public static int getItemFromHotbar(final Item item) {
         int slot = -1;
         for (int i = 0; i < 9; ++i) {
