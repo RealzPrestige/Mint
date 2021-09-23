@@ -15,6 +15,10 @@ import net.minecraft.item.Item;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author zPrestige
+ */
+
 public class Offhand extends Module {
 
     public Setting<Boolean> itemParent = register(new Setting("Item", true, false));

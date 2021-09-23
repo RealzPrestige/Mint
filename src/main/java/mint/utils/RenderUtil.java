@@ -24,12 +24,47 @@ public class RenderUtil {
     public static RenderItem itemRender;
     public static ICamera camera;
     public static Minecraft mc = Minecraft.getMinecraft();
+    public static Tessellator tessellator;
+    public static BufferBuilder builder;
 
     static {
         Minecraft mc = Minecraft.getMinecraft();
         itemRender = mc.getRenderItem();
         camera = new Frustum();
+        tessellator = Tessellator.getInstance();
+        builder = RenderUtil.tessellator.getBuffer();
     }
+
+    public static Vec3d updateToCamera(final Vec3d vec) {
+        return new Vec3d(vec.x - RenderUtil.mc.getRenderManager().viewerPosX, vec.y - RenderUtil.mc.getRenderManager().viewerPosY, vec.z - RenderUtil.mc.getRenderManager().viewerPosZ);
+    }
+    public static void addBuilderVertex(final BufferBuilder bufferBuilder, final double x, final double y, final double z, final Color color) {
+        bufferBuilder.pos(x, y, z).color(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f).endVertex();
+    }
+
+    public static void prepare() {
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GlStateManager.disableLighting();
+        GlStateManager.depthMask(false);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        GL11.glDisable(3553);
+        GL11.glEnable(2848);
+        GL11.glBlendFunc(770, 771);
+    }
+
+    public static void release() {
+        GlStateManager.depthMask(true);
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.enableAlpha();
+        GlStateManager.popMatrix();
+        GL11.glEnable(3553);
+        GL11.glPolygonMode(1032, 6914);
+    }
+
 
     public static void drawText(BlockPos pos, String text, int color) {
         GlStateManager.pushMatrix();

@@ -3,8 +3,14 @@ package mint.utils;
 public class Timer {
     private long time = -1L;
     private final long current;
+    long startTime;
+    long delay;
+    boolean paused;
 
     public Timer() {
+        this.startTime = System.currentTimeMillis();
+        this.delay = 0L;
+        this.paused = false;
         current = -1;
     }
     public final boolean hasReached(final long delay) {
@@ -51,5 +57,26 @@ public class Timer {
     public long getMs(long time) {
         return time / 1000000L;
     }
+
+    public boolean isPassed() {
+        return !this.paused && System.currentTimeMillis() - this.startTime >= this.delay;
+    }
+
+    public void setDelay(final long delay) {
+        this.delay = delay;
+    }
+
+    public void setPaused(final boolean paused) {
+        this.paused = paused;
+    }
+
+    public boolean isPaused() {
+        return this.paused;
+    }
+
+    public long getStartTime() {
+        return this.startTime;
+    }
+
 }
 
