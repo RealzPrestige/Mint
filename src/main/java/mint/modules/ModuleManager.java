@@ -48,12 +48,12 @@ public class ModuleManager
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
-        moduleList.add(new Speed());
 
         /** Player **/
         moduleList.add(new AntiAim());
         moduleList.add(new FastPlace());
         moduleList.add(new PacketEXP());
+        moduleList.add(new ChorusManipulator());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());

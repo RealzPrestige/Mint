@@ -35,6 +35,48 @@ public class RenderUtil {
         builder = RenderUtil.tessellator.getBuffer();
     }
 
+    public static void renderBB(final int glMode, AxisAlignedBB bb, final Color bottom, final Color top) {
+        GL11.glShadeModel(7425);
+        bb = updateToCamera(bb);
+        prepare();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        (RenderUtil.builder = RenderUtil.tessellator.getBuffer()).begin(glMode, DefaultVertexFormats.POSITION_COLOR);
+        buildBBBuffer(RenderUtil.builder, bb, bottom, top);
+        RenderUtil.tessellator.draw();
+        release();
+        GL11.glShadeModel(7424);
+    }
+
+    public static AxisAlignedBB updateToCamera(final AxisAlignedBB bb) {
+        return new AxisAlignedBB(bb.minX - RenderUtil.mc.getRenderManager().viewerPosX, bb.minY - RenderUtil.mc.getRenderManager().viewerPosY, bb.minZ - RenderUtil.mc.getRenderManager().viewerPosZ, bb.maxX - RenderUtil.mc.getRenderManager().viewerPosX, bb.maxY - RenderUtil.mc.getRenderManager().viewerPosY, bb.maxZ - RenderUtil.mc.getRenderManager().viewerPosZ);
+    }
+    public static void buildBBBuffer(final BufferBuilder builder, final AxisAlignedBB bb, final Color bottom, final Color top) {
+        addBuilderVertex(builder, bb.minX, bb.minY, bb.minZ, bottom);
+        addBuilderVertex(builder, bb.maxX, bb.minY, bb.minZ, bottom);
+        addBuilderVertex(builder, bb.maxX, bb.minY, bb.maxZ, bottom);
+        addBuilderVertex(builder, bb.minX, bb.minY, bb.maxZ, bottom);
+        addBuilderVertex(builder, bb.minX, bb.minY, bb.minZ, bottom);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.minZ, top);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.maxZ, top);
+        addBuilderVertex(builder, bb.minX, bb.minY, bb.maxZ, bottom);
+        addBuilderVertex(builder, bb.minX, bb.minY, bb.maxZ, bottom);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.maxZ, top);
+        addBuilderVertex(builder, bb.maxX, bb.maxY, bb.maxZ, top);
+        addBuilderVertex(builder, bb.maxX, bb.minY, bb.maxZ, bottom);
+        addBuilderVertex(builder, bb.maxX, bb.minY, bb.maxZ, bottom);
+        addBuilderVertex(builder, bb.maxX, bb.maxY, bb.maxZ, top);
+        addBuilderVertex(builder, bb.maxX, bb.maxY, bb.minZ, top);
+        addBuilderVertex(builder, bb.maxX, bb.minY, bb.minZ, bottom);
+        addBuilderVertex(builder, bb.maxX, bb.minY, bb.minZ, bottom);
+        addBuilderVertex(builder, bb.maxX, bb.maxY, bb.minZ, top);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.minZ, top);
+        addBuilderVertex(builder, bb.minX, bb.minY, bb.minZ, bottom);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.minZ, top);
+        addBuilderVertex(builder, bb.maxX, bb.maxY, bb.minZ, top);
+        addBuilderVertex(builder, bb.maxX, bb.maxY, bb.maxZ, top);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.maxZ, top);
+        addBuilderVertex(builder, bb.minX, bb.maxY, bb.minZ, top);
+    }
     public static Vec3d updateToCamera(final Vec3d vec) {
         return new Vec3d(vec.x - RenderUtil.mc.getRenderManager().viewerPosX, vec.y - RenderUtil.mc.getRenderManager().viewerPosY, vec.z - RenderUtil.mc.getRenderManager().viewerPosZ);
     }

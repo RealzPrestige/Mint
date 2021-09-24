@@ -7,6 +7,7 @@ import mint.events.*;
 import mint.modules.Feature;
 import mint.commands.Command;
 import mint.modules.core.Notifications;
+import mint.modules.player.ChorusManipulator;
 import mint.modules.visual.PopESP;
 import mint.utils.Timer;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -17,6 +18,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -85,6 +87,7 @@ public class EventManager extends Feature {
             }
         }
     }
+
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
