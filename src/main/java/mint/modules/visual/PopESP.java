@@ -21,7 +21,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 public class PopESP extends Module {
 
     /**
-     * @author zPrestige & kambing
+     * @author zPrestige & kambing & gerald
      */
 
     private static PopESP INSTANCE = new PopESP();

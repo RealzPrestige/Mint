@@ -22,7 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.Objects;
 
 public class NameTags extends Module {
@@ -181,7 +180,7 @@ public class NameTags extends Module {
     }
 
     private void renderEnchantmentText(ItemStack stack, int x) {
-        int enchantmentY = -28 + yOff.getValue();
+        int enchantmentY = -28 + 1;
         if (stack.getItem() == Items.GOLDEN_APPLE && stack.hasEffect()) {
             this.renderer.drawStringWithShadow("God", x * 2, enchantmentY, -3977919);
             enchantmentY -= 8;

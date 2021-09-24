@@ -37,7 +37,7 @@ public class PlayerChams extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
-        if (event.getEntityLivingBase() instanceof EntityPlayer) {
+        if (event.getEntityLivingBase() instanceof EntityPlayer && event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {
             if (transparent.getValue()) {
                 GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
