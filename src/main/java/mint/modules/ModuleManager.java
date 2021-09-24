@@ -52,6 +52,8 @@ public class ModuleManager
 
         /** Player **/
         moduleList.add(new AntiAim());
+        moduleList.add(new FastPlace());
+        moduleList.add(new PacketEXP());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());
