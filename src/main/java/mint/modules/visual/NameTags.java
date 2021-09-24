@@ -11,13 +11,13 @@ import mint.utils.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
@@ -186,16 +186,17 @@ public class NameTags extends Module {
             enchantmentY -= 8;
         }
         if (enchant.getValue()) {
-            for (Enchantment enchantment : EnchantmentHelper.getEnchantments(stack).keySet()) {
-                if (enchantment == null) {
-                    continue;
-                }
-                    int level = EnchantmentHelper.getEnchantmentLevel(enchantment, stack);
-                    this.renderer.drawString(findStringForEnchants(enchantment, level), x * 2, enchantmentY, -1,true);
-                }
+            NBTTagList enchants = stack.getEnchantmentTagList();
+            for (int index = 0; index < enchants.tagCount(); ++index) {
+                short id = enchants.getCompoundTagAt(index).getShort("id");
+                int level = enchants.getCompoundTagAt(index).getShort("lvl");
+                Enchantment enc = Enchantment.getEnchantmentByID(id);
+                if (enc == null) continue;
+                String encName = findStringForEnchants(enc, level);
+                this.renderer.drawStringWithShadow(encName, x * 2, enchantmentY, -1);
                 enchantmentY -= 8;
             }
-
+        }
         if (PlayerUtil.hasDurability(stack)) {
             int percent = PlayerUtil.getRoundedDamage(stack);
             String color = percent >= 60 ? "\u00a7a" : (percent >= 25 ? "\u00a7e" : "\u00a7c");
