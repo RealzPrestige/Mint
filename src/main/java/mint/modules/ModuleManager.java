@@ -48,6 +48,7 @@ public class ModuleManager
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
+        moduleList.add(new NoRotate());
 
         /** Player **/
         moduleList.add(new AntiAim());
