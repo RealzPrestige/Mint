@@ -37,6 +37,7 @@ public class ModuleManager
         moduleList.add(new SelfFill());
         moduleList.add(new CrystalAura());
         moduleList.add(new AutoCrystal());
+        moduleList.add(new Offhand());
 
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());
@@ -47,7 +48,7 @@ public class ModuleManager
         moduleList.add(new Clip());
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
-        //moduleList.add(new Strafe());
+        moduleList.add(new Strafe());
 
         /** Player **/
         moduleList.add(new AntiAim());
@@ -60,6 +61,7 @@ public class ModuleManager
         moduleList.add(new PopESP());
         moduleList.add(new CrystalChanger());
         moduleList.add(new PlayerChams());
+        moduleList.add(new PlayerTrails());
     }
 
     public Module getModuleByName(String name) {

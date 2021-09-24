@@ -1,46 +1,24 @@
 package mint.events;
 
 import net.minecraft.entity.MoverType;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
 
-@Cancelable
-public class MoveEvent extends EventProcessor {
-
-    private MoverType type;
+public class MoveEvent extends EventProcessor
+{
+    public MoverType type;
     public double x;
     public double y;
     public double z;
+    public boolean moved;
 
-    public MoveEvent(int stage, MoverType type, double x, double y, double z) {
-        super(stage);
+    public MoveEvent(final MoverType type, final double x, final double y, final double z) {
+        this.moved = false;
         this.type = type;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public MoverType getType() {
-        return this.type;
-    }
-    public void setType(MoverType type) {
-        this.type = type;
-    }
-    public double getX() {
-        return this.x;
-    }
-    public void setX(double x) {
-        this.x = x;
-    }
-    public double getY() {
-        return this.y;
-    }
-    public void setY(double y) {
-        this.y = y;
-    }
-    public double getZ() {
-        return this.z;
-    }
-    public void setZ(double z) {
-        this.z = z;
+    public boolean isCancelable() {
+        return true;
     }
 }

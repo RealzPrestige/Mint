@@ -50,5 +50,22 @@ public class ColorUtil {
         double rainbowState = Math.ceil((double) (System.currentTimeMillis() + (long) delay) / 20.0);
         return Color.getHSBColor((float) (rainbowState % 360.0 / 360.0), Gui.getInstance().rainbowSaturation.getValue() / 255.0f, Gui.getInstance().rainbowBrightness.getValue() / 255.0f);
     }
+
+    public static Color interpolate(final float value, final Color start, final Color end) {
+        final float sr = start.getRed() / 255.0f;
+        final float sg = start.getGreen() / 255.0f;
+        final float sb = start.getBlue() / 255.0f;
+        final float sa = start.getAlpha() / 255.0f;
+        final float er = end.getRed() / 255.0f;
+        final float eg = end.getGreen() / 255.0f;
+        final float eb = end.getBlue() / 255.0f;
+        final float ea = end.getAlpha() / 255.0f;
+        final float r = sr * value + er * (1.0f - value);
+        final float g = sg * value + eg * (1.0f - value);
+        final float b = sb * value + eb * (1.0f - value);
+        final float a = sa * value + ea * (1.0f - value);
+        return new Color(r, g, b, a);
+    }
+
 }
 

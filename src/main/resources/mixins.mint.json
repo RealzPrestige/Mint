@@ -4,6 +4,7 @@
   "package": "mint.mixins",
   "refmap": "mixins.mint.refmap.json",
   "mixins": [
+    "MixinEntityPlayerSP",
     "MixinFontRenderer",
     "MixinMinecraft",
     "MixinRenderLivingBase",
