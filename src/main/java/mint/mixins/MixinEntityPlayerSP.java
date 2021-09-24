@@ -33,6 +33,7 @@ public class MixinEntityPlayerSP extends AbstractClientPlayer {
         }
         return bb.minY;
     }
+
     @Inject(method = { "move" }, at = { @At("HEAD") }, cancellable = true)
     public void move(final MoverType type, final double x, final double y, final double z, final CallbackInfo ci) {
         final MoveEvent event = new MoveEvent(type, x, y, z);
