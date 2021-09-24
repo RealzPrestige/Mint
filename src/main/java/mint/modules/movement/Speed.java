@@ -18,10 +18,9 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
- *
- * @Author zPrestige (& Kambing)
- * @Since 24/09/2021
- *
+ * @author zPrestige & kambing
+ * @since 24/09/2021
+ * pyro strafe recreation by the @authors 
  */
 public class Speed extends Module {
 
