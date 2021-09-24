@@ -32,6 +32,11 @@ public class NoRotate extends Module {
 
     public void onEnable() {
         startpos = PlayerUtil.getPlayerPos(mc.player);
+        if(packetJump.getValue()){
+            EntityUtil.packetJump(false);
+        } else {
+            mc.player.jump();
+        }
     }
 
     public void onUpdate() {
@@ -42,6 +47,9 @@ public class NoRotate extends Module {
             BlockUtil.placeBlock(startpos, EnumHand.MAIN_HAND, rotate.getValue(), packetPlace.getValue(), false, false, EnumHand.MAIN_HAND);
             mc.player.inventory.currentItem = oldSlot;
             mc.playerController.updateController();
+        }
+        if(mc.world.getBlockState(startpos).getBlock() == Blocks.OBSIDIAN){
+            disable();
         }
     }
 }
