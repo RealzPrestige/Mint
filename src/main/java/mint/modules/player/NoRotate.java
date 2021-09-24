@@ -1,16 +1,18 @@
 package mint.modules.player;
 
 
-import com.google.common.eventbus.Subscribe;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
+import mint.modules.combat.HoleFiller;
 import mint.utils.BlockUtil;
 import mint.utils.EntityUtil;
 import mint.utils.InventoryUtil;
-import net.minecraft.block.BlockObsidian;
+import mint.utils.PlayerUtil;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -19,48 +21,27 @@ import net.minecraft.util.math.BlockPos;
  */
 public class NoRotate extends Module {
 
+    public Setting<Boolean> packetJump = register(new Setting("Packet Jump", true));
+    public Setting<Boolean> packetPlace = register(new Setting("Packet Place", true));
+    public Setting<Boolean> rotate = register(new Setting("Place Rotate", true));
+    BlockPos startpos;
 
-    public Setting<Boolean> packet = register(new Setting("PacketJump", true));
     public NoRotate() {
-    super("ZPRESTIGEAURA",Category.MOVEMENT,"zprsdsihjfipawe");}
-
-    public BlockPos startPos = null;
-
-    @Override
-    public void onEnable() {
-        if (fullNullCheck()) {
-            disable();
-            return;
-        }
-        if (mc.player.isElytraFlying()) {
-            return;
-        }
-        startPos = new BlockPos(mc.player.getPosition());
+        super("ZPRESTIGEAURA", Category.MOVEMENT, "zprsdsihjfipawe");
     }
 
-    @Override
-    @Subscribe
+    public void onEnable() {
+        startpos = PlayerUtil.getPlayerPos(mc.player);
+    }
+
     public void onUpdate() {
-        if (fullNullCheck()) {
-            disable();
-            return;
-        }
+        int blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
         int oldSlot = mc.player.inventory.currentItem;
-        mc.player.connection.sendPacket(new CPacketHeldItemChange(InventoryUtil.findHotbarBlock(BlockObsidian.class)));
-        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
-        if (packet.getValue()) {
-            EntityUtil.packetJump(true);
-            BlockUtil.placeBlock(startPos);
-            mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY - 1.4, mc.player.posZ, true));
-        }else{
-            mc.player.jump();
-            BlockUtil.placeBlock(startPos);
-            if (startPos.getY() != mc.player.getPosition().getY()) {
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY - 1.4, mc.player.posZ, true));
-            }
+        if(!mc.player.onGround) {
+            InventoryUtil.SilentSwitchToSlot(blockSlot);
+            BlockUtil.placeBlock(startpos, EnumHand.MAIN_HAND, rotate.getValue(), packetPlace.getValue(), false, false, EnumHand.MAIN_HAND);
+            mc.player.inventory.currentItem = oldSlot;
+            mc.playerController.updateController();
         }
-        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
-        mc.player.connection.sendPacket(new CPacketHeldItemChange(oldSlot));
-        disable();
     }
 }

@@ -63,6 +63,7 @@ public class ModuleManager
         moduleList.add(new CrystalChanger());
         moduleList.add(new PlayerChams());
         moduleList.add(new PlayerTrails());
+        moduleList.add(new BreakESP());
     }
 
     public Module getModuleByName(String name) {

@@ -13,6 +13,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -25,6 +26,10 @@ import java.util.*;
 
 public class PlayerUtil {
     private static final JsonParser PARSER = new JsonParser();
+
+    public static BlockPos getPlayerPos(EntityPlayer player) {
+        return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
+    }
 
     public static boolean isArmorLow(final EntityPlayer player, final int durability) {
         for (final ItemStack piece : player.inventory.armorInventory) {

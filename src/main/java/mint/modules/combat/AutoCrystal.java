@@ -139,7 +139,7 @@ public class AutoCrystal extends Module {
             final float self = EntityUtil.calculatePos(pos, mc.player);
             if (BlockUtil.canPlaceCrystal(pos, true)) {
                 final float damage;
-                if (EntityUtil.getHealth(mc.player) > self + 0.5f && this.maxSelfDamage.getValue() > self && (damage = EntityUtil.calculatePos(pos, EntityUtil.getTarget(targetRange.getValue()))) > maxDamage && damage > self) {
+                if (EntityUtil.getHealth(mc.player) > self + 0.5f && this.maxSelfDamage.getValue() > self && (damage = EntityUtil.calculatePos(pos, EntityUtil.getTarget(targetRange.getValue()))) > maxDamage && damage > self && !EntityUtil.isPlayerSafe(target)) {
                     if (damage <= this.minDamage.getValue()) {
                         if (damage <= 2.0f) {
                             continue;

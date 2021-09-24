@@ -7,9 +7,9 @@ import mint.clickgui.setting.Setting;
 import mint.events.MoveEvent;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
+import mint.utils.MathUtil;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -18,18 +18,26 @@ public class Strafe extends Module {
     public Setting<Mode> mode = register(new Setting<>("Mode", Mode.STRAFE));
     public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1)));
     public enum Mode{STRAFE, INSTANT}
-    public Setting<Double> airSpeed = register(new Setting("Air Speed", 1.1, 0.5, 1.3, v-> mode.getValue() == Mode.STRAFE));
-    public Setting<Double> downSpeed = register(new Setting("Down Speed", 1.1, 0.5, 1.3, v-> mode.getValue() == Mode.STRAFE));
-    public Setting<Double> groundSpeed = register(new Setting("Ground Speed", 1.1, 0.5, 1.3, v-> mode.getValue() == Mode.STRAFE));
-    public Setting<Double> jumpSpeed = register(new Setting("Jump Speed", 1.1, 0.5, 1.3, v-> mode.getValue() == Mode.STRAFE));
-    boolean jumpBoosting;
     public boolean changeY = false;
     public double minY = 0.0;
+    int ticks;
     int delay;
+    private static float speed;
+    private double speed1;
+    private int stage;
+    private boolean disabling;
+    private boolean stopMotionUntilNext;
+    private double moveSpeed;
+    private boolean spedUp;
+    public static boolean canStep;
+    private double lastDist;
+    public static double yOffset;
+    private boolean cancel;
+
     public Strafe() {
-        super("Strafe", Category.MOVEMENT, "");
-        jumpBoosting = false;
-        this.setInstance();
+        super("Strafe", Category.MOVEMENT, "Tweaks and speeds up movement.");
+        setInstance();
+        speed = 0.08f;
     }
 
     public static Strafe getInstance() {
@@ -45,24 +53,25 @@ public class Strafe extends Module {
 
     @Override
     public void onDisable() {
-        this.changeY = false;
+        changeY = false;
+        delay = 0;
     }
     
     public void onTick() {
-        if(delay < 12) {
-            ++delay;
+        if(ticks < 12) {
+            ++ticks;
         }
-        if(delay > 10) {
+        if(ticks > 10) {
             if (switchBind.getValue().getKey() > -1) {
                 if (Keyboard.isKeyDown(switchBind.getValue().getKey())) {
                     if (mode.getValue() == Mode.INSTANT) {
                         mode.setValue(Mode.STRAFE);
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Strafe"), 1);
-                        delay = 0;
+                        ticks = 0;
                     } else if (mode.getValue() == Mode.STRAFE) {
                         mode.setValue(Mode.INSTANT);
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Instant"), 1);
-                        delay = 0;
+                        ticks = 0;
                     }
                 }
             }
@@ -71,27 +80,11 @@ public class Strafe extends Module {
 
     
     public void onUpdate() {
-            if (mode.getValue() == Mode.STRAFE && EntityUtil.isMoving(mc.player) && mc.player.onGround) {
-                mc.player.jump();
-            }
     }
 
     @SubscribeEvent
     public void onMove(MoveEvent event) {
-        if(mode.getValue() == Mode.STRAFE) {
-            if (EntityUtil.isMoving(mc.player)) {
-                final float speed = mc.player.onGround ? groundSpeed.getValue().floatValue() : (this.jumpBoosting ? jumpSpeed.getValue().floatValue() : ((event.y > 0.0) ? airSpeed.getValue().floatValue() : downSpeed.getValue().floatValue()));
-                final double[] motion = EntityUtil.forward(EntityUtil.getDefaultMoveSpeed() * speed);
-                event.x = motion[0];
-                event.z = motion[1];
-            }
-            else {
-                event.x = 0.0;
-                event.z = 0.0;
-            }
-            if (this.jumpBoosting) {
-                this.jumpBoosting = false;
-            }
+        if(mode.getValue() == Mode.STRAFE){
         } else if(mode.getValue() == Mode.INSTANT){
             if (!(event.getStage() != 0 || nullCheck() || mc.player.isSneaking() || mc.player.isInWater() || mc.player.isInLava() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
                 MovementInput movementInput = mc.player.movementInput;
@@ -116,10 +109,5 @@ public class Strafe extends Module {
                 }
             }
         }
-    }
-
-    @SubscribeEvent
-    public void onJump(LivingEvent.LivingJumpEvent event) {
-        jumpBoosting = true;
     }
 }
