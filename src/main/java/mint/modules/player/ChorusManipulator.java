@@ -20,6 +20,15 @@ import java.util.*;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
+
+/**
+ *
+ * @Author zPrestige_
+ * Inspired by KamiV
+ * @Since 24/09/2021
+ *
+ */
+
 public class ChorusManipulator extends Module {
     public Setting<Boolean> cancel = register(new Setting<>("Cancel",false));
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
