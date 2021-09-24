@@ -51,6 +51,7 @@ public class ModuleManager
 
         /** Player **/
         moduleList.add(new AntiAim());
+        moduleList.add(new FakeChorus());
 
         /** Visual **/
         moduleList.add(new SwingAnimations());
