@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
-
 import static org.lwjgl.opengl.GL11.*;
 
 public class CrystalChams extends Module {
