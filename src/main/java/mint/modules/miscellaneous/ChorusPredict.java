@@ -36,8 +36,8 @@ public class ChorusPredict extends Module {
         super("ChorusPredict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
     }
 
-    public void onLogin(){
-        if(isEnabled()) {
+    public void onLogin() {
+        if (isEnabled()) {
             disable();
             enable();
         }

@@ -17,10 +17,12 @@ public class PlayerChams extends Module {
 
     private static PlayerChams INSTANCE = new PlayerChams();
     public Setting<Boolean> transparent = register(new Setting<>("Transparent", false));
-    public Setting<Boolean> texture2D = register(new Setting<>("Texture2D", false));
+    public Setting<Boolean> texture2D = register(new Setting<>("Texture 2D", false));
     public Setting<Boolean> walls = register(new Setting<>("Walls", false));
     public Setting<Boolean> glint = register(new Setting<>("Glint", false));
-    public Setting<Boolean> customBlendFunc = register(new Setting("CustomBlendFunc", false, v-> glint.getValue()));
+    public Setting<Boolean> customBlendFunc = register(new Setting("Custom Blend Func", false, v-> glint.getValue()));
+    public Setting<RenderMode> renderMode = register(new Setting<>("Render Mode", RenderMode.FILL));
+    enum RenderMode{FILL, WIRE, BOTH}
     public Setting<Float> red = register(new Setting<>("Red", 0.0f, 0.0f, 255.0f));
     public Setting<Float> green = register(new Setting<>("Green", 255.0f, 0.0f, 255.0f));
     public Setting<Float> blue = register(new Setting<>("Blue", 0.0f, 0.0f, 255.0f));
@@ -78,6 +80,25 @@ public class PlayerChams extends Module {
                 }
             }
             GL11.glColor4f(red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, alpha.getValue() / 255f);
+
+            switch (renderMode.getValue()){
+                case FILL: {
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON_MODE);
+                    break;
+                }
+                case WIRE: {
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                    break;
+                }
+                case BOTH: {
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON_MODE);
+                    event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                    event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
+                    break;
+                }
+            }
+
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
             if (walls.getValue()) {
                 glEnable(GL_DEPTH_TEST);

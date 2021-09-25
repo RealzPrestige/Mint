@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class AnimationDisable extends Module {
 
     public AnimationDisable(){
-        super("AnimationDisable",Category.VISUAL,"cancels ur mom");
+        super("CripWalk",Category.VISUAL,"cancels movement animations");
     }
     @Override
     public void onUpdate() {

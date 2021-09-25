@@ -12,11 +12,13 @@ public class ReverseStep extends Module {
     public Setting<Float> vanillaSpeed = register(new Setting("VanillaSpeed", 9.0f, 0.1f, 9.0f));
 
     @Override
-    public void onUpdate(){
+    public void onUpdate() {
+        //nice if checks for liquids only loool
         if (mc.player.isInLava() || mc.player.isInWater()) {
             return;
         }
-        if (mc.player.onGround){
+        if (mc.player.onGround) {
+            //LOL NIGGA WHO MADE IT? THATS LIKE FUCKING 2012 PASTE SHIT LVL LOLLLLL
             mc.player.motionY -= vanillaSpeed.getValue();
         }
     }

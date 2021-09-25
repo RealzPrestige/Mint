@@ -42,7 +42,9 @@ public class FakePlayer extends Module {
 
     @Override
     public void onEnable() {
-        if (nullCheck()) return;
+        if (nullCheck()) {
+            return;
+        }
         fake_player = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString("ee11ee92-8148-47e8-b416-72908a6a2275"), name.getValue()));
         fake_player.copyLocationAndAnglesFrom(mc.player);
         fake_player.rotationYawHead = mc.player.rotationYawHead;
@@ -70,13 +72,18 @@ public class FakePlayer extends Module {
 
     @Override
     public void onUpdate() {
-        if (nullCheck()) this.setEnabled(false);
+        if (nullCheck()) {
+            //china.com or something
+            setEnabled(false);
+        }
     }
 
     @Override
     public void onDisable() {
         try {
-            if (nullCheck()) return;
+            if (nullCheck()) {
+                return;
+            }
             mc.world.removeEntity(fake_player);
         } catch (Exception ignored) {
         }

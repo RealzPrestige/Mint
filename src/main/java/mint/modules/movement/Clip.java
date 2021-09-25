@@ -36,8 +36,6 @@ public class Clip extends Module {
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
         EntityUtil.packetJump(true);
-
-        //todo oml what is dis,
         switch (mc.player.getPosition().getY()) {
             case 6:
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -7.4, mc.player.posZ, true));
