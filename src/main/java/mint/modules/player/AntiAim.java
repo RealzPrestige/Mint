@@ -44,10 +44,6 @@ public class AntiAim extends Module {
         }
     }
 
-    public String hudInfoString(){
-        return "Y" + yaw.getValue() + " P" + pitch.getValue();
-    }
-
     public enum Mode {
         Custom,
         Spin

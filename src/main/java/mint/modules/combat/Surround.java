@@ -6,8 +6,6 @@ import mint.commands.Command;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
 import mint.utils.InventoryUtil;
-import mint.utils.Timer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayer;

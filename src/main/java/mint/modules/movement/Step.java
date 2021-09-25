@@ -7,6 +7,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 
 public class Step extends Module {
     public Setting<Boolean> vanilla = register(new Setting<>("Vanilla",false));
+    public Setting<Boolean> cancelLiquids = register(new Setting("CancelInLiquid", true)); //todo uwu rename it to something non-british
     public Setting<Integer> stepHeight = register(new Setting<>("Height",2,1,4, v -> ! vanilla.getValue()));
     double[] oneblockPositions = new double[]{0.42, 0.75};
     double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
@@ -26,6 +27,9 @@ public class Step extends Module {
 
     @Override
     public void onUpdate() {
+        if (cancelLiquids.getValue() && (mc.player.isInWater() || mc.player.isInLava())) {
+            return;
+        }
         if (vanilla.getValue()) {
             mc.player.stepHeight = stepHeight.getValue();
             return;
@@ -51,7 +55,7 @@ public class Step extends Module {
         if (mc.player.collidedHorizontally && mc.player.onGround) {
             ++packets;
         }
-        if (mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && mc.player.collidedVertically && mc.player.fallDistance == 0.0f && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() && (packets > selectedPositions.length - 2 || packets > 0 )) {
+        if (mc.player.onGround && mc.player.collidedVertically && mc.player.fallDistance == 0.0f && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() && (packets > selectedPositions.length - 2 || packets > 0 )) {
             for (double position : selectedPositions) {
                 mc.player.connection.sendPacket( new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true) );
             }
