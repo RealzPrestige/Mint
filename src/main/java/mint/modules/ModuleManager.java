@@ -65,6 +65,7 @@ public class ModuleManager
         moduleList.add(new PlayerChams());
         moduleList.add(new PlayerTrails());
         moduleList.add(new BreakESP());
+        moduleList.add(new AnimationDisable());
     }
 
     public Module getModuleByName(String name) {
