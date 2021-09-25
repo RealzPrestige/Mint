@@ -21,6 +21,7 @@ public class CrystalChams extends Module {
     public Setting<RenderMode> renderMode = register(new Setting<>("Render Mode", RenderMode.FILL));
     public enum RenderMode {FILL, WIRE, BOTH}
     public Setting<Boolean> glint = register(new Setting<>("Galaxy Texture", false));
+    public Setting<Integer> rotations = register(new Setting<>("Rotations", 30, 0, 200));
     public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1.0f, 0.1f, 3.0f));
     public Setting<Double> scale = register(new Setting<>("Scale", 1.0, 0.0, 2.0));
     public Setting<Float> red = register(new Setting<>("Red", 0.0f, 0.0f, 255.0f));
@@ -92,9 +93,9 @@ public class CrystalChams extends Module {
             }
             case BOTH: {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON_MODE);
-                event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * 3, rotationMoved * 0.2F, 0, 0, 0.0625F);
+                event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * (rotations.getValue() / 10), rotationMoved * 0.2F, 0, 0, 0.0625F);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * 3, rotationMoved * 0.2F, 0, 0, 0.0625F);
+                event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * (rotations.getValue() / 10), rotationMoved * 0.2F, 0, 0, 0.0625F);
 
                 break;
             }
@@ -106,7 +107,7 @@ public class CrystalChams extends Module {
 
         GL11.glColor4f(red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, alpha.getValue() / 255f);
 
-        event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * 3, rotationMoved * 0.2F, 0, 0, 0.0625F);
+        event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * (rotations.getValue() / 10), rotationMoved * 0.2F, 0, 0, 0.0625F);
 
         if (walls.getValue()) {
             glEnable(GL_DEPTH_TEST);
