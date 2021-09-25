@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 
 public class ChorusPredict extends Module {
+
     private final Setting<Integer> time = register(new Setting<>("Duration", 500, 50, 3000));
     private final Setting<Boolean> boxParent = register(new Setting<>("Box", true, false));
     private final Setting<Boolean> box = register(new Setting("BoxSetting", true, v-> boxParent.getValue()));
@@ -32,7 +33,7 @@ public class ChorusPredict extends Module {
     private double z;
 
     public ChorusPredict() {
-        super("ChorusESP", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
+        super("ChorusPredict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
     }
 
     public void onLogin(){

@@ -7,9 +7,9 @@
     "MixinEntityPlayerSP",
     "MixinFontRenderer",
     "MixinMinecraft",
+    "MixinNetworkManager",
     "MixinRenderLivingBase",
     "MixinRenderModifiedCrystal",
-    "MixinNetworkManager",
     "MixinRenderPlayer",
     "MixinWorld"
   ]

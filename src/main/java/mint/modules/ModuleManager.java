@@ -56,6 +56,7 @@ public class ModuleManager
         moduleList.add(new ChorusManipulator());
 
         /** Visual **/
+        moduleList.add(new CrystalChams());
         moduleList.add(new SwingAnimations());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());

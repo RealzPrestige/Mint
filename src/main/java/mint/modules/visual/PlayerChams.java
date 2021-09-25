@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 
 public class PlayerChams extends Module {
+
+    private static PlayerChams INSTANCE = new PlayerChams();
     public Setting<Boolean> transparent = register(new Setting<>("Transparent", false));
     public Setting<Boolean> texture2D = register(new Setting<>("Texture2D", false));
     public Setting<Boolean> walls = register(new Setting<>("Walls", false));
@@ -27,6 +29,18 @@ public class PlayerChams extends Module {
 
     public PlayerChams() {
         super("PlayerChams", Category.VISUAL, "Renders stuff on players.");
+        this.setInstance();
+    }
+
+    public static PlayerChams getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PlayerChams();
+        }
+        return INSTANCE;
+    }
+
+    private void setInstance() {
+        INSTANCE = this;
     }
 
     @SubscribeEvent
@@ -37,7 +51,7 @@ public class PlayerChams extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
-        if (event.getEntityLivingBase() instanceof EntityPlayer && event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {
+        if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {
             if (transparent.getValue()) {
                 GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
@@ -75,6 +89,6 @@ public class PlayerChams extends Module {
     }
 
     static {
-        RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+        RES_ITEM_GLINT = new ResourceLocation("textures/galaxy.png");
     }
 }
