@@ -40,7 +40,7 @@ public class CrystalChams extends Module {
     }
 
     @SubscribeEvent
-    public void onRendereEntityModel(RenderEntityModelEvent event) {
+    public void onRendererEntityModel(RenderEntityModelEvent event) {
         if(event.entity instanceof EntityEnderCrystal) {
             event.setCanceled(true);
         }
