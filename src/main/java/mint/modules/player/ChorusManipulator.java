@@ -28,8 +28,8 @@ import static org.lwjgl.opengl.GL11.glEnable;
  * @Since 24/09/2021
  *
  */
-
 public class ChorusManipulator extends Module {
+    public static ChorusManipulator INSTANCE = new ChorusManipulator();
     public Setting<Boolean> cancel = register(new Setting<>("Cancel",false));
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
     public Setting<Boolean> solidSetting = register(new Setting("Render Solid", true, v -> solidParent.getValue()));
@@ -46,7 +46,7 @@ public class ChorusManipulator extends Module {
 
     Queue<CPacketPlayer> packets;
     Queue<CPacketConfirmTeleport> tpPackets;
-    EntityOtherPlayerMP fakeEntity;
+    public EntityOtherPlayerMP fakeEntity;
 
     double xPos;
     double yPos;

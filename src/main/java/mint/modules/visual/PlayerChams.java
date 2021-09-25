@@ -3,6 +3,7 @@ package mint.modules.visual;
 import mint.clickgui.setting.Setting;
 import mint.events.RenderLivingEntityEvent;
 import mint.modules.Module;
+import mint.modules.player.ChorusManipulator;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -51,7 +52,7 @@ public class PlayerChams extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
-        if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {
+        if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity) && !event.getEntityLivingBase().equals(ChorusManipulator.INSTANCE.fakeEntity)) {
             if (transparent.getValue()) {
                 GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
@@ -62,6 +63,7 @@ public class PlayerChams extends Module {
             }
             if (walls.getValue()) {
                 glDisable(GL_DEPTH_TEST);
+                glDisable(GL_SHININESS);
             }
             if(glint.getValue()){
                 mc.getTextureManager().bindTexture(RES_ITEM_GLINT);
