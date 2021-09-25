@@ -1,6 +1,5 @@
 package mint.modules.movement;
 
-import com.google.common.eventbus.Subscribe;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -27,8 +26,6 @@ public class Clip extends Module {
         startPos = new BlockPos(mc.player.getPositionVector());
     }
 
-    @Override
-    @Subscribe
     public void onUpdate() {
         if (fullNullCheck()) {
             disable();
