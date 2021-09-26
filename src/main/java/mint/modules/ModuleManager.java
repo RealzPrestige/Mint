@@ -38,6 +38,7 @@ public class ModuleManager
         moduleList.add(new CrystalAura());
         moduleList.add(new AutoCrystal());
         moduleList.add(new Offhand());
+        moduleList.add(KotlinAura.INSTANCE);
 
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());
