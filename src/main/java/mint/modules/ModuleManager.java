@@ -35,7 +35,6 @@ public class ModuleManager
         /** Combat **/
         moduleList.add(new HoleFiller());
         moduleList.add(new SelfFill());
-        moduleList.add(new CrystalAura());
         moduleList.add(new AutoCrystal());
         moduleList.add(new Offhand());
         moduleList.add(KotlinAura.INSTANCE);
@@ -57,12 +56,11 @@ public class ModuleManager
         moduleList.add(new ChorusManipulator());
 
         /** Visual **/
-        moduleList.add(new CrystalChams());
+        moduleList.add(new Chams());
         moduleList.add(new SwingAnimations());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
         moduleList.add(new PopESP());
-        moduleList.add(new PlayerChams());
         moduleList.add(new PlayerTrails());
         moduleList.add(new BreakESP());
         moduleList.add(new AnimationDisable());
