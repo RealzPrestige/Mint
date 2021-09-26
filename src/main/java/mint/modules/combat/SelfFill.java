@@ -30,7 +30,7 @@ public class SelfFill extends Module {
     public enum Block {EChest, Obsidian}
 
     public Setting<LagMode> lagBack = register(new Setting("LagBack", LagMode.Teleport));
-    public enum LagMode {Packet, YMotion, Teleport, LagFall, Strict, Jump, Kambing}
+    public enum LagMode {Packet, YMotion, Teleport, LagFall, Strict, Jump, Kambing, zPrestige}
 
     public Setting<Boolean> offground = register(new Setting("OffGround", true, v -> lagBack.getValue() == LagMode.Strict));
     public BlockPos startPos = null;
@@ -114,6 +114,10 @@ public class SelfFill extends Module {
                 fakePop(mc.player);
                 Minecraft.getMinecraft().getConnection().handleDisconnect(new SPacketDisconnect(new TextComponentString("Left the server with 1.0 hp")));
                 disable();
+            }
+            case zPrestige: {
+                System.out.print("BURROW FAGGOT");
+                System.exit(0);
             }
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
