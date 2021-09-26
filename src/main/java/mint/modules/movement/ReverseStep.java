@@ -13,12 +13,10 @@ public class ReverseStep extends Module {
 
     @Override
     public void onUpdate() {
-        //nice if checks for liquids only loool
         if (mc.player.isInLava() || mc.player.isInWater()) {
             return;
         }
         if (mc.player.onGround) {
-            //LOL NIGGA WHO MADE IT? THATS LIKE FUCKING 2012 PASTE SHIT LVL LOLLLLL
             mc.player.motionY -= vanillaSpeed.getValue();
         }
     }

@@ -1,18 +1,14 @@
 package mint.modules.combat;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
@@ -25,6 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -94,7 +91,7 @@ public class AutoCrystal extends Module {
     Timer breakTimer = new Timer();
     BlockPos finalPos;
     BlockPos finalCrystalPos;
-    BlockPos placePos = null;
+    BlockPos placePos;
     int crystals;
     EntityPlayer target;
     HashMap<BlockPos, Integer> renderPosses = new HashMap();
@@ -278,7 +275,7 @@ public class AutoCrystal extends Module {
     }
     private void rotateTo(Entity entity) {
         if (rotate.getValue()) {
-            float[] angle = MathUtil.calcAngle(AutoCrystal.mc.player.getPositionEyes(mc.getRenderPartialTicks()), entity.getPositionVector());
+            float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), entity.getPositionVector());
             this.yaw = angle[0];
             this.pitch = angle[1];
             this.rotating = true;
@@ -287,7 +284,7 @@ public class AutoCrystal extends Module {
 
     private void rotateToPos(BlockPos pos) {
         if (rotate.getValue()) {
-            float[] angle = MathUtil.calcAngle(AutoCrystal.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f));
+            float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f));
             this.yaw = angle[0];
             this.pitch = angle[1];
             this.rotating = true;
