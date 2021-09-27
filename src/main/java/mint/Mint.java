@@ -2,7 +2,7 @@ package mint;
 
 import mint.commands.CommandManager;
 import mint.managers.*;
-import mint.modules.ModuleManager;
+import mint.managers.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -15,6 +15,7 @@ public class Mint {
     public static CommandManager commandManager;
     public static FriendManager friendManager;
     public static ModuleManager moduleManager;
+    public static MessageManager messageManager;
     public static ColorManager colorManager;
     public static FileManager fileManager;
     public static ConfigManager configManager;
@@ -32,6 +33,7 @@ public class Mint {
         commandManager = new CommandManager();
         friendManager = new FriendManager();
         moduleManager = new ModuleManager();
+        messageManager = new MessageManager();
         eventManager = new EventManager();
         fileManager = new FileManager();
         colorManager = new ColorManager();

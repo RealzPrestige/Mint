@@ -37,7 +37,7 @@ public class FontChanger
                 return true;
             }
             if (!message) continue;
-            Command.sendMessage(s);
+            Mint.messageManager.sendMessage(s);
         }
         return false;
     }
@@ -51,7 +51,7 @@ public class FontChanger
         Setting setting;
         if (event.getStage() == 2 && (setting = event.getSetting()) != null && setting.getFeature().equals(this)) {
             if (setting.getName().equals("FontName") && !FontChanger.checkFont(setting.getPlannedValue().toString(), false)) {
-                Command.sendMessage(ChatFormatting.WHITE + "That font doesnt exist.");
+                Mint.messageManager.sendMessage(ChatFormatting.WHITE + "That font doesnt exist.");
                 event.setCanceled(true);
                 return;
             }

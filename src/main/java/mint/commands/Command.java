@@ -26,17 +26,6 @@ public abstract class Command
         this.commands = commands;
     }
 
-    public static void sendMessage(String message) {
-        Command.sendSilentMessage(Mint.commandManager.getClientMessage() + " " + ChatFormatting.GRAY + message);
-    }
-
-    public static void sendSilentMessage(String message) {
-        if (Command.nullCheck()) {
-            return;
-        }
-        Mint.INSTANCE.mc.player.sendMessage(new ChatMessage(message));
-    }
-
     public static String getCommandPrefix() {
         return Mint.commandManager.getPrefix();
     }

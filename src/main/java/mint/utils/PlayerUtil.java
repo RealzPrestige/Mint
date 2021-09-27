@@ -172,21 +172,21 @@ public class PlayerUtil {
                 profile = null;
             }
             if (profile == null) {
-                Command.sendMessage("Player isn't online. Looking up UUID..");
+                Mint.messageManager.sendMessage("Player isn't online. Looking up UUID..");
                 String s = PlayerUtil.requestIDs("[\"" + this.name + "\"]");
                 if (s == null || s.isEmpty()) {
-                    Command.sendMessage("Couldn't find player ID. Are you connected to the internet? (0)");
+                    Mint.messageManager.sendMessage("Couldn't find player ID. Are you connected to the internet? (0)");
                 } else {
                     JsonElement element = (new JsonParser()).parse(s);
                     if (element.getAsJsonArray().size() == 0) {
-                        Command.sendMessage("Couldn't find player ID. (1)");
+                        Mint.messageManager.sendMessage("Couldn't find player ID. (1)");
                     } else {
                         try {
                             String id = element.getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
                             this.uuid = UUIDTypeAdapter.fromString(id);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Command.sendMessage("Couldn't find player ID. (2)");
+                            Mint.messageManager.sendMessage("Couldn't find player ID. (2)");
                         }
                     }
                 }

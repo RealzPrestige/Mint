@@ -92,7 +92,7 @@ public class Notifications extends Module {
                     id *= 10;
                 }
                 if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
-                    mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + " " + ChatFormatting.WHITE + ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem."), id);
+                    Mint.messageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
                 }
                 if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
                     Notifications.getInstance().notification.clear();
@@ -107,7 +107,7 @@ public class Notifications extends Module {
                     id *= 10;
                 }
                 if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
-                    mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + " " + ChatFormatting.WHITE + ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems."), id);
+                    Mint.messageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
                 }
                 if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
                     Notifications.getInstance().notification.clear();
@@ -140,7 +140,7 @@ public class Notifications extends Module {
                 id *= 10;
             }
             if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
-                mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + " " + ChatFormatting.WHITE + ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem."), id);
+                Mint.messageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
             }
             if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)){
                 Notifications.getInstance().notification.clear();
@@ -155,7 +155,7 @@ public class Notifications extends Module {
                 id *= 10;
             }
             if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
-                mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(ChatFormatting.WHITE + "" + ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems."), id);
+                Mint.messageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
             }
             if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)){
                 Notifications.getInstance().notification.clear();

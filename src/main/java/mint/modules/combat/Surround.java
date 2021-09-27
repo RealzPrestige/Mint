@@ -1,6 +1,7 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.commands.Command;
 import mint.modules.Module;
@@ -43,9 +44,12 @@ public class Surround extends Module {
 
     @Override
     public void onEnable() {
+        if(mc.player == null && mc.world == null) {
+            return;
+        }
         ticks = 0;
         if (obbySlot == -1 && ecSlot == -1) {
-            Command.sendMessage("Out of blocks, disabling");
+            Mint.messageManager.sendMessage("Out of blocks, disabling");
             disable();
         }
         startPos = EntityUtil.getRoundedBlockPos(mc.player);

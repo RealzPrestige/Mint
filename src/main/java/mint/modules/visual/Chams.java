@@ -4,6 +4,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.RenderCrystalEvent;
 import mint.events.RenderLivingEntityEvent;
 import mint.modules.Module;
+import mint.utils.ColorUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -35,6 +36,7 @@ public class Chams extends Module {
     public Setting<Float> green = register(new Setting<>("Green", 255.0f, 0.0f, 255.0f));
     public Setting<Float> blue = register(new Setting<>("Blue", 0.0f, 0.0f, 255.0f));
     public Setting<Float> alpha = register(new Setting<>("Alpha", 0.0f, 0.0f, 255.0f));
+    public Setting<Boolean> rainbow = register(new Setting<>("Rainbow", true));
 
     static final ResourceLocation RES_ITEM_GLINT;
 
@@ -114,7 +116,7 @@ public class Chams extends Module {
             glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
             glLineWidth((float) ((double) lineWidth.getValue()));
 
-            GL11.glColor4f(red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, alpha.getValue() / 255f);
+            GL11.glColor4f(rainbow.getValue() ? ColorUtil.rainbow(6).getRed() : red.getValue() / 255f, rainbow.getValue() ? ColorUtil.rainbow(6).getGreen() : green.getValue() / 255f, rainbow.getValue() ? ColorUtil.rainbow(6).getBlue() : blue.getValue() / 255f, alpha.getValue() / 255f);
 
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
 

@@ -12,11 +12,11 @@ public class Prefix
     @Override
     public void execute(String[] commands) {
         if (commands.length == 1) {
-            Command.sendMessage(ChatFormatting.WHITE + "Current prefix is " + Mint.commandManager.getPrefix());
+            Mint.messageManager.sendMessage(ChatFormatting.WHITE + "Current prefix is " + Mint.commandManager.getPrefix());
             return;
         }
         Mint.commandManager.setPrefix(commands[0]);
-        Command.sendMessage(ChatFormatting.WHITE + "Prefix has been set to " + commands[0]);
+        Mint.messageManager.sendMessage(ChatFormatting.WHITE + "Prefix has been set to " + commands[0]);
     }
 }
 
