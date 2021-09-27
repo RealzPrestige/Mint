@@ -38,10 +38,12 @@ public class ModuleManager
         moduleList.add(new AutoCrystal());
         moduleList.add(new Offhand());
         moduleList.add(KotlinAura.INSTANCE);
+        moduleList.add(new CityAnvil());
 
         /** Miscellaneous **/
         moduleList.add(new FakePlayer());
         moduleList.add(new ChorusPredict());
+        moduleList.add(new AutoEnderChest());
 
         /** Movement **/
         moduleList.add(new Clip());
@@ -54,6 +56,7 @@ public class ModuleManager
         moduleList.add(new FastPlace());
         moduleList.add(new PacketEXP());
         moduleList.add(new ChorusManipulator());
+        moduleList.add(new AutoMine());
 
         /** Visual **/
         moduleList.add(new Chams());
@@ -63,7 +66,7 @@ public class ModuleManager
         moduleList.add(new PopESP());
         moduleList.add(new PlayerTrails());
         moduleList.add(new BreakESP());
-        moduleList.add(new AnimationDisable());
+        moduleList.add(new CripWalk());
     }
 
     public Module getModuleByName(String name) {

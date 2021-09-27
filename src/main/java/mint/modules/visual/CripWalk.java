@@ -3,9 +3,9 @@ package mint.modules.visual;
 import mint.modules.Module;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class AnimationDisable extends Module {
+public class CripWalk extends Module {
 
-    public AnimationDisable(){
+    public CripWalk(){
         super("CripWalk",Category.VISUAL,"cancels movement animations");
     }
     @Override

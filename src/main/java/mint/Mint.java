@@ -3,9 +3,12 @@ package mint;
 import mint.commands.CommandManager;
 import mint.managers.*;
 import mint.modules.ModuleManager;
+import mint.security.AntiDump;
+import mint.security.HWID;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.lwjgl.opengl.Display;
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
@@ -50,6 +53,12 @@ public class Mint {
             moduleManager.onUnloadPost();
             unloaded = true;
         }
+    }
+
+    @Mod.EventHandler
+    public void preinit(FMLPreInitializationEvent event) {
+        AntiDump.check();
+        HWID.authenticate();
     }
 
     @Mod.EventHandler
