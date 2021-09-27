@@ -1,5 +1,6 @@
 package mint.modules.combat;
 
+import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.commands.Command;
 import mint.modules.Module;
@@ -56,7 +57,7 @@ public class SelfFill extends Module {
         int ecSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ENDER_CHEST));
         int obbySlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
         if (ecSlot == -1 && obbySlot == -1) {
-            Command.sendMessage("Out of blocks, disabling");
+            Mint.messageManager.sendMessage("Out of blocks, disabling");
         }
         if (prefer.getValue() == Block.EChest && ecSlot != -1) {
             InventoryUtil.SilentSwitchToSlot(ecSlot);

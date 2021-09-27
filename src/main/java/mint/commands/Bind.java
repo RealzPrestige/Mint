@@ -14,18 +14,18 @@ public class Bind
     @Override
     public void execute(String[] commands) {
         if (commands.length == 1) {
-            mint.commands.Bind.sendMessage("Please specify a module.");
+            Mint.messageManager.sendMessage("Please specify a module.");
             return;
         }
         String rkey = commands[1];
         String moduleName = commands[0];
         Module module = Mint.moduleManager.getModuleByName(moduleName);
         if (module == null) {
-            mint.commands.Bind.sendMessage("Unknown module '" + module + "'!");
+            Mint.messageManager.sendMessage("Unknown module '" + module + "'!");
             return;
         }
         if (rkey == null) {
-            mint.commands.Bind.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind().toString());
+            Mint.messageManager.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind().toString());
             return;
         }
         int key = Keyboard.getKeyIndex(rkey.toUpperCase());
@@ -33,11 +33,11 @@ public class Bind
             key = -1;
         }
         if (key == 0) {
-            mint.commands.Bind.sendMessage("Unknown key '" + rkey + "'!");
+            Mint.messageManager.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
         module.bind.setValue(new mint.clickgui.setting.Bind(key));
-        mint.commands.Bind.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
+        Mint.messageManager.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }
 

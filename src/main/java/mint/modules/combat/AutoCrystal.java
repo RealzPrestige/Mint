@@ -10,6 +10,7 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -111,6 +112,7 @@ public class AutoCrystal extends Module {
         mc.world.removeEntityFromWorld(crystals);
         crystals = 0;
     }
+
     @Override
     public void onUpdate() {
         target = EntityUtil.getTarget(targetRange.getValue());
@@ -125,8 +127,6 @@ public class AutoCrystal extends Module {
             }
         }
     }
-
-
 
     public void doPlace() {
         float maxDamage = 0.5f;
@@ -151,9 +151,11 @@ public class AutoCrystal extends Module {
         if (placePos != null) {
             int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
             int oldSlot = mc.player.inventory.currentItem;
-            if (mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
+            if (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL){
                 if (silentSwitch.getValue()){
                     InventoryUtil.SilentSwitchToSlot(crystalSlot);
+                }else {
+                    InventoryUtil.switchToSlot(crystalSlot);
                 }
             }
             if(placeRotate.getValue()) {
@@ -238,6 +240,7 @@ public class AutoCrystal extends Module {
             }
         }
     }
+
     @Override
     public void onRender3D(Render3DEvent event) {
         if (renderMode.getValue() == RenderMode.FADE) {
@@ -290,7 +293,4 @@ public class AutoCrystal extends Module {
             this.rotating = true;
         }
     }
-
-
-
 }

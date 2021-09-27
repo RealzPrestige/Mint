@@ -8,6 +8,7 @@ public class CripWalk extends Module {
     public CripWalk(){
         super("CripWalk",Category.VISUAL,"cancels movement animations");
     }
+
     @Override
     public void onUpdate() {
         for (EntityPlayer player : mc.world.playerEntities) {

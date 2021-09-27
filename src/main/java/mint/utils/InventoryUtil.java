@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 import sun.audio.AudioPlayer;
 
 public class InventoryUtil {
@@ -54,6 +55,15 @@ public class InventoryUtil {
         }
         Mint.INSTANCE.mc.player.inventory.currentItem = slot;
         Mint.INSTANCE.mc.playerController.updateController();
+    }
+
+    public static void switchToSlot(int slot) {
+        if (Mint.INSTANCE.mc.player.inventory.currentItem == slot || slot == -1) {
+            return;
+        }
+        mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
+        mc.player.inventory.currentItem = slot;
+        mc.playerController.updateController();
     }
 
     public static int findHotbarBlock(Class clazz) {

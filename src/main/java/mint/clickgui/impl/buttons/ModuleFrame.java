@@ -101,10 +101,10 @@ public class ModuleFrame
             if (mouseButton == 2 && this.isHovering(mouseX, mouseY)) {
                 if(module.isDrawn()) {
                     module.setUndrawn();
-                    Command.sendMessage(module.getName() + " is no longer Drawn.");
+                    Mint.messageManager.sendMessage(module.getName() + " is no longer Drawn.");
                 } else {
                     module.setDrawn();
-                    Command.sendMessage(module.getName() + " is now Drawn.");
+                    Mint.messageManager.sendMessage(module.getName() + " is now Drawn.");
                 }
                 Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
             }

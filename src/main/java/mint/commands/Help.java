@@ -11,9 +11,9 @@ public class Help extends Command {
 
     @Override
     public void execute(String[] commands) {
-        Help.sendMessage(ChatFormatting.WHITE + "" + ChatFormatting.BOLD + "Commands: ");
+        Mint.messageManager.sendMessage(ChatFormatting.WHITE + "" + ChatFormatting.BOLD + "Commands: ");
         for (Command command : Mint.commandManager.getCommands()) {
-            Help.sendMessage(ChatFormatting.WHITE + " \u2022 " + command.getName());
+            Mint.messageManager.sendMessage(ChatFormatting.WHITE + " \u2022 " + command.getName());
         }
     }
 }
