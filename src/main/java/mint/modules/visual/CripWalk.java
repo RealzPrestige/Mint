@@ -2,8 +2,8 @@ package mint.modules.visual;
 
 import mint.modules.Module;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import mint.events.Render3DEvent;
 
 public class CripWalk extends Module {
 
