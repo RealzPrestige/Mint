@@ -10,7 +10,6 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -148,10 +147,8 @@ public class AutoCrystal extends Module {
             if (BlockUtil.canPlaceCrystal(pos, true)) {
                 final float damage;
                 if (EntityUtil.getHealth(mc.player) > self + 0.5f && this.maxSelfDamage.getValue() > self && (damage = EntityUtil.calculatePos(pos, EntityUtil.getTarget(targetRange.getValue()))) > maxDamage && damage > self && !EntityUtil.isPlayerSafe(target)) {
-                    if (damage <= this.minDamage.getValue()) {
-                        if (damage <= 2.0f) {
+                    if (damage <= minDamage.getValue()) {
                             continue;
-                        }
                     }
                     maxDamage = damage;
                     placePos = pos;

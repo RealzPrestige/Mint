@@ -75,10 +75,8 @@ object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
                     ) > maxDamage && damage > self && !EntityUtil.isPlayerSafe(target)
                 ) {
                     if (damage <= this.minDamage.getValue()) {
-                        if (damage <= 2.0f) {
                             ++i
                             continue
-                        }
                     }
                     maxDamage = damage
                     placePos = pos
