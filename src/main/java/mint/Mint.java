@@ -54,7 +54,7 @@ public class Mint {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         Display.setTitle("Mint 0.1.1");
-        Mint.load();
+        this.load();
     }
 }
 

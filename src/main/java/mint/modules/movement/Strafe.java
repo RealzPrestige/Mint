@@ -8,7 +8,6 @@ import mint.events.MoveEvent;
 import mint.events.UpdateWalkingPlayerEvent;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
-import mint.utils.MathUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.MovementInput;
@@ -86,6 +85,8 @@ public class Strafe extends Module {
             }
         }
     }
+
+    public void onLogin() {disable();}
 
     
     public void onUpdate() {

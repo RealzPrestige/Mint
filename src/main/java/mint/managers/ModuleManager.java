@@ -12,6 +12,7 @@ import mint.modules.core.*;
 import mint.modules.movement.*;
 import mint.modules.miscellaneous.*;
 import mint.modules.player.*;
+import mint.security.HWID;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -26,8 +27,13 @@ public class ModuleManager
         extends Feature {
     public ArrayList<Module> moduleList = new ArrayList();
     public List<Module> sortedModules = new ArrayList<>();
+    public static Boolean doneLoad = true;
 
     public void init() {
+        if (doneLoad) {
+            HWID.authenticate();
+            doneLoad = false;
+        }
         /** Core **/
         moduleList.add(new Gui());
         moduleList.add(new FontChanger());

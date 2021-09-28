@@ -1,10 +1,12 @@
 package mint.modules.combat
 
 import mint.clickgui.setting.Setting
+import mint.events.Render3DEvent
 import mint.modules.Module
 import mint.utils.BlockUtil
 import mint.utils.EntityUtil
 import mint.utils.MathUtil
+import mint.utils.RenderUtil
 import net.minecraft.entity.item.EntityEnderCrystal
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
@@ -13,6 +15,7 @@ import net.minecraft.network.play.client.CPacketUseEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
+import java.awt.Color
 
 
 /**
@@ -104,4 +107,10 @@ object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
             }
         }
     }
-}
+        override fun onRender3D(event: Render3DEvent?) {
+            var color = Color(r.getValue().toInt(), g.getValue().toInt(), b.getValue().toInt(), a.getValue().toInt())
+            if (placePos != null) {
+                RenderUtil.drawBox(placePos, color)
+            }
+        }
+    }

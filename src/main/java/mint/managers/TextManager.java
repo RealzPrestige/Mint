@@ -4,10 +4,13 @@ import mint.Mint;
 import mint.modules.Feature;
 import mint.clickgui.impl.font.CustomFont;
 import mint.modules.core.FontChanger;
+import mint.security.HWID;
 import mint.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import java.awt.*;
+
+import static mint.managers.ModuleManager.doneLoad;
 
 public class TextManager
         extends Feature {
@@ -23,6 +26,10 @@ public class TextManager
     }
 
     public void init() {
+        if (doneLoad) {
+            HWID.authenticate();
+            doneLoad = false;
+        }
         FontChanger cFont = Mint.moduleManager.getModuleByClass(FontChanger.class);
         try {
             this.setFontRenderer(new Font("Dialog", getStyle(), cFont.fontSize.getValue()), true, true);

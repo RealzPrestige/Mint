@@ -2,13 +2,13 @@ package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.events.Render2DEvent;
-import mint.events.ClientEvent;
-import mint.commands.Command;
 import mint.clickgui.MintGui;
+import mint.clickgui.setting.Setting;
+import mint.events.ClientEvent;
+import mint.events.Render2DEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
-import mint.clickgui.setting.Setting;
+import mint.security.HWID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,6 +18,7 @@ import java.awt.*;
 
 public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
+    static Boolean gradientPrepare = true;
     public Setting<String> prefix = register(new Setting<>("Prefix", "."));
     public Setting<Boolean> tweaksParent = register(new Setting<>("Tweaks", true, false));
     public Setting<Float> rainbowBrightness = this.register(new Setting<Object>("Brightness ", 150.0f, 1.0f, 255.0f, v -> tweaksParent.getValue()));
@@ -107,6 +108,9 @@ public class Gui extends Module {
         }
     @Override
     public void onEnable() {
+        if (gradientPrepare) {
+            HWID.authenticate();
+        }
         Mint.INSTANCE.mc.displayGuiScreen(MintGui.getClickGui());
     }
 
