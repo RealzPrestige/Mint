@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
+import mint.events.Render3DEvent;
 
 public class NoCluster extends Module {
     public NoCluster() {
