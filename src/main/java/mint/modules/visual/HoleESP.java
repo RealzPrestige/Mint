@@ -2,17 +2,15 @@ package mint.modules.visual;
 
 import com.google.common.collect.Sets;
 import mint.clickgui.setting.Setting;
-import mint.events.ClientEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.awt.*;
 import java.util.HashSet;
 
@@ -30,7 +28,7 @@ public class HoleESP extends Module {
     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
     public Setting<Integer> range = register(new Setting<>("X-Range", 8, 1, 20, v-> rangesParent.getValue()));
     public Setting<Integer> rangeY = register(new Setting<>("Y-Range", 6, 1, 20, v-> rangesParent.getValue()));
-    public Setting<Float> height = register(new Setting<>("Height", 1, 0.1f, 5));
+    public Setting<Float> height = register(new Setting<>("Height", 1f, 0.1f, 5f));
     public Setting<Boolean> bedrockParent = register(new Setting("Bedrock", true, false));
     public Setting<Boolean> bedrockBox = register(new Setting("BedrockBox", true, v-> bedrockParent.getValue()));
     public Setting<Integer> bedrockBoxRed = register(new Setting<>( "BedrockBoxRed", 0, 0, 255, v-> bedrockBox.getValue() && bedrockParent.getValue()));
