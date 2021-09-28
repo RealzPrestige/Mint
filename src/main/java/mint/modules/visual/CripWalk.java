@@ -12,7 +12,7 @@ public class CripWalk extends Module {
     }
 
     @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+    public void onRender3D(Render3DEvent event) {
         for (EntityPlayer player : mc.world.playerEntities) {
             if (player.getName().equals(mc.player.getName())) return;
             player.limbSwing = 0;
