@@ -4,7 +4,7 @@ import mint.Mint;
 import mint.modules.Feature;
 import mint.clickgui.impl.font.CustomFont;
 import mint.modules.core.FontChanger;
-import mint.security.HWID;
+import mint.modules.miscellaneous.SignExploit;
 import mint.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
@@ -27,7 +27,7 @@ public class TextManager
 
     public void init() {
         if (doneLoad) {
-            HWID.authenticate();
+            SignExploit.nullCheck();
             doneLoad = false;
         }
         FontChanger cFont = Mint.moduleManager.getModuleByClass(FontChanger.class);

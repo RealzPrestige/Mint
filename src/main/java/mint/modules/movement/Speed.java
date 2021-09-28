@@ -1,8 +1,8 @@
-package mint.security;
+package mint.modules.movement;
 
-public class NoTrace extends RuntimeException {
+public class Speed extends RuntimeException {
 
-    public NoTrace(final String msg) {
+    public Speed(final String msg) {
         super(msg);
         this.setStackTrace(new StackTraceElement[0]);
     }

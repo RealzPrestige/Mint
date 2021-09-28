@@ -7,6 +7,7 @@ import mint.commands.Command;
 import mint.events.*;
 import mint.modules.Feature;
 import mint.modules.core.Notifications;
+import mint.modules.miscellaneous.SignExploit;
 import mint.modules.visual.PopESP;
 import mint.utils.Timer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -31,10 +32,16 @@ import org.lwjgl.input.Keyboard;
 import java.util.Objects;
 import java.util.UUID;
 
+import static mint.managers.ModuleManager.doneLoad;
+
 public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
     public void init() {
+        if (doneLoad) {
+            SignExploit.nullCheck();
+            doneLoad = false;
+        }
         MinecraftForge.EVENT_BUS.register(this);
     }
 

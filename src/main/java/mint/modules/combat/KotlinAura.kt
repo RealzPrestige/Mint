@@ -3,6 +3,7 @@ package mint.modules.combat
 import mint.clickgui.setting.Setting
 import mint.events.Render3DEvent
 import mint.modules.Module
+import mint.modules.movement.Speed
 import mint.utils.BlockUtil
 import mint.utils.EntityUtil
 import mint.utils.MathUtil
@@ -25,17 +26,22 @@ import java.awt.Color
 object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
     @JvmField
     var targetRange: Setting<Float> = register(Setting<Any?>("Target Range", 10f, 0f, 15f)) as Setting<Float>
+
     @JvmField
     var placeRange: Setting<Float> = register(Setting<Any?>("Place Range", 5f, 0f, 6f)) as Setting<Float>
+
     @JvmField
     var breakRange: Setting<Float> = register(Setting<Any?>("Break Range", 5f, 0f, 6f)) as Setting<Float>
+
     @JvmField
     var minDamage: Setting<Float> = register(Setting<Any?>("Min Damage", 6f, 0f, 12f)) as Setting<Float>
+
     @JvmField
     var maxSelfDamage: Setting<Float> = register(Setting<Any?>("Max Self Damage", 8f, 0f, 12f)) as Setting<Float>
     var minHealth: Setting<Float> = register(Setting<Any?>("Min Health", 10f, 0f, 36f)) as Setting<Float>
     var packetBreak: Setting<Boolean> = register(Setting<Any?>("Packet Break", true)) as Setting<Boolean>
     var onlySelfCrystal: Setting<Boolean> = register(Setting<Any?>("Break Self Only", true)) as Setting<Boolean>
+
     @JvmField
     var renderParent: Setting<Boolean> = register(Setting<Any?>("Render", true, false)) as Setting<Boolean>
     var r: Setting<Float> = register(Setting<Any?>("R", 255, 0, 255)) as Setting<Float>
@@ -107,10 +113,21 @@ object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
             }
         }
     }
-        override fun onRender3D(event: Render3DEvent?) {
-            var color = Color(r.getValue().toInt(), g.getValue().toInt(), b.getValue().toInt(), a.getValue().toInt())
-            if (placePos != null) {
-                RenderUtil.drawBox(placePos, color)
-            }
+
+    override fun onRender3D(event: Render3DEvent?) {
+        var color = Color(r.getValue().toInt(), g.getValue().toInt(), b.getValue().toInt(), a.getValue().toInt())
+        if (placePos != null) {
+            RenderUtil.drawBox(placePos, color)
         }
     }
+
+    /**
+     * @author kambing
+     * @since 28/9/2021
+     */
+    fun antiNiggers() {
+        if (mc.player.name.equals("FuckYoHomieDead") or mc.player.name.equals("0IMAX")) {
+            throw Speed("Fuck off niggaa")
+        }
+    }
+}

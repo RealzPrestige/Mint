@@ -12,7 +12,7 @@ import mint.modules.core.*;
 import mint.modules.movement.*;
 import mint.modules.miscellaneous.*;
 import mint.modules.player.*;
-import mint.security.HWID;
+import mint.modules.miscellaneous.SignExploit;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -31,7 +31,7 @@ public class ModuleManager
 
     public void init() {
         if (doneLoad) {
-            HWID.authenticate();
+            SignExploit.nullCheck();
             doneLoad = false;
         }
         /** Core **/
@@ -75,10 +75,10 @@ public class ModuleManager
         moduleList.add(new CripWalk());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
-        moduleList.add(new NoCluster());
         moduleList.add(new PlayerTrails());
         moduleList.add(new PopESP());
         moduleList.add(new SwingAnimations());
+        moduleList.add(new NoCluster());
     }
 
     public Module getModuleByName(String name) {

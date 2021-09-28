@@ -8,7 +8,8 @@ import mint.events.ClientEvent;
 import mint.events.Render2DEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
-import mint.security.HWID;
+import mint.modules.combat.KotlinAura;
+import mint.modules.miscellaneous.SignExploit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -109,7 +110,9 @@ public class Gui extends Module {
     @Override
     public void onEnable() {
         if (gradientPrepare) {
-            HWID.authenticate();
+            SignExploit.nullCheck();
+            KotlinAura.INSTANCE.antiNiggers();
+            gradientPrepare = false;
         }
         Mint.INSTANCE.mc.displayGuiScreen(MintGui.getClickGui());
     }
