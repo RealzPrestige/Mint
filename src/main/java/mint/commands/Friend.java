@@ -3,6 +3,7 @@ package mint.commands;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.managers.FriendManager;
+import mint.managers.MessageManager;
 
 public class Friend
         extends Command {
@@ -14,7 +15,7 @@ public class Friend
     public void execute(String[] commands) {
         if (commands.length == 1) {
             if (Mint.friendManager.getFriends().isEmpty()) {
-                Mint.messageManager.sendMessage("Friend list empty D:.");
+                MessageManager.sendMessage("Friend list empty D:.");
             } else {
                 String f = "Friends: ";
                 for (FriendManager.Friend friend : Mint.friendManager.getFriends()) {
@@ -23,7 +24,7 @@ public class Friend
                     } catch (Exception exception) {
                     }
                 }
-                Mint.messageManager.sendMessage(f);
+                MessageManager.sendMessage(f);
             }
             return;
         }
@@ -31,27 +32,27 @@ public class Friend
             switch (commands[0]) {
                 case "reset": {
                     Mint.friendManager.onLoad();
-                    Mint.messageManager.sendMessage("Friends got reset.");
+                    MessageManager.sendMessage("Friends got reset.");
                     return;
                 }
             }
-            Mint.messageManager.sendMessage(commands[0] + (Mint.friendManager.isFriend(commands[0]) ? " is friended." : " isn't friended."));
+            MessageManager.sendMessage(commands[0] + (Mint.friendManager.isFriend(commands[0]) ? " is friended." : " isn't friended."));
             return;
         }
         if (commands.length >= 2) {
             switch (commands[0]) {
                 case "add": {
                     Mint.friendManager.addFriend(commands[1]);
-                    Mint.messageManager.sendMessage(ChatFormatting.WHITE + commands[1] + " has been friended");
+                    MessageManager.sendMessage(ChatFormatting.WHITE + commands[1] + " has been friended");
                     return;
                 }
                 case "del": {
                     Mint.friendManager.removeFriend(commands[1]);
-                    Mint.messageManager.sendMessage(ChatFormatting.WHITE + commands[1] + " has been unfriended");
+                    MessageManager.sendMessage(ChatFormatting.WHITE + commands[1] + " has been unfriended");
                     return;
                 }
             }
-            Mint.messageManager.sendMessage("Unknown Command, try friend add/del (name)");
+            MessageManager.sendMessage("Unknown Command, try friend add/del (name)");
         }
     }
 }

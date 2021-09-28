@@ -197,11 +197,11 @@ public class EventManager extends Feature {
                 if (event.getMessage().length() > 1) {
                     Mint.commandManager.executeCommand(event.getMessage().substring(Command.getCommandPrefix().length() - 1));
                 } else {
-                    Mint.messageManager.sendMessage("Please enter a command.");
+                    MessageManager.sendMessage("Please enter a command.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Mint.messageManager.sendMessage(ChatFormatting.RED + "An error occurred while running this command. Check the log!");
+                MessageManager.sendMessage(ChatFormatting.RED + "An error occurred while running this command. Check the log!");
             }
         }
     }

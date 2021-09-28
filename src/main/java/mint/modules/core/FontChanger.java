@@ -4,6 +4,7 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.events.ClientEvent;
 import mint.commands.Command;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.clickgui.setting.Setting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -37,7 +38,7 @@ public class FontChanger
                 return true;
             }
             if (!message) continue;
-            Mint.messageManager.sendMessage(s);
+            MessageManager.sendMessage(s);
         }
         return false;
     }
@@ -51,7 +52,7 @@ public class FontChanger
         Setting setting;
         if (event.getStage() == 2 && (setting = event.getSetting()) != null && setting.getFeature().equals(this)) {
             if (setting.getName().equals("FontName") && !FontChanger.checkFont(setting.getPlannedValue().toString(), false)) {
-                Mint.messageManager.sendMessage(ChatFormatting.WHITE + "That font doesnt exist.");
+                MessageManager.sendMessage(ChatFormatting.WHITE + "That font doesnt exist.");
                 event.setCanceled(true);
                 return;
             }

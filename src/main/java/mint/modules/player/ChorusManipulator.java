@@ -1,14 +1,17 @@
 package mint.modules.player;
 
+import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
@@ -31,6 +34,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 public class ChorusManipulator extends Module {
     public static ChorusManipulator INSTANCE = new ChorusManipulator();
     public Setting<Boolean> cancel = register(new Setting<>("Cancel",false));
+    public Setting<Boolean> tpOnSwitch = register(new Setting<>("Tp on Switch", true));
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
     public Setting<Boolean> solidSetting = register(new Setting("Render Solid", true, v -> solidParent.getValue()));
     public Setting<Float> red = register(new Setting<>("Solid Red", 140.0f, 0.0f, 255.0f, v -> solidParent.getValue() && solidSetting.getValue()));
@@ -51,6 +55,8 @@ public class ChorusManipulator extends Module {
     double xPos;
     double yPos;
     double zPos;
+
+    public boolean isCancelled = false;
 
     public HashMap<EntityPlayer, Integer> playerCham = new HashMap<>();
 
@@ -87,6 +93,19 @@ public class ChorusManipulator extends Module {
         }
     }
 
+    public void onTick() {
+        if(isCancelled && mc.player.getHeldItemMainhand().getItem() != Items.CHORUS_FRUIT && tpOnSwitch.getValue()) {
+            while (!packets.isEmpty()) {
+                mc.getConnection().sendPacket(packets.poll());
+            }
+            while (!tpPackets.isEmpty()) {
+                mc.getConnection().sendPacket(tpPackets.poll());
+            }
+            playerCham.clear();
+            isCancelled = false;
+        }
+    }
+
     @Override
     public void onDisable() {
         while (!packets.isEmpty()) {
@@ -96,6 +115,7 @@ public class ChorusManipulator extends Module {
             mc.getConnection().sendPacket(tpPackets.poll());
         }
         playerCham.clear();
+        isCancelled = false;
     }
 
     @SubscribeEvent
@@ -162,6 +182,10 @@ public class ChorusManipulator extends Module {
                 fakeEntity.cameraYaw = fakeEntity.rotationYaw;
                 fakeEntity.cameraPitch = fakeEntity.rotationPitch;
                 playerCham.put(fakeEntity, 255);
+                if(isCancelled = false) {
+                    MessageManager.sendMessage("TEST isCancelled has been set [True] TEST");
+                    isCancelled = true;
+                }
             }
         }
     }

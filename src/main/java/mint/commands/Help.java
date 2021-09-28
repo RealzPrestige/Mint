@@ -2,6 +2,7 @@ package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.managers.MessageManager;
 
 public class Help extends Command {
 
@@ -11,9 +12,9 @@ public class Help extends Command {
 
     @Override
     public void execute(String[] commands) {
-        Mint.messageManager.sendMessage(ChatFormatting.WHITE + "" + ChatFormatting.BOLD + "Commands: ");
+        MessageManager.sendMessage(ChatFormatting.WHITE + "" + ChatFormatting.BOLD + "Commands: ");
         for (Command command : Mint.commandManager.getCommands()) {
-            Mint.messageManager.sendMessage(ChatFormatting.WHITE + " \u2022 " + command.getName());
+            MessageManager.sendMessage(ChatFormatting.WHITE + " \u2022 " + command.getName());
         }
     }
 }

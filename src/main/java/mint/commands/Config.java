@@ -2,6 +2,7 @@ package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.managers.MessageManager;
 
 import java.io.File;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public class Config extends Command {
 
     public void execute(String[] commands) {
         if (commands.length == 1) {
-            Mint.messageManager.sendMessage("You`ll find the config files in your gameProfile directory under mint/config");
+            MessageManager.sendMessage("You`ll find the config files in your gameProfile directory under mint/config");
             return;
         }
         if (commands.length == 2)
@@ -27,26 +28,26 @@ public class Config extends Command {
                 for (File file1 : directories)
                     builder.append(file1.getName() + ", ");
                 configs = builder.toString();
-                Mint.messageManager.sendMessage(configs);
+                MessageManager.sendMessage(configs);
             } else {
-                Mint.messageManager.sendMessage("Not a valid command... Possible usage: <list>");
+                MessageManager.sendMessage("Not a valid command... Possible usage: <list>");
             }
         if (commands.length >= 3) {
             switch (commands[0]) {
                 case "save":
                     Mint.configManager.saveConfig(commands[1]);
-                    Mint.messageManager.sendMessage(ChatFormatting.GREEN + "Config '" + commands[1] + "' has been saved.");
+                    MessageManager.sendMessage(ChatFormatting.GREEN + "Config '" + commands[1] + "' has been saved.");
                     return;
                 case "load":
                     if (Mint.configManager.configExists(commands[1])) {
                         Mint.configManager.loadConfig(commands[1]);
-                        Mint.messageManager.sendMessage(ChatFormatting.GREEN + "Config '" + commands[1] + "' has been loaded.");
+                        MessageManager.sendMessage(ChatFormatting.GREEN + "Config '" + commands[1] + "' has been loaded.");
                     } else {
-                        Mint.messageManager.sendMessage(ChatFormatting.RED + "Config '" + commands[1] + "' does not exist.");
+                        MessageManager.sendMessage(ChatFormatting.RED + "Config '" + commands[1] + "' does not exist.");
                     }
                     return;
             }
-            Mint.messageManager.sendMessage("Not a valid command... Possible usage: <save/load>");
+            MessageManager.sendMessage("Not a valid command... Possible usage: <save/load>");
         }
     }
 }

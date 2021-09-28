@@ -30,6 +30,7 @@ public class HoleESP extends Module {
     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
     public Setting<Integer> range = register(new Setting<>("X-Range", 8, 1, 20, v-> rangesParent.getValue()));
     public Setting<Integer> rangeY = register(new Setting<>("Y-Range", 6, 1, 20, v-> rangesParent.getValue()));
+    public Setting<Float> height = register(new Setting<>("Height", 1, 0.1f, 5));
     public Setting<Boolean> bedrockParent = register(new Setting("Bedrock", true, false));
     public Setting<Boolean> bedrockBox = register(new Setting("BedrockBox", true, v-> bedrockParent.getValue()));
     public Setting<Integer> bedrockBoxRed = register(new Setting<>( "BedrockBoxRed", 0, 0, 255, v-> bedrockBox.getValue() && bedrockParent.getValue()));
@@ -74,10 +75,10 @@ public class HoleESP extends Module {
 
     public void onRender3D(Render3DEvent event) {
         for (BlockPos pos : bedrockholes) {
-            RenderUtil.drawBoxESPFlat(pos, new Color(ColorUtil.toRGBA(bedrockBoxRed.getValue(), bedrockBoxGreen.getValue(), bedrockBoxBlue.getValue(), bedrockBoxAlpha.getValue())), true, new Color(ColorUtil.toRGBA(bedrockOutlineRed.getValue(), bedrockOutlineGreen.getValue(), bedrockOutlineBlue.getValue(), bedrockOutlineAlpha.getValue())), bedrockOutlineLineWidth.getValue(), bedrockOutline.getValue(), bedrockBox.getValue(), bedrockBoxAlpha.getValue(), true);
+            RenderUtil.drawBoxESPFlat(new BlockPos(pos.getX(), pos.getY() + height.getValue(), pos.getZ()), new Color(ColorUtil.toRGBA(bedrockBoxRed.getValue(), bedrockBoxGreen.getValue(), bedrockBoxBlue.getValue(), bedrockBoxAlpha.getValue())), true, new Color(ColorUtil.toRGBA(bedrockOutlineRed.getValue(), bedrockOutlineGreen.getValue(), bedrockOutlineBlue.getValue(), bedrockOutlineAlpha.getValue())), bedrockOutlineLineWidth.getValue(), bedrockOutline.getValue(), bedrockBox.getValue(), bedrockBoxAlpha.getValue(), true);
         }
         for (BlockPos pos : obsidianholes) {
-            RenderUtil.drawBoxESPFlat(pos, new Color(ColorUtil.toRGBA(obsidianBoxRed.getValue(), obsidianBoxGreen.getValue(), obsidianBoxBlue.getValue(), obsidianBoxAlpha.getValue())), true, new Color(ColorUtil.toRGBA(obsidianOutlineRed.getValue(), obsidianOutlineGreen.getValue(), obsidianOutlineBlue.getValue(), obsidianOutlineAlpha.getValue())), obsidianOutlineLineWidth.getValue(), obsidianOutline.getValue(), obsidianBox.getValue(), obsidianBoxAlpha.getValue(), true);
+            RenderUtil.drawBoxESPFlat(new BlockPos(pos.getX(), pos.getY() + height.getValue(), pos.getZ()), new Color(ColorUtil.toRGBA(obsidianBoxRed.getValue(), obsidianBoxGreen.getValue(), obsidianBoxBlue.getValue(), obsidianBoxAlpha.getValue())), true, new Color(ColorUtil.toRGBA(obsidianOutlineRed.getValue(), obsidianOutlineGreen.getValue(), obsidianOutlineBlue.getValue(), obsidianOutlineAlpha.getValue())), obsidianOutlineLineWidth.getValue(), obsidianOutline.getValue(), obsidianBox.getValue(), obsidianBoxAlpha.getValue(), true);
         }
         if (updates > updateDelay.getValue()) {
             obsidianholes.clear();

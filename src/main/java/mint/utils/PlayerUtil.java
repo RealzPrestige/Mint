@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import com.mojang.util.UUIDTypeAdapter;
 import mint.Mint;
 import mint.commands.Command;
+import mint.managers.MessageManager;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
@@ -172,21 +173,21 @@ public class PlayerUtil {
                 profile = null;
             }
             if (profile == null) {
-                Mint.messageManager.sendMessage("Player isn't online. Looking up UUID..");
+                MessageManager.sendMessage("Player isn't online. Looking up UUID..");
                 String s = PlayerUtil.requestIDs("[\"" + this.name + "\"]");
                 if (s == null || s.isEmpty()) {
-                    Mint.messageManager.sendMessage("Couldn't find player ID. Are you connected to the internet? (0)");
+                    MessageManager.sendMessage("Couldn't find player ID. Are you connected to the internet? (0)");
                 } else {
                     JsonElement element = (new JsonParser()).parse(s);
                     if (element.getAsJsonArray().size() == 0) {
-                        Mint.messageManager.sendMessage("Couldn't find player ID. (1)");
+                        MessageManager.sendMessage("Couldn't find player ID. (1)");
                     } else {
                         try {
                             String id = element.getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
                             this.uuid = UUIDTypeAdapter.fromString(id);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Mint.messageManager.sendMessage("Couldn't find player ID. (2)");
+                            MessageManager.sendMessage("Couldn't find player ID. (2)");
                         }
                     }
                 }

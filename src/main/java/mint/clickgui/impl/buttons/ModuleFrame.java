@@ -5,6 +5,7 @@ import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
 import mint.commands.Command;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
@@ -101,10 +102,10 @@ public class ModuleFrame
             if (mouseButton == 2 && this.isHovering(mouseX, mouseY)) {
                 if(module.isDrawn()) {
                     module.setUndrawn();
-                    Mint.messageManager.sendMessage(module.getName() + " is no longer Drawn.");
+                    MessageManager.sendMessage(module.getName() + " is no longer Drawn.");
                 } else {
                     module.setDrawn();
-                    Mint.messageManager.sendMessage(module.getName() + " is now Drawn.");
+                    MessageManager.sendMessage(module.getName() + " is now Drawn.");
                 }
                 Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
             }

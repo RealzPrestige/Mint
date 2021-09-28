@@ -6,6 +6,7 @@ import mint.events.Render2DEvent;
 import mint.events.ClientEvent;
 import mint.commands.Command;
 import mint.clickgui.MintGui;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.clickgui.setting.Setting;
 import net.minecraft.client.Minecraft;
@@ -83,7 +84,7 @@ public class Gui extends Module {
         if (event.getStage() == 2 && event.getSetting().getFeature().equals(this)) {
             if (event.getSetting().equals(this.prefix)) {
                 Mint.commandManager.setPrefix(this.prefix.getPlannedValue());
-                Mint.messageManager.sendMessage("Prefix set to " + ChatFormatting.DARK_GRAY + Mint.commandManager.getPrefix());
+                MessageManager.sendMessage("Prefix set to " + ChatFormatting.DARK_GRAY + Mint.commandManager.getPrefix());
             }
         }
     }

@@ -22,21 +22,24 @@ import net.minecraft.util.math.BlockPos
 object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
     @JvmField
     var targetRange: Setting<Float> = register(Setting<Any?>("Target Range", 10f, 0f, 15f)) as Setting<Float>
-
     @JvmField
     var placeRange: Setting<Float> = register(Setting<Any?>("Place Range", 5f, 0f, 6f)) as Setting<Float>
-
     @JvmField
     var breakRange: Setting<Float> = register(Setting<Any?>("Break Range", 5f, 0f, 6f)) as Setting<Float>
-
     @JvmField
     var minDamage: Setting<Float> = register(Setting<Any?>("Min Damage", 6f, 0f, 12f)) as Setting<Float>
-
     @JvmField
     var maxSelfDamage: Setting<Float> = register(Setting<Any?>("Max Self Damage", 8f, 0f, 12f)) as Setting<Float>
     var minHealth: Setting<Float> = register(Setting<Any?>("Min Health", 10f, 0f, 36f)) as Setting<Float>
     var packetBreak: Setting<Boolean> = register(Setting<Any?>("Packet Break", true)) as Setting<Boolean>
     var onlySelfCrystal: Setting<Boolean> = register(Setting<Any?>("Break Self Only", true)) as Setting<Boolean>
+    @JvmField
+    var renderParent: Setting<Boolean> = register(Setting<Any?>("Render", true, false)) as Setting<Boolean>
+    var r: Setting<Float> = register(Setting<Any?>("R", 255, 0, 255)) as Setting<Float>
+    var g: Setting<Float> = register(Setting<Any?>("G", 255, 0, 255)) as Setting<Float>
+    var b: Setting<Float> = register(Setting<Any?>("B", 255, 0, 255)) as Setting<Float>
+    var a: Setting<Float> = register(Setting<Any?>("A", 255, 0, 255)) as Setting<Float>
+
     override fun onUpdate() {
         target = EntityUtil.getTarget(targetRange.getValue())
         doPlace()

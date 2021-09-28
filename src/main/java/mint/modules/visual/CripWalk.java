@@ -2,6 +2,8 @@ package mint.modules.visual;
 
 import mint.modules.Module;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CripWalk extends Module {
 
@@ -9,8 +11,8 @@ public class CripWalk extends Module {
         super("CripWalk",Category.VISUAL,"cancels movement animations");
     }
 
-    @Override
-    public void onUpdate() {
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
         for (EntityPlayer player : mc.world.playerEntities) {
             if (player.getName().equals(mc.player.getName())) return;
             player.limbSwing = 0;

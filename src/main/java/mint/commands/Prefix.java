@@ -2,6 +2,7 @@ package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.managers.MessageManager;
 
 public class Prefix
         extends Command {
@@ -12,11 +13,11 @@ public class Prefix
     @Override
     public void execute(String[] commands) {
         if (commands.length == 1) {
-            Mint.messageManager.sendMessage(ChatFormatting.WHITE + "Current prefix is " + Mint.commandManager.getPrefix());
+            MessageManager.sendMessage(ChatFormatting.WHITE + "Current prefix is " + Mint.commandManager.getPrefix());
             return;
         }
         Mint.commandManager.setPrefix(commands[0]);
-        Mint.messageManager.sendMessage(ChatFormatting.WHITE + "Prefix has been set to " + commands[0]);
+        MessageManager.sendMessage(ChatFormatting.WHITE + "Prefix has been set to " + commands[0]);
     }
 }
 

@@ -31,62 +31,73 @@ import java.util.Map;
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE;
-    public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
-    public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f, v-> targetParent.getValue()));
-
+    //range
     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
     public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f, v-> rangesParent.getValue()));
     public Setting<Float> breakRange = register(new Setting("Break Range", 5f, 0f, 6f, v-> rangesParent.getValue()));
+    public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f, v-> rangesParent.getValue()));
 
+    //swing
     public Setting<Boolean> swingParent = register(new Setting("Swing", true, false));
     public Setting<Boolean> placeSwing = register(new Setting("Place Swing", false, v-> swingParent.getValue()));
     public Setting<EnumHand> placeSwingMode = register(new Setting("Place Mode", EnumHand.MAIN_HAND, v-> placeSwing.getValue() && swingParent.getValue()));
     public Setting<Boolean> breakSwing = register(new Setting("Break Swing", false, v-> swingParent.getValue()));
     public Setting<EnumHand> breakSwingMode = register(new Setting("Break Mode", EnumHand.MAIN_HAND, v-> breakSwing.getValue() && swingParent.getValue()));
 
+    //packet
     public Setting<Boolean> packetParent = register(new Setting("Packet", true, false));
     public Setting<Boolean> packetBreak = register(new Setting("Packet Break", false, v-> packetParent.getValue()));
 
+    //rotate
     public Setting<Boolean> rotateParent = register(new Setting("Rotations", true, false));
     public Setting<Boolean> rotate = register(new Setting("Rotate", false, v-> rotateParent.getValue()));
     public Setting<Boolean> placeRotate = register(new Setting("Place Rotate", false, v-> rotateParent.getValue() && rotate.getValue()));
     public Setting<Boolean> breakRotate = register(new Setting("Break Rotate", false, v-> rotateParent.getValue() && rotate.getValue()));
 
+    //switch
     public Setting<Boolean> switchParent = register(new Setting("Switch", true, false));
     public Setting<Boolean> silentSwitch = register(new Setting("Silent Switch", false, v-> switchParent.getValue()));
 
+    //predict
     public Setting<Boolean> predictParent = register(new Setting("Predict", true, false));
     public Setting<Boolean> breakPredict = register(new Setting("Break Predict", false, v-> predictParent.getValue()));
     public Setting<Boolean> soundPredict = register(new Setting("Sound Predict", false, v-> predictParent.getValue()));
     public Setting<Boolean> placePredict = register(new Setting("Place Predict", false, v-> predictParent.getValue()));
 
+    //damage
     public Setting<Boolean> damagesParent = register(new Setting("Damages", true, false));
     public Setting<Float> minDamage = register(new Setting("Min Damage", 6f, 0f, 12f, v-> damagesParent.getValue()));
     public Setting<Float> maxSelfDamage = register(new Setting("Max Self Damage", 8f, 0f, 12f, v-> damagesParent.getValue()));
 
+    //delay
     public Setting<Boolean> delayParent = register(new Setting("Delays", true, false));
     public Setting<Integer> placeDelay = register(new Setting("Place Delay", 0, 0, 200, v-> delayParent.getValue()));
     public Setting<Integer> breakDelay = register(new Setting("Break Delay", 65, 0, 200, v-> delayParent.getValue()));
 
+    //render
     public Setting<Boolean> parentVisual = register(new Setting("Visual", true, false));
     public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.FADE, v-> parentVisual.getValue()));
     public enum RenderMode{STATIC, FADE}
+    //fade
     public Setting<Boolean> fadeParent = register(new Setting("Fade", false, true, v-> parentVisual.getValue()));
     public Setting<Integer> startAlpha = register(new Setting<>("StartAlpha", 255, 0, 255, v-> parentVisual.getValue() && fadeParent.getValue()));
     public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v-> parentVisual.getValue() && fadeParent.getValue()));
     public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 20, 10, 100, v-> parentVisual.getValue() && fadeParent.getValue()));
+    //box
     public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v-> parentVisual.getValue()));
     public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v-> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> boxRed = register(new Setting<>( "BoxRed", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
+    //outline
     public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, v-> parentVisual.getValue()));
     public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v-> outlineParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> outlineRed = register(new Setting<>( "OutlineRed", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Boolean> rainbow = register(new Setting("Rainbow", true, v -> parentVisual.getValue()));
 
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
@@ -250,7 +261,7 @@ public class AutoCrystal extends Module {
                     renderPosses.remove(entry.getKey());
                     return;
                 }
-                RenderUtil.drawBoxESP(entry.getKey(), new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), entry.getValue()),true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), entry.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), entry.getValue(), true);
+                RenderUtil.drawBoxESP(entry.getKey(), rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), entry.getValue()),true, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), entry.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), entry.getValue(), true);
             }
 
         } else if (renderMode.getValue() == RenderMode.STATIC) {
@@ -261,7 +272,7 @@ public class AutoCrystal extends Module {
             }
             if (finalPos != null) {
                 if (boxSetting.getValue()) {
-                    RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
+                    RenderUtil.drawBoxESP(finalPos, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), boxAlpha.getValue()) : new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), outlineAlpha.getValue()) : new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
                 }
             }
         }

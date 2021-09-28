@@ -1,9 +1,11 @@
-package mint.modules;
+package mint.managers;
 
 import mint.Mint;
 import mint.events.Render2DEvent;
 import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
+import mint.modules.Feature;
+import mint.modules.Module;
 import mint.modules.visual.*;
 import mint.modules.combat.*;
 import mint.modules.core.*;
@@ -33,15 +35,20 @@ public class ModuleManager
         moduleList.add(new Notifications());
 
         /** Combat **/
-        moduleList.add(new HoleFiller());
-        moduleList.add(new SelfFill());
         moduleList.add(new AutoCrystal());
-        moduleList.add(new Offhand());
+        moduleList.add(new CityAnvil());
+        moduleList.add(new HoleFiller());
+        moduleList.add(new KillAura());
         moduleList.add(KotlinAura.INSTANCE);
+        //moduleList.add(new ObiAssist());
+        moduleList.add(new Offhand());
+        moduleList.add(new SelfFill());
+        //moduleList.add(new Surround());
 
         /** Miscellaneous **/
-        moduleList.add(new FakePlayer());
+        moduleList.add(new AutoEnderChest());
         moduleList.add(new ChorusPredict());
+        moduleList.add(new FakePlayer());
 
         /** Movement **/
         moduleList.add(new Clip());
@@ -51,19 +58,21 @@ public class ModuleManager
 
         /** Player **/
         moduleList.add(new AntiAim());
+        moduleList.add(new AutoMine());
+        moduleList.add(new ChorusManipulator());
         moduleList.add(new FastPlace());
         moduleList.add(new PacketEXP());
-        moduleList.add(new ChorusManipulator());
 
         /** Visual **/
+        moduleList.add(new BreakESP());
         moduleList.add(new Chams());
-        moduleList.add(new SwingAnimations());
+        moduleList.add(new CripWalk());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
-        moduleList.add(new PopESP());
+        moduleList.add(new NoCluster());
         moduleList.add(new PlayerTrails());
-        moduleList.add(new BreakESP());
-        moduleList.add(new AnimationDisable());
+        moduleList.add(new PopESP());
+        moduleList.add(new SwingAnimations());
     }
 
     public Module getModuleByName(String name) {

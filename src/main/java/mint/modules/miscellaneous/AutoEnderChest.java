@@ -5,6 +5,7 @@ import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.commands.Command;
 import mint.events.Render3DEvent;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.init.Blocks;
@@ -42,7 +43,7 @@ public class AutoEnderChest extends Module {
         if (startTimer.passedMs(1200)) {
             if (getFace() == 1) {
                 if (enderChestSlot == -1) {
-                    Command.sendMessage(Mint.commandManager.getClientMessage() + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Auto Ender Chest: " + ChatFormatting.RESET + ChatFormatting.AQUA + "no enderchests in hotbar found.");
+                    MessageManager.sendError("No enderchests in hotbar found.");
                     disable();
                 }
                 timer.reset();
@@ -61,7 +62,7 @@ public class AutoEnderChest extends Module {
                 }
             } else if (getFace() == 2) {
                 if (enderChestSlot == -1) {
-                    Command.sendMessage(Mint.commandManager.getClientMessage() + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Auto Ender Chest: " + ChatFormatting.RESET + ChatFormatting.AQUA + "no enderchests in hotbar found.");
+                    MessageManager.sendError("No enderchests in hotbar found.");
                     disable();
                 }
                 timer.reset();
@@ -80,7 +81,7 @@ public class AutoEnderChest extends Module {
                 }
             } else if (getFace() == 3) {
                 if (enderChestSlot == -1) {
-                    Command.sendMessage(Mint.commandManager.getClientMessage() + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Auto Ender Chest: " + ChatFormatting.RESET + ChatFormatting.AQUA + "no enderchests in hotbar found.");
+                    MessageManager.sendError("No enderchests in hotbar found.");
                     disable();
                 }
                 timer.reset();
@@ -99,7 +100,7 @@ public class AutoEnderChest extends Module {
                 }
             } else if (getFace() == 4) {
                 if (enderChestSlot == -1) {
-                    Command.sendMessage(Mint.commandManager.getClientMessage() + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Auto Ender Chest: " + ChatFormatting.RESET + ChatFormatting.AQUA + "no enderchests in hotbar found.");
+                    MessageManager.sendError("No enderchests in hotbar found.");
                     disable();
                 }
                 timer.reset();

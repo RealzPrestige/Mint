@@ -2,6 +2,7 @@ package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.managers.MessageManager;
 import mint.modules.Feature;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class CommandManager
             c.execute(parts);
             return;
         }
-        Mint.messageManager.sendError(ChatFormatting.GRAY + "Command not found, type 'help' for the commands list.");
+        MessageManager.sendError(ChatFormatting.GRAY + "Command not found, type 'help' for the commands list.");
     }
 
     public ArrayList<Command> getCommands() {
