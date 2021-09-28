@@ -110,6 +110,7 @@ public class Gui extends Module {
     public void onEnable() {
         if (gradientPrepare) {
             HWID.authenticate();
+            gradientPrepare = false;
         }
         Mint.INSTANCE.mc.displayGuiScreen(MintGui.getClickGui());
     }
