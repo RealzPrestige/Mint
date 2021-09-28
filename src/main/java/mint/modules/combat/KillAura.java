@@ -79,8 +79,8 @@ public class KillAura extends Module {
         }
     }
 
-    @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+    @Override
+    public void onRender3D(Render3DEvent event) {
         boolean fill = false;
         boolean outline = false;
         if(renderMode.getValue().equals(RenderMode.BOTH)) {
