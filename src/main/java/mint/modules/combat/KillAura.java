@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import mint.events.Render3DEvent;
 
 public class KillAura extends Module {
     public KillAura() {
@@ -79,8 +80,8 @@ public class KillAura extends Module {
         }
     }
 
-    @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+    @Override
+    public void onRender3D(Render3DEvent event) {
         boolean fill = false;
         boolean outline = false;
         if(renderMode.getValue().equals(RenderMode.BOTH)) {

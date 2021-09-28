@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
+import mint.events.Render3DEvent;
 
 public class NoCluster extends Module {
     public NoCluster() {
@@ -16,8 +17,8 @@ public class NoCluster extends Module {
     public Setting<Float> range = register(new Setting<>("Range", 4, 1, 6));
     public Setting<Float> alpha = register(new Setting<>("Alpha", 100, 1, 255));
 
-    @SubscribeEvent
-    public void onRender(RenderLivingEntityEvent event) {
+    @Override
+    public void onRender3D(Render3DEvent event) {
         for(Entity entity : mc.world.loadedEntityList) {
             if(shouldRender(entity)) {
                 GL11.glPushMatrix();
