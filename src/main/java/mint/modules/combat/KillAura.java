@@ -17,28 +17,24 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 public class KillAura extends Module {
     public KillAura() {
         super("KillAura", Category.COMBAT, "Automatically attacks players.");
     }
 
-    public Setting<Boolean> switchToSword = register(new Setting<>("SwitchToSword", true));
-    public Setting<Integer> range = register(new Setting<>("Range", 4, 1, 6));
+    //delay
     public Setting<Boolean> delayParent = register(new Setting<>("Delay", true, false));
     public Setting<Boolean> attackDelay = register(new Setting("AttackDelay", true, v -> delayParent.getValue()));
     public Setting<Integer> attackSpeed = register(new Setting("AttackSpeed", 10, 2, 18, v -> delayParent.getValue()));
+    //target
     public Setting<Boolean> targetParent = register(new Setting("Targets", true, false));
     public Setting<Boolean> players = register(new Setting("Players", true, v -> targetParent.getValue()));
     public Setting<Boolean> mobs = register(new Setting("Mobs", true, v -> targetParent.getValue()));
     public Setting<Boolean> animals = register(new Setting("Animals", true, v -> targetParent.getValue()));
+    //render
     public Setting<Boolean> renderParent = register(new Setting<>("Render", true, false));
     public Setting<Boolean> render = register(new Setting("Render", true, v -> renderParent.getValue()));
     public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.BOTH, v-> renderParent.getValue() && render.getValue()));
@@ -49,12 +45,13 @@ public class KillAura extends Module {
     public Setting<Integer> a = register(new Setting("A", 125, 0, 255, v -> renderParent.getValue() && render.getValue()));
     public Setting<Integer> lineWidth = register(new Setting("LineWidth", 1, 0, 3, v -> renderParent.getValue() && render.getValue()));
     public Setting<Boolean> rainbow = register(new Setting("Rainbow", true, v -> renderParent.getValue() && render.getValue()));
+    //misc
+    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
+    public Setting<Integer> range = register(new Setting("Range", 4, 1, 6, v -> miscParent.getValue()));
+    public Setting<Boolean> rotate = register(new Setting("Rotate", false, v -> miscParent.getValue()));
+    public Setting<Boolean> switchToSword = register(new Setting("SwitchToSword", true, v -> miscParent.getValue()));
 
     public Entity target = null;
-
-    public void onLogin() {
-        disable();
-    }
 
     @Override
     public void onUpdate() {
@@ -97,9 +94,6 @@ public class KillAura extends Module {
             outline = true;
         }
         if (render.getValue() && target != null) {
-            double x = (target.posX - target.lastTickPosX) * event.getPartialTicks();
-            double y = (target.posY - target.lastTickPosY) * event.getPartialTicks();
-            double z = (target.posZ - target.lastTickPosZ) * event.getPartialTicks();
             AxisAlignedBB bb = target.getEntityBoundingBox().offset(-mc.getRenderManager().renderPosX, -mc.getRenderManager().renderPosY, -mc.getRenderManager().renderPosZ);
             RenderUtil.prepare();
             if (fill)
@@ -110,6 +104,10 @@ public class KillAura extends Module {
             }
             RenderUtil.release();
         }
+    }
+
+    public void onLogin() {
+        disable();
     }
 
     @Override
