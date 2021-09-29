@@ -2,13 +2,11 @@ package mint
 
 import mint.commands.CommandManager
 import mint.managers.*
-import mint.utils.security.Login
+import mint.security.Login
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.opengl.Display
-import sun.rmi.runtime.Log
 import java.lang.Thread.sleep
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")

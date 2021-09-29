@@ -32,70 +32,76 @@ public class AutoCrystal extends Module {
     public static AutoCrystal INSTANCE;
     //range
     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
-    public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f, v-> rangesParent.getValue()));
-    public Setting<Float> breakRange = register(new Setting("Break Range", 5f, 0f, 6f, v-> rangesParent.getValue()));
-    public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f, v-> rangesParent.getValue()));
+    public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
+    public Setting<Float> breakRange = register(new Setting("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
+    public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
 
     //swing
     public Setting<Boolean> swingParent = register(new Setting("Swing", true, false));
-    public Setting<Boolean> placeSwing = register(new Setting("Place Swing", false, v-> swingParent.getValue()));
-    public Setting<EnumHand> placeSwingMode = register(new Setting("Place Mode", EnumHand.MAIN_HAND, v-> placeSwing.getValue() && swingParent.getValue()));
-    public Setting<Boolean> breakSwing = register(new Setting("Break Swing", false, v-> swingParent.getValue()));
-    public Setting<EnumHand> breakSwingMode = register(new Setting("Break Mode", EnumHand.MAIN_HAND, v-> breakSwing.getValue() && swingParent.getValue()));
+    public Setting<Boolean> placeSwing = register(new Setting("Place Swing", false, v -> swingParent.getValue()));
+    public Setting<EnumHand> placeSwingMode = register(new Setting("Place Mode", EnumHand.MAIN_HAND, v -> placeSwing.getValue() && swingParent.getValue()));
+    public Setting<Boolean> breakSwing = register(new Setting("Break Swing", false, v -> swingParent.getValue()));
+    public Setting<EnumHand> breakSwingMode = register(new Setting("Break Mode", EnumHand.MAIN_HAND, v -> breakSwing.getValue() && swingParent.getValue()));
 
     //packet
     public Setting<Boolean> packetParent = register(new Setting("Packet", true, false));
-    public Setting<Boolean> packetBreak = register(new Setting("Packet Break", false, v-> packetParent.getValue()));
+    public Setting<Boolean> packetBreak = register(new Setting("Packet Break", false, v -> packetParent.getValue()));
 
     //rotate
     public Setting<Boolean> rotateParent = register(new Setting("Rotations", true, false));
-    public Setting<Boolean> rotate = register(new Setting("Rotate", false, v-> rotateParent.getValue()));
-    public Setting<Boolean> placeRotate = register(new Setting("Place Rotate", false, v-> rotateParent.getValue() && rotate.getValue()));
-    public Setting<Boolean> breakRotate = register(new Setting("Break Rotate", false, v-> rotateParent.getValue() && rotate.getValue()));
+    public Setting<Boolean> rotate = register(new Setting("Rotate", false, v -> rotateParent.getValue()));
+    public Setting<Boolean> placeRotate = register(new Setting("Place Rotate", false, v -> rotateParent.getValue() && rotate.getValue()));
+    public Setting<Boolean> breakRotate = register(new Setting("Break Rotate", false, v -> rotateParent.getValue() && rotate.getValue()));
 
     //switch
     public Setting<Boolean> switchParent = register(new Setting("Switch", true, false));
-    public Setting<Boolean> silentSwitch = register(new Setting("Silent Switch", false, v-> switchParent.getValue()));
+    public Setting<Boolean> silentSwitch = register(new Setting("Silent Switch", false, v -> switchParent.getValue()));
 
     //predict
     public Setting<Boolean> predictParent = register(new Setting("Predict", true, false));
-    public Setting<Boolean> breakPredict = register(new Setting("Break Predict", false, v-> predictParent.getValue()));
-    public Setting<Boolean> soundPredict = register(new Setting("Sound Predict", false, v-> predictParent.getValue()));
-    public Setting<Boolean> placePredict = register(new Setting("Place Predict", false, v-> predictParent.getValue()));
+    public Setting<BreakMode> breakMode = register(new Setting("Break Mode", BreakMode.BREAK, v -> predictParent.getValue()));
+
+    enum BreakMode {BREAK, PREDICT, BREAKPREDICT}
+
+    public Setting<Boolean> soundPredict = register(new Setting("Sound Predict", false, v -> predictParent.getValue()));
+    public Setting<Boolean> placePredict = register(new Setting("Place Predict", false, v -> predictParent.getValue()));
 
     //damage
     public Setting<Boolean> damagesParent = register(new Setting("Damages", true, false));
-    public Setting<Float> minDamage = register(new Setting("Min Damage", 6f, 0f, 12f, v-> damagesParent.getValue()));
-    public Setting<Float> maxSelfDamage = register(new Setting("Max Self Damage", 8f, 0f, 12f, v-> damagesParent.getValue()));
+    public Setting<Float> minDamage = register(new Setting("Min Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Float> maxSelfDamage = register(new Setting("Max Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Boolean> unsafeOnly = register(new Setting("Unsafe Only", false));
 
     //delay
     public Setting<Boolean> delayParent = register(new Setting("Delays", true, false));
-    public Setting<Integer> placeDelay = register(new Setting("Place Delay", 0, 0, 200, v-> delayParent.getValue()));
-    public Setting<Integer> breakDelay = register(new Setting("Break Delay", 65, 0, 200, v-> delayParent.getValue()));
+    public Setting<Integer> placeDelay = register(new Setting("Place Delay", 0, 0, 200, v -> delayParent.getValue()));
+    public Setting<Integer> breakDelay = register(new Setting("Break Delay", 65, 0, 200, v -> delayParent.getValue()));
 
     //render
     public Setting<Boolean> parentVisual = register(new Setting("Visual", true, false));
-    public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.FADE, v-> parentVisual.getValue()));
-    public enum RenderMode{STATIC, FADE}
+    public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.FADE, v -> parentVisual.getValue()));
+
+    public enum RenderMode {STATIC, FADE}
+
     //fade
-    public Setting<Boolean> fadeParent = register(new Setting("Fade", false, true, v-> parentVisual.getValue()));
-    public Setting<Integer> startAlpha = register(new Setting<>("StartAlpha", 255, 0, 255, v-> parentVisual.getValue() && fadeParent.getValue()));
-    public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v-> parentVisual.getValue() && fadeParent.getValue()));
-    public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 20, 10, 100, v-> parentVisual.getValue() && fadeParent.getValue()));
+    public Setting<Boolean> fadeParent = register(new Setting("Fade", false, true, v -> parentVisual.getValue()));
+    public Setting<Integer> startAlpha = register(new Setting<>("StartAlpha", 255, 0, 255, v -> parentVisual.getValue() && fadeParent.getValue()));
+    public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v -> parentVisual.getValue() && fadeParent.getValue()));
+    public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 20, 10, 100, v -> parentVisual.getValue() && fadeParent.getValue()));
     //box
-    public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v-> parentVisual.getValue()));
-    public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v-> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxRed = register(new Setting<>( "BoxRed", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v-> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v -> parentVisual.getValue()));
+    public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v -> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxRed = register(new Setting<>("BoxRed", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
     //outline
-    public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, v-> parentVisual.getValue()));
-    public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v-> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>( "OutlineRed", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v-> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, v -> parentVisual.getValue()));
+    public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v -> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineRed = register(new Setting<>("OutlineRed", 255, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
+    public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
     public Setting<Boolean> rainbow = register(new Setting("Rainbow", true, v -> parentVisual.getValue()));
 
     Timer placeTimer = new Timer();
@@ -110,7 +116,7 @@ public class AutoCrystal extends Module {
     private float pitch = 0.0f;
     private boolean rotating = false;
 
-    public AutoCrystal(){
+    public AutoCrystal() {
         super("Auto Crystal", Category.COMBAT, "");
     }
 
@@ -118,7 +124,11 @@ public class AutoCrystal extends Module {
         return AutoCrystal.INSTANCE;
     }
 
-    public void onToggle(){
+    public void onToggle() {
+        placePos = null;
+        target = null;
+        finalPos = null;
+        finalCrystalPos = null;
         mc.world.removeEntityFromWorld(crystals);
         crystals = 0;
     }
@@ -127,11 +137,11 @@ public class AutoCrystal extends Module {
     public void onUpdate() {
         target = EntityUtil.getTarget(targetRange.getValue());
         if (target != null) {
-            if(placeTimer.passedMs(placeDelay.getValue())) {
+            if (placeTimer.passedMs(placeDelay.getValue())) {
                 doPlace();
                 placeTimer.reset();
             }
-            if(breakTimer.passedMs(breakDelay.getValue()) && !breakPredict.getValue()) {
+            if (breakTimer.passedMs(breakDelay.getValue()) && breakMode.getValue().equals(BreakMode.BREAK) || breakMode.getValue().equals(BreakMode.BREAKPREDICT)) {
                 doBreak();
                 breakTimer.reset();
             }
@@ -139,50 +149,53 @@ public class AutoCrystal extends Module {
     }
 
     public void doPlace() {
-        float maxDamage = 0.5f;
-        final List<BlockPos> sphere = BlockUtil.getSphere(this.placeRange.getValue(), true);
+        final List<BlockPos> sphere = BlockUtil.getSphere(placeRange.getValue(), true);
         for (int size = sphere.size(), i = 0; i < size; ++i) {
             final BlockPos pos = sphere.get(i);
             final float self = EntityUtil.calculatePos(pos, mc.player);
             if (BlockUtil.canPlaceCrystal(pos, true)) {
-                final float damage;
-                if (EntityUtil.getHealth(mc.player) > self + 0.5f && this.maxSelfDamage.getValue() > self && (damage = EntityUtil.calculatePos(pos, EntityUtil.getTarget(targetRange.getValue()))) > maxDamage && damage > self && !EntityUtil.isPlayerSafe(target)) {
-                    if (damage <= minDamage.getValue()) {
-                            continue;
-                    }
-                    maxDamage = damage;
-                    placePos = pos;
-                    finalPos = placePos;
-                }
+
+                float damage = EntityUtil.calculatePos(pos, EntityUtil.getTarget(targetRange.getValue()));
+
+                if (EntityUtil.getHealth(mc.player) < self) continue;
+
+                if (maxSelfDamage.getValue() < self) continue;
+
+                if (damage < minDamage.getValue()) continue;
+
+                if (unsafeOnly.getValue() && EntityUtil.isPlayerSafe(target)) continue;
+
+                placePos = pos;
+                finalPos = placePos;
             }
         }
         if (placePos != null) {
             int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
             int oldSlot = mc.player.inventory.currentItem;
-            if (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL){
-                if (silentSwitch.getValue()){
+            if (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL) {
+                if (silentSwitch.getValue()) {
                     InventoryUtil.SilentSwitchToSlot(crystalSlot);
-                }else {
+                } else {
                     InventoryUtil.switchToSlot(crystalSlot);
                 }
             }
-            if(placeRotate.getValue()) {
+            if (placeRotate.getValue()) {
                 rotateToPos(placePos);
             }
-            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem()== Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            if (renderMode.getValue() == RenderMode.FADE){
+            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+            if (renderMode.getValue() == RenderMode.FADE) {
                 renderPosses.put(placePos, startAlpha.getValue());
             }
-            if (mc.player.getHeldItemOffhand().getItem()!= Items.END_CRYSTAL){
-                if (silentSwitch.getValue()){
+            if (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL) {
+                if (silentSwitch.getValue()) {
                     mc.player.inventory.currentItem = oldSlot;
                     mc.playerController.updateController();
                 }
             }
-            if(placeSwing.getValue()){
+            if (placeSwing.getValue()) {
                 mc.player.swingArm(placeSwingMode.getValue());
             }
-            if(placePredict.getValue()) {
+            if (placePredict.getValue()) {
                 Timer timers = new Timer();
                 EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
                 mc.world.addEntityToWorld(crystals, crystal);
@@ -202,7 +215,7 @@ public class AutoCrystal extends Module {
 
                 if (crystal.getDistance(mc.player) > MathUtil.square(breakRange.getValue())) continue;
 
-                if(breakRotate.getValue()) {
+                if (breakRotate.getValue()) {
                     rotateTo(crystal);
                 }
 
@@ -216,14 +229,14 @@ public class AutoCrystal extends Module {
     }
 
     @SubscribeEvent
-    public void onPacketReceive(PacketEvent.Receive event){
-            if (event.getPacket() instanceof SPacketSoundEffect) {
-                final SPacketSoundEffect packet = event.getPacket();
-                if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
-                    for (Entity entityCrystal : mc.world.loadedEntityList) {
-                        if (entityCrystal instanceof EntityEnderCrystal) {
-                            if (entityCrystal.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue() && soundPredict.getValue()) {
-                                    entityCrystal.setDead();
+    public void onPacketReceive(PacketEvent.Receive event) {
+        if (event.getPacket() instanceof SPacketSoundEffect) {
+            final SPacketSoundEffect packet = event.getPacket();
+            if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
+                for (Entity entityCrystal : mc.world.loadedEntityList) {
+                    if (entityCrystal instanceof EntityEnderCrystal) {
+                        if (entityCrystal.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue() && soundPredict.getValue()) {
+                            entityCrystal.setDead();
                         }
                     }
                 }
@@ -231,18 +244,18 @@ public class AutoCrystal extends Module {
         }
         if (event.getPacket() instanceof SPacketSpawnObject) {
             final SPacketSpawnObject packet = event.getPacket();
-            if (packet.getType() == 51 && finalPos != null && EntityUtil.getTarget(targetRange.getValue()) != null && breakPredict.getValue()) {
+            if (packet.getType() == 51 && finalPos != null && EntityUtil.getTarget(targetRange.getValue()) != null && breakMode.getValue().equals(BreakMode.PREDICT) || breakMode.getValue().equals(BreakMode.BREAKPREDICT)) {
                 final CPacketUseEntity predict = new CPacketUseEntity();
                 predict.entityId = packet.getEntityID();
                 predict.action = CPacketUseEntity.Action.ATTACK;
                 finalCrystalPos = new BlockPos(packet.getX(), packet.getY(), packet.getZ());
-                if(predict.entityId != crystals) {
-                    if(breakRotate.getValue()) {
+                if (predict.entityId != crystals) {
+                    if (breakRotate.getValue()) {
                         rotateToPos(finalCrystalPos);
                     }
-                        mc.getConnection().sendPacket(predict);
-                        if (breakSwing.getValue()) {
-                            mc.player.swingArm(breakSwingMode.getValue());
+                    mc.getConnection().sendPacket(predict);
+                    if (breakSwing.getValue()) {
+                        mc.player.swingArm(breakSwingMode.getValue());
                     }
                 }
             }
@@ -258,7 +271,7 @@ public class AutoCrystal extends Module {
                     renderPosses.remove(entry.getKey());
                     return;
                 }
-                RenderUtil.drawBoxESP(entry.getKey(), rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), entry.getValue()),true, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), entry.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), entry.getValue(), true);
+                RenderUtil.drawBoxESP(entry.getKey(), rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), entry.getValue()), true, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), entry.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), entry.getValue(), true);
             }
 
         } else if (renderMode.getValue() == RenderMode.STATIC) {
@@ -284,21 +297,22 @@ public class AutoCrystal extends Module {
             rotating = false;
         }
     }
+
     private void rotateTo(Entity entity) {
         if (rotate.getValue()) {
             float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), entity.getPositionVector());
-            this.yaw = angle[0];
-            this.pitch = angle[1];
-            this.rotating = true;
+            yaw = angle[0];
+            pitch = angle[1];
+            rotating = true;
         }
     }
 
     private void rotateToPos(BlockPos pos) {
         if (rotate.getValue()) {
             float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f));
-            this.yaw = angle[0];
-            this.pitch = angle[1];
-            this.rotating = true;
+            yaw = angle[0];
+            pitch = angle[1];
+            rotating = true;
         }
     }
 }

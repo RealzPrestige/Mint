@@ -1,4 +1,4 @@
-package mint.utils.security;
+package mint.security;
 
 import javax.swing.*;
 import java.awt.*;
