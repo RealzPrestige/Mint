@@ -1,7 +1,5 @@
 package mint.security;
 
-import net.minecraft.client.Minecraft;
-
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
@@ -38,7 +36,6 @@ public class Login {
         } catch (UnsupportedLookAndFeelException exc) {
             System.err.println("Nimbus: Unsupported Look and feel!");
         }
-        Minecraft mc = Minecraft.getMinecraft();
         JLabel label = new JLabel();
         JTextField text = new JTextField();
         JPasswordField value = new JPasswordField();
@@ -72,7 +69,8 @@ public class Login {
 
         enter.addActionListener(e -> {
             String password = String.valueOf(value.getPassword());
-            if (password.equals("kambing")) { //TODO add auth key thing
+            if (password.equals("kambing")) {
+                //TODO add auth key thing
                 label.setText("Verifying..");
                 try {
                     sleep(1000);
@@ -82,7 +80,7 @@ public class Login {
                 //TODO send webhook to verify
                 done = true;
                 SwingUtilities.invokeLater(() -> frame.setVisible(false));
-             } else {
+            } else {
                 label.setText("Password incorrect!");
                 // webhook
             }
