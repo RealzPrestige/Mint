@@ -66,7 +66,7 @@ class Mint {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent?) {
-        Login().f.isVisible = true
+        Login().frame.isVisible = true
         while (!Login.done) {
             sleep(300)
         }
