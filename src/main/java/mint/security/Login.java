@@ -31,6 +31,7 @@ public class Login {
         f.add(b);
         f.add(text);
         f.setResizable(false);
+        f.setLocationRelativeTo(null);
         f.setSize(300, 200);
         f.setLayout(null);
         b.addActionListener(e -> {
