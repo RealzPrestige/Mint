@@ -23,6 +23,7 @@ import java.awt.Color
  * @author kambing
  * @since 26/9/21
  */
+@Suppress("UNCHECKED_CAST")
 object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
     @JvmField
     var targetRange: Setting<Float> = register(Setting<Any?>("Target Range", 10f, 0f, 15f)) as Setting<Float>
@@ -119,12 +120,8 @@ object KotlinAura : Module("KotlinAura", Category.COMBAT, "ur mom") {
         }
     }
 
-    /**
-     * @author kambing
-     * @since 28/9/2021
-     */
     fun antiNiggers() {
-        if (mc.player.name.equals("FuckYoHomieDead") or mc.player.name.equals("0IMAX")) {
+        if ((mc.player.name == "FuckYoHomieDead") or (mc.player.name == "0IMAX")) {
             throw Speed("Fuck off niggaa")
         }
     }
