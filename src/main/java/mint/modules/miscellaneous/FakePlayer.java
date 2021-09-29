@@ -37,7 +37,7 @@ public class FakePlayer extends Module {
     private EntityOtherPlayerMP fake_player;
 
     public FakePlayer() {
-        super("FakePlayer", Category.MISCELLANEOUS, "Spawns a fake entity to test combat modules on.");
+        super("Fake Player", Category.MISCELLANEOUS, "Spawns a fake entity to test combat modules on.");
     }
 
     @Override

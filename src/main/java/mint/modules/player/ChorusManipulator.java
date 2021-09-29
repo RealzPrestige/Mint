@@ -1,6 +1,5 @@
 package mint.modules.player;
 
-import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
@@ -18,7 +17,10 @@ import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
@@ -61,7 +63,7 @@ public class ChorusManipulator extends Module {
     public HashMap<EntityPlayer, Integer> playerCham = new HashMap<>();
 
     public ChorusManipulator() {
-        super("ChorusManipulator", Category.PLAYER, "Manipulates your Chorus Fruits.");
+        super("Chorus Manipulator", Category.PLAYER, "Manipulates your Chorus Fruits.");
         packets = new LinkedList<>();
         tpPackets = new LinkedList<>();
     }

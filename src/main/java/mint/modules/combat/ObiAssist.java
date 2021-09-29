@@ -38,7 +38,7 @@ public class ObiAssist extends Module {
     private final Timer delayTimer = new Timer();
 
     public ObiAssist() {
-        super("ObiAssist", Category.COMBAT, "Place obsidian to support your AutoCrystal in terrain duels.");
+        super("Obi Assist", Category.COMBAT, "Place obsidian to support your AutoCrystal in terrain duels.");
     }
 
 

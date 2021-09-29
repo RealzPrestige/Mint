@@ -1,8 +1,6 @@
 package mint.modules.combat;
 
-import mint.Mint;
 import mint.clickgui.setting.Setting;
-import mint.commands.Command;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.BlockUtil;
@@ -25,7 +23,7 @@ public class SelfFill extends Module {
 
 
     public SelfFill() {
-        super("SelfFill", Category.COMBAT, "Rubberbands you in a block.");
+        super("Self Fill", Category.COMBAT, "Rubberbands you in a block.");
     }
 
     public Setting<Block> prefer = register(new Setting("Prefer", Block.EChest));

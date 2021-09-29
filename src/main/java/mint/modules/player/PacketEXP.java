@@ -13,7 +13,7 @@ public class PacketEXP extends Module {
     public Setting<Boolean> rightClickOnly = register(new Setting("Right Click Only", false));
 
     public PacketEXP() {
-        super("PacketEXP", Category.PLAYER, "Uses packets to throw Exp very fast.");
+        super("Packet EXP", Category.PLAYER, "Uses packets to throw Exp very fast.");
     }
 
     public void onUpdate() {

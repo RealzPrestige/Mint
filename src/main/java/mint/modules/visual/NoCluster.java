@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 public class NoCluster extends Module {
     public NoCluster() {
-        super("NoCluster", Category.VISUAL, "Once a player is in range they become clear.");
+        super("No Cluster", Category.VISUAL, "Once a player is in range they become clear.");
     }
 
     public Setting<Float> range = register(new Setting<>("Range", 4.0f, 1.0f, 6.0f));

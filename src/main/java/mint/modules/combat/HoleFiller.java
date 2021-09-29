@@ -73,7 +73,7 @@ public class HoleFiller extends Module {
     public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v-> render.getValue() && renderMode.getValue() == RenderMode.FADE));
     public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 20, 10, 100, v-> render.getValue() && renderMode.getValue() == RenderMode.FADE));
     public HoleFiller(){
-        super("HoleFiller", Category.COMBAT, "Fills safe spots (near enemies).");
+        super("Hole Filler", Category.COMBAT, "Fills safe spots (near enemies).");
     }
 
     public void onTick() {

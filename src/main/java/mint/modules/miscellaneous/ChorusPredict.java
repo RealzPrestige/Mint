@@ -33,7 +33,7 @@ public class ChorusPredict extends Module {
     private double z;
 
     public ChorusPredict() {
-        super("ChorusPredict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
+        super("Chorus Predict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
     }
 
     public void onLogin() {

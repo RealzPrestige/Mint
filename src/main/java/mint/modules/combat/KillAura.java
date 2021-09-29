@@ -1,6 +1,7 @@
 package mint.modules.combat;
 
 import mint.clickgui.setting.Setting;
+import mint.events.Render3DEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.InventoryUtil;
@@ -17,13 +18,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import mint.events.Render3DEvent;
 
 public class KillAura extends Module {
     public KillAura() {
-        super("KillAura", Category.COMBAT, "Automatically attacks players.");
+        super("Kill Aura", Category.COMBAT, "Automatically attacks players.");
     }
 
     //delay

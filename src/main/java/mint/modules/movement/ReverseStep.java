@@ -6,7 +6,7 @@ import mint.modules.Module;
 public class ReverseStep extends Module {
 
     public ReverseStep() {
-        super("ReverseStep", Module.Category.MOVEMENT, "Makes downwards motion Instant / Faster");
+        super("Reverse Step", Module.Category.MOVEMENT, "Makes downwards motion Instant / Faster");
     }
 
     public Setting<Float> vanillaSpeed = register(new Setting("VanillaSpeed", 9.0f, 0.1f, 9.0f));

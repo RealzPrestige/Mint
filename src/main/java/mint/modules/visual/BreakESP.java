@@ -36,7 +36,7 @@ public class BreakESP extends Module {
     public Setting<Float> lineWidth = register(new Setting<>("LineWidth", 3.0f, 0.1f, 5.0f, v -> outlineParent.getValue() && outline.getValue()));
 
     public BreakESP() {
-        super("BreakESP", Category.VISUAL, "Renders when a block is being broken.");
+        super("Break ESP", Category.VISUAL, "Renders when a block is being broken.");
     }
 
     @Override

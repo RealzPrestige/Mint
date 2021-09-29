@@ -8,7 +8,7 @@ import mint.events.Render3DEvent;
 public class CripWalk extends Module {
 
     public CripWalk(){
-        super("CripWalk",Category.VISUAL,"cancels movement animations");
+        super("Crip Walk",Category.VISUAL,"cancels movement animations");
     }
 
     @SubscribeEvent

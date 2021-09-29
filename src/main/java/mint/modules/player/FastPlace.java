@@ -10,7 +10,7 @@ public class FastPlace extends Module {
     public Setting <Boolean> crystal = register(new Setting<>("Crystals", false));
 
     public FastPlace(){
-        super("FastPlace", Category.PLAYER, "Allows you to do things faster.");
+        super("Fast Place", Category.PLAYER, "Allows you to do things faster.");
     }
 
     @Override

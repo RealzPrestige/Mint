@@ -41,7 +41,7 @@ public class NameTags extends Module {
     private final Setting<Integer> yOff = register(new Setting<>("EnchantYOff", 8, 1, 20,v-> enchant.getValue()));
 
     public NameTags() {
-        super("Nametags", Category.VISUAL, "Draws info about an entity above their head.");
+        super("Name Tags", Category.VISUAL, "Draws info about an entity above their head.");
         this.setInstance();
     }
 
