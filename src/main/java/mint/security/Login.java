@@ -12,9 +12,10 @@ public class Login {
      * 29/9/2021
      */
     public final JFrame f = new JFrame("Mint Auth");
+
     public Login() {
         final JLabel label = new JLabel();
-        label.setBounds(20, 125, 200, 50);
+        label.setBounds(296, 125, 200, 50);
         final JPasswordField value = new JPasswordField();
         value.setBounds(100, 50, 100, 30);
         JLabel l2 = new JLabel("Password:");
@@ -33,6 +34,8 @@ public class Login {
         f.setResizable(false);
         f.setSize(300, 200);
         f.setLayout(null);
+        f.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/minecraft/textures/mintlogo.png")));
+        f.setResizable(false);
         b.addActionListener(e -> {
             String password = String.valueOf(value.getPassword());
             if (password.equals("kambing")) {
