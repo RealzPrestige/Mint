@@ -6,6 +6,7 @@ import mint.security.Login
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.opengl.Display
 import java.lang.Thread.sleep
 
@@ -65,11 +66,15 @@ class Mint {
     }
 
     @Mod.EventHandler
-    fun init(event: FMLInitializationEvent?) {
-        Login().frame.isVisible = true
+    fun init(event: FMLPreInitializationEvent?) {
+        Login().f.isVisible = true
         while (!Login.done) {
             sleep(300)
         }
+    }
+
+    @Mod.EventHandler
+    fun init(event: FMLInitializationEvent?) {
         Display.setTitle("Mint 0.1.1")
         load()
     }
