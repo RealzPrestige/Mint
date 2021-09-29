@@ -34,6 +34,7 @@ public class Login {
         f.add(b);
         f.add(text);
         f.setResizable(false);
+        f.setLocationRelativeTo(null);
         f.setSize(300, 200);
         f.setLayout(null);
         f.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/minecraft/textures/mintlogo.png")));
