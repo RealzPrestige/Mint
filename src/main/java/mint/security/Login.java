@@ -1,6 +1,6 @@
 package mint.security;
 
-import mint.modules.Module;
+import net.minecraft.client.Minecraft;
 
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -8,60 +8,68 @@ import java.awt.*;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * @author kambing
+ * 29/9/2021
+ */
+
 public class Login {
     public static Boolean done = false;
-    /**
-     * @author kambing
-     * 29/9/2021
-     */
     public final JFrame frame = new JFrame("Mint Auth");
 
     public Login() {
         try {
             UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            UIManager.put("control", new Color(29, 25, 25));
-            UIManager.put("info", new Color(42, 39, 39));
-            UIManager.put("nimbusBase", new Color(54, 54, 62));
+            UIManager.put("control", new Color(20, 20, 20));
+            UIManager.put("info", new Color(20, 20, 20));
+            UIManager.put("nimbusBase", new Color(20, 20, 20));
             UIManager.put("nimbusAlertYellow", new Color(248, 187, 0));
-            UIManager.put("nimbusDisabledText", new Color(128, 128, 128));
+            UIManager.put("nimbusDisabledText", new Color(0, 0, 0));
             UIManager.put("nimbusFocus", new Color(115, 164, 209));
             UIManager.put("nimbusGreen", new Color(176, 179, 50));
             UIManager.put("nimbusInfoBlue", new Color(66, 139, 221));
-            UIManager.put("nimbusLightBackground", new Color(10, 15, 23));
+            UIManager.put("nimbusLightBackground", new Color(255, 255, 255));
             UIManager.put("nimbusOrange", new Color(191, 98, 4));
             UIManager.put("nimbusRed", new Color(169, 46, 34));
-            UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
-            UIManager.put("nimbusSelectionBackground", new Color(104, 93, 156));
+            UIManager.put("nimbusSelectedText", new Color(230, 230, 230));
+            UIManager.put("nimbusSelectionBackground", new Color(255, 255, 255));
             UIManager.put("text", new Color(230, 230, 230));
             SwingUtilities.updateComponentTreeUI(frame);
         } catch (UnsupportedLookAndFeelException exc) {
             System.err.println("Nimbus: Unsupported Look and feel!");
         }
-        final JLabel label = new JLabel();
-        label.setBounds(20, 125, 200, 50);
-        final JPasswordField value = new JPasswordField();
-        value.setBounds(100, 50, 100, 30);
-        JLabel passString = new JLabel("Password:");
-        JLabel welcomer = new JLabel("Welcome, " + Module.mc.getSession().getProfile().getName() + " !");
-        welcomer.setBounds(100, 10, 800, 50);
-        passString.setBounds(20, 50, 80, 30);
-        JButton enter = new JButton("Enter");
-        enter.setBounds(100, 95, 80, 30);
+        Minecraft mc = Minecraft.getMinecraft();
+        JLabel label = new JLabel();
         JTextField text = new JTextField();
-        label.setFont(new Font("Arial", Font.BOLD, 13));
-        passString.setFont(new Font("Arial", Font.BOLD, 13));
-        enter.setFont(new Font("Arial", Font.BOLD, 13));
-        welcomer.setFont(new Font("Arial", Font.BOLD, 15));
+        JPasswordField value = new JPasswordField();
+        JButton enter = new JButton("Enter");
+        JLabel passString = new JLabel("Password:");
+
+        label.setBounds(85, 125, 200, 50);
+        value.setBounds(90, 50, 100, 30);
+        passString.setBounds(105, 30, 80, 30);
+        enter.setBounds(100, 85, 80, 30);
+
+        label.setFont(new Font("Dialog", Font.BOLD, 13));
+        passString.setFont(new Font("Dialog", Font.BOLD, 13));
+        enter.setFont(new Font("Dialog", Font.BOLD, 13));
+
         frame.add(value);
         frame.add(label);
         frame.add(passString);
         frame.add(enter);
         frame.add(text);
-        frame.add(welcomer);
+
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setSize(300, 200);
         frame.setLayout(null);
+        frame.setVisible(true);
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/minecraft/textures/mintlogo.png")));
+
+        enter.setBackground(new Color(255, 255, 255));
+        enter.setForeground(new Color(20, 20, 20));
+
         enter.addActionListener(e -> {
             String password = String.valueOf(value.getPassword());
             if (password.equals("kambing")) { //TODO add auth key thing
@@ -74,8 +82,8 @@ public class Login {
                 //TODO send webhook to verify
                 done = true;
                 SwingUtilities.invokeLater(() -> frame.setVisible(false));
-            } else {
-                label.setText("YO RATTED LOLOLOL");
+             } else {
+                label.setText("Password incorrect!");
                 // webhook
             }
         });
