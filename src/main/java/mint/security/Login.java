@@ -1,5 +1,7 @@
 package mint.security;
 
+import mint.Mint;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -50,6 +52,7 @@ public class Login {
                 SwingUtilities.invokeLater(() -> f.setVisible(false));
             }else{
                 label.setText("Incorrect password");
+                Mint.INSTANCE.mc.shutdown();
             }
         });
     }
