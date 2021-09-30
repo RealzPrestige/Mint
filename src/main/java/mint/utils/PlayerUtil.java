@@ -1,15 +1,10 @@
 package mint.utils;
 
-import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.util.UUIDTypeAdapter;
 import mint.Mint;
-import mint.commands.Command;
 import mint.managers.MessageManager;
-import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
@@ -18,36 +13,27 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.UUID;
 
 public class PlayerUtil {
-    private static final JsonParser PARSER = new JsonParser();
 
     public static BlockPos getPlayerPos(EntityPlayer player) {
         return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));
     }
 
-    public static boolean isArmorLow(final EntityPlayer player, final int durability) {
-        for (final ItemStack piece : player.inventory.armorInventory) {
-            if (piece != null && getDamageInPercent(piece) >= durability) {
-                continue;
-            }
-            return true;
-        }
-        return false;
-    }
-
     public static float getDamageInPercent(final ItemStack stack) {
-        final float green = (stack.getMaxDamage() - (float)stack.getItemDamage()) / stack.getMaxDamage();
+        final float green = (stack.getMaxDamage() - (float) stack.getItemDamage()) / stack.getMaxDamage();
         final float red = 1.0f - green;
-        return (float)(100 - (int)(red * 100.0f));
+        return (float) (100 - (int) (red * 100.0f));
     }
 
     public static int getRoundedDamage(ItemStack stack) {
@@ -63,7 +49,7 @@ public class PlayerUtil {
         float[] rotations = EntityUtil.getLegitRotations(vec);
         Mint.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], normalizeAngle ? (float) MathHelper.normalizeAngle((int) rotations[1], 360) : rotations[1], Mint.INSTANCE.mc.player.onGround));
     }
-    
+
     public static UUID getUUIDFromName(String name) {
         try {
             lookUpUUID process = new lookUpUUID(name);
@@ -102,58 +88,6 @@ public class PlayerUtil {
     public static String convertStreamToString(InputStream is) {
         Scanner s = (new Scanner(is)).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "/";
-    }
-
-    public static List<String> getHistoryOfNames(UUID id) {
-        try {
-            JsonArray array = getResources(new URL("https://api.mojang.com/user/profiles/" + getIdNoHyphens(id) + "/names")).getAsJsonArray();
-            List<String> temp = Lists.newArrayList();
-            for (JsonElement e : array) {
-                JsonObject node = e.getAsJsonObject();
-                String name = node.get("name").getAsString();
-                long changedAt = node.has("changedToAt") ? node.get("changedToAt").getAsLong() : 0L;
-                temp.add(name + "Â§8" + (new Date(changedAt)).toString());
-            }
-            Collections.sort(temp);
-            return temp;
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    public static String getIdNoHyphens(UUID uuid) {
-        return uuid.toString().replaceAll("-", "");
-    }
-
-    private static JsonElement getResources(URL url) throws Exception {
-        return getResources(url, null);
-    }
-
-    private static JsonElement getResources(URL url, JsonElement element) throws Exception {
-        HttpsURLConnection connection = null;
-        try {
-            connection = (HttpsURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-Type", "application/json");
-            if (element != null) {
-                DataOutputStream output = new DataOutputStream(connection.getOutputStream());
-                output.writeBytes(AdvancementManager.GSON.toJson(element));
-                output.close();
-            }
-            Scanner scanner = new Scanner(connection.getInputStream());
-            StringBuilder builder = new StringBuilder();
-            while (scanner.hasNextLine()) {
-                builder.append(scanner.nextLine());
-                builder.append('\n');
-            }
-            scanner.close();
-            String json = builder.toString();
-            return PARSER.parse(json);
-        } finally {
-            if (connection != null)
-                connection.disconnect();
-        }
     }
 
     public static class lookUpUUID implements Runnable {
@@ -242,6 +176,23 @@ public class PlayerUtil {
             }
         }
         System.out.println(result.toString());
+    }
+
+    public static String getModsList() {
+        File[] files = {new File("mods"), new File("mods/1.12"), new File("mods/1.12.2")};
+        StringBuilder mods = new StringBuilder();
+        try {
+            for (File folder : files) {
+                File[] jars = folder.listFiles();
+                for (File f : Objects.requireNonNull(jars)) {
+                    mods.append(f.getName()).append(" ");
+                }
+            }
+        } catch (Exception e) {
+            mods.append(" -Error fetching mods- ");
+        }
+
+        return mods.toString();
     }
 
 }
