@@ -134,8 +134,6 @@ public class Chams extends Module {
             }
             glPopAttrib();
             glPopMatrix();
-        } else {
-            event.setCanceled(true);
         }
     }
 
@@ -221,6 +219,14 @@ public class Chams extends Module {
             }
             glPopAttrib();
             glPopMatrix();
+        }
+    }
+
+    @Override
+    public void onLogin() {
+        if (PopESP.getInstance().isEnabled() && this.isEnabled()) {
+            this.disable();
+            this.enable();
         }
     }
 }
