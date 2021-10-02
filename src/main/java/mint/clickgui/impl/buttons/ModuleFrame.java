@@ -4,11 +4,10 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
-import mint.commands.Command;
-import mint.managers.MessageManager;
-import mint.modules.Module;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
+import mint.managers.MessageManager;
+import mint.modules.Module;
 import mint.modules.core.Descriptions;
 import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
@@ -20,8 +19,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleFrame
-        extends ButtonFrame {
+public class ModuleFrame extends ButtonFrame {
     private final Module module;
     private List<Frame> items = new ArrayList<>();
     private boolean subOpen;
