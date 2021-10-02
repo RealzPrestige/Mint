@@ -18,6 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.chunk.EmptyChunk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -395,5 +396,9 @@ public class EntityUtil  {
             return true;
         }
         return false;
+    }
+
+    public static boolean isBorderingChunk(final Entity boat, final Double mX, final Double mZ) {
+        return Mint.INSTANCE.mc.world.getChunk((int)(boat.posX + mX) / 16, (int)(boat.posZ + mZ) / 16) instanceof EmptyChunk;
     }
 }
