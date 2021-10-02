@@ -32,6 +32,7 @@ public class Notifications extends Module {
     public Setting<Boolean> modules = register(new Setting("Modules", false, v -> targetsParent.getValue()));
     public Setting<Boolean> othersParent = register(new Setting("Others", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
     public Setting<Integer> y = register(new Setting("y", 255, 0, 1000, v -> othersParent.getValue()));
+    public Setting<Integer> divided = register(new Setting("Divided", 10, 0, 100, v -> othersParent.getValue()));
     public Setting<Boolean> newMode = register(new Setting("New Mode", false, v -> othersParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
     public Setting<Integer> staticTime = register(new Setting("Static Time", 30, 0, 100, v -> othersParent.getValue()));
     public Setting<Boolean> startColorParent = register(new Setting("Start Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
@@ -84,10 +85,9 @@ public class Notifications extends Module {
                 }
                 if (entry.getValue() == 951) {
                     hasReachedEndState = true;
-                    if (timer.passedMs(staticTime.getValue() / 10)) {
-                        staticowidth = staticowidth - 1;
-                        timer.reset();
-                    }
+                }
+                if(hasReachedEndState){
+
                 }
                 if (hasReachedEndState && waitTime == staticTime.getValue()) {
                     if(lefinalewidth){
@@ -102,6 +102,7 @@ public class Notifications extends Module {
                     RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5, y.getValue() + renderer.getFontHeight() + 10, ColorUtil.toRGBA(backgroundRed.getValue(), backgroundGreen.getValue(), backgroundBlue.getValue(), backgroundAlpha.getValue()));
                     renderer.drawString(moduleString, entry.getValue() - renderer.getStringWidth(moduleString), y.getValue() + 2, -1, false);
                     RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5 + width, y.getValue() + renderer.getFontHeight() + 10, rainbow.getValue() ? ColorUtil.rainbow(300).getRGB() : ColorUtil.toRGBA(newColorRed.getValue(), newColorGreen.getValue(), newColorBlue.getValue(), newColorAlpha.getValue()));
+                    RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() + renderer.getFontHeight() + 10, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5 - (waitTime * renderer.getStringWidth(moduleString) / 70), y.getValue() + renderer.getFontHeight() + 11, rainbow.getValue() ? ColorUtil.rainbow(300).getRGB() : ColorUtil.toRGBA(newColorRed.getValue(), newColorGreen.getValue(), newColorBlue.getValue(), newColorAlpha.getValue()));
                 } else {
                     RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5, y.getValue() + renderer.getFontHeight() + 10, ColorUtil.toRGBA(backgroundRed.getValue(), backgroundGreen.getValue(), backgroundBlue.getValue(), backgroundAlpha.getValue()));
                     RenderUtil.drawBorder(entry.getValue() - renderer.getStringWidth(moduleString) - 4, y.getValue() - 4, renderer.getStringWidth(moduleString) + 8, renderer.getFontHeight() + 13, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()));
