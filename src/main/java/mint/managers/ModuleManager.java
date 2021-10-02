@@ -60,6 +60,7 @@ public class ModuleManager
 
         /** Movement **/
         moduleList.add(new Clip());
+        moduleList.add(new Phase());
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
