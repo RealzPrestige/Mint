@@ -20,7 +20,7 @@ public class SelfAnvil extends Module {
     public Setting<Integer> startDelay = register(new Setting("Start Delay", 50, 0, 200));
     public Setting<Integer> placeDelay = register(new Setting("Place Delay", 20, 0, 200));
     public Setting<Boolean> smart = register(new Setting<>("Smart", false));
-    public Setting<Integer> smartRange = register(new Setting("Smart Range", 10, 0, 15));
+    public Setting<Integer> smartRange = register(new Setting("Smart Range", 10, 0, 15, v-> smart.getValue()));
     public Setting<Boolean> packet = register(new Setting<>("Packet", false));
     public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
     public Setting<Boolean> swing = register(new Setting<>("Swing", false));
