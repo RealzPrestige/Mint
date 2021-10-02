@@ -60,6 +60,7 @@ public class ModuleManager
         moduleList.add(new SelfAnvil());
 
         /** Movement **/
+        moduleList.add(new BoatFly());
         moduleList.add(new Clip());
         moduleList.add(new Phase());
         moduleList.add(new ReverseStep());
@@ -71,6 +72,7 @@ public class ModuleManager
         moduleList.add(new AutoMine());
         moduleList.add(new ChorusManipulator());
         moduleList.add(new FastPlace());
+        moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
 
         /** Visual **/
