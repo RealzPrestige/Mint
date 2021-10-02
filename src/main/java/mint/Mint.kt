@@ -1,5 +1,4 @@
 package mint
-// fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
 import mint.commands.CommandManager
 import mint.managers.*
@@ -11,35 +10,25 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.opengl.Display
 import java.lang.Thread.sleep
 
-// fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
-
-// fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
-
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
 class Mint {
     @JvmField
     var mc = Minecraft.getMinecraft()
-    // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
     companion object {
         @JvmField
         var INSTANCE = Mint()
-
         @JvmField
         var commandManager: CommandManager? = null
-
         @JvmField
         var friendManager: FriendManager? = null
-
         @JvmField
         var moduleManager: ModuleManager? = null
         var colorManager: ColorManager? = null
         var fileManager: FileManager? = null
-
         @JvmField
         var configManager: ConfigManager? = null
         var eventManager: EventManager? = null
-
         @JvmField
         var textManager: TextManager? = null
         private var unloaded = false
@@ -59,7 +48,6 @@ class Mint {
             configManager!!.init()
             moduleManager!!.onLoad()
         }
-        // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
         @JvmStatic
         fun onUnload() {
@@ -76,21 +64,18 @@ class Mint {
             unloaded = false
         }
     }
-    // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
     @Mod.EventHandler
     fun init(event: FMLPreInitializationEvent?) {
-       // Login().frame.isVisible = true
-       // while (!Login.done) {
-       //    sleep(300)
-     // }
+      //  Login().frame.isVisible = true
+        //while (!Login.done) {
+        //    sleep(300)
+       // }
     }
-    // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent?) {
         Display.setTitle("Mint 0.1.1")
-        // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
         load()
     }
 }

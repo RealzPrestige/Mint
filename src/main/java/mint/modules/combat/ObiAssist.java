@@ -34,11 +34,11 @@ public class ObiAssist extends Module {
     private final Setting<Boolean> packethand = register(new Setting<>("PacketHand", true));
     private final Setting<Boolean> render = register(new Setting<>("Render", true));
     private final Setting<Double> range = register(new Setting<>("TargetMaxRange", 10.0, 5.0, 15.0));
-    private final Setting<Double> delay = register(new Setting<>("Delay (MS)", 200.0, 0.0, 500.0));
+    private final Setting<Integer> delay = register(new Setting<>("MSDelay", 200, 0, 500));
     private final Timer delayTimer = new Timer();
 
     public ObiAssist() {
-        super("Obi Assist", Category.COMBAT, "Place obsidian to support your AutoCrystal in terrain duels.");
+        super("Obby Assist", Category.COMBAT, "Place obsidian to support your AutoCrystal in pvp.");
     }
 
 
@@ -58,7 +58,7 @@ public class ObiAssist extends Module {
         //switch shit kinda messy
         if (AutoCrystal.getInstance().isEnabled() && target != null) {
             if (slot != -1) {
-                if (delayTimer.passedMs(delay.getValue().longValue())) {
+                if (delayTimer.passedMs(delay.getValue())) {
                     if (mc.player.inventory.currentItem != slot) {
                         if (packet.getValue()) {
                             if (mc.player.isHandActive()) {

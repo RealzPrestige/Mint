@@ -6,8 +6,10 @@ import mint.clickgui.setting.Setting;
 import mint.commands.Command;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.utils.BlockUtil;
 import mint.utils.EntityUtil;
 import mint.utils.InventoryUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -37,6 +39,7 @@ public class Surround extends Module {
     int originalSlot;
     int obbySlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
     int ecSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ENDER_CHEST));
+    private int safety;
 
     public Setting<Boolean> parentDisable = register(new Setting("Disable", true, false));
     public Setting<Boolean> disableOnCompletion = register(new Setting("Completion", false, v -> parentDisable.getValue()));
@@ -45,42 +48,43 @@ public class Surround extends Module {
 
     @Override
     public void onEnable() {
-        if(mc.player == null && mc.world == null) {
+        if (fullNullCheck()) {
             return;
         }
         ticks = 0;
         if (obbySlot == -1 && ecSlot == -1) {
             MessageManager.sendMessage("Out of blocks, disabling");
             disable();
-        }
-        startPos = EntityUtil.getRoundedBlockPos(mc.player);
-        CPos = EntityUtil.getCenter(mc.player.posX, mc.player.posY, mc.player.posZ);
-        switch (center.getValue()) {
-            case Instant:
-                mc.player.motionX = 0;
-                mc.player.motionZ = 0;
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x, CPos.y, CPos.z, true));
-                mc.player.setPosition(CPos.x, CPos.y, CPos.z);
-                break;
-
-            case Teleport:
-                mc.player.motionX = 0;
-                mc.player.motionZ = 0;
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x - 0.2, CPos.y - 0.2, CPos.z - 0.2, true));
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x, CPos.y, CPos.z, true));
-                mc.player.setPosition(CPos.x, CPos.y, CPos.z);
-                break;
-
-            case NCP:
-                if (NCPFactor.getValue() == 1) {
-                    mc.player.motionX = (CPos.x - mc.player.posX) / 1;
-                    mc.player.motionZ = (CPos.z - mc.player.posZ) / 1;
+        } else {
+            startPos = EntityUtil.getRoundedBlockPos(mc.player);
+            CPos = EntityUtil.getCenter(mc.player.posX, mc.player.posY, mc.player.posZ);
+            switch (center.getValue()) {
+                case Instant:
+                    mc.player.motionX = 0;
+                    mc.player.motionZ = 0;
+                    mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x, CPos.y, CPos.z, true));
+                    mc.player.setPosition(CPos.x, CPos.y, CPos.z);
                     break;
-                } else {
-                    mc.player.motionX = (CPos.x - mc.player.posX) / 2;
-                    mc.player.motionZ = (CPos.z - mc.player.posZ) / 2;
+
+                case Teleport:
+                    mc.player.motionX = 0;
+                    mc.player.motionZ = 0;
+                    mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x - 0.2, CPos.y - 0.2, CPos.z - 0.2, true));
+                    mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x, CPos.y, CPos.z, true));
+                    mc.player.setPosition(CPos.x, CPos.y, CPos.z);
                     break;
-                }
+
+                case NCP:
+                    if (NCPFactor.getValue() == 1) {
+                        mc.player.motionX = (CPos.x - mc.player.posX) / 1;
+                        mc.player.motionZ = (CPos.z - mc.player.posZ) / 1;
+                        break;
+                    } else {
+                        mc.player.motionX = (CPos.x - mc.player.posX) / 2;
+                        mc.player.motionZ = (CPos.z - mc.player.posZ) / 2;
+                        break;
+                    }
+            }
         }
     }
 
@@ -89,7 +93,7 @@ public class Surround extends Module {
         ticks++;
 
         if (ticks >= delay.getValue()) {
-            doPlace();
+            //doPlace();
         }
         if (startPos != EntityUtil.getRoundedBlockPos(mc.player) && disableOnMove.getValue()) {
             disable();
@@ -103,15 +107,16 @@ public class Surround extends Module {
     }
 
     public String hudInfoString() {
-        //todo someone make a safety check
-        return ChatFormatting.GREEN + "Safe";
-    }
-
-    public void doPlace() {
-
-    }
-
-    public boolean passedTicks(int tick) {
-        return ticks >= tick;
+        switch (safety) {
+            case 0: {
+                return ChatFormatting.RED + "Unsafe";
+            }
+            case 1: {
+                return  ChatFormatting.YELLOW + "Safe";
+            }
+            default: {
+                return ChatFormatting.GREEN + "Safe";
+            }
+        }
     }
 }
