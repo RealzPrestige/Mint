@@ -19,8 +19,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleFrame
-        extends ButtonFrame {
+public class ModuleFrame extends ButtonFrame {
     private final Module module;
     private List<Frame> items = new ArrayList<>();
     private boolean subOpen;
