@@ -120,7 +120,7 @@ public class AutoCrystal extends Module {
     private boolean rotating = false;
 
     public AutoCrystal() {
-        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks crystals.");
+        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks ender crystals to obliterate nearby enimies in minecraft crystal HVH.");
     }
 
     public static AutoCrystal getInstance() {
