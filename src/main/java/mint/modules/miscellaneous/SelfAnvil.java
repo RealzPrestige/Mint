@@ -17,10 +17,11 @@ public class SelfAnvil extends Module {
     public Setting<BaseBlock> baseBlock = register(new Setting("Base Block", BaseBlock.Obsidian));
 
     public enum BaseBlock {Obsidian, Anvils}
+
     public Setting<Integer> startDelay = register(new Setting("Start Delay", 50, 0, 200));
     public Setting<Integer> placeDelay = register(new Setting("Place Delay", 20, 0, 200));
     public Setting<Boolean> smart = register(new Setting<>("Smart", false));
-    public Setting<Integer> smartRange = register(new Setting("Smart Range", 10, 0, 15, v-> smart.getValue()));
+    public Setting<Integer> smartRange = register(new Setting("Smart Range", 10, 0, 15, v -> smart.getValue()));
     public Setting<Boolean> packet = register(new Setting<>("Packet", false));
     public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
     public Setting<Boolean> swing = register(new Setting<>("Swing", false));
@@ -38,23 +39,28 @@ public class SelfAnvil extends Module {
     public SelfAnvil() {
         super("Self Anvil", Category.MISCELLANEOUS, "Lets an anvil fall on top of you to compensate for burrow patch...");
     }
-    public void onEnable(){
+
+    public void onEnable() {
         startTimer.reset();
     }
-    public void onDisable(){
+
+    public void onDisable() {
         upperBlockPos = null;
         baseBlockPos = null;
         anvilBlockPos = null;
     }
+
     public void onUpdate() {
         if (fullNullCheck()) return;
         playerPos = PlayerUtil.getPlayerPos(mc.player);
         EntityPlayer target = EntityUtil.getTarget(smartRange.getValue());
-        if(target == null) return;
+        if (target == null) return;
 
-        if(smart.getValue() && target.getDistance(mc.player) > smartRange.getValue()) return;
+        if (smart.getValue()) {
+            if (target.getDistance(mc.player) > smartRange.getValue()) return;
+        }
 
-        if(startTimer.passedMs(startDelay.getValue()) && !mc.world.getBlockState(playerPos).getBlock().equals(Blocks.ANVIL)) {
+        if (startTimer.passedMs(startDelay.getValue()) && !mc.world.getBlockState(playerPos).getBlock().equals(Blocks.ANVIL)) {
             doAnvil();
         }
     }
@@ -252,17 +258,17 @@ public class SelfAnvil extends Module {
         return 0;
     }
 
-    public void onRender3D(Render3DEvent event){
+    public void onRender3D(Render3DEvent event) {
         //BlockPos upperBlockPos = null;
         //BlockPos baseBlockPos = null;
         //BlockPos anvilBlockPos = null;
-        if(upperBlockPos != null){
+        if (upperBlockPos != null) {
             RenderUtil.drawBlockOutline(upperBlockPos, new Color(255, 255, 255), 1f, true);
         }
-        if(baseBlockPos != null){
+        if (baseBlockPos != null) {
             RenderUtil.drawBlockOutline(baseBlockPos, new Color(255, 255, 255), 1f, true);
         }
-        if(anvilBlockPos != null){
+        if (anvilBlockPos != null) {
             RenderUtil.drawBlockOutline(anvilBlockPos, new Color(255, 255, 255), 1f, true);
         }
     }
