@@ -672,5 +672,36 @@ public class RenderUtil {
         GL11.glDisable(2848);
     }
 
-}
+    public static void drawColorPickerSquare(float x, float y, float w, float h, float hue, int alpha) {
+        RenderUtil.prepare(1);
+        builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+
+        final Color starting = new Color(Color.HSBtoRGB(hue, 1, 1));
+
+        builder.pos(w, y, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
+        builder.pos(x, y, 0).color(255, 255, 255, alpha).endVertex();
+        builder.pos(x, h, 0).color(255, 255, 255, alpha).endVertex();
+        builder.pos(w, h, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
+
+        builder.pos(w, y, 0).color(0, 0, 0, 0).endVertex();
+        builder.pos(x, y, 0).color(0, 0, 0, 0).endVertex();
+        builder.pos(x, h, 0).color(0, 0, 0, alpha).endVertex();
+        builder.pos(w, h, 0).color(0, 0, 0, alpha).endVertex();
+
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.shadeModel(GL_FLAT);
+        GlStateManager.enableAlpha();
+    }
+
+    public static void prepare(float width) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.glLineWidth(width);
+            GlStateManager.disableAlpha();
+            GlStateManager.shadeModel(GL_SMOOTH);
+        }
+    }
 

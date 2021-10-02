@@ -4,11 +4,12 @@ import mint.events.ClientEvent;
 import mint.modules.Feature;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.awt.*;
 import java.util.function.Predicate;
 
 public class Setting<T> {
     private final String name;
-    private final T defaultValue;
+    private T defaultValue;
     public T value;
     private T plannedValue;
     private T min;
@@ -16,6 +17,9 @@ public class Setting<T> {
     private boolean hasRestriction;
     private boolean isParent;
     private Predicate<T> visibility;
+    private Color color;
+    private boolean isColorSetting;
+    private int r,g,b,a;
     private String description;
     private Feature feature;
 
@@ -104,6 +108,31 @@ public class Setting<T> {
         this.max = max;
         this.plannedValue = defaultValue;
         this.visibility = visibility;
+        this.description = "";
+        this.hasRestriction = true;
+    }
+
+    public Setting(String name, int red, int green, int blue, int alpha, Predicate<T> visibility) {
+        this.name = name;
+        this.isColorSetting = true;
+        this.color = new Color(red,green,blue,alpha);
+        this.r = red;
+        this.g = green;
+        this.b = blue;
+        this.a = alpha;
+        this.visibility = visibility;
+        this.description = "";
+        this.hasRestriction = true;
+    }
+
+    public Setting(String name, int red, int green, int blue, int alpha) {
+        this.name = name;
+        this.isColorSetting = true;
+        this.color = new Color(red,green,blue,alpha);
+        this.r = red;
+        this.g = green;
+        this.b = blue;
+        this.a = alpha;
         this.description = "";
         this.hasRestriction = true;
     }
@@ -243,7 +272,7 @@ public class Setting<T> {
     }
 
     public boolean isEnumSetting() {
-        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof Bind) && !(this.value instanceof Character) && !(this.value instanceof Boolean);
+        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof Bind) && !(this.value instanceof Character) && !(this.value instanceof Boolean) && !isColorSetting;
     }
 
     public boolean isStringSetting() {
@@ -264,6 +293,14 @@ public class Setting<T> {
 
     public boolean isParent() {
         return this.isParent;
+    }
+
+    public boolean isColorSetting() {
+        return this.isColorSetting;
+    }
+
+    public Color getColor() {
+        return this.color;
     }
 
     public void setVisibility(Predicate<T> visibility) {

@@ -2,11 +2,10 @@ package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.clickgui.setting.Setting;
 import mint.events.ClientEvent;
-import mint.commands.Command;
 import mint.managers.MessageManager;
 import mint.modules.Module;
-import mint.clickgui.setting.Setting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
@@ -16,6 +15,7 @@ public class FontChanger
     private static FontChanger INSTANCE = new FontChanger();
     public Setting<Boolean> override = this.register(new Setting<>("Full", false));
     public Setting<Integer> fontSize = this.register(new Setting<>("Size", 17, 15, 20));
+    public Setting colorTest = register(new Setting("ColorTest",255,255,255,255));
     public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD));
     public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}
     private boolean reloadFont = false;

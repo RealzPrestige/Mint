@@ -39,6 +39,7 @@ public class ModuleManager
         moduleList.add(new FontChanger());
         moduleList.add(new Descriptions());
         moduleList.add(new Notifications());
+        moduleList.add(new RubberbandNotify());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());

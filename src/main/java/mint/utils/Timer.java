@@ -74,6 +74,10 @@ public class Timer {
         return this.paused;
     }
 
+    public long getTime() {
+        return this.time;
+    }
+
     public long getStartTime() {
         return this.startTime;
     }
