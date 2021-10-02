@@ -57,6 +57,7 @@ public class ModuleManager
         moduleList.add(new Backpack());
         moduleList.add(new ChorusPredict());
         moduleList.add(new FakePlayer());
+        moduleList.add(new SelfAnvil());
 
         /** Movement **/
         moduleList.add(new Clip());
