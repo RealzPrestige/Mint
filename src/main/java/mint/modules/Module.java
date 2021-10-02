@@ -102,6 +102,8 @@ public class Module extends Feature {
             Notifications.getInstance().notification.clear();
             Notifications.getInstance().hasReachedEndState = false;
             Notifications.getInstance().waitTime = 0;
+            Notifications.getInstance().width = 0;
+            Notifications.getInstance().lefinalewidth = false;
             Notifications.getInstance().notification.put(this.getName().replace("_", " ") + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!", 1000);
         }
         MinecraftForge.EVENT_BUS.register(this);
@@ -120,7 +122,10 @@ public class Module extends Feature {
             Notifications.getInstance().notification.clear();
             Notifications.getInstance().hasReachedEndState = false;
             Notifications.getInstance().waitTime = 0;
+            Notifications.getInstance().width = 0;
+            Notifications.getInstance().lefinalewidth = false;
             Notifications.getInstance().notification.put(this.getName().replace("_", " ") + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!", 1000);
+
         }
     }
 

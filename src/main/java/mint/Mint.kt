@@ -10,10 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.opengl.Display
 import java.lang.Thread.sleep
-import mint.utils.PlayerUtil;
-import sun.plugin2.util.SystemUtil
-import java.lang.Exception
-import java.util.*
+
 // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
 // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
@@ -27,17 +24,22 @@ class Mint {
     companion object {
         @JvmField
         var INSTANCE = Mint()
+
         @JvmField
         var commandManager: CommandManager? = null
+
         @JvmField
         var friendManager: FriendManager? = null
+
         @JvmField
         var moduleManager: ModuleManager? = null
         var colorManager: ColorManager? = null
         var fileManager: FileManager? = null
+
         @JvmField
         var configManager: ConfigManager? = null
         var eventManager: EventManager? = null
+
         @JvmField
         var textManager: TextManager? = null
         private var unloaded = false
@@ -78,10 +80,10 @@ class Mint {
 
     @Mod.EventHandler
     fun init(event: FMLPreInitializationEvent?) {
-      //  Login().frame.isVisible = true
-        //while (!Login.done) {
-        //    sleep(300)
-       // }
+       // Login().frame.isVisible = true
+       // while (!Login.done) {
+       //    sleep(300)
+     // }
     }
     // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 

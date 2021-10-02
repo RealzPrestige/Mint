@@ -19,11 +19,11 @@ import java.util.Map;
  */
 public class RubberbandNotify extends Module {
     public RubberbandNotify() {
-        super("RBandNotify", Category.CORE, "Notify rubberbands.");
+        super("Rubber Band Notify", Category.CORE, "Notify rubberbands.");
     }
 
-    HashMap<String, Integer> rubberbandString = new HashMap();
-    private Timer timer = new Timer();
+    HashMap<String, Integer> rubberbandString = new HashMap<>();
+    private final Timer timer = new Timer();
     float seconds;
 
     @SubscribeEvent
