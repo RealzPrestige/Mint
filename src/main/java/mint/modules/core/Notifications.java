@@ -7,7 +7,6 @@ import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
-import mint.utils.Timer;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.awt.*;
@@ -17,53 +16,47 @@ import java.util.Map;
 public class Notifications extends Module {
 
     private static Notifications INSTANCE = new Notifications();
-    public HashMap<String, Integer> notification = new HashMap();
-    public static HashMap<String, Integer> TotemPopCounter = new HashMap();
+    public HashMap<String, Integer> notification = new HashMap<>();
+    public static HashMap<String, Integer> TotemPopCounter = new HashMap<>();
     public boolean hasReachedEndState;
     public int waitTime;
     public int width;
-    int staticowidth;
     public Setting<Mode> mode = register(new Setting("Mode", Mode.CHAT));
-
     public enum Mode {CHAT, HUD, BOTH}
-
-    public Setting<Boolean> targetsParent = register(new Setting("Targets", true, false));
+    public Setting<Boolean> targetsParent = register(new Setting<>("Targets", true, false));
     public Setting<Boolean> pops = register(new Setting("Pops", false, v -> targetsParent.getValue()));
     public Setting<Boolean> modules = register(new Setting("Modules", false, v -> targetsParent.getValue()));
-    public Setting<Boolean> othersParent = register(new Setting("Others", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> y = register(new Setting("y", 255, 0, 1000, v -> othersParent.getValue()));
-    public Setting<Integer> divided = register(new Setting("Divided", 10, 0, 100, v -> othersParent.getValue()));
+    public Setting<Boolean> othersParent = register(new Setting<>("Others", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> y = register(new Setting<>("y", 255, 0, 1000, v -> othersParent.getValue()));
     public Setting<Boolean> newMode = register(new Setting("New Mode", false, v -> othersParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> staticTime = register(new Setting("Static Time", 30, 0, 100, v -> othersParent.getValue()));
-    public Setting<Boolean> startColorParent = register(new Setting("Start Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> red = register(new Setting("Start Red", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> green = register(new Setting("Start Green", 110, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> blue = register(new Setting("Start Blue", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> alpha = register(new Setting("Start Alpha", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Boolean> endColorParent = register(new Setting("End Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> endRed = register(new Setting("End Red", 255, 0, 255, v -> endColorParent.getValue() && ((mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))) && !newMode.getValue()));
-    public Setting<Integer> endGreen = register(new Setting("End Green", 255, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> endBlue = register(new Setting("End Blue", 0, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> endAlpha = register(new Setting("End Alpha", 255, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Boolean> outlineColorParent = register(new Setting("Outline Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting("Outline Red", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting("Outline Green", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH) && !newMode.getValue())));
-    public Setting<Integer> outlineBlue = register(new Setting("Outline Blue", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting("Outline Alpha", 100, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
-    public Setting<Boolean> backgroundColorParent = register(new Setting("Background Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> backgroundRed = register(new Setting("Background Red", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> backgroundGreen = register(new Setting("Background Green", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> backgroundBlue = register(new Setting("Background Blue", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> backgroundAlpha = register(new Setting("Background Alpha", 200, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Boolean> newColorParent = register(new Setting("New Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> staticTime = register(new Setting<>("Static Time", 30, 0, 100, v -> othersParent.getValue()));
+    public Setting<Boolean> startColorParent = register(new Setting<>("Start Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> red = register(new Setting<>("Start Red", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> green = register(new Setting<>("Start Green", 110, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> blue = register(new Setting<>("Start Blue", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Boolean> endColorParent = register(new Setting<>("End Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> endRed = register(new Setting<>("End Red", 255, 0, 255, v -> endColorParent.getValue() && ((mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))) && !newMode.getValue()));
+    public Setting<Integer> endGreen = register(new Setting<>("End Green", 255, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> endBlue = register(new Setting<>("End Blue", 0, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 255, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Boolean> outlineColorParent = register(new Setting<>("Outline Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH) && !newMode.getValue())));
+    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 100, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Boolean> backgroundColorParent = register(new Setting<>("Background Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundRed = register(new Setting<>("Background Red", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundGreen = register(new Setting<>("Background Green", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundBlue = register(new Setting<>("Background Blue", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundAlpha = register(new Setting<>("Background Alpha", 200, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Boolean> newColorParent = register(new Setting<>("New Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
     public Setting<Boolean> rainbow = register(new Setting("Rainbow", false, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
-    public Setting<Integer> newColorRed = register(new Setting("New Color Red", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
-    public Setting<Integer> newColorGreen = register(new Setting("New Color Green", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
-    public Setting<Integer> newColorBlue = register(new Setting("New Color Blue", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
-    public Setting<Integer> newColorAlpha = register(new Setting("New Color Alpha", 200, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
-
+    public Setting<Integer> newColorRed = register(new Setting<>("New Color Red", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public Setting<Integer> newColorGreen = register(new Setting<>("New Color Green", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public Setting<Integer> newColorBlue = register(new Setting<>("New Color Blue", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public Setting<Integer> newColorAlpha = register(new Setting<>("New Color Alpha", 200, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
     public boolean lefinalewidth;
-    Timer timer = new Timer();
 
     public Notifications() {
         super("Notifications", Category.CORE, "Notifies you when you toggle a Module.");
@@ -85,9 +78,6 @@ public class Notifications extends Module {
                 }
                 if (entry.getValue() == 951) {
                     hasReachedEndState = true;
-                }
-                if(hasReachedEndState){
-
                 }
                 if (hasReachedEndState && waitTime == staticTime.getValue()) {
                     if(lefinalewidth){
