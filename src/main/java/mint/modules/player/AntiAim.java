@@ -25,20 +25,20 @@ public class AntiAim extends Module {
     }
 
     @SubscribeEvent
-    public void onPacketSend(PacketEvent.Send event) {
+    public void onPacketSend(PacketEvent.Send e) {
         if (!isEnabled()) {
             return;
         }
-        if (event.getPacket() instanceof CPacketPlayer && !Mint.INSTANCE.mc.player.isHandActive()) {
+        if (e.getPacket() instanceof CPacketPlayer && !Mint.INSTANCE.mc.player.isHandActive()) {
             switch (mode.getValue()) {
                 case Custom:
-                ((CPacketPlayer) event.getPacket()).yaw = yaw.getValue();
-                ((CPacketPlayer) event.getPacket()).pitch = pitch.getValue();
-                break;
+                    ((CPacketPlayer)e.getPacket()).yaw = yaw.getValue();
+                    ((CPacketPlayer)e.getPacket()).pitch = pitch.getValue();
+                    break;
 
                 case Spin:
-                    ((CPacketPlayer) event.getPacket()).yaw = nextValue;
-                    ((CPacketPlayer) event.getPacket()).pitch = nextValue;
+                    ((CPacketPlayer)e.getPacket()).yaw = nextValue;
+                    ((CPacketPlayer)e.getPacket()).pitch = nextValue;
                     break;
             }
         }

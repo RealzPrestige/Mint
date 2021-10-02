@@ -80,16 +80,20 @@ public class SelfFill extends Module {
         switch (lagBack.getValue()) {
             case Packet: {
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
+                break;
             }
             case YMotion: {
                 mc.player.motionY = 1.75;
+                break;
             }
             case Teleport: {
                 mc.player.setPositionAndUpdate(mc.player.posX, mc.player.posY + 1, mc.player.posZ);
+                break;
             }
             case LagFall: {
                 mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + 2.35, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
+                break;
             }
             case DoubleJump: {
                 if (packetJump.getValue()) {
@@ -97,6 +101,7 @@ public class SelfFill extends Module {
                 } else {
                     mc.player.jump();
                 }
+                break;
             }
             //what,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, kambing yo braen dead??
             case Kambing: {
@@ -107,6 +112,7 @@ public class SelfFill extends Module {
                 fakePop(mc.player);
                 Minecraft.getMinecraft().getConnection().handleDisconnect(new SPacketDisconnect(new TextComponentString("Left the server with 1.0 hp")));
                 disable();
+                break;
             }
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));

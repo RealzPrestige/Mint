@@ -61,9 +61,10 @@ public class Strafe extends Module {
         changeY = false;
         delay = 0;
     }
+
     @SubscribeEvent
     public void onPlayerUpdateWalking(UpdateWalkingPlayerEvent event) {
-        if(mode.getValue() == Mode.STRAFE) {
+        if (mode.getValue() == Mode.STRAFE) {
             final double xDist = mc.player.posX - mc.player.prevPosX;
             final double zDist = mc.player.posZ - mc.player.prevPosZ;
             lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
@@ -71,10 +72,10 @@ public class Strafe extends Module {
     }
     
     public void onTick() {
-        if(ticks < 12) {
+        if (ticks < 12) {
             ++ticks;
         }
-        if(ticks > 10) {
+        if (ticks > 10) {
             if (switchBind.getValue().getKey() > -1) {
                 if (Keyboard.isKeyDown(switchBind.getValue().getKey())) {
                     if (mode.getValue() == Mode.INSTANT) {
@@ -91,7 +92,9 @@ public class Strafe extends Module {
         }
     }
 
-    public void onLogin() {disable();}
+    public void onLogin() {
+        disable();
+    }
 
 
     public void onUpdate() {
@@ -113,7 +116,7 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onMove(MoveEvent event) {
-        if(fullNullCheck()){
+        if (fullNullCheck()){
             return;
         }
         if(mode.getValue() == Mode.STRAFE){

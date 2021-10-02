@@ -18,11 +18,9 @@ import java.awt.*;
 public class AutoMine extends Module {
 
     public Setting<MineMode> mineMode = register(new Setting<>("Mine Mode", MineMode.NORMAL));
-
     public enum MineMode {NORMAL, COMBAT}
 
     public Setting<Priority> minePriority = register(new Setting<>("Mine Priority", Priority.SURROUNDS, v -> mineMode.getValue() == MineMode.COMBAT));
-
     public enum Priority {SURROUNDS, CITY, DYNAMIC}
 
     public Setting<Float> targetRange = register(new Setting<>("Target Range", 9.0f, 0.0f, 15.0f, v -> mineMode.getValue().equals(MineMode.COMBAT)));
@@ -54,10 +52,12 @@ public class AutoMine extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck()) return;
+        if (fullNullCheck()) {
+            return;
+        }
 
         EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
-        if (mineMode.getValue().equals(MineMode.NORMAL)) {
+        if (mineMode.getValue() == MineMode.NORMAL) {
             mc.gameSettings.keyBindAttack.pressed = true;
         }
 
@@ -116,7 +116,7 @@ public class AutoMine extends Module {
                     }
                 }
             }
-            if(targetBlock != null && mc.world.getBlockState(targetBlock).getBlock().equals(Blocks.AIR)){
+            if (targetBlock != null && mc.world.getBlockState(targetBlock).getBlock().equals(Blocks.AIR)){
                 targetBlock = null;
             }
         }
@@ -129,7 +129,9 @@ public class AutoMine extends Module {
     }
 
     public void onRender3D(Render3DEvent event) {
-        if (fullNullCheck()) return;
+        if (fullNullCheck()) {
+            return;
+        }
 
         if (targetBlock != null && !mc.world.getBlockState(targetBlock).getBlock().equals(Blocks.AIR)) {
             RenderUtil.drawBoxESP(targetBlock, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 1, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), true);
