@@ -7,11 +7,9 @@ import mint.utils.RenderUtil;
 
 public class EmptyFrame
         extends ButtonFrame {
-    private final Setting setting;
 
     public EmptyFrame(Setting setting) {
         super(setting.getName());
-        this.setting = setting;
         this.width = 15;
     }
 
@@ -22,9 +20,6 @@ public class EmptyFrame
         RenderUtil.drawRect(this.x + 113, this.y - 2, this.x + 114, this.y + this.height, sideColor);
     }
 
-    public void update() {
-        this.setHidden(!this.setting.isVisible());
-    }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
@@ -34,16 +29,6 @@ public class EmptyFrame
     @Override
     public int getHeight() {
         return 14;
-    }
-
-    @Override
-    public void toggle() {
-        setting.setValue(!((Boolean) this.setting.getValue()));
-    }
-
-    @Override
-    public boolean getState() {
-        return (Boolean) this.setting.getValue();
     }
 }
 

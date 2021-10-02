@@ -71,7 +71,6 @@ public class AutoCrystal extends Module {
     public Setting<Float> minDamage = register(new Setting("Min Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
     public Setting<Float> maxSelfDamage = register(new Setting("Max Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
     public Setting<Boolean> unsafeOnly = register(new Setting("Unsafe Only", false));
-    public Setting<Boolean> targetSeePos = register(new Setting("Target See Pos", false));
 
     //delay
     public Setting<Boolean> delayParent = register(new Setting("Delays", true, false));

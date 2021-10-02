@@ -23,6 +23,7 @@ public class ModuleFrame extends ButtonFrame {
     private final Module module;
     private List<Frame> items = new ArrayList<>();
     private boolean subOpen;
+
     public ModuleFrame(Module module) {
         super(module.getName());
         this.module = module;
@@ -42,6 +43,9 @@ public class ModuleFrame extends ButtonFrame {
                 }
                 if (setting.isColorSetting()) {
                     newItems.add(new ColorFrame(setting));
+                    //TODO: make open setitng ro smth
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
                 }
                 if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName")) {
                     newItems.add(new StringFrame(setting));
@@ -62,14 +66,14 @@ public class ModuleFrame extends ButtonFrame {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (!this.items.isEmpty()) {
-           if(subOpen){
-               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 10, this.y - 2.5f - (float) MintGui.getClickGui().getTextOffset(),5f, 1, 20, 1, true);
-           } else {
-               RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(),5f, 1, 20, 1, false);
-           }
+            if (subOpen) {
+                RenderUtil.drawArrow(this.x - 5 + (float) this.width - 10, this.y - 2.5f - (float) MintGui.getClickGui().getTextOffset(), 5f, 1, 20, 1, true);
+            } else {
+                RenderUtil.drawArrow(this.x - 5 + (float) this.width - 7.4f, this.y + 3.0f - (float) MintGui.getClickGui().getTextOffset(), 5f, 1, 20, 1, false);
+            }
             if (this.subOpen) {
                 float height = 1.0f;
-                 for (Frame item : this.items) {
+                for (Frame item : this.items) {
                     Component.counter1[0] = Component.counter1[0] + 1;
                     if (!item.isHidden()) {
                         item.setLocation(this.x + 1.0f, this.y + (height += 15.0f));
@@ -81,11 +85,11 @@ public class ModuleFrame extends ButtonFrame {
                 }
             }
         }
-        if(isHovering(mouseX, mouseY) && Descriptions.getInstance().isEnabled()){
-            if(Descriptions.getInstance().rect.getValue()) {
+        if (isHovering(mouseX, mouseY) && Descriptions.getInstance().isEnabled()) {
+            if (Descriptions.getInstance().rect.getValue()) {
                 RenderUtil.drawRect(Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 0 : mouseX + 10, Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 530 : mouseY, mouseX + 10 + renderer.getStringWidth(module.getDescription()), mouseY + 10, ColorUtil.toRGBA(0, 0, 0, 100));
             }
-            if(Descriptions.getInstance().outline.getValue()) {
+            if (Descriptions.getInstance().outline.getValue()) {
                 RenderUtil.drawBorder(Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 0 : mouseX + 10, Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 530 : mouseY, renderer.getStringWidth(module.getDescription()), 10, new Color(ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), 255)));
             }
             renderer.drawStringWithShadow(module.getDescription(), Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 0 : mouseX + 10, Descriptions.getInstance().mode.getValue() == Descriptions.Mode.BOTTOMLEFT ? 530 : mouseY, -1);
@@ -101,7 +105,7 @@ public class ModuleFrame extends ButtonFrame {
                 Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
             }
             if (mouseButton == 2 && this.isHovering(mouseX, mouseY)) {
-                if(module.isDrawn()) {
+                if (module.isDrawn()) {
                     module.setUndrawn();
                     MessageManager.sendMessage(module.getName() + " is no longer Drawn.");
                 } else {

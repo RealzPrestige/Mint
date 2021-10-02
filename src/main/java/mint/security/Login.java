@@ -71,6 +71,7 @@ public class Login {
 
         enter.setBackground(new Color(255, 255, 255));
         enter.setForeground(new Color(20, 20, 20));
+        value.setForeground(new Color(20,20,20));
 
         enter.addActionListener(e -> {
             String password = String.valueOf(value.getPassword());

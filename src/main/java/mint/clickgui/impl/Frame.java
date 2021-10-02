@@ -9,6 +9,7 @@ public class Frame
     protected int width;
     protected int height;
     private boolean hidden;
+    private boolean open;
 
     public Frame(String name) {
         super(name);
@@ -61,6 +62,11 @@ public class Frame
     public boolean isHidden() {
         return this.hidden;
     }
+
+    public boolean isOpen(){ return this.open; }
+
+    public void setOpen(){open = true;}
+    public void setNotOpen(){open = false;}
 
     public boolean setHidden(boolean hidden) {
         this.hidden = hidden;

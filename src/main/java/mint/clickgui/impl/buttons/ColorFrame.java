@@ -2,11 +2,14 @@ package mint.clickgui.impl.buttons;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
+import mint.clickgui.impl.Frame;
 import mint.clickgui.setting.Setting;
 import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.Minecraft;
+
+import java.util.ArrayList;
 
 /**
  * @author kambing
@@ -17,13 +20,13 @@ public class ColorFrame extends ButtonFrame { //TODO: finish this
     public static final Minecraft mc = Minecraft.getMinecraft();
     public Setting setting;
     public Boolean open = false;
+    ArrayList<Frame> newItems = new ArrayList<>();
 
     public ColorFrame(Setting setting) {
         super(setting.getName());
         this.setting = setting;
         this.width = 15;
     }
-
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -44,18 +47,15 @@ public class ColorFrame extends ButtonFrame { //TODO: finish this
 
     @Override
     public int getHeight() {
-        if (this.open) {
-            return 14 + 135;
-        }
         return 14;
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         this.setHidden(!this.setting.isVisible());
-        if (mouseButton == 0 && this.isHovering(mouseX, mouseY) && !this.open) {
+        if (mouseButton == 1 && this.isHovering(mouseX, mouseY) && !this.open) {
             this.open = true;
-        }else if (mouseButton == 0 && this.isHovering(mouseX, mouseY) && this.open) {
+        }else if (mouseButton == 1 && this.isHovering(mouseX, mouseY) && this.open) {
             this.open = false;
         }
     }
