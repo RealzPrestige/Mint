@@ -51,7 +51,7 @@ public class CityAnvil extends Module {
             int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
             int oldSlot = mc.player.inventory.currentItem;
 
-            //North:
+            //North
             if (mc.world.getBlockState(pos.north()).getBlock() == Blocks.AIR
                     && mc.world.getBlockState(pos.north().north()).getBlock() == Blocks.AIR
                     && mc.world.getBlockState(pos.north().north().up()).getBlock() == Blocks.AIR

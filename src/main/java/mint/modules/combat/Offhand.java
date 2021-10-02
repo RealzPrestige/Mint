@@ -121,13 +121,13 @@ public class Offhand extends Module {
     }
 
     String getRendererString(){
-        if(mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL){
+        if (mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL){
             return "End Crystal";
         }
-        if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING){
+        if (mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING){
             return "Totem";
         }
-        if(mc.player.getHeldItemOffhand().getItem() == Items.GOLDEN_APPLE){
+        if (mc.player.getHeldItemOffhand().getItem() == Items.GOLDEN_APPLE){
             return "Golden Apple";
         }
         return "";

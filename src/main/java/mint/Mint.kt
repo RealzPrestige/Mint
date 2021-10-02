@@ -1,5 +1,4 @@
 package mint
-// fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
 import mint.commands.CommandManager
 import mint.managers.*
@@ -10,19 +9,11 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.opengl.Display
 import java.lang.Thread.sleep
-import mint.utils.PlayerUtil;
-import sun.plugin2.util.SystemUtil
-import java.lang.Exception
-import java.util.*
-// fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
-
-// fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
 class Mint {
     @JvmField
     var mc = Minecraft.getMinecraft()
-    // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
     companion object {
         @JvmField
@@ -57,7 +48,6 @@ class Mint {
             configManager!!.init()
             moduleManager!!.onLoad()
         }
-        // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
         @JvmStatic
         fun onUnload() {
@@ -74,7 +64,6 @@ class Mint {
             unloaded = false
         }
     }
-    // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
     @Mod.EventHandler
     fun init(event: FMLPreInitializationEvent?) {
@@ -83,12 +72,10 @@ class Mint {
         //    sleep(300)
        // }
     }
-    // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent?) {
         Display.setTitle("Mint 0.1.1")
-        // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
         load()
     }
 }

@@ -361,6 +361,7 @@ public class EntityUtil  {
     public static boolean isDead(Entity entity) {
         return !EntityUtil.isAlive(entity);
     }
+
     public static boolean isMoving() {
         return (double) Mint.INSTANCE.mc.player.moveForward != 0.0 || (double) Mint.INSTANCE.mc.player.moveStrafing != 0.0;
     }
