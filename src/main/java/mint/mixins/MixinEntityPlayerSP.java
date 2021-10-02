@@ -27,7 +27,7 @@ public class MixinEntityPlayerSP extends AbstractClientPlayer {
     
     @Redirect(method={"onUpdateWalkingPlayer"}, at=@At(value="FIELD", target="net/minecraft/util/math/AxisAlignedBB.minY:D"))
     private double minYHook(AxisAlignedBB bb) {
-        if (Strafe.getInstance().isEnabled() && Strafe.getInstance().changeY && Strafe.getInstance().mode.getValue() == Strafe.Mode.INSTANT) {
+        if (Strafe.getInstance().isEnabled() && Strafe.getInstance().changeY && Strafe.getInstance().mode.getValue() == Strafe.Mode.INSTANT && !Strafe.getInstance().strafeTest.getValue()) {
             Strafe.getInstance().changeY = false;
             return Strafe.getInstance().minY;
         }
