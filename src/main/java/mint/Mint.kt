@@ -78,10 +78,10 @@ class Mint {
 
     @Mod.EventHandler
     fun init(event: FMLPreInitializationEvent?) {
-        Login().frame.isVisible = true
-        while (!Login.done) {
-            sleep(300)
-        }
+      //  Login().frame.isVisible = true
+        //while (!Login.done) {
+        //    sleep(300)
+       // }
     }
     // fuck you kambing why do you use kotlin i dont understand any of this BULLSHIT converting
 

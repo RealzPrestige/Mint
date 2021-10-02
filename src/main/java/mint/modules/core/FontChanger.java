@@ -15,7 +15,11 @@ public class FontChanger
     private static FontChanger INSTANCE = new FontChanger();
     public Setting<Boolean> override = this.register(new Setting<>("Full", false));
     public Setting<Integer> fontSize = this.register(new Setting<>("Size", 17, 15, 20));
-    public Setting colorTest = register(new Setting("ColorTest",255,255,255,255));
+    public Setting<Integer> w = this.register(new Setting<>("W", 72, 0, 200));
+    public Setting<Integer> h = this.register(new Setting<>("H", 72, 0, 200));
+    public Setting<Integer> x = this.register(new Setting<>("X", 72, 0, 200));
+    public Setting<Integer> y = this.register(new Setting<>("Y", 72, 0, 200));
+    public Setting colorTest = register(new Setting("ColorTest",255,255,255,255, true));
     public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD));
     public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}
     private boolean reloadFont = false;

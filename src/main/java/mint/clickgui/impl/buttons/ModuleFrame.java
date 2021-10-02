@@ -46,6 +46,13 @@ public class ModuleFrame extends ButtonFrame {
                     //TODO: make open setitng ro smth
                     newItems.add(new EmptyFrame(setting));
                     newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
+                    newItems.add(new EmptyFrame(setting));
                 }
                 if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName")) {
                     newItems.add(new StringFrame(setting));
