@@ -49,6 +49,7 @@ public class KillAura extends Module {
 
     //misc
     public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
+    public Setting<Boolean> onlySword = register(new Setting("OnlySword", false, v -> miscParent.getValue()));
     public Setting<Integer> range = register(new Setting("Range", 4, 1, 6, v -> miscParent.getValue()));
     public Setting<Boolean> rotate = register(new Setting("Rotate", false, v -> miscParent.getValue()));
     public Setting<Boolean> switchToSword = register(new Setting("SwitchToSword", true, v -> miscParent.getValue()));
@@ -59,9 +60,10 @@ public class KillAura extends Module {
         for (Entity e : mc.world.loadedEntityList) {
             int swordSlot = InventoryUtil.getItemSlot(Items.DIAMOND_SWORD);
             if (shouldAttack(e)) {
-                if (swordSlot != -1 && switchToSword.getValue() && mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD)
+                if (swordSlot != -1 && switchToSword.getValue() && mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) {
                     InventoryUtil.switchToSlot(swordSlot);
-                if (mc.player.getHeldItemMainhand().getItem() instanceof ItemSword) {
+                }
+                if (mc.player.getHeldItemMainhand().getItem() instanceof ItemSword && onlySword.getValue()) {
                     if (attackDelay.getValue()) {
                         if (mc.player.getCooledAttackStrength(0.0f) >= 1.0f) {
                             mc.playerController.attackEntity(mc.player, e);

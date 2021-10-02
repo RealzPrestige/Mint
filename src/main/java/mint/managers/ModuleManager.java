@@ -55,6 +55,7 @@ public class ModuleManager
         /** Miscellaneous **/
         moduleList.add(new AutoEnderChest());
         moduleList.add(new Backpack());
+        moduleList.add(new BoatPhase());
         moduleList.add(new ChorusPredict());
         moduleList.add(new FakePlayer());
 
