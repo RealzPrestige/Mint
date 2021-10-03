@@ -1,17 +1,10 @@
 package mint.modules.movement;
 
 import mint.clickgui.setting.Setting;
-import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
 import mint.utils.MathUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.network.play.client.CPacketInput;
-import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Comparator;
 
 public class BoatFly extends Module {
 
@@ -26,7 +19,7 @@ public class BoatFly extends Module {
     public Setting<Boolean> cancelGravity = register(new Setting("CancelGravity", true, v -> spoofParent.getValue()));
 
     public Setting<Boolean> flightParent = register(new Setting("Flight", true, false));
-    public Setting<Boolean> stopUnloaded = register(new Setting("Stop In Unloaded Chunks", true)); //todo rename it to smth oml
+    public Setting<Boolean> stopUnloaded = register(new Setting("Pause", true)); //todo rename it to smth oml
     public Setting<Float> hSpeed = register(new Setting("Horizontal speed", 2.0f, 0.1f, 2.5f, v -> flightParent.getValue()));
     public Setting<Float> vSpeed = register(new Setting("Vertical speed", 2.0f, 0.1f, 2.5f, v -> flightParent.getValue()));
 
