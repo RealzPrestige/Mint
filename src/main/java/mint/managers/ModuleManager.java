@@ -57,9 +57,12 @@ public class ModuleManager
         moduleList.add(new Backpack());
         moduleList.add(new ChorusPredict());
         moduleList.add(new FakePlayer());
+        moduleList.add(new SelfAnvil());
 
         /** Movement **/
+        moduleList.add(new BoatFly());
         moduleList.add(new Clip());
+        moduleList.add(new Phase());
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
@@ -69,6 +72,7 @@ public class ModuleManager
         moduleList.add(new AutoMine());
         moduleList.add(new ChorusManipulator());
         moduleList.add(new FastPlace());
+        moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
 
         /** Visual **/

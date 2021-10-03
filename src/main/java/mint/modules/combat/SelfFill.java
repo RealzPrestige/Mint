@@ -7,17 +7,12 @@ import mint.utils.BlockUtil;
 import mint.utils.EntityUtil;
 import mint.utils.InventoryUtil;
 import mint.utils.Timer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.server.SPacketDisconnect;
-import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 
 public class SelfFill extends Module {
 
@@ -30,7 +25,7 @@ public class SelfFill extends Module {
     public enum Block {EChest, Obsidian}
 
     public Setting<LagMode> lagBack = register(new Setting("LagBack", LagMode.Teleport));
-    public enum LagMode {Packet, YMotion, Teleport, LagFall, DoubleJump, Kambing}
+    public enum LagMode {Packet, YMotion, Teleport, LagFall, DoubleJump}
     public Setting<Boolean> packetJump = register(new Setting("PacketJump", true, v -> lagBack.getValue() == LagMode.DoubleJump));
     public BlockPos startPos = null;
     Timer timer = new Timer();
@@ -80,16 +75,20 @@ public class SelfFill extends Module {
         switch (lagBack.getValue()) {
             case Packet: {
                 mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
+                break;
             }
             case YMotion: {
                 mc.player.motionY = 1.75;
+                break;
             }
             case Teleport: {
                 mc.player.setPositionAndUpdate(mc.player.posX, mc.player.posY + 1, mc.player.posZ);
+                break;
             }
             case LagFall: {
                 mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + 2.35, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
+                break;
             }
             case DoubleJump: {
                 if (packetJump.getValue()) {
@@ -97,16 +96,7 @@ public class SelfFill extends Module {
                 } else {
                     mc.player.jump();
                 }
-            }
-            //what,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, kambing yo braen dead??
-            case Kambing: {
-                mc.player.posY = 100;
-                fakePop(mc.player);
-                fakePop(mc.player);
-                fakePop(mc.player);
-                fakePop(mc.player);
-                Minecraft.getMinecraft().getConnection().handleDisconnect(new SPacketDisconnect(new TextComponentString("Left the server with 1.0 hp")));
-                disable();
+                break;
             }
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
@@ -117,11 +107,5 @@ public class SelfFill extends Module {
         }
         timer.reset();
         disable();
-    }
-
-    public void fakePop(EntityPlayer player) {
-        try {
-            mc.player.connection.handleEntityStatus(new SPacketEntityStatus(player, (byte) 35));
-        } catch (Exception e) {}
     }
 }

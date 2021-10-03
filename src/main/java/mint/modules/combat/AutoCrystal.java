@@ -30,6 +30,7 @@ import java.util.Map;
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE;
+
     //range
     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
     public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
@@ -88,6 +89,7 @@ public class AutoCrystal extends Module {
     public Setting<Integer> startAlpha = register(new Setting<>("StartAlpha", 255, 0, 255, v -> parentVisual.getValue() && fadeParent.getValue()));
     public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v -> parentVisual.getValue() && fadeParent.getValue()));
     public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 20, 10, 100, v -> parentVisual.getValue() && fadeParent.getValue()));
+
     //box
     public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v -> parentVisual.getValue()));
     public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v -> boxParent.getValue() && parentVisual.getValue()));
@@ -95,6 +97,7 @@ public class AutoCrystal extends Module {
     public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
     public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
+
     //outline
     public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, v -> parentVisual.getValue()));
     public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v -> outlineParent.getValue() && parentVisual.getValue()));
@@ -117,7 +120,7 @@ public class AutoCrystal extends Module {
     private boolean rotating = false;
 
     public AutoCrystal() {
-        super("Auto Crystal", Category.COMBAT, "");
+        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks ender crystals to obliterate nearby enimies in minecraft crystal HVH.");
     }
 
     public static AutoCrystal getInstance() {

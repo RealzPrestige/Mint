@@ -1,7 +1,6 @@
 package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.events.Render2DEvent;
 import mint.managers.MessageManager;
@@ -9,7 +8,6 @@ import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextComponentString;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -18,50 +16,63 @@ import java.util.Map;
 public class Notifications extends Module {
 
     private static Notifications INSTANCE = new Notifications();
-    public HashMap<String, Integer> notification = new HashMap();
-    public static HashMap<String, Integer> TotemPopCounter = new HashMap();
+    public HashMap<String, Integer> notification = new HashMap<>();
+    public static HashMap<String, Integer> TotemPopCounter = new HashMap<>();
     public boolean hasReachedEndState;
     public int waitTime;
-
+    public int width;
     public Setting<Mode> mode = register(new Setting("Mode", Mode.CHAT));
-    public enum Mode{CHAT, HUD, BOTH}
-    public Setting<Boolean> targetsParent = register(new Setting("Targets", true, false));
-    public Setting<Boolean> pops = register(new Setting("Pops", false, v-> targetsParent.getValue()));
-    public Setting<Boolean> modules = register(new Setting("Modules", false, v-> targetsParent.getValue()));
-    public Setting<Boolean> othersParent = register(new Setting("Others", false, true, v-> mode.getValue() == Mode.HUD));
-    public Setting<Integer> y = register(new Setting("y", 255, 0, 1000, v-> othersParent.getValue()));
-    public Setting<Integer> staticTime = register(new Setting("StaticTime", 30, 0, 100, v-> othersParent.getValue()));
-    public Setting<Boolean> startColorParent = register(new Setting("StartColor", false, true, v-> mode.getValue() == Mode.HUD));
-    public Setting<Integer> red = register(new Setting("StartRed", 255, 0, 255, v-> startColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> green = register(new Setting("StartGreen", 110, 0, 255, v-> startColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> blue = register(new Setting("StartBlue", 255, 0, 255, v-> startColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> alpha = register(new Setting("StartAlpha", 255, 0, 255, v-> startColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Boolean> endColorParent = register(new Setting("EndColor", false, true, v-> mode.getValue() == Mode.HUD));
-    public Setting<Integer> endRed = register(new Setting("EndRed", 255, 0, 255, v-> endColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> endGreen = register(new Setting("EndGreen", 255, 0, 255, v-> endColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> endBlue = register(new Setting("EndBlue", 0, 0, 255, v-> endColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> endAlpha = register(new Setting("EndAlpha", 255, 0, 255, v-> endColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Boolean> outlineColorParent = register(new Setting("OutlineColor", false, true, v-> mode.getValue() == Mode.HUD));
-    public Setting<Integer> outlineRed = register(new Setting("OutlineRed", 255, 0, 255, v-> outlineColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> outlineGreen = register(new Setting("OutlineGreen", 255, 0, 255, v-> outlineColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> outlineBlue = register(new Setting("OutlineBlue", 255, 0, 255, v-> outlineColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> outlineAlpha = register(new Setting("OutlineAlpha", 100, 0, 255, v-> outlineColorParent.getValue() && mode.getValue() == Mode.HUD));
+    public enum Mode {CHAT, HUD, BOTH}
+    public Setting<Boolean> targetsParent = register(new Setting<>("Targets", true, false));
+    public Setting<Boolean> pops = register(new Setting("Pops", false, v -> targetsParent.getValue()));
+    public Setting<Boolean> modules = register(new Setting("Modules", false, v -> targetsParent.getValue()));
+    public Setting<Boolean> othersParent = register(new Setting<>("Others", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> y = register(new Setting<>("y", 255, 0, 1000, v -> othersParent.getValue()));
+    public Setting<Boolean> newMode = register(new Setting("New Mode", false, v -> othersParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> staticTime = register(new Setting<>("Static Time", 30, 0, 100, v -> othersParent.getValue()));
+    public Setting<Boolean> startColorParent = register(new Setting<>("Start Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> red = register(new Setting<>("Start Red", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> green = register(new Setting<>("Start Green", 110, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> blue = register(new Setting<>("Start Blue", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> startColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Boolean> endColorParent = register(new Setting<>("End Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> endRed = register(new Setting<>("End Red", 255, 0, 255, v -> endColorParent.getValue() && ((mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))) && !newMode.getValue()));
+    public Setting<Integer> endGreen = register(new Setting<>("End Green", 255, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> endBlue = register(new Setting<>("End Blue", 0, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 255, 0, 255, v -> endColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Boolean> outlineColorParent = register(new Setting<>("Outline Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH) && !newMode.getValue())));
+    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 255, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 100, 0, 255, v -> outlineColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue()));
+    public Setting<Boolean> backgroundColorParent = register(new Setting<>("Background Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundRed = register(new Setting<>("Background Red", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundGreen = register(new Setting<>("Background Green", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundBlue = register(new Setting<>("Background Blue", 50, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> backgroundAlpha = register(new Setting<>("Background Alpha", 200, 0, 255, v -> backgroundColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Boolean> newColorParent = register(new Setting<>("New Color", false, true, v -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Boolean> rainbow = register(new Setting("Rainbow", false, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH))));
+    public Setting<Integer> newColorRed = register(new Setting<>("New Color Red", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public Setting<Integer> newColorGreen = register(new Setting<>("New Color Green", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public Setting<Integer> newColorBlue = register(new Setting<>("New Color Blue", 50, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public Setting<Integer> newColorAlpha = register(new Setting<>("New Color Alpha", 200, 0, 255, v -> newColorParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !rainbow.getValue()));
+    public boolean lefinalewidth;
 
-    public Setting<Boolean> backgroundColorParent = register(new Setting("BackgroundColor", false, true, v-> mode.getValue() == Mode.HUD));
-    public Setting<Integer> backgroundRed = register(new Setting("BackgroundRed", 50, 0, 255, v-> backgroundColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> backgroundGreen = register(new Setting("BackgroundGreen", 50, 0, 255, v-> backgroundColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> backgroundBlue = register(new Setting("BackgroundBlue", 50, 0, 255, v-> backgroundColorParent.getValue() && mode.getValue() == Mode.HUD));
-    public Setting<Integer> backgroundAlpha = register(new Setting("BackgroundAlpha", 200, 0, 255, v-> backgroundColorParent.getValue() && mode.getValue() == Mode.HUD));
-
-    public Notifications(){
+    public Notifications() {
         super("Notifications", Category.CORE, "Notifies you when you toggle a Module.");
         this.setInstance();
     }
 
-    public void onRender2D(Render2DEvent event){
-        for(Map.Entry<String, Integer> entry : notification.entrySet()) {
+    public void onRender2D(Render2DEvent event) {
+        for (Map.Entry<String, Integer> entry : notification.entrySet()) {
             if (modules.getValue()) {
                 String moduleString = entry.getKey();
+                if(width > -renderer.getStringWidth(moduleString) - 7 && !lefinalewidth) {
+                    width = width - 2;
+                }
+                if(width == -renderer.getStringWidth(moduleString) - 7 || width == -renderer.getStringWidth(moduleString) - 8){
+                    lefinalewidth = true;
+                }
                 if (entry.getValue() > 950 && !hasReachedEndState) {
                     notification.put(entry.getKey(), entry.getValue() - 1);
                 }
@@ -69,15 +80,25 @@ public class Notifications extends Module {
                     hasReachedEndState = true;
                 }
                 if (hasReachedEndState && waitTime == staticTime.getValue()) {
+                    if(lefinalewidth){
+                        width = width + 2;
+                    }
                     notification.put(entry.getKey(), entry.getValue() + 1);
                 }
                 if (entry.getValue() > 1100) {
                     notification.remove(entry.getKey());
                 }
-                RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5, y.getValue() + renderer.getFontHeight() + 10, ColorUtil.toRGBA(backgroundRed.getValue(), backgroundGreen.getValue(), backgroundBlue.getValue(), backgroundAlpha.getValue()));
-                RenderUtil.drawBorder(entry.getValue() - renderer.getStringWidth(moduleString) - 4, y.getValue() - 4, renderer.getStringWidth(moduleString) + 8, renderer.getFontHeight() + 13, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()));
-                RenderUtil.drawGradientRect(entry.getValue() - renderer.getStringWidth(moduleString) - 4, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 4, y.getValue() - 4, ColorUtil.toRGBA(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()), ColorUtil.toRGBA(endRed.getValue(), endGreen.getValue(), endBlue.getValue(), endAlpha.getValue()));
-                renderer.drawString(moduleString, entry.getValue() - renderer.getStringWidth(moduleString), y.getValue() + 2, -1, false);
+                if (newMode.getValue()) {
+                    RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5, y.getValue() + renderer.getFontHeight() + 10, ColorUtil.toRGBA(backgroundRed.getValue(), backgroundGreen.getValue(), backgroundBlue.getValue(), backgroundAlpha.getValue()));
+                    renderer.drawString(moduleString, entry.getValue() - renderer.getStringWidth(moduleString), y.getValue() + 2, -1, false);
+                    RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5 + width, y.getValue() + renderer.getFontHeight() + 10, rainbow.getValue() ? ColorUtil.rainbow(300).getRGB() : ColorUtil.toRGBA(newColorRed.getValue(), newColorGreen.getValue(), newColorBlue.getValue(), newColorAlpha.getValue()));
+                    RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() + renderer.getFontHeight() + 10, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5 - (waitTime * renderer.getStringWidth(moduleString) / 70), y.getValue() + renderer.getFontHeight() + 11, rainbow.getValue() ? ColorUtil.rainbow(300).getRGB() : ColorUtil.toRGBA(newColorRed.getValue(), newColorGreen.getValue(), newColorBlue.getValue(), newColorAlpha.getValue()));
+                } else {
+                    RenderUtil.drawRect(entry.getValue() - renderer.getStringWidth(moduleString) - 5, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 5, y.getValue() + renderer.getFontHeight() + 10, ColorUtil.toRGBA(backgroundRed.getValue(), backgroundGreen.getValue(), backgroundBlue.getValue(), backgroundAlpha.getValue()));
+                    RenderUtil.drawBorder(entry.getValue() - renderer.getStringWidth(moduleString) - 4, y.getValue() - 4, renderer.getStringWidth(moduleString) + 8, renderer.getFontHeight() + 13, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()));
+                    RenderUtil.drawGradientRect(entry.getValue() - renderer.getStringWidth(moduleString) - 4, y.getValue() - 5, entry.getValue() - renderer.getStringWidth(moduleString) + renderer.getStringWidth(moduleString) + 4, y.getValue() - 4, ColorUtil.toRGBA(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()), ColorUtil.toRGBA(endRed.getValue(), endGreen.getValue(), endBlue.getValue(), endAlpha.getValue()));
+                    renderer.drawString(moduleString, entry.getValue() - renderer.getStringWidth(moduleString), y.getValue() + 2, -1, false);
+                }
             }
         }
     }
@@ -93,24 +114,32 @@ public class Notifications extends Module {
                     id *= 10;
                 }
                 if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+                    width = 0;
+                    lefinalewidth = false;
                     MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
                 }
-                if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                    width = 0;
+                    lefinalewidth = false;
                     Notifications.getInstance().notification.clear();
                     Notifications.getInstance().hasReachedEndState = false;
                     Notifications.getInstance().waitTime = 0;
                     notification.put(ChatFormatting.WHITE + "" + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", 1000);
                 }
-            }else {
+            } else {
                 int id = 0;
                 for (char character : player.getName().toCharArray()) {
                     id += character;
                     id *= 10;
                 }
                 if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+                    width = 0;
+                    lefinalewidth = false;
                     MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
                 }
-                if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                    width = 0;
+                    lefinalewidth = false;
                     Notifications.getInstance().notification.clear();
                     Notifications.getInstance().hasReachedEndState = false;
                     Notifications.getInstance().waitTime = 0;
@@ -141,9 +170,13 @@ public class Notifications extends Module {
                 id *= 10;
             }
             if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+                width = 0;
+                lefinalewidth = false;
                 MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
             }
-            if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)){
+            if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                width = 0;
+                lefinalewidth = false;
                 Notifications.getInstance().notification.clear();
                 Notifications.getInstance().hasReachedEndState = false;
                 Notifications.getInstance().waitTime = 0;
@@ -156,9 +189,13 @@ public class Notifications extends Module {
                 id *= 10;
             }
             if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+                width = 0;
+                lefinalewidth = false;
                 MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
             }
-            if(pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)){
+            if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                width = 0;
+                lefinalewidth = false;
                 Notifications.getInstance().notification.clear();
                 Notifications.getInstance().hasReachedEndState = false;
                 Notifications.getInstance().waitTime = 0;
@@ -166,9 +203,10 @@ public class Notifications extends Module {
             }
         }
     }
+
     //HAHAHAAA FUCK U KAMBING ONTICK TIMERS ON TOP EZZ
-    public void onTick(){
-        if(waitTime < staticTime.getValue()){
+    public void onTick() {
+        if (waitTime < staticTime.getValue()) {
             ++waitTime;
         }
     }

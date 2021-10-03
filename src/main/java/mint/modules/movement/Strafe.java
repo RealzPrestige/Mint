@@ -11,7 +11,6 @@ import mint.utils.EntityUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,15 +22,19 @@ import java.util.Objects;
 
 public class Strafe extends Module {
     private static Strafe INSTANCE = new Strafe();
-    public Setting<Mode> mode = register(new Setting<>("Mode", Mode.STRAFE));
-    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1)));
-    public Setting<Boolean> useTimer = register(new Setting("Use Timer", false, v-> mode.getValue() == Mode.STRAFE || mode.getValue() == Mode.STRAFETEST));
+    public Setting<Boolean> strafeTest = register(new Setting<>("Strafe Test", false));
+    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.3f, 1.0f, 2.0f, v -> strafeTest.getValue()));
+    public Setting<Mode> mode = register(new Setting<>("Mode", Mode.STRAFE, v -> !strafeTest.getValue()));
+    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1), v -> !strafeTest.getValue()));
+    public Setting<Boolean> useTimer = register(new Setting("Use Timer", false, v -> mode.getValue() == Mode.STRAFE && !strafeTest.getValue()));
 
     private int level;
     private double moveSpeed;
     private double lastDist;
     private int timerDelay;
-    public enum Mode{STRAFE, INSTANT, STRAFETEST}
+
+    public enum Mode {STRAFE, INSTANT}
+
     public boolean changeY = false;
     public double minY = 0.0;
     private int currentState = 1;
@@ -61,27 +64,29 @@ public class Strafe extends Module {
         changeY = false;
         delay = 0;
     }
+
     @SubscribeEvent
     public void onPlayerUpdateWalking(UpdateWalkingPlayerEvent event) {
-        if(mode.getValue() == Mode.STRAFE) {
+        if (mode.getValue() == Mode.STRAFE && !strafeTest.getValue()) {
             final double xDist = mc.player.posX - mc.player.prevPosX;
             final double zDist = mc.player.posZ - mc.player.prevPosZ;
             lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
         }
     }
-    
+
     public void onTick() {
-        if(ticks < 12) {
+
+        if (ticks < 12) {
             ++ticks;
         }
-        if(ticks > 10) {
+        if (ticks > 10) {
             if (switchBind.getValue().getKey() > -1) {
                 if (Keyboard.isKeyDown(switchBind.getValue().getKey())) {
-                    if (mode.getValue() == Mode.INSTANT) {
+                    if (mode.getValue() == Mode.INSTANT && !strafeTest.getValue()) {
                         mode.setValue(Mode.STRAFE);
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Strafe"), 1);
                         ticks = 0;
-                    } else if (mode.getValue() == Mode.STRAFE) {
+                    } else if (mode.getValue() == Mode.STRAFE && !strafeTest.getValue()) {
                         mode.setValue(Mode.INSTANT);
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Instant"), 1);
                         ticks = 0;
@@ -91,18 +96,15 @@ public class Strafe extends Module {
         }
     }
 
-    public void onLogin() {disable();}
+    public void onLogin() {
+        disable();
+    }
 
 
     public void onUpdate() {
-        if (mc.player != null && mode.getValue() == Mode.STRAFETEST) {
-            this.prevDist = Math.sqrt((mc.player.posX - mc.player.prevPosX) * (mc.player.posX - mc.player.prevPosX) + (mc.player.posZ - mc.player.prevPosZ) * (mc.player.posZ - mc.player.prevPosZ));
-            if (useTimer.getValue()) {
-                mc.timer.tickLength = 50.0F / 1.3F;
-            } else if (mc.timer.tickLength != 50.0F) {
-                mc.timer.tickLength = 50.0F;
-            }
-
+        if (mc.player != null && strafeTest.getValue()) {
+            prevDist = Math.sqrt((mc.player.posX - mc.player.prevPosX) * (mc.player.posX - mc.player.prevPosX) + (mc.player.posZ - mc.player.prevPosZ) * (mc.player.posZ - mc.player.prevPosZ));
+            mc.timer.tickLength = 50.0F / timerAmount.getValue();
             if (!mc.player.isSprinting()) {
                 mc.player.setSprinting(true);
                 mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SPRINTING));
@@ -113,10 +115,10 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onMove(MoveEvent event) {
-        if(fullNullCheck()){
+        if (fullNullCheck()) {
             return;
         }
-        if(mode.getValue() == Mode.STRAFE){
+        if (mode.getValue() == Mode.STRAFE && !strafeTest.getValue()) {
             ++timerDelay;
             timerDelay %= 5;
             if (timerDelay != 0) {
@@ -189,7 +191,7 @@ public class Strafe extends Module {
                 event.x = (0.0);
                 event.z = (0.0);
             }
-        } else if(mode.getValue() == Mode.INSTANT){
+        } else if (mode.getValue() == Mode.INSTANT && !strafeTest.getValue()) {
             if (!(event.getStage() != 0 || nullCheck() || mc.player.isSneaking() || mc.player.isInWater() || mc.player.isInLava() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
                 MovementInput movementInput = mc.player.movementInput;
                 float moveForward = movementInput.moveForward;
@@ -212,39 +214,39 @@ public class Strafe extends Module {
                     event.z = ((double) moveForward * EntityUtil.getMaxSpeed() * Math.sin(Math.toRadians(rotationYaw + 90.0f)) - (double) moveStrafe * EntityUtil.getMaxSpeed() * Math.cos(Math.toRadians(rotationYaw + 90.0f)));
                 }
             }
-        }else if (mode.getValue() == Mode.STRAFETEST) {
-            switch(this.currentState) {
+        } else if (strafeTest.getValue()) {
+            switch (currentState) {
                 case 0:
-                    ++this.currentState;
-                    this.prevDist = 0.0D;
+                    ++currentState;
+                    prevDist = 0.0D;
                     break;
                 case 1:
                 default:
-                    if ((mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0.0D, mc.player.motionY, 0.0D)).size() > 0 || mc.player.collidedVertically) && this.currentState > 0) {
-                        this.currentState = mc.player.moveForward == 0.0F && mc.player.moveStrafing == 0.0F ? 0 : 1;
+                    if ((mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0.0D, mc.player.motionY, 0.0D)).size() > 0 || mc.player.collidedVertically) && currentState > 0) {
+                        currentState = mc.player.moveForward == 0.0F && mc.player.moveStrafing == 0.0F ? 0 : 1;
                     }
 
-                    this.motionSpeed = this.prevDist - this.prevDist / 159.0D;
+                    motionSpeed = prevDist - prevDist / 159.0D;
                     break;
                 case 2:
                     double var2 = 0.40123128D;
                     if ((mc.player.moveForward != 0.0F || mc.player.moveStrafing != 0.0F) && mc.player.onGround) {
                         if (mc.player.isPotionActive(MobEffects.JUMP_BOOST)) {
-                            var2 += (double)((float)(mc.player.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+                            var2 += (float) (Objects.requireNonNull(mc.player.getActivePotionEffect(MobEffects.JUMP_BOOST)).getAmplifier() + 1) * 0.1F;
                         }
 
                         event.y = (mc.player.motionY = var2);
-                        this.motionSpeed *= 2.149D;
+                        motionSpeed *= 2.149D;
                     }
                     break;
                 case 3:
-                    this.motionSpeed = this.prevDist - 0.76D * (this.prevDist - this.getBaseMotionSpeed());
+                    motionSpeed = prevDist - 0.76D * (prevDist - getBaseMotionSpeed());
             }
 
-            this.motionSpeed = Math.max(this.motionSpeed, this.getBaseMotionSpeed());
-            double var4 = (double)mc.player.movementInput.moveForward;
-            double var6 = (double)mc.player.movementInput.moveStrafe;
-            double var8 = (double)mc.player.rotationYaw;
+            motionSpeed = Math.max(motionSpeed, getBaseMotionSpeed());
+            double var4 = mc.player.movementInput.moveForward;
+            double var6 = mc.player.movementInput.moveStrafe;
+            double var8 = mc.player.rotationYaw;
             if (var4 == 0.0D && var6 == 0.0D) {
                 event.x = (0.0D);
                 event.z = (0.0D);
@@ -255,11 +257,12 @@ public class Strafe extends Module {
                 var6 *= Math.cos(0.7853981633974483D);
             }
 
-            event.x = ((var4 * this.motionSpeed * -Math.sin(Math.toRadians(var8)) + var6 * this.motionSpeed * Math.cos(Math.toRadians(var8))) * 0.99D);
-            event.z = ((var4 * this.motionSpeed * Math.cos(Math.toRadians(var8)) - var6 * this.motionSpeed * -Math.sin(Math.toRadians(var8))) * 0.99D);
-            ++this.currentState;
-}
+            event.x = ((var4 * motionSpeed * -Math.sin(Math.toRadians(var8)) + var6 * motionSpeed * Math.cos(Math.toRadians(var8))) * 0.99D);
+            event.z = ((var4 * motionSpeed * Math.cos(Math.toRadians(var8)) - var6 * motionSpeed * -Math.sin(Math.toRadians(var8))) * 0.99D);
+            ++currentState;
+        }
     }
+
     double round(final double value) {
         BigDecimal bigDecimal = new BigDecimal(value);
         bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
@@ -278,11 +281,12 @@ public class Strafe extends Module {
         }
         return defaultSpeed;
     }
+
     private double getBaseMotionSpeed() {
         double event = 0.272D;
         if (mc.player.isPotionActive(MobEffects.SPEED)) {
-            int var3 = ((PotionEffect)Objects.requireNonNull(mc.player.getActivePotionEffect(MobEffects.SPEED))).getAmplifier();
-            event *= 1.0D + 0.2D * (double)var3;
+            int var3 = Objects.requireNonNull(mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
+            event *= 1.0D + 0.2D * (double) var3;
         }
         return event;
     }

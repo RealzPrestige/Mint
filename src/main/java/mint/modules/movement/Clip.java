@@ -1,5 +1,6 @@
 package mint.modules.movement;
 
+import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -12,6 +13,8 @@ public class Clip extends Module {
         super("Clip", Module.Category.MOVEMENT, "VClip bypass for crystalpvp cc.");
     }
 
+    public Setting<Float> height = register(new Setting("Height", 1.4f, 1.1f, 2.0f));
+    public Setting<Boolean> offground = register(new Setting("Offground", false));
     public BlockPos startPos = null;
 
     @Override
@@ -32,37 +35,8 @@ public class Clip extends Module {
             return;
         }
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
-        EntityUtil.packetJump(true);
-        switch (mc.player.getPosition().getY()) {
-            case 6:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -7.4, mc.player.posZ, true));
-                break;
-
-            case 5:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -6.4, mc.player.posZ, true));
-                break;
-
-            case 4:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -5.4, mc.player.posZ, true));
-                break;
-
-            case 3:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -4.4, mc.player.posZ, true));
-                break;
-
-            case 2:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -3.4, mc.player.posZ, true));
-                break;
-
-            case 1:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -2.4, mc.player.posZ, true));
-                break;
-
-            case 0:
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY -1.4, mc.player.posZ, true));
-                break;
-
-        }
+        EntityUtil.packetJump(offground.getValue());
+        mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, (mc.player.posY + height.getValue()) * -1, mc.player.posZ, offground.getValue()));
         mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
         disable();
     }

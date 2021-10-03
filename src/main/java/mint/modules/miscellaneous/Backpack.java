@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Backpack extends Module {
 
     public Backpack() {
-        super("Backpack", Module.Category.MISCELLANEOUS, "idk.");
+        super("Backpack", Module.Category.MISCELLANEOUS, "Manipulates container packets.");
     }
 
     public Setting<Boolean> containerParent = register(new Setting("Containers", true, false));
