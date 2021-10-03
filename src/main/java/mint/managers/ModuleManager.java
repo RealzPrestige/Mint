@@ -85,6 +85,7 @@ public class ModuleManager
         moduleList.add(new PopESP());
         moduleList.add(new SwingAnimations());
         moduleList.add(new NoCluster());
+        moduleList.add(new ViewTweaks());
     }
 
     public Module getModuleByName(String name) {
