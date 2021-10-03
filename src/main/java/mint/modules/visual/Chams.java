@@ -25,6 +25,7 @@ public class Chams extends Module {
     public Setting<Boolean> blend = register(new Setting<>("Blend", false));
     public Setting<Boolean> depthMask = register(new Setting<>("Depth Mask", false));
     public Setting<Boolean> walls = register(new Setting<>("Walls", false));
+    public Setting<Boolean> cancel = register(new Setting<>("Cancel", false));
     public Setting<RenderMode> renderMode = register(new Setting<>("Render Mode", RenderMode.FILL));
     public enum RenderMode {FILL, WIRE, BOTH}
     public Setting<Boolean> glint = register(new Setting<>("Galaxy Texture", false));
@@ -63,6 +64,11 @@ public class Chams extends Module {
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
         if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity) && (targets.getValue() == Targets.PLAYERS || targets.getValue() == Targets.BOTH)) {
+        event.getEntityLivingBase().hurtTime = 0;
+        event.getEntityLivingBase().maxHurtTime = 0;
+        if (cancel.getValue()) {
+            event.setCanceled(true);
+        }
             if (transparent.getValue()) {
                 GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
@@ -140,6 +146,9 @@ public class Chams extends Module {
     @SubscribeEvent
     public void onRenderCrystalPost(RenderCrystalEvent.RenderCrystalPostEvent event) {
         if (targets.getValue() == Targets.CRYSTALS || targets.getValue() == Targets.BOTH) {
+            if (cancel.getValue()) {
+                event.setCanceled(true);
+            }
             if (transparent.getValue()) {
                 GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
