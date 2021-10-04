@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import org.apache.logging.log4j.core.jmx.Server
 import org.lwjgl.opengl.Display
 import java.lang.Thread.sleep
 
@@ -31,10 +32,13 @@ class Mint {
         var eventManager: EventManager? = null
         @JvmField
         var textManager: TextManager? = null
+        @JvmField
+        var serverManager: ServerManager? = null
         private var unloaded = false
         fun load() {
             unloaded = false
             textManager = TextManager()
+            serverManager = ServerManager()
             commandManager = CommandManager()
             friendManager = FriendManager()
             moduleManager = ModuleManager()
