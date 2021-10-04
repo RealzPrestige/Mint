@@ -70,6 +70,8 @@ public class Speedmine extends Module {
     public BlockPos currentPos;
     public Block currentBlock;
     public IBlockState currentBlockState;
+    int pickSlot = InventoryUtil.getItemFromHotbar(Items.DIAMOND_PICKAXE);
+    int oldSlot;
 
     public Speedmine() {
         super("Speedmine", Category.PLAYER, "Speeds up mining and tweaks.");
@@ -112,17 +114,20 @@ public class Speedmine extends Module {
         if (currentAlpha < (alpha.getValue() - 2)) {
             currentAlpha = currentAlpha + 3;
         }
-        int pickSlot = InventoryUtil.findHotbarBlock(ItemPickaxe.class);
+
         if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.AUTO && timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) && getPickSlot() != -1) {
             if (pickSlot == -1) {
                 TextComponentString text = new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.WHITE + ChatFormatting.BOLD + " Speedmine: " + ChatFormatting.RESET + ChatFormatting.GRAY + "No pickaxe found, stopped" + ChatFormatting.WHITE + ChatFormatting.BOLD + " SilentSwitch");
                 Module.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
             } else {
+                /* i doubt that packet switch works as silentswitch but whatever
+                omg i got a headache from reading the code
+                nigger.NIGGA _- 2124 530i 23r=== 32rt49 m _= 555 what the fuck nigga china code */
                 mc.player.connection.sendPacket(new CPacketHeldItemChange(getPickSlot()));
             }
         }
         if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.AUTO && timer.passedMs((int) (2200.0f * Mint.serverManager.getTpsFactor()))) {
-            int oldSlot = mc.player.inventory.currentItem;
+            oldSlot = mc.player.inventory.currentItem;
             mc.player.connection.sendPacket(new CPacketHeldItemChange(oldSlot));
         }
         if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND) {
@@ -135,7 +140,7 @@ public class Speedmine extends Module {
                         mc.player.connection.sendPacket(new CPacketHeldItemChange(getPickSlot()));
 
                         if (delay == 5) {
-                            int oldSlot = mc.player.inventory.currentItem;
+                            oldSlot = mc.player.inventory.currentItem;
                             mc.player.connection.sendPacket(new CPacketHeldItemChange(oldSlot));
                         }
 

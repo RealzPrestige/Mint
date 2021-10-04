@@ -40,6 +40,7 @@ public class Phase extends Module {
 
         switch (mode.getValue()) {
             case Clip:
+
                 if (packet.getValue()) {
 
                     //horizontal
