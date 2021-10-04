@@ -74,6 +74,7 @@ public class ModuleManager
         moduleList.add(new FastPlace());
         moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
+        moduleList.add(new Speedmine());
 
         /** Visual **/
         moduleList.add(new BreakESP());

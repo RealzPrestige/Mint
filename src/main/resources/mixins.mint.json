@@ -9,6 +9,7 @@
     "MixinItemRenderer",
     "MixinMinecraft",
     "MixinNetworkManager",
+    "MixinPlayerControllerMP",
     "MixinRenderLivingBase",
     "MixinRenderModifiedCrystal",
     "MixinRenderPlayer",
