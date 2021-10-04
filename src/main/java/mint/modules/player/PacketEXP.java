@@ -17,7 +17,7 @@ public class PacketEXP extends Module {
     }
 
     public void onUpdate() {
-        if(rightClickOnly.getValue() && !mc.gameSettings.keyBindUseItem.isKeyDown()){
+        if (rightClickOnly.getValue() && !mc.gameSettings.keyBindUseItem.isKeyDown()) {
             return;
         }
         if (mc.player.getHeldItemMainhand().getItem() == Items.EXPERIENCE_BOTTLE) {

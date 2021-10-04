@@ -23,7 +23,7 @@ public class SelfFill extends Module {
 
     public Setting<Block> prefer = register(new Setting("Prefer", Block.EChest));
     public enum Block {EChest, Obsidian}
-
+    public Setting<Float> height = register(new Setting("Height", 1.0f, 1.0f, 5.0f));
     public Setting<LagMode> lagBack = register(new Setting("LagBack", LagMode.Teleport));
     public enum LagMode {Packet, YMotion, Teleport, LagFall, DoubleJump}
     public Setting<Boolean> packetJump = register(new Setting("PacketJump", true, v -> lagBack.getValue() == LagMode.DoubleJump));
@@ -74,19 +74,19 @@ public class SelfFill extends Module {
 
         switch (lagBack.getValue()) {
             case Packet: {
-                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, true));
+                mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ, true));
                 break;
             }
             case YMotion: {
-                mc.player.motionY = 1.75;
+                mc.player.motionY = height.getValue();
                 break;
             }
             case Teleport: {
-                mc.player.setPositionAndUpdate(mc.player.posX, mc.player.posY + 1, mc.player.posZ);
+                mc.player.setPositionAndUpdate(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ);
                 break;
             }
             case LagFall: {
-                mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + 2.35, mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
+                mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
                 break;
             }
