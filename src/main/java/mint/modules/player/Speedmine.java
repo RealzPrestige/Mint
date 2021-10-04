@@ -167,7 +167,6 @@ public class Speedmine extends Module {
             bb = mc.world.getBlockState(currentPos).getSelectedBoundingBox(mc.world, currentPos);
 
             Color color = new Color(red.getValue(), green.getValue(), blue.getValue(), renderMode.getValue().equals(RenderMode.FADE) ? currentAlpha : alpha.getValue());
-
             switch (renderMode.getValue()) {
                 case EXPAND:
                     bb = bb.shrink(Math.max(Math.min(normalize(count, getMineTime(currentBlock, item) - subVal, 0), 1.0), 0.0));
@@ -224,8 +223,12 @@ public class Speedmine extends Module {
                             currentBlockState = mc.world.getBlockState(currentPos);
                             timer.reset();
                             if (getBestItem(currentBlock) == null) {
-                                item = mc.player.getHeldItem(EnumHand.MAIN_HAND);
-                            }else{
+                                if (mc.player.getHeldItem(EnumHand.MAIN_HAND) != getItemStackFromItem(Items.AIR) || mc.player.getHeldItem(EnumHand.MAIN_HAND) != null) {
+                                    item = mc.player.getHeldItem(EnumHand.MAIN_HAND);
+                                }else{
+                                    item = getItemStackFromItem(Items.GOLDEN_APPLE);
+                                }
+                            } else {
                                 item = getItemStackFromItem(getBestItem(currentBlock));
                             }
                         }
