@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author kambing, zPrestige
  */
 public class ViewTweaks extends Module {
+
     private static ViewTweaks INSTANCE = new ViewTweaks();
     public Setting<Boolean> fullBright = register(new Setting("FullBright", false));
     public Setting<Boolean> glow = register(new Setting("ItemGlow", false));

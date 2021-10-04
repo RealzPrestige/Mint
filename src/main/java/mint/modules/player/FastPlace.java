@@ -15,7 +15,7 @@ public class FastPlace extends Module {
 
     @Override
     public void onUpdate(){
-        if(fullNullCheck()){
+        if (fullNullCheck()) {
             return;
         }
         if ((mc.player.getHeldItemOffhand().getItem() == Items.EXPERIENCE_BOTTLE || mc.player.getHeldItemMainhand().getItem() == Items.EXPERIENCE_BOTTLE) && exp.getValue()) {

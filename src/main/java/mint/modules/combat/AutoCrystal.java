@@ -29,6 +29,7 @@ import java.util.Map;
 
 public class AutoCrystal extends Module {
 
+    //how about me making break and placement and u niggas making the calcs and shit cuz this is bad
     public static AutoCrystal INSTANCE;
 
     //range
@@ -120,7 +121,7 @@ public class AutoCrystal extends Module {
     private boolean rotating = false;
 
     public AutoCrystal() {
-        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks ender crystals to obliterate nearby enimies in minecraft crystal HVH.");
+        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks crystals."); //morning brit, morning
     }
 
     public static AutoCrystal getInstance() {

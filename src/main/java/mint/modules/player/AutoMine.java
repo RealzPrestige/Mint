@@ -81,7 +81,7 @@ public class AutoMine extends Module {
                         targetBlock = null;
                     }
                 }
-                if (minePriority.getValue().equals(Priority.City)) {
+                if (minePriority.getValue() == Priority.City) {
                     if (mc.world.getBlockState(pos.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.north().north()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.north().north().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.BEDROCK))) {
                         targetBlock = pos.north();
                     } else if (mc.world.getBlockState(pos.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.east().east()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.east().east().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.BEDROCK))) {
@@ -94,7 +94,7 @@ public class AutoMine extends Module {
                         targetBlock = null;
                     }
                 }
-                if (minePriority.getValue().equals(Priority.Dynamic)) {
+                if (minePriority.getValue() == Priority.Dynamic) {
                     if (mc.world.getBlockState(pos.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.north().north()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.north().north().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.BEDROCK))) {
                         targetBlock = pos.north();
                     } else if (mc.world.getBlockState(pos.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.east().east()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.east().east().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.BEDROCK))) {
@@ -116,7 +116,7 @@ public class AutoMine extends Module {
                     }
                 }
             }
-            if (targetBlock != null && mc.world.getBlockState(targetBlock).getBlock().equals(Blocks.AIR)){
+            if (targetBlock != null && mc.world.getBlockState(targetBlock).getBlock() == Blocks.AIR){
                 targetBlock = null;
             }
         }

@@ -44,6 +44,7 @@ public class ModuleManager
         /** Combat **/
         moduleList.add(new AutoCrystal());
         moduleList.add(new CityAnvil());
+        moduleList.add(new Crits());
         moduleList.add(new HoleFiller());
         moduleList.add(new KillAura());
         moduleList.add(KotlinAura.INSTANCE);

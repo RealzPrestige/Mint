@@ -13,13 +13,12 @@ public class BoatFly extends Module {
     }
 
     public Setting<Boolean> spoofParent = register(new Setting("Spoof", true, false));
-    public Setting<Boolean> ncpPacket = register(new Setting("NCP Bypass", true, v -> spoofParent.getValue()));
     public Setting<Boolean> noClip = register(new Setting("NoClip", true, v -> spoofParent.getValue()));
     public Setting<Boolean> onGround = register(new Setting("OnGround", false, v -> spoofParent.getValue()));
     public Setting<Boolean> cancelGravity = register(new Setting("CancelGravity", true, v -> spoofParent.getValue()));
 
     public Setting<Boolean> flightParent = register(new Setting("Flight", true, false));
-    public Setting<Boolean> stopUnloaded = register(new Setting("Pause", true)); //todo rename it to smth oml
+    public Setting<Boolean> stopUnloaded = register(new Setting("Pause In Unloaded", true));
     public Setting<Float> hSpeed = register(new Setting("Horizontal speed", 2.0f, 0.1f, 2.5f, v -> flightParent.getValue()));
     public Setting<Float> vSpeed = register(new Setting("Vertical speed", 2.0f, 0.1f, 2.5f, v -> flightParent.getValue()));
 

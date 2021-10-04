@@ -44,14 +44,15 @@ public class AutoEnderChest extends Module {
             disable();
         }
         if (startTimer.passedMs(1200)) {
+            if (enderChestSlot == -1) {
+                MessageManager.sendError("No enderchests in hotbar found.");
+                disable();
+            }
+            timer.reset();
+            startTimer.reset();
+            InventoryUtil.SilentSwitchToSlot(enderChestSlot);
             if (getFace() == 1) {
-                if (enderChestSlot == -1) {
-                    MessageManager.sendError("No enderchests in hotbar found.");
-                    disable();
-                }
-                timer.reset();
-                startTimer.reset();
-                InventoryUtil.SilentSwitchToSlot(enderChestSlot);
+
                 BlockUtil.placeBlock(pos.north().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
@@ -64,13 +65,7 @@ public class AutoEnderChest extends Module {
                     mc.playerController.updateController();
                 }
             } else if (getFace() == 2) {
-                if (enderChestSlot == -1) {
-                    MessageManager.sendError("No enderchests in hotbar found.");
-                    disable();
-                }
-                timer.reset();
-                startTimer.reset();
-                InventoryUtil.SilentSwitchToSlot(enderChestSlot);
+
                 BlockUtil.placeBlock(pos.east().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
@@ -83,13 +78,7 @@ public class AutoEnderChest extends Module {
                     mc.playerController.updateController();
                 }
             } else if (getFace() == 3) {
-                if (enderChestSlot == -1) {
-                    MessageManager.sendError("No enderchests in hotbar found.");
-                    disable();
-                }
-                timer.reset();
-                startTimer.reset();
-                InventoryUtil.SilentSwitchToSlot(enderChestSlot);
+
                 BlockUtil.placeBlock(pos.south().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
@@ -102,13 +91,7 @@ public class AutoEnderChest extends Module {
                     mc.playerController.updateController();
                 }
             } else if (getFace() == 4) {
-                if (enderChestSlot == -1) {
-                    MessageManager.sendError("No enderchests in hotbar found.");
-                    disable();
-                }
-                timer.reset();
-                startTimer.reset();
-                InventoryUtil.SilentSwitchToSlot(enderChestSlot);
+
                 BlockUtil.placeBlock(pos.west().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
