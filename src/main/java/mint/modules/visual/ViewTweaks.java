@@ -12,8 +12,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ViewTweaks extends Module {
     private static ViewTweaks INSTANCE = new ViewTweaks();
     public Setting<Boolean> fullBright = register(new Setting("FullBright", false));
+    public Setting<Boolean> glow = register(new Setting("ItemGlow", false));
     private final Setting<Boolean> fov = register(new Setting<>("FOV", true, false));
-    private final Setting<Boolean> fovStay = register(new Setting<>("FOV Stay", false));
+    private final Setting<Boolean> fovStay = register(new Setting("FOVStay", false, v -> fov.getValue()));
     public Setting<Float> fovValue = register(new Setting("FovValue", 140.0f, 0.0f, 180.0f, v -> fov.getValue()));
     public Setting<Boolean> antiFog = register(new Setting("AntiFog", false));
     public Setting<Boolean> noWeather = register(new Setting("NoWeather", false));

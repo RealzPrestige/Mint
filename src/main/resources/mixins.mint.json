@@ -6,6 +6,7 @@
   "mixins": [
     "MixinEntityPlayerSP",
     "MixinFontRenderer",
+    "MixinItemRenderer",
     "MixinMinecraft",
     "MixinNetworkManager",
     "MixinRenderLivingBase",
