@@ -18,7 +18,7 @@ public class Phase extends Module {
     public Setting<Integer> speed = register(new Setting("Speed", 1, 1, 10, v -> mode.getValue() == Mode.Test));
 
     public Setting<Boolean> spoofonGround = register(new Setting("Spoof onGround", true));
-    public Setting<Boolean> offground = register(new Setting("Offground", false)); //sorry i had a brain meltdown when making this
+    public Setting<Boolean> offground = register(new Setting("Offground", false));
 
     @Override
     public void onToggle() {
@@ -34,6 +34,11 @@ public class Phase extends Module {
 
         mc.player.noClip = true;
         mc.player.setVelocity(0.0, 0.0, 0.0);
+
+        //since we dont want to step up when phasing in a block, we do this
+        mc.player.collidedHorizontally = false;
+        mc.player.collidedVertically = false;
+
         if (spoofonGround.getValue()) {
             mc.player.onGround = false;
         }

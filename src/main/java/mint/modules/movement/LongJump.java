@@ -17,14 +17,19 @@ public class LongJump extends Module {
     public enum Mode {Factor}
 
     public Setting<Float> acceleration = register(new Setting("Acceleration", 0.3f, 0.0f, 1.0f, v -> mode.getValue() == Mode.Factor));
+    public Setting<Boolean> autoJump = register(new Setting("Auto Jump", true));
+    public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 410));
     public Setting<Boolean> disableOnLag = register(new Setting("Disable On Lag", true));
-    Double playerSpeed;
+    double playerSpeed;
     float jumpFactor;
 
     @Override
     public void onEnable() {
         playerSpeed = EntityUtil.getDefaultSpeed();
         jumpFactor = mc.player.jumpMovementFactor;
+        if (mc.player.onGround && autoJump.getValue() && mc.player.moveForward == 0.0f && mc.player.moveStrafing == 0.0f) {
+            mc.player.motionY = jumpHeight.getValue() / 1000;
+        }
     }
 
     @Override
@@ -37,14 +42,9 @@ public class LongJump extends Module {
         if (mode.getValue() == Mode.Factor) {
             if (mc.player.onGround) {
                 mc.player.jumpMovementFactor = jumpFactor;
-                mc.player.motionY = 0.41f;
-
-            } else if (!(mc.player.jumpMovementFactor > 0.1f)){
-
+            } else if (!(mc.player.jumpMovementFactor > 0.1f)) {
                 mc.player.jumpMovementFactor += acceleration.getValue();
-
             }
-
         }
     }
 

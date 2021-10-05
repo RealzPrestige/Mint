@@ -16,8 +16,9 @@ public class ReverseStep extends Module {
         if (mc.player.isInLava() || mc.player.isInWater()) {
             return;
         }
-        if (mc.player.onGround) {
-            mc.player.motionY -= vanillaSpeed.getValue();
+        if (!mc.player.onGround) {
+            return;
         }
+        mc.player.motionY -= vanillaSpeed.getValue();
     }
 }

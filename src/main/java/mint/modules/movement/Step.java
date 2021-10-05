@@ -14,6 +14,8 @@ public class Step extends Module {
     public Setting<Integer> stepHeight = register(new Setting("Height",2,1,4, v -> mode.getValue() != Mode.Vanilla));
     double[] oneblockPositions = new double[]{0.42, 0.75};
     double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
+
+    //why do these even exist what the fuck
     double[] twoFiveOffset = new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.907};
     double[] fourBlockPositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43, 1.78, 1.63, 1.51, 1.9, 2.21, 2.45, 2.43, 2.78, 2.63, 2.51, 2.9, 3.21, 3.45, 3.43};
     double[] selectedPositions = new double[0];
