@@ -13,31 +13,22 @@ public class Clip extends Module {
         super("Clip", Module.Category.MOVEMENT, "VClip bypass for crystalpvp cc.");
     }
 
-    public Setting<Float> height = register(new Setting("Height", 1.4f, 1.1f, 2.0f));
+    public Setting<Float> offset = register(new Setting("Y Offset", 1.4f, 1.1f, 2.0f));
     public Setting<Boolean> offground = register(new Setting("Offground", false));
-    public BlockPos startPos = null;
 
     @Override
-    public void onEnable() {
-        if (fullNullCheck()) {
-            disable();
-            return;
-        }
-        if (mc.player.isElytraFlying()) {
-            return;
-        }
-        startPos = new BlockPos(mc.player.getPositionVector());
-    }
-
     public void onUpdate() {
         if (fullNullCheck()) {
             disable();
             return;
         }
-        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
-        EntityUtil.packetJump(offground.getValue());
-        mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, (mc.player.posY + height.getValue()) * -1, mc.player.posZ, offground.getValue()));
-        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
-        disable();
+        if (mc.player.posY < 6 && !mc.player.isElytraFlying()) {
+            mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            EntityUtil.packetJump(offground.getValue());
+            double y = (mc.player.posY + offset.getValue()) * -1;
+            mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, y, mc.player.posZ, offground.getValue()));
+            mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+            disable();
+        }
     }
 }

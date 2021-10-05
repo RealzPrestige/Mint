@@ -146,14 +146,14 @@ public class Strafe extends Module {
             }
             if (level == 1 && (mc.player.moveForward != 0.0f || mc.player.moveStrafing != 0.0f)) {
                 level = 2;
-                moveSpeed = 1.35 * getDefaultSpeed() - 0.01;
+                moveSpeed = 1.35 * EntityUtil.getDefaultSpeed() - 0.01;
             } else if (level == 2) {
                 level = 3;
                 event.y = (mc.player.motionY = 0.399399995803833);
                 moveSpeed *= 2.149;
             } else if (level == 3) {
                 level = 4;
-                final double difference = 0.66 * (lastDist - getDefaultSpeed());
+                final double difference = 0.66 * (lastDist - EntityUtil.getDefaultSpeed());
                 moveSpeed = lastDist - difference;
             } else {
                 if (mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0.0, mc.player.motionY, 0.0)).size() > 0 || mc.player.collidedVertically) {
@@ -161,7 +161,7 @@ public class Strafe extends Module {
                 }
                 moveSpeed = lastDist - lastDist / 159.0;
             }
-            moveSpeed = Math.max(moveSpeed, getDefaultSpeed());
+            moveSpeed = Math.max(moveSpeed, EntityUtil.getDefaultSpeed());
             final MovementInput movementInput = mc.player.movementInput;
             float forward = movementInput.moveForward;
             float strafe = movementInput.moveStrafe;
@@ -240,10 +240,10 @@ public class Strafe extends Module {
                     }
                     break;
                 case 3:
-                    motionSpeed = prevDist - 0.76D * (prevDist - getBaseMotionSpeed());
+                    motionSpeed = prevDist - 0.76D * (prevDist - EntityUtil.getBaseMotionSpeed());
             }
 
-            motionSpeed = Math.max(motionSpeed, getBaseMotionSpeed());
+            motionSpeed = Math.max(motionSpeed, EntityUtil.getBaseMotionSpeed());
             double var4 = mc.player.movementInput.moveForward;
             double var6 = mc.player.movementInput.moveStrafe;
             double var8 = mc.player.rotationYaw;
@@ -267,27 +267,5 @@ public class Strafe extends Module {
         BigDecimal bigDecimal = new BigDecimal(value);
         bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
         return bigDecimal.doubleValue();
-    }
-
-    static double getDefaultSpeed() {
-        double defaultSpeed = 0.2873;
-        if (mc.player.isPotionActive(MobEffects.SPEED)) {
-            final int amplifier = Objects.requireNonNull(mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
-            defaultSpeed *= 1.0 + 0.2 * (amplifier + 1);
-        }
-        if (mc.player.isPotionActive(MobEffects.JUMP_BOOST)) {
-            final int amplifier = Objects.requireNonNull(mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
-            defaultSpeed /= 1.0 + 0.2 * (amplifier + 1);
-        }
-        return defaultSpeed;
-    }
-
-    private double getBaseMotionSpeed() {
-        double event = 0.272D;
-        if (mc.player.isPotionActive(MobEffects.SPEED)) {
-            int var3 = Objects.requireNonNull(mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
-            event *= 1.0D + 0.2D * (double) var3;
-        }
-        return event;
     }
 }

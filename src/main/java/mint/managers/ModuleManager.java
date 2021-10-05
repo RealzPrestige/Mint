@@ -63,6 +63,7 @@ public class ModuleManager
         /** Movement **/
         moduleList.add(new BoatFly());
         moduleList.add(new Clip());
+        moduleList.add(new LongJump());
         moduleList.add(new Phase());
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
@@ -75,7 +76,7 @@ public class ModuleManager
         moduleList.add(new FastPlace());
         moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
-        moduleList.add(new Speedmine());
+        //moduleList.add(new Speedmine()); cant boot up the client with it being initialized
 
         /** Visual **/
         moduleList.add(new BreakESP());

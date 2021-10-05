@@ -59,7 +59,7 @@ public class Notifications extends Module {
     public boolean lefinalewidth;
 
     public Notifications() {
-        super("Notifications", Category.CORE, "Notifies you when you toggle a Module.");
+        super("Notifications", Category.CORE, "Notifies you when stuff happens."); //ongh
         this.setInstance();
     }
 

@@ -121,7 +121,7 @@ public class AutoCrystal extends Module {
     private boolean rotating = false;
 
     public AutoCrystal() {
-        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks crystals."); //morning brit, morning
+        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks crystals.");
     }
 
     public static AutoCrystal getInstance() {

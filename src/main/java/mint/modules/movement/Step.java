@@ -2,13 +2,16 @@ package mint.modules.movement;
 
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
+import mint.utils.EntityUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 public class Step extends Module {
-    public Setting<Boolean> vanilla = register(new Setting<>("Vanilla",false));
-    public Setting<Boolean> cancelLiquids = register(new Setting("CancelInLiquid", true)); //todo uwu rename it to something non-british
-    public Setting<Integer> stepHeight = register(new Setting<>("Height",2,1,4, v -> ! vanilla.getValue()));
+    public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));
+    public enum Mode {Vanilla, Normal, Packet} //vanilla is yk, normal is the packet array shit, packet is my test mode
+
+    public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
+    public Setting<Integer> stepHeight = register(new Setting("Height",2,1,4, v -> mode.getValue() != Mode.Vanilla));
     double[] oneblockPositions = new double[]{0.42, 0.75};
     double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
     double[] twoFiveOffset = new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.907};
@@ -17,7 +20,7 @@ public class Step extends Module {
     int packets;
 
     public Step() {
-        super("Step", Category.MOVEMENT,"Allows you to travel up blocks quicker without jumping.");
+        super("Step", Category.MOVEMENT,"Allows you to step up blocks.");
     }
 
     @Override
@@ -30,37 +33,44 @@ public class Step extends Module {
         if (cancelLiquids.getValue() && (mc.player.isInWater() || mc.player.isInLava())) {
             return;
         }
-        if (vanilla.getValue()) {
+        if (mode.getValue() == Mode.Vanilla) {
             mc.player.stepHeight = stepHeight.getValue();
             return;
         }
-        switch (stepHeight.getValue()) {
-            case 1: {
-                selectedPositions = oneblockPositions;
-                break;
+        if (mode.getValue() == Mode.Normal) {
+            switch (stepHeight.getValue()) {
+                case 1: {
+                    selectedPositions = oneblockPositions;
+                    break;
+                }
+                case 2: {
+                    selectedPositions = futurePositions;
+                    break;
+                }
+                case 3: {
+                    selectedPositions = twoFiveOffset;
+                    break;
+                }
+                case 4: {
+                    selectedPositions = fourBlockPositions;
+                    break;
+                }
             }
-            case 2: {
-                selectedPositions = futurePositions;
-                break;
+            if (mc.player.collidedHorizontally && mc.player.onGround) {
+                ++packets;
             }
-            case 3: {
-                selectedPositions = twoFiveOffset;
-                break;
-            }
-            case 4: {
-                selectedPositions = fourBlockPositions;
-                break;
+            if (mc.player.onGround && mc.player.collidedVertically && mc.player.fallDistance == 0.0f && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() && (packets > selectedPositions.length - 2 || packets > 0)) {
+                for (double position : selectedPositions) {
+                    mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true));
+                }
+                mc.player.setPosition(mc.player.posX, mc.player.posY + selectedPositions[selectedPositions.length - 1], mc.player.posZ);
+                packets = 0;
             }
         }
-        if (mc.player.collidedHorizontally && mc.player.onGround) {
-            ++packets;
-        }
-        if (mc.player.onGround && mc.player.collidedVertically && mc.player.fallDistance == 0.0f && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() && (packets > selectedPositions.length - 2 || packets > 0 )) {
-            for (double position : selectedPositions) {
-                mc.player.connection.sendPacket( new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true) );
+        if (mode.getValue() == Mode.Packet) {
+            if (mc.player.onGround && mc.player.collidedVertically && mc.player.collidedHorizontally) {
+                EntityUtil.packetJump(true);
             }
-            mc.player.setPosition(mc.player.posX, mc.player.posY + selectedPositions[selectedPositions.length - 1], mc.player.posZ);
-            packets = 0;
         }
     }
 }

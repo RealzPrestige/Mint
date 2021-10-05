@@ -74,7 +74,7 @@ public class Speedmine extends Module {
     int oldSlot;
 
     public Speedmine() {
-        super("Speedmine", Category.PLAYER, "Speeds up mining and tweaks.");
+        super("Speedmine", Category.PLAYER, "Tweaks your mining.");
         setInstance();
     }
 

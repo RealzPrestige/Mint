@@ -356,7 +356,7 @@ public class EntityUtil  {
     }
 
     public static boolean isAlive(Entity entity) {
-        return EntityUtil.isLiving(entity) && !entity.isDead && ((EntityLivingBase) entity).getHealth() > 0.0f;
+        return EntityUtil.isLiving(entity) && !entity.isDead && ((EntityLivingBase)entity).getHealth() >= 0.0f;
     }
 
     public static boolean isDead(Entity entity) {
@@ -400,5 +400,27 @@ public class EntityUtil  {
 
     public static boolean isBorderingChunk(final Entity boat, final Double mX, final Double mZ) {
         return Mint.INSTANCE.mc.world.getChunk((int)(boat.posX + mX) / 16, (int)(boat.posZ + mZ) / 16) instanceof EmptyChunk;
+    }
+
+    public static double getDefaultSpeed() {
+        double defaultSpeed = 0.2873;
+        if (Mint.INSTANCE.mc.player.isPotionActive(MobEffects.SPEED)) {
+            final int amplifier = Objects.requireNonNull(Mint.INSTANCE.mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
+            defaultSpeed *= 1.0 + 0.2 * (amplifier + 1);
+        }
+        if (Mint.INSTANCE.mc.player.isPotionActive(MobEffects.JUMP_BOOST)) {
+            final int amplifier = Objects.requireNonNull(Mint.INSTANCE.mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
+            defaultSpeed /= 1.0 + 0.2 * (amplifier + 1);
+        }
+        return defaultSpeed;
+    }
+
+    public static double getBaseMotionSpeed() {
+        double event = 0.272D;
+        if (Mint.INSTANCE.mc.player.isPotionActive(MobEffects.SPEED)) {
+            int var3 = Objects.requireNonNull(Mint.INSTANCE.mc.player.getActivePotionEffect(MobEffects.SPEED)).getAmplifier();
+            event *= 1.0D + 0.2D * (double) var3;
+        }
+        return event;
     }
 }

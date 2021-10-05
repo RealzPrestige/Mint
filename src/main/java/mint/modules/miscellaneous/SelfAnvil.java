@@ -37,7 +37,7 @@ public class SelfAnvil extends Module {
     BlockPos anvilBlockPos = null;
 
     public SelfAnvil() {
-        super("Self Anvil", Category.MISCELLANEOUS, "Lets an anvil fall on top of you to compensate for burrow patch...");
+        super("Self Anvil", Category.MISCELLANEOUS, "Lets an anvil fall on top of you to compensate for burrow patch..."); //kys
     }
 
     public void onEnable() {

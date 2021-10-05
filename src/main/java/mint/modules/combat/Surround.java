@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3d;
 public class Surround extends Module {
 
     public Surround() {
-        super("Surround", Module.Category.COMBAT, "Surrounds you with Obsidian/EChest.");
+        super("Surround", Module.Category.COMBAT, "Surrounds you with Blocks.");
     }
 
     public Setting<Integer> delay = register(new Setting("TickDelay", 0, 0, 20));
