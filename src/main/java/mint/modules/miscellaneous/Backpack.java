@@ -39,16 +39,7 @@ public class Backpack extends Module {
     @Override
     public void onUpdate() {
         if (mc.currentScreen instanceof GuiContainer && open.getValue()) {
-            if (mc.currentScreen instanceof MintGui) {
-                return;
-            }
-            if (mc.currentScreen instanceof GuiChest && !chest.getValue()) {
-                return;
-            }
-            if (mc.currentScreen instanceof GuiFurnace && !furnace.getValue()) {
-                return;
-            }
-            if (mc.currentScreen instanceof GuiInventory && !inventory.getValue()) {
+            if (mc.currentScreen instanceof MintGui || mc.currentScreen instanceof GuiChest && !chest.getValue() || mc.currentScreen instanceof GuiFurnace && !furnace.getValue() || mc.currentScreen instanceof GuiInventory && !inventory.getValue()) {
                 return;
             }
             cancelledGui = mc.currentScreen;
