@@ -1,8 +1,11 @@
 package mint.modules.miscellaneous;
 
 import mint.clickgui.setting.Setting;
+import mint.events.PacketEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PacketManipulator extends Module {
 
@@ -16,18 +19,21 @@ public class PacketManipulator extends Module {
 
     public Setting<Boolean> cancel = register(new Setting("Cancel", true, false));
     public Setting<Boolean> s = register(new Setting("Server", true, false, v -> cancel.getValue()));
+
     public Setting<Boolean> c = register(new Setting("Client", true, false, v -> cancel.getValue()));
+    public Setting<Boolean> cplayer = register(new Setting("Player", true));
 
     public Setting<Boolean> send = register(new Setting("Send", true, false));
     public Setting<Integer> packet1 = register(new Setting("Packet1", 1, 1, 10, v -> send.getValue()));
 
-    @Override
-    public void onUpdate() {
-        MessageManager.sendMessage("1=");
-        MessageManager.sendMessage("2=");
-        MessageManager.sendMessage("3=");
-        MessageManager.sendMessage("4=");
-        MessageManager.sendMessage("5=");
-        MessageManager.sendMessage("6=");
+    @SubscribeEvent
+    public void onPacketSend(PacketEvent.Send e) {
+        if (isEnabled()) {
+            if (e.getPacket() instanceof CPacketPlayer && cplayer.getValue()) {
+                e.setCanceled(true);
+            }
+        } else {
+            return;
+        }
     }
 }
