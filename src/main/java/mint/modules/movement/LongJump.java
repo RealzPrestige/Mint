@@ -14,6 +14,7 @@ public class LongJump extends Module {
     }
 
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Factor));
+
     public enum Mode {Factor}
 
     public Setting<Float> acceleration = register(new Setting("Acceleration", 0.3f, 0.0f, 1.0f, v -> mode.getValue() == Mode.Factor));
@@ -51,7 +52,8 @@ public class LongJump extends Module {
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive e) {
         if (e.getPacket() instanceof SPacketPlayerPosLook && disableOnLag.getValue()) {
-            disable();
+            if (isEnabled())
+                disable();
         }
     }
 }
