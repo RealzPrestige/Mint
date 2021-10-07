@@ -70,7 +70,7 @@ public class Speedmine extends Module {
     public BlockPos currentPos;
     public Block currentBlock;
     public IBlockState currentBlockState;
-    int pickSlot = InventoryUtil.getItemFromHotbar(Items.DIAMOND_PICKAXE);
+    int pickSlot;
     int oldSlot;
 
     public Speedmine() {
@@ -100,6 +100,7 @@ public class Speedmine extends Module {
 
     @Override
     public void onTick() {
+        pickSlot = InventoryUtil.getItemFromHotbar(Items.DIAMOND_PICKAXE);
         if (delay > 5) {
             delay = 0;
         } else {

@@ -22,11 +22,12 @@ public class BowHack extends Module {
     public Setting<Integer> power = register(new Setting("Power", 3, 1, 30));
     public Setting<Integer> yOffset = register(new Setting("Y Offset", 5, 1, 10));
     public Setting<Boolean> debug = register(new Setting("Debug", true));
-    float yaw = mc.player.rotationYaw;
+    float yaw;
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof CPacketPlayerTryUseItem && mc.player.getHeldItemMainhand().getItem() instanceof ItemBow) {
+            yaw = mc.player.rotationYaw;
             mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(
                     mc.player.posX - Math.sin(yaw) * power.getValue(),
                     mc.player.posY + yOffset.getValue(),

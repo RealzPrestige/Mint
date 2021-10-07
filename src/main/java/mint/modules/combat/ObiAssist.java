@@ -17,7 +17,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static mint.modules.miscellaneous.FakePlayer.calculateDamage;
@@ -44,7 +43,7 @@ public class ObiAssist extends Module {
 
     @Override
     public void onUpdate() {
-        EntityPlayer target = AutoCrystal.getInstance().target;
+        EntityPlayer target = AutoCrystal.getInstance().targetPlayer;
         int slot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
         int old = mc.player.inventory.currentItem;
         EnumHand hand = null;
@@ -52,7 +51,7 @@ public class ObiAssist extends Module {
         if (target == null)
             return;
 
-        if (AutoCrystal.getInstance().placePos != null)
+        if (AutoCrystal.getInstance().finalPos != null)
             return;
 
         //switch shit kinda messy
@@ -74,7 +73,7 @@ public class ObiAssist extends Module {
             if (!(target.getDistance(mc.player) > range.getValue())) {
                 float range = AutoCrystal.getInstance().placeRange.getValue();
                 float targetDMG = 0.0f;
-                float minDmg = AutoCrystal.getInstance().minDamage.getValue();
+                float minDmg = AutoCrystal.getInstance().minimumDamage.getValue();
                 BlockPos targetPos = null;
                 for (BlockPos pos : BlockUtil.getSphere(getPlayerPosFloored(), range, (int) range, false, true, 0)) {
                     validResult result = valid(pos);
@@ -82,7 +81,7 @@ public class ObiAssist extends Module {
                     if (!canPlaceCrystalIfObbyWasAtPos(pos)) continue;
                     float tempDMG = calculateDamage(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, target);
                     final float self = EntityUtil.calculatePos(pos, mc.player);
-                    if (EntityUtil.getHealth(mc.player) > self + 0.5f && AutoCrystal.getInstance().maxSelfDamage.getValue() > self && (tempDMG = EntityUtil.calculatePos(pos, target)) > AutoCrystal.getInstance().maxSelfDamage.getValue() && tempDMG > self) {
+                    if (EntityUtil.getHealth(mc.player) > self + 0.5f && AutoCrystal.getInstance().maximumSelfDamage.getValue() > self && (tempDMG = EntityUtil.calculatePos(pos, target)) > AutoCrystal.getInstance().maximumSelfDamage.getValue() && tempDMG > self) {
                         if (tempDMG <= minDmg) {
                             if (tempDMG <= 2.0f) {
                                 continue;
@@ -125,7 +124,7 @@ public class ObiAssist extends Module {
     public BlockPos getBestBlock() {
         float range = AutoCrystal.getInstance().placeRange.getValue();
         final List<BlockPos> blocks = BlockUtil.getSphere(range, true);
-        EntityPlayer target = AutoCrystal.getInstance().target;
+        EntityPlayer target = AutoCrystal.getInstance().targetPlayer;
         for (BlockPos block : blocks) {
             /** all the checks **/
             if (target.getDistance(mc.player) >= range) continue;
@@ -136,7 +135,7 @@ public class ObiAssist extends Module {
             double bestDmg = 0;
             BlockPos bestBlock = null;
             float targetDmg = calculateDamage(block.getX() + 0.5, block.getY() + 1.0, block.getZ() + 0.5, target);
-            float minDmg = AutoCrystal.getInstance().minDamage.getValue();
+            float minDmg = AutoCrystal.getInstance().minimumDamage.getValue();
             if (targetDmg < minDmg) continue;
             if (targetDmg > bestDmg) {
                 bestBlock = block;

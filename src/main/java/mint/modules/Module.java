@@ -125,7 +125,6 @@ public class Module extends Feature {
             Notifications.getInstance().width = 0;
             Notifications.getInstance().lefinalewidth = false;
             Notifications.getInstance().notification.put(this.getName().replace("_", " ") + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!", 1000);
-
         }
     }
 

@@ -1,8 +1,11 @@
 package mint.modules.combat;
 
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
+import mint.events.CrystalAttackEvent;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
@@ -10,313 +13,431 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.network.play.server.SPacketSpawnObject;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+
+/**
+ * @Author zPrestige_
+ * @Since 05/10/21
+ */
 
 public class AutoCrystal extends Module {
 
-    //how about me making break and placement and u niggas making the calcs and shit cuz this is bad
-    public static AutoCrystal INSTANCE;
+    public static AutoCrystal INSTANCE = new AutoCrystal();
 
-    //range
-    public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
-    public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
-    public Setting<Float> breakRange = register(new Setting("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
-    public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
+    public Setting<Boolean> rangesParent = register(new Setting<>("Ranges", true, false));
+    public Setting<Float> placeRange = register(new Setting<>("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
+    public Setting<Float> breakRange = register(new Setting<>("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
+    public Setting<Float> targetRange = register(new Setting<>("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
 
-    //swing
-    public Setting<Boolean> swingParent = register(new Setting("Swing", true, false));
-    public Setting<Boolean> placeSwing = register(new Setting("Place Swing", false, v -> swingParent.getValue()));
-    public Setting<EnumHand> placeSwingMode = register(new Setting("Place Mode", EnumHand.MAIN_HAND, v -> placeSwing.getValue() && swingParent.getValue()));
-    public Setting<Boolean> breakSwing = register(new Setting("Break Swing", false, v -> swingParent.getValue()));
-    public Setting<EnumHand> breakSwingMode = register(new Setting("Break Mode", EnumHand.MAIN_HAND, v -> breakSwing.getValue() && swingParent.getValue()));
+    public Setting<Boolean> damagesParent = register(new Setting<>("Damages", true, false));
+    public Setting<Float> minimumDamage = register(new Setting<>("Minimum Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Float> maximumSelfDamage = register(new Setting<>("Maximum Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Boolean> antiSuicide = register(new Setting<>("Anti Suicide", false, false, v -> damagesParent.getValue()));
 
-    //packet
-    public Setting<Boolean> packetParent = register(new Setting("Packet", true, false));
-    public Setting<Boolean> packetBreak = register(new Setting("Packet Break", false, v -> packetParent.getValue()));
+    public Setting<Boolean> predictParent = register(new Setting<>("Predicts", true, false));
+    public Setting<Boolean> soundPredict = register(new Setting<>("Sound Predict", false, false, v -> predictParent.getValue()));
+    public Setting<Boolean> placePredict = register(new Setting<>("Place Predict", false, false, v -> predictParent.getValue()));
+    public Setting<Boolean> breakPredict = register(new Setting<>("Break Predict", false, false, v -> predictParent.getValue()));
+    public Setting<Boolean> breakPredictCalc = register(new Setting<>("Break Predict Calc", false, false, v -> predictParent.getValue() && breakPredict.getValue()));
 
-    //rotate
-    public Setting<Boolean> rotateParent = register(new Setting("Rotations", true, false));
-    public Setting<Boolean> rotate = register(new Setting("Rotate", false, v -> rotateParent.getValue()));
-    public Setting<Boolean> placeRotate = register(new Setting("Place Rotate", false, v -> rotateParent.getValue() && rotate.getValue()));
-    public Setting<Boolean> breakRotate = register(new Setting("Break Rotate", false, v -> rotateParent.getValue() && rotate.getValue()));
+    public Setting<Boolean> delayParent = register(new Setting<>("Delays", true, false));
+    public Setting<Integer> placeDelay = register(new Setting<>("Place Delay", 100, 0, 500, v -> delayParent.getValue()));
+    public Setting<Integer> breakDelay = register(new Setting<>("Break Delay", 100, 0, 500, v -> delayParent.getValue()));
 
-    //switch
-    public Setting<Boolean> switchParent = register(new Setting("Switch", true, false));
-    public Setting<Boolean> silentSwitch = register(new Setting("Silent Switch", false, v -> switchParent.getValue()));
+    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
+    public Setting<Boolean> updatedPlacements = register(new Setting<>("1.13+ Placements", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> limitAttack = register(new Setting<>("Limit Attack", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> packetBreak = register(new Setting<>("Packet Break", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> allowCollision = register(new Setting<>("Allow Collision", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> cancelVelocity = register(new Setting<>("Cancel Velocity", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> cancelExplosion = register(new Setting<>("Cancel Explosion", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> silentSwitch = register(new Setting<>("Silent Switch", false, false, v -> miscParent.getValue()));
+    public Setting<Boolean> antiWeakness = register(new Setting<>("Anti Weakness", false, false, v -> silentSwitch.getValue() && miscParent.getValue()));
+    public Setting<Boolean> swingParent = register(new Setting<>("Swings", true, false));
+    public Setting<Boolean> placeSwing = register(new Setting<>("Place Swing", false, false, v -> swingParent.getValue()));
+    public Setting<PlaceSwingHand> placeSwingHand = register(new Setting<>("PlaceSwingHand", PlaceSwingHand.MAINHAND, v -> placeSwing.getValue() && swingParent.getValue()));
 
-    //predict
-    public Setting<Boolean> predictParent = register(new Setting("Predict", true, false));
-    public Setting<BreakMode> breakMode = register(new Setting("Break Mode", BreakMode.BREAK, v -> predictParent.getValue()));
+    public enum PlaceSwingHand {MAINHAND, OFFHAND}
 
-    enum BreakMode {BREAK, PREDICT, BREAKPREDICT}
+    public Setting<Boolean> breakSwing = register(new Setting<>("Break Swing", false, false, v -> swingParent.getValue()));
+    public Setting<BreakSwingHand> breakSwingHand = register(new Setting<>("BreakSwingHand", BreakSwingHand.MAINHAND, v -> breakSwing.getValue() && swingParent.getValue()));
 
-    public Setting<Boolean> soundPredict = register(new Setting("Sound Predict", false, v -> predictParent.getValue()));
-    public Setting<Boolean> placePredict = register(new Setting("Place Predict", false, v -> predictParent.getValue()));
+    public enum BreakSwingHand {MAINHAND, OFFHAND}
 
-    //damage
-    public Setting<Boolean> damagesParent = register(new Setting("Damages", true, false));
-    public Setting<Float> minDamage = register(new Setting("Min Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
-    public Setting<Float> maxSelfDamage = register(new Setting("Max Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
-    public Setting<Boolean> unsafeOnly = register(new Setting("Unsafe Only", false));
+    public Setting<Boolean> facePlaceParent = register(new Setting<>("Face Placing", true, false));
+    public Setting<FacePlaceMode> facePlaceMode = register(new Setting<>("FacePlaceMode", FacePlaceMode.Never, v -> facePlaceParent.getValue()));
 
-    //delay
-    public Setting<Boolean> delayParent = register(new Setting("Delays", true, false));
-    public Setting<Integer> placeDelay = register(new Setting("Place Delay", 0, 0, 200, v -> delayParent.getValue()));
-    public Setting<Integer> breakDelay = register(new Setting("Break Delay", 65, 0, 200, v -> delayParent.getValue()));
+    public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    //render
-    public Setting<Boolean> parentVisual = register(new Setting("Visual", true, false));
-    public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.FADE, v -> parentVisual.getValue()));
+    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Delay", 15, 0, 36, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
+    public Setting<Bind> facePlaceBind = register(new Setting<>("Face Place Bind", new Bind(-1), v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue()));
 
-    public enum RenderMode {STATIC, FADE}
+    public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
+    public Setting<Boolean> render = register(new Setting<>("Render", false, false, v -> renderParent.getValue()));
+    public Setting<Boolean> fade = register(new Setting<>("Fade", false, false, v -> render.getValue() && renderParent.getValue()));
+    public Setting<Integer> startAlpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
+    public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 0, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
+    public Setting<Integer> fadeSpeed = register(new Setting<>("Fade Speed", 20, 0, 100, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
 
-    //fade
-    public Setting<Boolean> fadeParent = register(new Setting("Fade", false, true, v -> parentVisual.getValue()));
-    public Setting<Integer> startAlpha = register(new Setting<>("StartAlpha", 255, 0, 255, v -> parentVisual.getValue() && fadeParent.getValue()));
-    public Setting<Integer> endAlpha = register(new Setting<>("EndAlpha", 0, 0, 255, v -> parentVisual.getValue() && fadeParent.getValue()));
-    public Setting<Integer> fadeStep = register(new Setting<>("FadeStep", 20, 10, 100, v -> parentVisual.getValue() && fadeParent.getValue()));
+    public Setting<Boolean> box = register(new Setting<>("Box", false, false, v -> render.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxRed = register(new Setting<>("Box Red", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxGreen = register(new Setting<>("Box Green", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxBlue = register(new Setting<>("Box Blue", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxAlpha = register(new Setting<>("Box Alpha", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
 
-    //box
-    public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v -> parentVisual.getValue()));
-    public Setting<Boolean> boxSetting = register(new Setting("BoxSetting", false, v -> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxRed = register(new Setting<>("BoxRed", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, v -> boxParent.getValue() && parentVisual.getValue()));
+    public Setting<Boolean> outline = register(new Setting<>("Outline", false, false, v -> render.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1f, 0f, 5f, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
 
-    //outline
-    public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, v -> parentVisual.getValue()));
-    public Setting<Boolean> outlineSetting = register(new Setting("OutlineSetting", false, v -> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>("OutlineRed", 255, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 120, 0, 255, v -> outlineParent.getValue() && parentVisual.getValue()));
-    public Setting<Boolean> rainbow = register(new Setting("Rainbow", true, v -> parentVisual.getValue()));
 
+    EntityPlayer targetPlayer;
+    BlockPos finalPos;
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
-    BlockPos finalPos;
-    BlockPos finalCrystalPos;
-    BlockPos placePos;
-    int crystals;
-    EntityPlayer target;
-    HashMap<BlockPos, Integer> renderPosses = new HashMap();
-    private float yaw = 0.0f;
-    private float pitch = 0.0f;
-    private boolean rotating = false;
+    HashMap<BlockPos, Integer> possesToFade = new HashMap();
+    bestPlacePos bestCrystalPos = new bestPlacePos(BlockPos.ORIGIN, 0);
+    HashMap<Integer, Entity> attemptedEntityId = new HashMap();
+
+    float mainTargetDamage;
+    float mainTargetHealth;
+    float mainMinimumDamageValue;
+    float mainSelfHealth;
+    float mainSelfDamage;
+    int mainSlot;
+    int mainOldSlot;
 
     public AutoCrystal() {
-        super("Auto Crystal", Category.COMBAT, "Automatically places and breaks crystals.");
+        super("Auto Crystal", Category.COMBAT, "Obliterates kids with end crystals ezz");
+        this.setInstance();
     }
 
     public static AutoCrystal getInstance() {
-        return AutoCrystal.INSTANCE;
+        if (INSTANCE == null) {
+            INSTANCE = new AutoCrystal();
+        }
+        return INSTANCE;
     }
 
-    public void onToggle() {
-        placePos = null;
-        target = null;
-        finalPos = null;
-        finalCrystalPos = null;
-        mc.world.removeEntityFromWorld(crystals);
-        crystals = 0;
+    private void setInstance() {
+        INSTANCE = this;
     }
 
-    @Override
     public void onUpdate() {
-        target = EntityUtil.getTarget(targetRange.getValue());
-        if (target != null) {
-            if (placeTimer.passedMs(placeDelay.getValue())) {
-                doPlace();
-                placeTimer.reset();
-            }
-            if (breakTimer.passedMs(breakDelay.getValue()) && breakMode.getValue().equals(BreakMode.BREAK) || breakMode.getValue().equals(BreakMode.BREAKPREDICT)) {
-                doBreak();
-                breakTimer.reset();
-            }
+        if (fullNullCheck())
+            return;
+
+        targetPlayer = EntityUtil.getTarget(targetRange.getValue());
+
+        if (targetPlayer == null)
+            return;
+
+        if (placeTimer.passedMs((long) placeDelay.getValue())) {
+            doPlace();
+            placeTimer.reset();
+        }
+        if (breakTimer.passedMs((long) breakDelay.getValue())) {
+            doBreak();
+            breakTimer.reset();
         }
     }
 
-    public void doPlace() {
-        final List<BlockPos> sphere = BlockUtil.getSphere(placeRange.getValue(), true);
-        for (int size = sphere.size(), i = 0; i < size; ++i) {
-            final BlockPos pos = sphere.get(i);
-            final float self = EntityUtil.calculatePos(pos, mc.player);
-            if (BlockUtil.canPlaceCrystal(pos, true)) {
+    void doPlace() {
 
-                float damage = EntityUtil.calculatePos(pos, EntityUtil.getTarget(targetRange.getValue()));
+        int slot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
+        int oldSlot = mc.player.inventory.currentItem;
+        mainSlot = slot;
+        mainOldSlot = oldSlot;
 
-                if (EntityUtil.getHealth(mc.player) < self) continue;
+        bestCrystalPos = getBestPlacePos();
 
-                if (maxSelfDamage.getValue() < self) continue;
+        if (bestCrystalPos == null)
+            return;
 
-                if (damage < minDamage.getValue()) continue;
+        if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL && mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL))
+            InventoryUtil.switchToSlot(slot);
 
-                if (unsafeOnly.getValue() && EntityUtil.isPlayerSafe(target)) continue;
+        mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(bestCrystalPos.getBlockPos(), EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
 
-                placePos = pos;
-                finalPos = placePos;
-            }
+        finalPos = bestCrystalPos.getBlockPos();
+
+        if (render.getValue() && fade.getValue())
+            possesToFade.put(bestCrystalPos.getBlockPos(), startAlpha.getValue());
+
+        if (placeSwing.getValue())
+            mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+
+        if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
+            mc.player.inventory.currentItem = oldSlot;
+            mc.playerController.updateController();
         }
-        if (placePos != null) {
-            int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);
-            int oldSlot = mc.player.inventory.currentItem;
-            if (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL) {
-                if (silentSwitch.getValue()) {
-                    InventoryUtil.SilentSwitchToSlot(crystalSlot);
-                } else {
-                    InventoryUtil.switchToSlot(crystalSlot);
+    }
+
+    void doBreak() {
+        for (Entity entity : mc.world.loadedEntityList) {
+            if (entity instanceof EntityEnderCrystal) {
+                float selfHealth = mc.player.getHealth() + mc.player.getAbsorptionAmount();
+                float selfDamage = EntityUtil.calculateEntityDamage((EntityEnderCrystal) entity, mc.player);
+                float targetDamage = EntityUtil.calculateEntityDamage((EntityEnderCrystal) entity, targetPlayer);
+                float targetHealth = targetPlayer.getHealth() + targetPlayer.getAbsorptionAmount();
+                float minimumDamageValue = minimumDamage.getValue();
+                int sword = InventoryUtil.getItemFromHotbar(Items.DIAMOND_SWORD);
+                int oldSlot = mc.player.inventory.currentItem;
+
+                if (mc.player.getDistance(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRange.getValue()))
+                    continue;
+
+                if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                    minimumDamageValue = 2;
+
+                if (antiSuicide.getValue() && selfDamage > selfHealth)
+                    continue;
+
+                if (selfDamage > maximumSelfDamage.getValue())
+                    continue;
+
+                if (targetDamage < minimumDamageValue)
+                    continue;
+
+                if (limitAttack.getValue() && attemptedEntityId.containsValue(entity)) {
+                    MessageManager.sendMessage("Limited Attack");
+                    continue;
                 }
-            }
-            if (placeRotate.getValue()) {
-                rotateToPos(placePos);
-            }
-            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(placePos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            if (renderMode.getValue() == RenderMode.FADE) {
-                renderPosses.put(placePos, startAlpha.getValue());
-            }
-            if (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL) {
-                if (silentSwitch.getValue()) {
+
+                if (silentSwitch.getValue() && antiWeakness.getValue() && (mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) && mc.player.getActivePotionEffects().equals(Potion.getPotionById(18)))
+                    InventoryUtil.switchToSlot(sword);
+
+                if (packetBreak.getValue()) {
+                    mc.getConnection().sendPacket(new CPacketUseEntity(entity));
+                } else {
+                    mc.playerController.attackEntity(mc.player, entity);
+                }
+
+                CrystalAttackEvent event = new CrystalAttackEvent(entity.getEntityId(), entity);
+                MinecraftForge.EVENT_BUS.post(event);
+
+                if (breakSwing.getValue())
+                    mc.player.swingArm(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+
+                if (silentSwitch.getValue() && antiWeakness.getValue() && (mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) && mc.player.getActivePotionEffects().equals(Potion.getPotionById(18))) {
                     mc.player.inventory.currentItem = oldSlot;
                     mc.playerController.updateController();
                 }
             }
-            if (placeSwing.getValue()) {
-                mc.player.swingArm(placeSwingMode.getValue());
-            }
-            if (placePredict.getValue()) {
-                Timer timers = new Timer();
-                EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world, (double) placePos.getX() + 0.5, (double) placePos.getY() + 1, (double) placePos.getZ() + 0.5);
-                mc.world.addEntityToWorld(crystals, crystal);
-                timers.reset();
-                if (timers.passedMs(10)) {
-                    mc.world.removeEntityFromWorld(crystals);
-                    ++crystals;
-                }
-            }
         }
     }
 
-    public void doBreak() {
-        target = EntityUtil.getTarget(targetRange.getValue());
-        for (Entity crystal : mc.world.loadedEntityList) {
-            if (crystal instanceof EntityEnderCrystal) {
+    bestPlacePos getBestPlacePos() {
+        TreeMap<Float, bestPlacePos> posList = new TreeMap<>();
+        for (BlockPos pos : BlockUtil.getSphere(placeRange.getValue())) {
+            float targetDamage = EntityUtil.calculatePosDamage(pos, targetPlayer);
+            float selfHealth = mc.player.getHealth() + mc.player.getAbsorptionAmount();
+            float selfDamage = EntityUtil.calculatePosDamage(pos, mc.player);
+            float targetHealth = targetPlayer.getHealth() + targetPlayer.getAbsorptionAmount();
+            float minimumDamageValue = minimumDamage.getValue();
+            mainTargetDamage = targetDamage;
+            mainTargetHealth = targetHealth;
+            mainSelfDamage = selfDamage;
+            mainSelfHealth = selfHealth;
+            mainMinimumDamageValue = minimumDamageValue;
+            if (BlockUtil.isPosValidForCrystal(pos, updatedPlacements.getValue())) {
+                if (mc.player.getDistance(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f) > MathUtil.square(placeRange.getValue()))
+                    continue;
 
-                if (crystal.getDistance(mc.player) > MathUtil.square(breakRange.getValue())) continue;
+                if (!allowCollision.getValue() && !mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty())
+                    continue;
 
-                if (breakRotate.getValue()) {
-                    rotateTo(crystal);
-                }
+                if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                    minimumDamageValue = 2;
 
-                if (packetBreak.getValue()) {
-                    mc.getConnection().sendPacket(new CPacketUseEntity(crystal));
-                } else {
-                    mc.playerController.attackEntity(mc.player, crystal);
-                }
+                if (antiSuicide.getValue() && selfDamage > selfHealth)
+                    continue;
+
+                if (selfDamage > maximumSelfDamage.getValue())
+                    continue;
+
+                if (targetDamage < minimumDamageValue)
+                    continue;
+
+                posList.put(targetDamage, new bestPlacePos(pos, targetDamage));
             }
         }
+        if (!posList.isEmpty()) {
+            return posList.lastEntry().getValue();
+        }
+        return null;
     }
+
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if (cancelExplosion.getValue() && event.getPacket() instanceof SPacketExplosion)
+            event.setCanceled(true);
+
+        if (event.getPacket() instanceof SPacketEntityVelocity) {
+            SPacketEntityVelocity velocity = event.getPacket();
+
+            if (cancelVelocity.getValue() && velocity.getEntityID() == mc.player.getEntityId())
+                event.setCanceled(true);
+        }
+        if (breakPredict.getValue() && event.getPacket() instanceof SPacketSpawnObject) {
+            final SPacketSpawnObject packet = event.getPacket();
+            if (packet.getType() == 51 && finalPos != null && EntityUtil.getTarget(targetRange.getValue()) != null) {
+                final CPacketUseEntity predict = new CPacketUseEntity();
+                predict.entityId = packet.getEntityID();
+                predict.action = CPacketUseEntity.Action.ATTACK;
+
+                if (breakPredictCalc.getValue()) {
+                    if (mc.player.getDistance(packet.getX(), packet.getY(), packet.getZ()) > MathUtil.square(breakRange.getValue()))
+                        return;
+
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                        mainMinimumDamageValue = 2;
+
+                    if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
+                        return;
+
+                    if (mainSelfDamage > maximumSelfDamage.getValue())
+                        return;
+
+                    if (mainMinimumDamageValue > mainTargetDamage)
+                        return;
+                }
+
+                mc.getConnection().sendPacket(predict);
+                if (breakSwing.getValue()) {
+                    mc.player.swingArm(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                }
+            }
+        }
         if (event.getPacket() instanceof SPacketSoundEffect) {
-            final SPacketSoundEffect packet = event.getPacket();
+            SPacketSoundEffect packet = event.getPacket();
             if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
-                for (Entity entityCrystal : mc.world.loadedEntityList) {
-                    if (entityCrystal instanceof EntityEnderCrystal) {
-                        if (entityCrystal.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue() && soundPredict.getValue()) {
-                            entityCrystal.setDead();
+                for (Entity entity : mc.world.loadedEntityList) {
+                    if (entity instanceof EntityEnderCrystal) {
+
+                        if (limitAttack.getValue() && attemptedEntityId.containsValue(entity.getEntityId()))
+                            attemptedEntityId.remove(entity, entity.getEntityId());
+
+                        BlockPos predictedCrystalPos = new BlockPos(entity.posX, entity.posY - 1, entity.posZ);
+
+                        if (soundPredict.getValue() && entity.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue())
+                            entity.setDead();
+
+                        if (placePredict.getValue() && predictedCrystalPos.equals(bestCrystalPos)) {
+
+                            if (entity.getDistance(mc.player) > MathUtil.square(placeRange.getValue()))
+                                continue;
+
+                            if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                                mainMinimumDamageValue = 2;
+
+                            if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
+                                continue;
+
+                            if (mainSelfDamage > maximumSelfDamage.getValue())
+                                continue;
+
+                            if (mainMinimumDamageValue > mainTargetDamage)
+                                continue;
+
+                            if (limitAttack.getValue() && attemptedEntityId.containsValue(entity)) {
+                                MessageManager.sendMessage("Limited Attack");
+                                continue;
+                            }
+
+                            if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL))
+                                InventoryUtil.switchToSlot(mainSlot);
+
+                            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(predictedCrystalPos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+
+                            if (render.getValue() && fade.getValue())
+                                possesToFade.put(predictedCrystalPos, startAlpha.getValue());
+
+                            if (placeSwing.getValue())
+                                mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+
+                            if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
+                                mc.player.inventory.currentItem = mainOldSlot;
+                                mc.playerController.updateController();
+                            }
                         }
                     }
                 }
             }
         }
-        if (event.getPacket() instanceof SPacketSpawnObject) {
-            final SPacketSpawnObject packet = event.getPacket();
-            if (packet.getType() == 51 && finalPos != null && EntityUtil.getTarget(targetRange.getValue()) != null && breakMode.getValue().equals(BreakMode.PREDICT) || breakMode.getValue().equals(BreakMode.BREAKPREDICT)) {
-                final CPacketUseEntity predict = new CPacketUseEntity();
-                predict.entityId = packet.getEntityID();
-                predict.action = CPacketUseEntity.Action.ATTACK;
-                finalCrystalPos = new BlockPos(packet.getX(), packet.getY(), packet.getZ());
-                if (predict.entityId != crystals) {
-                    if (breakRotate.getValue()) {
-                        rotateToPos(finalCrystalPos);
-                    }
-                    mc.getConnection().sendPacket(predict);
-                    if (breakSwing.getValue()) {
-                        mc.player.swingArm(breakSwingMode.getValue());
-                    }
-                }
-            }
-        }
     }
 
-    @Override
-    public void onRender3D(Render3DEvent event) {
-        if (renderMode.getValue() == RenderMode.FADE) {
-            for (Map.Entry<BlockPos, Integer> entry : renderPosses.entrySet()) {
-                renderPosses.put(entry.getKey(), entry.getValue() - (fadeStep.getValue() / 10));
-                if (entry.getValue() <= endAlpha.getValue()) {
-                    renderPosses.remove(entry.getKey());
-                    return;
-                }
-                RenderUtil.drawBoxESP(entry.getKey(), rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), entry.getValue()), true, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), entry.getValue()) : new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), entry.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), entry.getValue(), true);
-            }
+    public void onEnable() {
+        targetPlayer = null;
+        finalPos = null;
+    }
 
-        } else if (renderMode.getValue() == RenderMode.STATIC) {
-            if (finalCrystalPos != null) {
-                if (boxSetting.getValue() && finalCrystalPos != finalPos) {
-                    RenderUtil.drawBoxESP(finalCrystalPos, new Color(255, 0, 0, boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
-                }
-            }
-            if (finalPos != null) {
-                if (boxSetting.getValue()) {
-                    RenderUtil.drawBoxESP(finalPos, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), boxAlpha.getValue()) : new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, rainbow.getValue() ? new Color(ColorUtil.rainbow(6).getRed(), ColorUtil.rainbow(6).getGreen(), ColorUtil.rainbow(6).getBlue(), outlineAlpha.getValue()) : new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 0.1f, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), false);
-                }
-            }
-        }
+    public void onDisable() {
+        targetPlayer = null;
+        finalPos = null;
     }
 
     @SubscribeEvent
-    public void onPacketSend(PacketEvent.Send event) {
-        if (event.getStage() == 0 && rotate.getValue() && rotating && event.getPacket() instanceof CPacketPlayer) {
-            CPacketPlayer packet = event.getPacket();
-            packet.yaw = yaw;
-            packet.pitch = pitch;
-            rotating = false;
+    public void onCrystalAttacked(CrystalAttackEvent event) {
+        if (limitAttack.getValue())
+            attemptedEntityId.put(event.getEntityId(), event.getEntity());
+    }
+
+    public void onRender3D(Render3DEvent event) {
+        if (render.getValue()) {
+            if (fade.getValue()) {
+                for (Map.Entry<BlockPos, Integer> entry : possesToFade.entrySet()) {
+                    possesToFade.put(entry.getKey(), entry.getValue() - (fadeSpeed.getValue() / 10));
+                    if (entry.getValue() <= endAlpha.getValue()) {
+                        possesToFade.remove(entry.getKey());
+                        return;
+                    }
+                    RenderUtil.drawBoxESP(entry.getKey(), new Color(boxRed.getValue() / 255f, boxGreen.getValue() / 255f, boxBlue.getValue() / 255f, entry.getValue() / 255f), true, new Color(outlineRed.getValue() / 255f, outlineGreen.getValue() / 255f, outlineBlue.getValue() / 255f, entry.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), entry.getValue(), true);
+                }
+            } else if (finalPos != null) {
+                RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue() / 255f, boxGreen.getValue() / 255f, boxBlue.getValue() / 255f, boxAlpha.getValue() / 255f), true, new Color(outlineRed.getValue() / 255f, outlineGreen.getValue() / 255f, outlineBlue.getValue() / 255f, outlineAlpha.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), (int) boxAlpha.getValue(), true);
+            }
         }
     }
 
-    private void rotateTo(Entity entity) {
-        if (rotate.getValue()) {
-            float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), entity.getPositionVector());
-            yaw = angle[0];
-            pitch = angle[1];
-            rotating = true;
-        }
-    }
+    static class bestPlacePos {
+        BlockPos blockPos;
+        float targetDamage;
 
-    private void rotateToPos(BlockPos pos) {
-        if (rotate.getValue()) {
-            float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f));
-            yaw = angle[0];
-            pitch = angle[1];
-            rotating = true;
+        public bestPlacePos(BlockPos blockPos, float targetDamage) {
+            this.blockPos = blockPos;
+            this.targetDamage = targetDamage;
+        }
+
+        public float getTargetDamage() {
+            return targetDamage;
+        }
+
+        public BlockPos getBlockPos() {
+            return blockPos;
         }
     }
 }
