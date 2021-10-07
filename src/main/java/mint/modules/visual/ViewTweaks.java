@@ -12,22 +12,22 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ViewTweaks extends Module {
 
     private static ViewTweaks INSTANCE = new ViewTweaks();
-    public Setting<Boolean> fullBright = register(new Setting("FullBright", false));
-    public Setting<Boolean> glow = register(new Setting("ItemGlow", false));
+    public Setting<Boolean> fullBright = register(new Setting("Full Bright", false));
+    public Setting<Boolean> glow = register(new Setting("Item Glow", false));
     private final Setting<Boolean> fov = register(new Setting<>("FOV", true, false));
-    private final Setting<Boolean> fovStay = register(new Setting("FOVStay", false, v -> fov.getValue()));
-    public Setting<Float> fovValue = register(new Setting("FovValue", 140.0f, 0.0f, 180.0f, v -> fov.getValue()));
-    public Setting<Boolean> antiFog = register(new Setting("AntiFog", false));
-    public Setting<Boolean> noWeather = register(new Setting("NoWeather", false));
-    public Setting<Boolean> timeChanger = register(new Setting("TimeChanger", true, false));
+    private final Setting<Boolean> fovStay = register(new Setting("FOV Stay", false, v -> fov.getValue()));
+    public Setting<Float> fovValue = register(new Setting("Fov Value", 140.0f, 0.0f, 180.0f, v -> fov.getValue()));
+    public Setting<Boolean> antiFog = register(new Setting("Anti Fog", false));
+    public Setting<Boolean> noWeather = register(new Setting("No Weather", false));
+    public Setting<Boolean> timeChanger = register(new Setting("Time Changer", true, false));
     public Setting<Integer> time = register(new Setting<>("Time", 0, 0, 23000, v -> timeChanger.getValue()));
-    public Setting<Boolean> skyColor = register(new Setting("SkyColor", true, false));
-    public Setting<Float> red = register(new Setting<>("SkyRed", 255.0f, 0.0f, 255.0f, v -> skyColor.getValue()));
-    public Setting<Float> green = register(new Setting<>("SkyGreen", 255.0f, 0.0f, 255.0f, v -> skyColor.getValue()));
-    public Setting<Float> blue = register(new Setting<>("SkyBlue", 255.0f, 0.0f, 255.0f, v -> skyColor.getValue()));
+    public Setting<Boolean> skyColor = register(new Setting("Sky Color", true, false));
+    public Setting<Float> red = register(new Setting<>("Sky Red", 255.0f, 0.0f, 255.0f, v -> skyColor.getValue()));
+    public Setting<Float> green = register(new Setting<>("Sky Green", 255.0f, 0.0f, 255.0f, v -> skyColor.getValue()));
+    public Setting<Float> blue = register(new Setting<>("Sky Blue", 255.0f, 0.0f, 255.0f, v -> skyColor.getValue()));
 
     public ViewTweaks() {
-        super("ViewTweaks", Category.VISUAL, "Tweak ur mom");
+        super("View Tweaks", Category.VISUAL, "Tweak how your game looks.");
         setInstance();
     }
 
