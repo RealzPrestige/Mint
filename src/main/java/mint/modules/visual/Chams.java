@@ -46,7 +46,7 @@ public class Chams extends Module {
     }
 
     public Chams() {
-        super("Chams", Category.VISUAL, "");
+        super("Chams", Category.VISUAL, "Changes how other players look & make them visible through walls.");
         this.setInstance();
     }
 
