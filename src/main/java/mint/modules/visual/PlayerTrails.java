@@ -37,7 +37,7 @@ public class PlayerTrails extends Module {
     Map<UUID, ItemTrail> trails = new HashMap<>();
 
     public PlayerTrails() {
-        super("Player Trails", Category.VISUAL, "");
+        super("Player Trails", Category.VISUAL, "Draws a line behind you (Breadcrumbs)");
     }
 
     public void onTick() {
