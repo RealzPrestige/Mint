@@ -21,9 +21,6 @@ public class RubberbandNotify extends Module {
     public RubberbandNotify() {
         super("Rubber Band Notify", Category.CORE, "Notify rubberbands.");
     }
-    //TODO : make a hud module? hud editor or sumn?
-    //nigga u dum as heil
-    //if u want a fucking hud then make an editor for that
     HashMap<String, Integer> rubberbandString = new HashMap<>();
     private final Timer timer = new Timer();
     float seconds;

@@ -423,4 +423,11 @@ public class EntityUtil  {
         }
         return event;
     }
+
+    public static boolean isInLiquid() {
+        if (Mint.INSTANCE.mc.player.isInWater() || Mint.INSTANCE.mc.player.isInLava()) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -8,7 +8,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 
 public class Step extends Module {
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));
-    public enum Mode {Vanilla, Normal, Packet} //vanilla is yk, normal is the packet array shit, packet is my test mode
+    public enum Mode {Vanilla, Normal}
 
     public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
     public Setting<Integer> stepHeight = register(new Setting("Height",2,1,4, v -> mode.getValue() != Mode.Vanilla));
@@ -32,7 +32,7 @@ public class Step extends Module {
 
     @Override
     public void onUpdate() {
-        if (cancelLiquids.getValue() && (mc.player.isInWater() || mc.player.isInLava())) {
+        if (cancelLiquids.getValue() && EntityUtil.isInLiquid()) {
             return;
         }
         if (mode.getValue() == Mode.Vanilla) {
@@ -67,11 +67,6 @@ public class Step extends Module {
                 }
                 mc.player.setPosition(mc.player.posX, mc.player.posY + selectedPositions[selectedPositions.length - 1], mc.player.posZ);
                 packets = 0;
-            }
-        }
-        if (mode.getValue() == Mode.Packet) {
-            if (mc.player.onGround && mc.player.collidedVertically && mc.player.collidedHorizontally) {
-                EntityUtil.packetJump(true);
             }
         }
     }

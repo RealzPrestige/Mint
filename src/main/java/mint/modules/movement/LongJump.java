@@ -18,7 +18,7 @@ public class LongJump extends Module {
 
     public Setting<Float> acceleration = register(new Setting("Acceleration", 0.3f, 0.0f, 1.0f, v -> mode.getValue() == Mode.Factor));
     public Setting<Boolean> autoJump = register(new Setting("Auto Jump", true));
-    public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 410));
+    public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 415));
     public Setting<Boolean> disableOnLag = register(new Setting("Disable On Lag", true));
     double playerSpeed;
     float jumpFactor;

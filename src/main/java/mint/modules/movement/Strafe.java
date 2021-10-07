@@ -192,7 +192,7 @@ public class Strafe extends Module {
                 event.z = (0.0);
             }
         } else if (mode.getValue() == Mode.INSTANT && !strafeTest.getValue()) {
-            if (!(event.getStage() != 0 || nullCheck() || mc.player.isSneaking() || mc.player.isInWater() || mc.player.isInLava() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
+            if (!(event.getStage() != 0 || nullCheck() || mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
                 MovementInput movementInput = mc.player.movementInput;
                 float moveForward = movementInput.moveForward;
                 float moveStrafe = movementInput.moveStrafe;
