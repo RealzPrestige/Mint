@@ -12,31 +12,48 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 /**
  arrow damage depends on the velocity of a player,
  so if u were to tp 1k blocks away right b4 shooting the arrow the dmg would get supa big
- todo setVelocity mode
+ its patched on practice servers forsho
  */
 public class BowHack extends Module {
     public BowHack() {
         super("BowHack", Category.PLAYER, "An exploit to insnatly kill your opponents.");
     }
 
-    public Setting<Integer> power = register(new Setting("Power", 3, 1, 30));
-    public Setting<Integer> yOffset = register(new Setting("Y Offset", 5, 1, 10));
+    public Setting<Mode> mode = register(new Setting("Mode", Mode.Calc));
+    public enum Mode {Calc, Simple}
+
+    public Setting<Integer> factor = register(new Setting("Factor", 3, 1, 30));
+    public Setting<Float> yOffset = register(new Setting("Y Offset", 5.0f, 0.0f, 10.0f));
     public Setting<Boolean> debug = register(new Setting("Debug", true));
     float yaw = mc.player.rotationYaw;
+    double x;
+    double y;
+    double z;
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof CPacketPlayerTryUseItem && mc.player.getHeldItemMainhand().getItem() instanceof ItemBow) {
-            mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(
-                    mc.player.posX - Math.sin(yaw) * power.getValue(),
-                    mc.player.posY + yOffset.getValue(),
-                    mc.player.posZ + Math.cos(yaw) * power.getValue(),
-                    mc.player.rotationYaw, mc.player.rotationPitch, false));
+            switch (mode.getValue()) {
+                case Calc:
+                    x = mc.player.posX - Math.sin(yaw) * factor.getValue();
+                    y = mc.player.posY + yOffset.getValue();
+                    z = mc.player.posZ + Math.cos(yaw) * factor.getValue();
+                    mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(x, y, z, mc.player.rotationYaw, mc.player.rotationPitch, false));
+                    break;
+
+                case Simple:
+                    x = mc.player.posX + factor.getValue();
+                    y = mc.player.posY + yOffset.getValue();
+                    z = mc.player.posZ + factor.getValue();
+                    mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(x, y, z, mc.player.rotationYaw, mc.player.rotationPitch, false));
+                    break;
+            }
+
             if (debug.getValue()) {
-                MessageManager.sendMessage("X: " + (mc.player.posX - Math.sin(yaw) * power.getValue()));
-                MessageManager.sendMessage("Y: " + (mc.player.posY + yOffset.getValue()));
-                MessageManager.sendMessage("Z: " + (mc.player.posZ + Math.cos(yaw) * power.getValue()));
-                MessageManager.sendMessage("Yaw: " + yaw);
+                MessageManager.sendMessage("X: " + x);
+                MessageManager.sendMessage("Y: " + y);
+                MessageManager.sendMessage("Z: " + z);
+                MessageManager.sendMessage("Yaw: " + (mode.getValue() == Mode.Calc ? yaw : "null"));
             }
         }
     }
