@@ -15,7 +15,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -27,6 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.util.Objects;
 
 import static mint.modules.player.Speedmine.Mode.PACKET;
 
@@ -169,15 +169,17 @@ public class Speedmine extends Module {
     @Override
     public void onRender3D(Render3DEvent event) {
         if (currentPos != null) {
+            if (getMineTime(currentBlock,item) == -1)
+                return;
             bb = mc.world.getBlockState(currentPos).getSelectedBoundingBox(mc.world, currentPos);
 
             Color color = new Color(red.getValue(), green.getValue(), blue.getValue(), renderMode.getValue().equals(RenderMode.FADE) ? currentAlpha : alpha.getValue());
             switch (renderMode.getValue()) {
                 case EXPAND:
-                    bb = bb.shrink(Math.max(Math.min(normalize(count, getMineTime(currentBlock, item) - subVal, 0), 1.0), 0.0));
+                    bb = bb.shrink(Math.max(Math.min(normalize(count, Objects.requireNonNull(getMineTime(currentBlock, item)) - subVal, 0), 1.0), 0.0));
                     break;
                 case EXPAND2:
-                    bb = bb.setMaxY(bb.minY - 0.5 + (Math.max(Math.min(normalize(count * 2, getMineTime(currentBlock, item) - subVal, 0), 1.5), 0.0)));
+                    bb = bb.setMaxY(bb.minY - 0.5 + (Math.max(Math.min(normalize(count * 2, Objects.requireNonNull(getMineTime(currentBlock, item)) - subVal, 0), 1.5), 0.0)));
                     break;
                 default:
                     break;
@@ -275,6 +277,9 @@ public class Speedmine extends Module {
     }
 
     public static double getMineTime(Block block, ItemStack stack) {
+        if (stack.item.equals(Items.AIR) || stack.item.equals(null))
+            return -1;
+
         float speedMultiplier = stack.getDestroySpeed(block.getDefaultState());
         float damage;
 

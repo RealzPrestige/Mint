@@ -70,7 +70,7 @@ class Mint {
     }
 
     @Mod.EventHandler
-    fun init(event: FMLPreInitializationEvent?) {
+    fun preInit(event: FMLPreInitializationEvent?) {
       //  Login().frame.isVisible = true
         //while (!Login.done) {
         //    sleep(300)
