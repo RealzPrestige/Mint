@@ -8,11 +8,15 @@ import mint.events.Render3DEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockObsidian;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
@@ -36,10 +40,11 @@ import java.util.TreeMap;
 
 
 /**
- * @Author zPrestige_
- * @Since 05/10/21
+ * @author zPrestige_
+ * @since 05/10/21
+ * @author kambing for obiassist
  */
-
+@SuppressWarnings("All")
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
@@ -112,9 +117,14 @@ public class AutoCrystal extends Module {
     public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
     public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1f, 0f, 5f, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
 
+    public Setting<Boolean> obiAssistParent = register(new Setting<>("Assist", true, false));
+    private final Setting<Boolean> packet = register(new Setting<>("PacketSwitch", true));
+    private final Setting<Double> range = register(new Setting<>("TargetMaxRange", 10.0, 5.0, 15.0));
+    private final Setting<Integer> delay = register(new Setting<>("MSDelay", 200, 0, 500));
 
     EntityPlayer targetPlayer;
     BlockPos finalPos;
+    Timer delayTimer = new Timer();
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
     HashMap<BlockPos, Integer> possesToFade = new HashMap();
@@ -248,6 +258,62 @@ public class AutoCrystal extends Module {
             }
         }
     }
+
+    void doObiAssist() {
+        EntityPlayer target = AutoCrystal.getInstance().targetPlayer;
+        int slot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
+        int old = mc.player.inventory.currentItem;
+        EnumHand hand = null;
+
+        if (target == null)
+            return;
+
+        if (AutoCrystal.getInstance().finalPos != null)
+            return;
+
+
+            if (slot != -1) {
+
+                if (delayTimer.passedMs(delay.getValue())) {
+                    if (mc.player.inventory.currentItem != slot) {
+                        if (packet.getValue()) {
+                            if (mc.player.isHandActive()) {
+                                hand = mc.player.getActiveHand();
+                            }
+                            mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
+                        }
+                    }
+                }
+        }
+        try {
+            if (!(target.getDistance(mc.player) > range.getValue())) {
+
+                AutoCrystal.bestPlacePos bestPlacePos;
+                bestPlacePos = AutoCrystal.getInstance().getBestPlacePos();
+                BlockPos pos = bestPlacePos.getBlockPos();
+
+
+                if (!isValidToJoinDaGang(pos)) return;
+                if (!canPlaceCrystalIfObbyWasAtPos(pos)) return;
+
+
+                BlockUtil.placeBlock(pos);
+                delayTimer.reset();
+                if (packet.getValue()) {
+                    if (slot != -1) {
+                        mc.player.connection.sendPacket(new CPacketHeldItemChange(old));
+                        if (packet.getValue() && hand != null) {
+                            mc.player.setActiveHand(hand);
+                        }
+                    }
+                }
+            }
+
+        } catch (NullPointerException ignored) {
+            //to avoid ticking entity crash
+        }
+    }
+
 
     public bestPlacePos getBestPlacePos() {
         TreeMap<Float, bestPlacePos> posList = new TreeMap<>();
@@ -396,6 +462,7 @@ public class AutoCrystal extends Module {
     }
 
     public void onDisable() {
+        delayTimer.reset();
         targetPlayer = null;
         finalPos = null;
     }
@@ -440,4 +507,27 @@ public class AutoCrystal extends Module {
             return blockPos;
         }
     }
+    public static boolean canPlaceCrystalIfObbyWasAtPos(final BlockPos pos) {
+
+        final Block floor = mc.world.getBlockState(pos.add(0, 1, 0)).getBlock();
+        final Block ceil = mc.world.getBlockState(pos.add(0, 2, 0)).getBlock();
+
+        if (floor == Blocks.AIR && ceil == Blocks.AIR) {
+            return mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(0, 1, 0))).isEmpty();
+        }
+
+        return false;
+    }
+
+    public boolean isValidToJoinDaGang(BlockPos pos) {
+        for (final EnumFacing side : EnumFacing.values()) {
+            final BlockPos neighbor = pos.offset(side);
+
+            if (mc.world.getBlockState(neighbor).getBlock().canCollideCheck(mc.world.getBlockState(neighbor), false)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+
