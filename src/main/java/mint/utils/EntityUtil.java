@@ -407,7 +407,10 @@ public class EntityUtil  {
     }
 
     public static Vec3d getCenter(double posX, double posY, double posZ) {
-        return new Vec3d(Math.floor(posX) + 0.5D, Math.floor(posY), Math.floor(posZ) + 0.5D);
+        double x = Math.floor(posX) + 0.5D;
+        double y = Math.floor(posY);
+        double z = Math.floor(posZ) + 0.5D;
+        return new Vec3d(x, y, z);
     }
 
     public static BlockPos getRoundedBlockPos(Entity entity) {

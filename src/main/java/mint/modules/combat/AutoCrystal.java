@@ -49,78 +49,79 @@ public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
 
-    public Setting<Boolean> rangesParent = register(new Setting<>("Ranges", true, false));
-    public Setting<Float> placeRange = register(new Setting<>("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
-    public Setting<Float> breakRange = register(new Setting<>("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
-    public Setting<Float> targetRange = register(new Setting<>("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
+    public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
+    public Setting<Float> placeRange = register(new Setting("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
+    public Setting<Float> breakRange = register(new Setting("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
+    public Setting<Float> targetRange = register(new Setting("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
 
-    public Setting<Boolean> damagesParent = register(new Setting<>("Damages", true, false));
-    public Setting<Float> minimumDamage = register(new Setting<>("Minimum Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
-    public Setting<Float> maximumSelfDamage = register(new Setting<>("Maximum Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
-    public Setting<Boolean> antiSuicide = register(new Setting<>("Anti Suicide", false, false, v -> damagesParent.getValue()));
+    public Setting<Boolean> damagesParent = register(new Setting("Damages", true, false));
+    public Setting<Float> minimumDamage = register(new Setting("Minimum Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Float> maximumSelfDamage = register(new Setting("Maximum Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Boolean> antiSuicide = register(new Setting("Anti Suicide", false, v -> damagesParent.getValue()));
 
-    public Setting<Boolean> predictParent = register(new Setting<>("Predicts", true, false));
-    public Setting<Boolean> soundPredict = register(new Setting<>("Sound Predict", false, false, v -> predictParent.getValue()));
-    public Setting<Boolean> placePredict = register(new Setting<>("Place Predict", false, false, v -> predictParent.getValue()));
-    public Setting<Boolean> breakPredict = register(new Setting<>("Break Predict", false, false, v -> predictParent.getValue()));
-    public Setting<Boolean> breakPredictCalc = register(new Setting<>("Break Predict Calc", false, false, v -> predictParent.getValue() && breakPredict.getValue()));
+    public Setting<Boolean> predictParent = register(new Setting("Predicts", true, false));
+    public Setting<Boolean> soundPredict = register(new Setting("Sound Predict", false, v -> predictParent.getValue()));
+    public Setting<Boolean> placePredict = register(new Setting("Place Predict", false, v -> predictParent.getValue()));
+    public Setting<Boolean> breakPredict = register(new Setting("Break Predict", false, v -> predictParent.getValue()));
+    public Setting<Boolean> breakPredictCalc = register(new Setting("Break Predict Calc", false, v -> predictParent.getValue() && breakPredict.getValue()));
 
-    public Setting<Boolean> delayParent = register(new Setting<>("Delays", true, false));
-    public Setting<Integer> placeDelay = register(new Setting<>("Place Delay", 100, 0, 500, v -> delayParent.getValue()));
-    public Setting<Integer> breakDelay = register(new Setting<>("Break Delay", 100, 0, 500, v -> delayParent.getValue()));
+    public Setting<Boolean> delayParent = register(new Setting("Delays", true, false));
+    public Setting<Integer> placeDelay = register(new Setting("Place Delay", 0, 0, 500, v -> delayParent.getValue()));
+    public Setting<Integer> breakDelay = register(new Setting("Break Delay", 0, 0, 500, v -> delayParent.getValue()));
 
-    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
-    public Setting<Boolean> updatedPlacements = register(new Setting<>("1.13+ Placements", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> limitAttack = register(new Setting<>("Limit Attack", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> packetBreak = register(new Setting<>("Packet Break", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> allowCollision = register(new Setting<>("Allow Collision", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> cancelVelocity = register(new Setting<>("Cancel Velocity", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> cancelExplosion = register(new Setting<>("Cancel Explosion", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> silentSwitch = register(new Setting<>("Silent Switch", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> antiWeakness = register(new Setting<>("Anti Weakness", false, false, v -> silentSwitch.getValue() && miscParent.getValue()));
-    public Setting<Boolean> swingParent = register(new Setting<>("Swings", true, false));
-    public Setting<Boolean> placeSwing = register(new Setting<>("Place Swing", false, false, v -> swingParent.getValue()));
-    public Setting<PlaceSwingHand> placeSwingHand = register(new Setting<>("PlaceSwingHand", PlaceSwingHand.MAINHAND, v -> placeSwing.getValue() && swingParent.getValue()));
+    public Setting<Boolean> miscParent = register(new Setting("Misc", true, false));
+    public Setting<Boolean> updatedPlacements = register(new Setting("1.13+ Placements", false, v -> miscParent.getValue()));
+    public Setting<Boolean> limitAttack = register(new Setting("Limit Attack", false, v -> miscParent.getValue()));
+    public Setting<Boolean> packetBreak = register(new Setting("Packet Break", false, v -> miscParent.getValue()));
+    public Setting<Boolean> allowCollision = register(new Setting("Allow Collision", false, v -> miscParent.getValue()));
+    public Setting<Boolean> cancelVelocity = register(new Setting("Cancel Velocity", false, v -> miscParent.getValue()));
+    public Setting<Boolean> cancelExplosion = register(new Setting("Cancel Explosion", false, v -> miscParent.getValue()));
+    public Setting<Boolean> silentSwitch = register(new Setting("Silent Switch", false, v -> miscParent.getValue()));
+    public Setting<Boolean> antiWeakness = register(new Setting("Anti Weakness", false, v -> silentSwitch.getValue() && miscParent.getValue()));
+
+    public Setting<Boolean> swingParent = register(new Setting("Swings", true, false));
+    public Setting<Boolean> placeSwing = register(new Setting("Place Swing", false, v -> swingParent.getValue()));
+    public Setting<PlaceSwingHand> placeSwingHand = register(new Setting("PlaceSwingHand", PlaceSwingHand.MAINHAND, v -> placeSwing.getValue() && swingParent.getValue()));
 
     public enum PlaceSwingHand {MAINHAND, OFFHAND}
 
-    public Setting<Boolean> breakSwing = register(new Setting<>("Break Swing", false, false, v -> swingParent.getValue()));
-    public Setting<BreakSwingHand> breakSwingHand = register(new Setting<>("BreakSwingHand", BreakSwingHand.MAINHAND, v -> breakSwing.getValue() && swingParent.getValue()));
+    public Setting<Boolean> breakSwing = register(new Setting("Break Swing", false, false, v -> swingParent.getValue()));
+    public Setting<BreakSwingHand> breakSwingHand = register(new Setting("BreakSwingHand", BreakSwingHand.MAINHAND, v -> breakSwing.getValue() && swingParent.getValue()));
 
     public enum BreakSwingHand {MAINHAND, OFFHAND}
 
-    public Setting<Boolean> facePlaceParent = register(new Setting<>("Face Placing", true, false));
-    public Setting<FacePlaceMode> facePlaceMode = register(new Setting<>("FacePlaceMode", FacePlaceMode.Never, v -> facePlaceParent.getValue()));
+    public Setting<Boolean> facePlaceParent = register(new Setting("Face Placing", true, false));
+    public Setting<FacePlaceMode> facePlaceMode = register(new Setting("FacePlaceMode", FacePlaceMode.Never, v -> facePlaceParent.getValue()));
 
     public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Delay", 15, 0, 36, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
-    public Setting<Bind> facePlaceBind = register(new Setting<>("Face Place Bind", new Bind(-1), v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue()));
+    public Setting<Float> facePlaceHp = register(new Setting("Face Place Delay", 15, 0, 36, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
+    public Setting<Bind> facePlaceBind = register(new Setting("Face Place Bind", new Bind(-1), v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue()));
 
-    public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
-    public Setting<Boolean> render = register(new Setting<>("Render", false, false, v -> renderParent.getValue()));
-    public Setting<Boolean> fade = register(new Setting<>("Fade", false, false, v -> render.getValue() && renderParent.getValue()));
-    public Setting<Integer> startAlpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
-    public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 0, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
-    public Setting<Integer> fadeSpeed = register(new Setting<>("Fade Speed", 20, 0, 100, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
+    public Setting<Boolean> renderParent = register(new Setting("Renders", true, false));
+    public Setting<Boolean> render = register(new Setting("Render", false, v -> renderParent.getValue()));
+    public Setting<Boolean> fade = register(new Setting("Fade", false, v -> render.getValue() && renderParent.getValue()));
+    public Setting<Integer> startAlpha = register(new Setting("Start Alpha", 255, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
+    public Setting<Integer> endAlpha = register(new Setting("End Alpha", 0, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
+    public Setting<Integer> fadeSpeed = register(new Setting("Fade Speed", 20, 0, 100, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
 
-    public Setting<Boolean> box = register(new Setting<>("Box", false, false, v -> render.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxRed = register(new Setting<>("Box Red", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxGreen = register(new Setting<>("Box Green", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxBlue = register(new Setting<>("Box Blue", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxAlpha = register(new Setting<>("Box Alpha", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Boolean> box = register(new Setting("Box", false, false, v -> render.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxRed = register(new Setting("Box Red", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxGreen = register(new Setting("Box Green", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxBlue = register(new Setting("Box Blue", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public Setting<Integer> boxAlpha = register(new Setting("Box Alpha", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
 
-    public Setting<Boolean> outline = register(new Setting<>("Outline", false, false, v -> render.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1f, 0f, 5f, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Boolean> outline = register(new Setting("Outline", false, false, v -> render.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineRed = register(new Setting("Outline Red", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineGreen = register(new Setting("Outline Green", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineBlue = register(new Setting("Outline Blue", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Integer> outlineAlpha = register(new Setting("Outline Alpha", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
+    public Setting<Float> lineWidth = register(new Setting("Line Width", 1f, 0f, 5f, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
 
-    public Setting<Boolean> obiAssistParent = register(new Setting<>("Assist", true, false));
-    private final Setting<Boolean> packet = register(new Setting<>("PacketSwitch", true));
-    private final Setting<Double> range = register(new Setting<>("TargetMaxRange", 10.0, 5.0, 15.0));
-    private final Setting<Integer> delay = register(new Setting<>("MSDelay", 200, 0, 500));
+    public Setting<Boolean> obiAssistParent = register(new Setting("Assist", true, false));
+    private final Setting<Boolean> packet = register(new Setting("PacketSwitch", true));
+    private final Setting<Double> range = register(new Setting("TargetMaxRange", 10.0, 5.0, 15.0));
+    private final Setting<Integer> delay = register(new Setting("MSDelay", 200, 0, 500));
 
     EntityPlayer targetPlayer;
     BlockPos finalPos;

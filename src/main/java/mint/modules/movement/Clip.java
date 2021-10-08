@@ -22,7 +22,7 @@ public class Clip extends Module {
             disable();
             return;
         }
-        if (mc.player.posY < 6 && !mc.player.isElytraFlying()) {
+        if (mc.player.posY < 6 && !mc.player.isElytraFlying() && mc.player.onGround) {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
             EntityUtil.packetJump(offground.getValue());
             double y = (mc.player.posY + offset.getValue()) * -1;

@@ -51,9 +51,8 @@ public class LongJump extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive e) {
-        if (e.getPacket() instanceof SPacketPlayerPosLook && disableOnLag.getValue()) {
-            if (isEnabled())
-                disable();
+        if (e.getPacket() instanceof SPacketPlayerPosLook && disableOnLag.getValue() && isEnabled()) {
+            disable();
         }
     }
 }
