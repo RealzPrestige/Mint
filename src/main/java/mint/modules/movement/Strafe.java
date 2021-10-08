@@ -74,6 +74,8 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onPlayerUpdateWalking(UpdateWalkingPlayerEvent event) {
+        if(Phase.getInstance().isEnabled())
+            return;
         if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
             final double xDist = mc.player.posX - mc.player.prevPosX;
             final double zDist = mc.player.posZ - mc.player.prevPosZ;
@@ -82,6 +84,8 @@ public class Strafe extends Module {
     }
 
     public void onTick() {
+        if(Phase.getInstance().isEnabled())
+            return;
         if (ticks < 12) {
             ++ticks;
         }
@@ -120,6 +124,8 @@ public class Strafe extends Module {
 
     public void onUpdate() {
         if(fullNullCheck()) return;
+        if(Phase.getInstance().isEnabled())
+            return;
         if (mc.player != null) {
             prevDist = Math.sqrt((mc.player.posX - mc.player.prevPosX) * (mc.player.posX - mc.player.prevPosX) + (mc.player.posZ - mc.player.prevPosZ) * (mc.player.posZ - mc.player.prevPosZ));
             if (useTimer.getValue() && EntityUtil.isMoving(mc.player)) {
@@ -136,9 +142,11 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onMove(MoveEvent event) {
-        if (fullNullCheck()) {
+        if (fullNullCheck())
             return;
-        }
+
+        if(Phase.getInstance().isEnabled())
+            return;
        if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
             if (EntityUtil.isMoving()) {
                 final EntityPlayerSP player2 = mc.player;

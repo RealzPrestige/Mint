@@ -12,6 +12,7 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
@@ -88,12 +89,12 @@ public class AutoCrystal extends Module {
     public Setting<Boolean> placeSwing = register(new Setting<>("Place Swing", false, false, v -> swingParent.getValue()));
     public Setting<PlaceSwingHand> placeSwingHand = register(new Setting<>("PlaceSwingHand", PlaceSwingHand.MAINHAND, v -> placeSwing.getValue() && swingParent.getValue()));
 
-    public enum PlaceSwingHand {MAINHAND, OFFHAND}
+    public enum PlaceSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public Setting<Boolean> breakSwing = register(new Setting<>("Break Swing", false, false, v -> swingParent.getValue()));
     public Setting<BreakSwingHand> breakSwingHand = register(new Setting<>("BreakSwingHand", BreakSwingHand.MAINHAND, v -> breakSwing.getValue() && swingParent.getValue()));
 
-    public enum BreakSwingHand {MAINHAND, OFFHAND}
+    public enum BreakSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public Setting<Boolean> facePlaceParent = register(new Setting<>("Face Placing", true, false));
     public Setting<FacePlaceMode> facePlaceMode = register(new Setting<>("FacePlaceMode", FacePlaceMode.Never, v -> facePlaceParent.getValue()));
@@ -107,7 +108,7 @@ public class AutoCrystal extends Module {
     public Setting<Boolean> pauseOnGapple = register(new Setting("Gapple", false, v -> pauseParent.getValue()));
     public Setting<Boolean> pauseOnSword = register(new Setting("Pause On Sword", false, v -> pauseParent.getValue()));
     public Setting<Boolean> pauseOnHealth = register(new Setting("Pause On Health", false, v -> pauseParent.getValue()));
-    public Setting<Float> pauseHealth = register(new Setting<>("Pause Health", 15, 0, 36, v -> pauseParent.getValue() && pauseOnHealth.getValue()));
+    public Setting<Float> pauseHealth = register(new Setting<>("Pause Health", 15f, 0f, 36f, v -> pauseParent.getValue() && pauseOnHealth.getValue()));
     public Setting<Boolean> pauseOnExp = register(new Setting("Pause On Exp", false, v -> pauseParent.getValue()));
 
     public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
@@ -162,14 +163,18 @@ public class AutoCrystal extends Module {
     private void setInstance() {
         INSTANCE = this;
     }
+    public void onLogin(){
+        if(isEnabled())
+            disable();
+    }
 
     public void onUpdate() {
         if (fullNullCheck())
             return;
 
-        if ((pauseOnGapple.getValue() && mc.player.getHeldItemMainhand().getItem().equals(Items.GOLDEN_APPLE) && mc.player.isHandActive())
+        if ((pauseOnGapple.getValue() && mc.player.getHeldItemMainhand().getItem().equals(Items.GOLDEN_APPLE) && mc.gameSettings.keyBindUseItem.isKeyDown())
                 || (pauseOnSword.getValue() && mc.player.getHeldItemMainhand().equals(Items.DIAMOND_SWORD))
-                || (pauseOnExp.getValue() && mc.player.getHeldItemMainhand().equals(Items.EXPERIENCE_BOTTLE) && mc.player.isHandActive()
+                || (pauseOnExp.getValue() && mc.player.getHeldItemMainhand().equals(Items.EXPERIENCE_BOTTLE) && mc.gameSettings.keyBindUseItem.isKeyDown()
                 || (pauseOnHealth.getValue() && mc.player.getHealth() + mc.player.getAbsorptionAmount() < pauseHealth.getValue())))
             return;
 
@@ -211,7 +216,7 @@ public class AutoCrystal extends Module {
             possesToFade.put(bestCrystalPos.getBlockPos(), startAlpha.getValue());
 
         if (placeSwing.getValue())
-            mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+            swingArm(true);
 
         if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
             mc.player.inventory.currentItem = oldSlot;
@@ -264,7 +269,7 @@ public class AutoCrystal extends Module {
                 MinecraftForge.EVENT_BUS.post(event);
 
                 if (breakSwing.getValue())
-                    mc.player.swingArm(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                    swingArm(false);
 
                 if (silentSwitch.getValue() && antiWeakness.getValue() && (mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) && mc.player.getActivePotionEffects().equals(Potion.getPotionById(18))) {
                     mc.player.inventory.currentItem = oldSlot;
@@ -357,7 +362,7 @@ public class AutoCrystal extends Module {
                             possesToFade.put(predictedCrystalPos, startAlpha.getValue());
 
                         if (placeSwing.getValue())
-                            mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                            swingArm(true);
 
                         if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
                             mc.player.inventory.currentItem = mainOldSlot;
@@ -401,9 +406,8 @@ public class AutoCrystal extends Module {
                 }
 
                 mc.getConnection().sendPacket(predict);
-                if (breakSwing.getValue()) {
-                    mc.player.swingArm(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
-                }
+                if (breakSwing.getValue())
+                    swingArm(false);
             }
         }
         if (event.getPacket() instanceof SPacketSoundEffect) {
@@ -449,7 +453,7 @@ public class AutoCrystal extends Module {
                                 possesToFade.put(predictedCrystalPos, startAlpha.getValue());
 
                             if (placeSwing.getValue())
-                                mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                               swingArm(true);
 
                             if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
                                 mc.player.inventory.currentItem = mainOldSlot;
@@ -462,8 +466,33 @@ public class AutoCrystal extends Module {
         }
     }
 
-
-
+    public void swingArm(boolean place){
+        if(place){
+            switch(placeSwingHand.getValue()){
+                case MAINHAND:
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                    break;
+                case OFFHAND:
+                    mc.player.swingArm(EnumHand.OFF_HAND);
+                    break;
+                case PACKET:
+                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+                    break;
+            }
+        } else {
+            switch(breakSwingHand.getValue()){
+                case MAINHAND:
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                    break;
+                case OFFHAND:
+                    mc.player.swingArm(EnumHand.OFF_HAND);
+                    break;
+                case PACKET:
+                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+                    break;
+            }
+        }
+    }
     public void onEnable() {
         targetPlayer = null;
         finalPos = null;
