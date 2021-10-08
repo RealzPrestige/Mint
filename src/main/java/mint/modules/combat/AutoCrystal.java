@@ -249,7 +249,7 @@ public class AutoCrystal extends Module {
         }
     }
 
-    bestPlacePos getBestPlacePos() {
+    public bestPlacePos getBestPlacePos() {
         TreeMap<Float, bestPlacePos> posList = new TreeMap<>();
         for (BlockPos pos : BlockUtil.getSphere(placeRange.getValue())) {
             float targetDamage = EntityUtil.calculatePosDamage(pos, targetPlayer);

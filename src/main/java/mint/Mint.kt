@@ -78,7 +78,7 @@ class Mint {
     }
 
     @Mod.EventHandler
-    fun init(event: FMLInitializationEvent?) {
+    fun init(event: FMLInitializationEvent?) { // the hwid is in MixinMinecraft
         Display.setTitle("Mint 0.1.1")
         load()
     }
