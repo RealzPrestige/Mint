@@ -17,7 +17,7 @@ public class LongJump extends Module {
 
     public enum Mode {Factor}
 
-    public Setting<Float> acceleration = register(new Setting("Acceleration", 0.3f, 0.0f, 1.0f, v -> mode.getValue() == Mode.Factor));
+    public Setting<Float> acceleration = register(new Setting("Acceleration", 30.0f, 0.0f, 100.0f, v -> mode.getValue() == Mode.Factor));
     public Setting<Boolean> autoJump = register(new Setting("Auto Jump", true));
     public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 415));
     public Setting<Boolean> disableOnLag = register(new Setting("Disable On Lag", true));
@@ -44,7 +44,7 @@ public class LongJump extends Module {
             if (mc.player.onGround) {
                 mc.player.jumpMovementFactor = jumpFactor;
             } else if (!(mc.player.jumpMovementFactor > 0.1f)) {
-                mc.player.jumpMovementFactor += acceleration.getValue();
+                mc.player.jumpMovementFactor += acceleration.getValue() / 100;
             }
         }
     }

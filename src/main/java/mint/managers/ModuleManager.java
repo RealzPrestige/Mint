@@ -40,6 +40,7 @@ public class ModuleManager
         moduleList.add(new Descriptions());
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
+        moduleList.add(new NoPotionHud());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());
@@ -68,6 +69,7 @@ public class ModuleManager
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
+        moduleList.add(new Anchor());
 
         /** Player **/
         moduleList.add(new AntiAim());
@@ -90,6 +92,7 @@ public class ModuleManager
         moduleList.add(new SwingAnimations());
         moduleList.add(new NoCluster());
         moduleList.add(new ViewTweaks());
+        moduleList.add(new CrystalChams());
     }
 
     public Module getModuleByName(String name) {

@@ -48,6 +48,7 @@ public class InventoryUtil {
         return slot;
     }
 
+
     public static void SilentSwitchToSlot(int slot) {
         if (Mint.INSTANCE.mc.player.inventory.currentItem == slot || slot == -1) {
             return;
