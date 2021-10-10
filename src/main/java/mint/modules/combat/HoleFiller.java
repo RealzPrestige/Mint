@@ -336,10 +336,7 @@ public class HoleFiller extends Module {
 
     public static EntityPlayer getPlayerTarget(int targetRange){
         EntityPlayer target = EntityUtil.getTarget(targetRange);
-        if (target != null){
-            return target;
-        }
-        return null;
+        return target;
     }
 
     public static boolean canBlockBeSeen(final BlockPos blockPos) {

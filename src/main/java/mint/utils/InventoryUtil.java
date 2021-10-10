@@ -10,7 +10,7 @@ import net.minecraft.network.play.client.CPacketHeldItemChange;
 
 public class InventoryUtil {
 
-    private static Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static int getItemSlot(Item item) {
         int itemSlot = -1;

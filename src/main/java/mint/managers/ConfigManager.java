@@ -132,12 +132,12 @@ public class ConfigManager {
         if (!directory.exists()) {
             directory.mkdir();
         }
-        if (!Files.exists(outputFile = Paths.get(featureName = this.config + this.getDirectory(feature) + feature.getName() + ".json", new String[0]), new LinkOption[0])) {
-            Files.createFile(outputFile, new FileAttribute[0]);
+        if (!Files.exists(outputFile = Paths.get(featureName = this.config + this.getDirectory(feature) + feature.getName() + ".json"))) {
+            Files.createFile(outputFile);
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson((JsonElement)this.writeSettings(feature));
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(outputFile, new OpenOption[0])));
+        String json = gson.toJson(this.writeSettings(feature));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(outputFile)));
         writer.write(json);
         writer.close();
     }
@@ -190,8 +190,8 @@ public class ConfigManager {
 
     private void loadSettings(Feature feature) throws IOException {
         String featureName = this.config + this.getDirectory(feature) + feature.getName() + ".json";
-        Path featurePath = Paths.get(featureName, new String[0]);
-        if (!Files.exists(featurePath, new LinkOption[0])) {
+        Path featurePath = Paths.get(featureName);
+        if (!Files.exists(featurePath)) {
             return;
         }
         this.loadPath(featurePath, feature);

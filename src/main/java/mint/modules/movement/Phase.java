@@ -6,7 +6,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
 
 public class Phase extends Module {
-    private static Phase INSTANCE = new Phase();
+    private static final Phase INSTANCE = new Phase();
     public Phase() {
         super("Phase", Module.Category.MOVEMENT, "Lets you phase through blocks.");
     }

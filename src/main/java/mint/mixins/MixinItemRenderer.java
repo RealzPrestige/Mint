@@ -19,10 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinItemRenderer {
     @Inject(method = { "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;Z)V" }, at = { @At("INVOKE") })
     public void renderItem(final ItemStack stack, final EntityLivingBase entitylivingbaseIn, final ItemCameraTransforms.TransformType transform, final boolean leftHanded, final CallbackInfo ci) {
-        if (ViewTweaks.getInstance().glow.getValue()) {
-            entitylivingbaseIn.glowing = true;
-        }else{
-            entitylivingbaseIn.glowing = false;
-        }
+        entitylivingbaseIn.glowing = ViewTweaks.getInstance().glow.getValue();
     }
 }

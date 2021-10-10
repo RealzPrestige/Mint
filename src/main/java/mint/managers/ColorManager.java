@@ -6,7 +6,7 @@ public class ColorManager {
     private float red = 1.0f;
     private float green = 1.0f;
     private float blue = 1.0f;
-    private float alpha = 1.0f;
+    private final float alpha = 1.0f;
     private Color color = new Color(this.red, this.green, this.blue, this.alpha);
 
     public void setColor(Color color) {

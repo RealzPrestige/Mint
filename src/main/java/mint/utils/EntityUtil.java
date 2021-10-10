@@ -428,14 +428,11 @@ public class EntityUtil {
 
     public static boolean isPlayerSafe(EntityPlayer target) {
         BlockPos playerPos = getPlayerPos(target);
-        if ((Mint.INSTANCE.mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.BEDROCK) &&
+        return (Mint.INSTANCE.mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.BEDROCK) &&
                 (Mint.INSTANCE.mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.BEDROCK) &&
                 (Mint.INSTANCE.mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.BEDROCK) &&
                 (Mint.INSTANCE.mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.BEDROCK) &&
-                (Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK)) {
-            return true;
-        }
-        return false;
+                (Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK);
     }
 
     public static boolean isBorderingChunk(final Entity boat, final Double mX, final Double mZ) {
@@ -465,10 +462,7 @@ public class EntityUtil {
     }
 
     public static boolean isInLiquid() {
-        if (Mint.INSTANCE.mc.player.isInWater() || Mint.INSTANCE.mc.player.isInLava()) {
-            return true;
-        }
-        return false;
+        return Mint.INSTANCE.mc.player.isInWater() || Mint.INSTANCE.mc.player.isInLava();
     }
 
     public static boolean startSneaking() {
