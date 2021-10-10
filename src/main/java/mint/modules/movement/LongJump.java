@@ -28,7 +28,7 @@ public class LongJump extends Module {
     public void onEnable() {
         playerSpeed = EntityUtil.getDefaultSpeed();
         jumpFactor = mc.player.jumpMovementFactor;
-        if (mc.player.onGround && autoJump.getValue() && mc.player.moveForward == 0.0f && mc.player.moveStrafing == 0.0f) {
+        if (mc.player.onGround && autoJump.getValue()) {
             mc.player.motionY = jumpHeight.getValue() / 1000;
         }
     }

@@ -21,6 +21,7 @@ public class CommandManager
         commands.add(new Config());
         commands.add(new Friend());
         commands.add(new Help());
+        commands.add(new Kick());
     }
 
     public static String[] removeElement(String[] input, int indexToDelete) {

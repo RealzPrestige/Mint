@@ -18,10 +18,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 public class AutoPiston extends Module {
-    public Setting<Float> targetRange = register(new Setting("Target Range", 5.0f, 0, 10.0f));
+    public Setting<Float> targetRange = register(new Setting("Target Range", 5.0f, 0.0f, 10.0f));
     public Setting<Integer> startDelay = register(new Setting("Start Delay", 100, 0, 1000));
-    public Setting<Integer> placeDelay = register(new Setting("Delay", 100, 50, 1000));
-    public Setting<Integer> crystalBreakDelay = register(new Setting("Crystal Break Delay", 150, 100, 1000));
+    public Setting<Integer> placeDelay = register(new Setting("Delay", 100, 0, 1000));
+    public Setting<Integer> crystalBreakDelay = register(new Setting("Crystal Break Delay", 150, 0, 1000));
     public Setting<Float> breakRange = register(new Setting("Break Range", 5.0f, 0.0f, 6.0f));
     public Setting<Boolean> packet = register(new Setting<>("Packet", false));
     public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
