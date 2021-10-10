@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import org.apache.logging.log4j.core.jmx.Server
 import org.lwjgl.opengl.Display
 import java.lang.Thread.sleep
 
@@ -19,19 +18,25 @@ class Mint {
     companion object {
         @JvmField
         var INSTANCE = Mint()
+
         @JvmField
         var commandManager: CommandManager? = null
+
         @JvmField
         var friendManager: FriendManager? = null
+
         @JvmField
         var moduleManager: ModuleManager? = null
         var colorManager: ColorManager? = null
         var fileManager: FileManager? = null
+
         @JvmField
         var configManager: ConfigManager? = null
         var eventManager: EventManager? = null
+
         @JvmField
         var textManager: TextManager? = null
+
         @JvmField
         var serverManager: ServerManager? = null
         private var unloaded = false
@@ -72,9 +77,9 @@ class Mint {
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent?) {
       //  Login().frame.isVisible = true
-        //while (!Login.done) {
-        //    sleep(300)
-       // }
+      //  while (!Login.done) {
+       //     sleep(300)
+     //   }
     }
 
     @Mod.EventHandler

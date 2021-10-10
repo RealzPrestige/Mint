@@ -28,34 +28,32 @@ public class BoatFly extends Module {
             return;
         }
 
-        if (!(mc.player.getRidingEntity() instanceof EntityBoat)) {
+        if (!(mc.player.ridingEntity instanceof EntityBoat)) {
             return;
         }
 
-        if (EntityUtil.isBorderingChunk(mc.player.getRidingEntity(), mc.player.getRidingEntity().motionX, mc.player.getRidingEntity().motionZ) && stopUnloaded.getValue()) {
+        if (EntityUtil.isBorderingChunk(mc.player.ridingEntity, mc.player.ridingEntity.motionX, mc.player.ridingEntity.motionZ) && stopUnloaded.getValue()) {
             return;
         }
 
-        mc.player.getRidingEntity().noClip = noClip.getValue();
-        mc.player.getRidingEntity().setNoGravity(cancelGravity.getValue());
-        mc.player.onGround = onGround.getValue();
-        mc.player.noClip = noClip.getValue();
+        mc.player.ridingEntity.noClip = noClip.getValue();
+        mc.player.ridingEntity.setNoGravity(cancelGravity.getValue());
+        mc.player.ridingEntity.onGround = onGround.getValue();
 
         final double[] normalDir = MathUtil.directionSpeed(hSpeed.getValue() / 0.4f);
         if (mc.player.movementInput.moveStrafe != 0.0f || mc.player.movementInput.moveForward != 0.0f) {
-            mc.player.getRidingEntity().motionX = normalDir[0];
-            mc.player.getRidingEntity().motionZ = normalDir[1];
+            mc.player.ridingEntity.motionX = normalDir[0];
+            mc.player.ridingEntity.motionZ = normalDir[1];
         } else {
-            mc.player.getRidingEntity().motionX = 0.0;
-            mc.player.getRidingEntity().motionZ = 0.0;
+            EntityUtil.setMotion(0.0);
         }
 
         if (mc.gameSettings.keyBindJump.isKeyDown()) {
-            mc.player.getRidingEntity().motionY = vSpeed.getValue() / 2;
+            mc.player.ridingEntity.motionY = vSpeed.getValue() / 2;
         }
 
         if (mc.gameSettings.keyBindSneak.isKeyDown()) {
-            mc.player.getRidingEntity().motionY = -vSpeed.getValue() / 2;
+            mc.player.ridingEntity.motionY = -vSpeed.getValue() / 2;
         }
     }
 }

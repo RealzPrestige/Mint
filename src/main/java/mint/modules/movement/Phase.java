@@ -6,7 +6,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
 
 public class Phase extends Module {
-
+    private static Phase INSTANCE = new Phase();
     public Phase() {
         super("Phase", Module.Category.MOVEMENT, "Lets you phase through blocks.");
     }
@@ -20,6 +20,10 @@ public class Phase extends Module {
     public Setting<Boolean> spoofonGround = register(new Setting("Spoof onGround", true));
     public Setting<Boolean> offground = register(new Setting("Offground", false));
 
+    public static Phase getInstance(){
+        return INSTANCE;
+    }
+
     @Override
     public void onToggle() {
         mc.player.noClip = false;
@@ -30,7 +34,7 @@ public class Phase extends Module {
         if (fullNullCheck()) {
             return;
         }
-        Vec3d direction = new Vec3d(Math.cos((mc.player.rotationYaw + 90.0f) * Math.PI / 180.0f), 0.0, Math.sin((mc.player.rotationYaw + 90f) * Math.PI / 180.0f));
+        Vec3d direction = new Vec3d(Math.cos((mc.player.rotationYaw + 90.0f) * 3.141592653589793 / 180.0f), 0.0, Math.sin((mc.player.rotationYaw + 90f) * 3.141592653589793 / 180.0f));
 
         mc.player.noClip = true;
         mc.player.setVelocity(0.0, 0.0, 0.0);

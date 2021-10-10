@@ -11,7 +11,7 @@ public class Step extends Module {
     public enum Mode {Vanilla, Normal}
 
     public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
-    public Setting<Integer> stepHeight = register(new Setting("Height",2,1,4, v -> mode.getValue() != Mode.Vanilla));
+    public Setting<Integer> stepHeight = register(new Setting("Height",2,1,4));
     double[] oneblockPositions = new double[]{0.42, 0.75};
     double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
 

@@ -5,18 +5,14 @@ import mint.clickgui.setting.Setting;
 import mint.events.CrystalAttackEvent;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
-import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockObsidian;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
+import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
@@ -29,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -40,11 +37,10 @@ import java.util.TreeMap;
 
 
 /**
- * @author zPrestige_
- * @since 05/10/21
- * @author kambing for obiassist
+ * @Author zPrestige_
+ * @Since 05/10/21
  */
-@SuppressWarnings("All")
+
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
@@ -62,12 +58,22 @@ public class AutoCrystal extends Module {
     public Setting<Boolean> predictParent = register(new Setting<>("Predicts", true, false));
     public Setting<Boolean> soundPredict = register(new Setting<>("Sound Predict", false, false, v -> predictParent.getValue()));
     public Setting<Boolean> placePredict = register(new Setting<>("Place Predict", false, false, v -> predictParent.getValue()));
+    public Setting<PlacePredictMode> placePredictMode = register(new Setting<>("Place Predict Mode", PlacePredictMode.SOUND, v -> predictParent.getValue() && placePredict.getValue()));
+
+    public enum PlacePredictMode {SOUND, EXPLOSION}
+
     public Setting<Boolean> breakPredict = register(new Setting<>("Break Predict", false, false, v -> predictParent.getValue()));
     public Setting<Boolean> breakPredictCalc = register(new Setting<>("Break Predict Calc", false, false, v -> predictParent.getValue() && breakPredict.getValue()));
 
     public Setting<Boolean> delayParent = register(new Setting<>("Delays", true, false));
     public Setting<Integer> placeDelay = register(new Setting<>("Place Delay", 100, 0, 500, v -> delayParent.getValue()));
     public Setting<Integer> breakDelay = register(new Setting<>("Break Delay", 100, 0, 500, v -> delayParent.getValue()));
+
+    public Setting<Boolean> raytraceParent = register(new Setting<>("Raytrace", true, false));
+    public Setting<Boolean> placeRaytrace = register(new Setting<>("Place Raytrace", false, false, v-> raytraceParent.getValue()));
+    public Setting<Float> placeRaytraceRange = register(new Setting<>("Place Raytrace Range", 5f, 0f, 6f, v-> raytraceParent.getValue() && placeRaytrace.getValue()));
+    public Setting<Boolean> breakRaytrace = register(new Setting<>("Break Raytrace", false, false, v-> raytraceParent.getValue()));
+    public Setting<Float> breakRaytraceRange = register(new Setting<>("Break Raytrace Range", 5f, 0f, 6f, v-> raytraceParent.getValue() && breakRaytrace.getValue()));
 
     public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
     public Setting<Boolean> updatedPlacements = register(new Setting<>("1.13+ Placements", false, false, v -> miscParent.getValue()));
@@ -78,24 +84,32 @@ public class AutoCrystal extends Module {
     public Setting<Boolean> cancelExplosion = register(new Setting<>("Cancel Explosion", false, false, v -> miscParent.getValue()));
     public Setting<Boolean> silentSwitch = register(new Setting<>("Silent Switch", false, false, v -> miscParent.getValue()));
     public Setting<Boolean> antiWeakness = register(new Setting<>("Anti Weakness", false, false, v -> silentSwitch.getValue() && miscParent.getValue()));
+
     public Setting<Boolean> swingParent = register(new Setting<>("Swings", true, false));
     public Setting<Boolean> placeSwing = register(new Setting<>("Place Swing", false, false, v -> swingParent.getValue()));
     public Setting<PlaceSwingHand> placeSwingHand = register(new Setting<>("PlaceSwingHand", PlaceSwingHand.MAINHAND, v -> placeSwing.getValue() && swingParent.getValue()));
 
-    public enum PlaceSwingHand {MAINHAND, OFFHAND}
+    public enum PlaceSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public Setting<Boolean> breakSwing = register(new Setting<>("Break Swing", false, false, v -> swingParent.getValue()));
     public Setting<BreakSwingHand> breakSwingHand = register(new Setting<>("BreakSwingHand", BreakSwingHand.MAINHAND, v -> breakSwing.getValue() && swingParent.getValue()));
 
-    public enum BreakSwingHand {MAINHAND, OFFHAND}
+    public enum BreakSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public Setting<Boolean> facePlaceParent = register(new Setting<>("Face Placing", true, false));
     public Setting<FacePlaceMode> facePlaceMode = register(new Setting<>("FacePlaceMode", FacePlaceMode.Never, v -> facePlaceParent.getValue()));
 
     public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Delay", 15, 0, 36, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
+    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Delay", 15f, 0f, 36f, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
     public Setting<Bind> facePlaceBind = register(new Setting<>("Face Place Bind", new Bind(-1), v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue()));
+
+    public Setting<Boolean> pauseParent = register(new Setting<>("Pauses", true, false));
+    public Setting<Boolean> pauseOnGapple = register(new Setting("Gapple", false, v -> pauseParent.getValue()));
+    public Setting<Boolean> pauseOnSword = register(new Setting("Pause On Sword", false, v -> pauseParent.getValue()));
+    public Setting<Boolean> pauseOnHealth = register(new Setting("Pause On Health", false, v -> pauseParent.getValue()));
+    public Setting<Float> pauseHealth = register(new Setting<>("Pause Health", 15f, 0f, 36f, v -> pauseParent.getValue() && pauseOnHealth.getValue()));
+    public Setting<Boolean> pauseOnExp = register(new Setting("Pause On Exp", false, v -> pauseParent.getValue()));
 
     public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
     public Setting<Boolean> render = register(new Setting<>("Render", false, false, v -> renderParent.getValue()));
@@ -117,14 +131,9 @@ public class AutoCrystal extends Module {
     public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
     public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1f, 0f, 5f, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
 
-    public Setting<Boolean> obiAssistParent = register(new Setting<>("Assist", true, false));
-    private final Setting<Boolean> packet = register(new Setting<>("PacketSwitch", true));
-    private final Setting<Double> range = register(new Setting<>("TargetMaxRange", 10.0, 5.0, 15.0));
-    private final Setting<Integer> delay = register(new Setting<>("MSDelay", 200, 0, 500));
 
     EntityPlayer targetPlayer;
     BlockPos finalPos;
-    Timer delayTimer = new Timer();
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
     HashMap<BlockPos, Integer> possesToFade = new HashMap();
@@ -154,9 +163,19 @@ public class AutoCrystal extends Module {
     private void setInstance() {
         INSTANCE = this;
     }
+    public void onLogin(){
+        if(isEnabled())
+            disable();
+    }
 
     public void onUpdate() {
         if (fullNullCheck())
+            return;
+
+        if ((pauseOnGapple.getValue() && mc.player.getHeldItemMainhand().getItem().equals(Items.GOLDEN_APPLE) && mc.gameSettings.keyBindUseItem.isKeyDown())
+                || (pauseOnSword.getValue() && mc.player.getHeldItemMainhand().equals(Items.DIAMOND_SWORD))
+                || (pauseOnExp.getValue() && mc.player.getHeldItemMainhand().equals(Items.EXPERIENCE_BOTTLE) && mc.gameSettings.keyBindUseItem.isKeyDown()
+                || (pauseOnHealth.getValue() && mc.player.getHealth() + mc.player.getAbsorptionAmount() < pauseHealth.getValue())))
             return;
 
         targetPlayer = EntityUtil.getTarget(targetRange.getValue());
@@ -197,7 +216,7 @@ public class AutoCrystal extends Module {
             possesToFade.put(bestCrystalPos.getBlockPos(), startAlpha.getValue());
 
         if (placeSwing.getValue())
-            mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+            swingArm(true);
 
         if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
             mc.player.inventory.currentItem = oldSlot;
@@ -219,7 +238,7 @@ public class AutoCrystal extends Module {
                 if (mc.player.getDistance(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRange.getValue()))
                     continue;
 
-                if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
                     minimumDamageValue = 2;
 
                 if (antiSuicide.getValue() && selfDamage > selfHealth)
@@ -231,10 +250,11 @@ public class AutoCrystal extends Module {
                 if (targetDamage < minimumDamageValue)
                     continue;
 
-                if (limitAttack.getValue() && attemptedEntityId.containsValue(entity)) {
-                    MessageManager.sendMessage("Limited Attack");
+                if (limitAttack.getValue() && attemptedEntityId.containsValue(entity))
                     continue;
-                }
+
+                if(breakRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(entity.posX, entity.posY, entity.posZ)) && mc.player.getDistance(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRaytraceRange.getValue()))
+                    continue;
 
                 if (silentSwitch.getValue() && antiWeakness.getValue() && (mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) && mc.player.getActivePotionEffects().equals(Potion.getPotionById(18)))
                     InventoryUtil.switchToSlot(sword);
@@ -249,7 +269,7 @@ public class AutoCrystal extends Module {
                 MinecraftForge.EVENT_BUS.post(event);
 
                 if (breakSwing.getValue())
-                    mc.player.swingArm(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                    swingArm(false);
 
                 if (silentSwitch.getValue() && antiWeakness.getValue() && (mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) && mc.player.getActivePotionEffects().equals(Potion.getPotionById(18))) {
                     mc.player.inventory.currentItem = oldSlot;
@@ -259,63 +279,7 @@ public class AutoCrystal extends Module {
         }
     }
 
-    void doObiAssist() {
-        EntityPlayer target = AutoCrystal.getInstance().targetPlayer;
-        int slot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
-        int old = mc.player.inventory.currentItem;
-        EnumHand hand = null;
-
-        if (target == null)
-            return;
-
-        if (AutoCrystal.getInstance().finalPos != null)
-            return;
-
-
-            if (slot != -1) {
-
-                if (delayTimer.passedMs(delay.getValue())) {
-                    if (mc.player.inventory.currentItem != slot) {
-                        if (packet.getValue()) {
-                            if (mc.player.isHandActive()) {
-                                hand = mc.player.getActiveHand();
-                            }
-                            mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
-                        }
-                    }
-                }
-        }
-        try {
-            if (!(target.getDistance(mc.player) > range.getValue())) {
-
-                AutoCrystal.bestPlacePos bestPlacePos;
-                bestPlacePos = AutoCrystal.getInstance().getBestPlacePos();
-                BlockPos pos = bestPlacePos.getBlockPos();
-
-
-                if (!isValidToJoinDaGang(pos)) return;
-                if (!canPlaceCrystalIfObbyWasAtPos(pos)) return;
-
-
-                BlockUtil.placeBlock(pos);
-                delayTimer.reset();
-                if (packet.getValue()) {
-                    if (slot != -1) {
-                        mc.player.connection.sendPacket(new CPacketHeldItemChange(old));
-                        if (packet.getValue() && hand != null) {
-                            mc.player.setActiveHand(hand);
-                        }
-                    }
-                }
-            }
-
-        } catch (NullPointerException ignored) {
-            //to avoid ticking entity crash
-        }
-    }
-
-
-    public bestPlacePos getBestPlacePos() {
+    bestPlacePos getBestPlacePos() {
         TreeMap<Float, bestPlacePos> posList = new TreeMap<>();
         for (BlockPos pos : BlockUtil.getSphere(placeRange.getValue())) {
             float targetDamage = EntityUtil.calculatePosDamage(pos, targetPlayer);
@@ -335,7 +299,7 @@ public class AutoCrystal extends Module {
                 if (!allowCollision.getValue() && !mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty())
                     continue;
 
-                if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
                     minimumDamageValue = 2;
 
                 if (antiSuicide.getValue() && selfDamage > selfHealth)
@@ -345,6 +309,9 @@ public class AutoCrystal extends Module {
                     continue;
 
                 if (targetDamage < minimumDamageValue)
+                    continue;
+
+                if(placeRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(pos.getX(), pos.getY(), pos.getZ())) && mc.player.getDistance(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f) > MathUtil.square(placeRaytraceRange.getValue()))
                     continue;
 
                 posList.put(targetDamage, new bestPlacePos(pos, targetDamage));
@@ -359,8 +326,54 @@ public class AutoCrystal extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if (cancelExplosion.getValue() && event.getPacket() instanceof SPacketExplosion)
-            event.setCanceled(true);
+        if (event.getPacket() instanceof SPacketExplosion) {
+
+            for (Entity entity : mc.world.loadedEntityList) {
+                if (entity instanceof EntityEnderCrystal) {
+                    BlockPos predictedCrystalPos = new BlockPos(entity.posX, entity.posY - 1, entity.posZ);
+                    if (placePredict.getValue() && placePredictMode.getValue().equals(PlacePredictMode.EXPLOSION) && predictedCrystalPos.equals(bestCrystalPos)) {
+                        if (entity.getDistance(mc.player) > MathUtil.square(placeRange.getValue()))
+                            continue;
+
+                        if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                            mainMinimumDamageValue = 2;
+
+                        if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
+                            continue;
+
+                        if (mainSelfDamage > maximumSelfDamage.getValue())
+                            continue;
+
+                        if (mainMinimumDamageValue > mainTargetDamage)
+                            continue;
+
+                        if (limitAttack.getValue() && attemptedEntityId.containsValue(entity))
+                            continue;
+
+                        if(placeRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(predictedCrystalPos.getX(), predictedCrystalPos.getY(), predictedCrystalPos.getZ())) && mc.player.getDistance(predictedCrystalPos.getX() + 0.5f, predictedCrystalPos.getY() + 1, predictedCrystalPos.getZ() + 0.5f) > MathUtil.square(placeRaytraceRange.getValue()))
+                            continue;
+
+                        if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL))
+                            InventoryUtil.switchToSlot(mainSlot);
+
+                        mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(predictedCrystalPos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+
+                        if (render.getValue() && fade.getValue())
+                            possesToFade.put(predictedCrystalPos, startAlpha.getValue());
+
+                        if (placeSwing.getValue())
+                            swingArm(true);
+
+                        if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
+                            mc.player.inventory.currentItem = mainOldSlot;
+                            mc.playerController.updateController();
+                        }
+                    }
+                }
+            }
+            if (cancelExplosion.getValue())
+                event.setCanceled(true);
+        }
 
         if (event.getPacket() instanceof SPacketEntityVelocity) {
             SPacketEntityVelocity velocity = event.getPacket();
@@ -379,7 +392,7 @@ public class AutoCrystal extends Module {
                     if (mc.player.getDistance(packet.getX(), packet.getY(), packet.getZ()) > MathUtil.square(breakRange.getValue()))
                         return;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
                         mainMinimumDamageValue = 2;
 
                     if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
@@ -393,9 +406,8 @@ public class AutoCrystal extends Module {
                 }
 
                 mc.getConnection().sendPacket(predict);
-                if (breakSwing.getValue()) {
-                    mc.player.swingArm(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
-                }
+                if (breakSwing.getValue())
+                    swingArm(false);
             }
         }
         if (event.getPacket() instanceof SPacketSoundEffect) {
@@ -412,12 +424,12 @@ public class AutoCrystal extends Module {
                         if (soundPredict.getValue() && entity.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue())
                             entity.setDead();
 
-                        if (placePredict.getValue() && predictedCrystalPos.equals(bestCrystalPos)) {
+                        if (placePredict.getValue() && placePredictMode.getValue().equals(PlacePredictMode.SOUND) && predictedCrystalPos.equals(bestCrystalPos)) {
 
                             if (entity.getDistance(mc.player) > MathUtil.square(placeRange.getValue()))
                                 continue;
 
-                            if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                            if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
                                 mainMinimumDamageValue = 2;
 
                             if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
@@ -429,10 +441,8 @@ public class AutoCrystal extends Module {
                             if (mainMinimumDamageValue > mainTargetDamage)
                                 continue;
 
-                            if (limitAttack.getValue() && attemptedEntityId.containsValue(entity)) {
-                                MessageManager.sendMessage("Limited Attack");
+                            if (limitAttack.getValue() && attemptedEntityId.containsValue(entity))
                                 continue;
-                            }
 
                             if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL))
                                 InventoryUtil.switchToSlot(mainSlot);
@@ -443,7 +453,7 @@ public class AutoCrystal extends Module {
                                 possesToFade.put(predictedCrystalPos, startAlpha.getValue());
 
                             if (placeSwing.getValue())
-                                mc.player.swingArm(placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                               swingArm(true);
 
                             if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
                                 mc.player.inventory.currentItem = mainOldSlot;
@@ -456,13 +466,39 @@ public class AutoCrystal extends Module {
         }
     }
 
+    public void swingArm(boolean place){
+        if(place){
+            switch(placeSwingHand.getValue()){
+                case MAINHAND:
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                    break;
+                case OFFHAND:
+                    mc.player.swingArm(EnumHand.OFF_HAND);
+                    break;
+                case PACKET:
+                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+                    break;
+            }
+        } else {
+            switch(breakSwingHand.getValue()){
+                case MAINHAND:
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                    break;
+                case OFFHAND:
+                    mc.player.swingArm(EnumHand.OFF_HAND);
+                    break;
+                case PACKET:
+                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+                    break;
+            }
+        }
+    }
     public void onEnable() {
         targetPlayer = null;
         finalPos = null;
     }
 
     public void onDisable() {
-        delayTimer.reset();
         targetPlayer = null;
         finalPos = null;
     }
@@ -490,6 +526,10 @@ public class AutoCrystal extends Module {
         }
     }
 
+    private boolean rayTraceCheckPos(BlockPos pos) {
+        return mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(pos.getX(), pos.getY(), pos.getZ()), false, true, false) == null;
+    }
+
     static class bestPlacePos {
         BlockPos blockPos;
         float targetDamage;
@@ -507,27 +547,4 @@ public class AutoCrystal extends Module {
             return blockPos;
         }
     }
-    public static boolean canPlaceCrystalIfObbyWasAtPos(final BlockPos pos) {
-
-        final Block floor = mc.world.getBlockState(pos.add(0, 1, 0)).getBlock();
-        final Block ceil = mc.world.getBlockState(pos.add(0, 2, 0)).getBlock();
-
-        if (floor == Blocks.AIR && ceil == Blocks.AIR) {
-            return mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(0, 1, 0))).isEmpty();
-        }
-
-        return false;
-    }
-
-    public boolean isValidToJoinDaGang(BlockPos pos) {
-        for (final EnumFacing side : EnumFacing.values()) {
-            final BlockPos neighbor = pos.offset(side);
-
-            if (mc.world.getBlockState(neighbor).getBlock().canCollideCheck(mc.world.getBlockState(neighbor), false)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
-
