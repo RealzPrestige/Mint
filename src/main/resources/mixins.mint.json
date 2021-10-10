@@ -13,6 +13,7 @@
     "MixinRenderLivingBase",
     "MixinRenderModifiedCrystal",
     "MixinRenderPlayer",
+    "MixinToSlowUrHand",
     "MixinWorld"
   ]
 }
