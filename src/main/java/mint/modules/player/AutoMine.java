@@ -23,6 +23,7 @@ public class AutoMine extends Module {
     public Setting<Priority> minePriority = register(new Setting<>("Mine Priority", Priority.Surrounds, v -> mineMode.getValue() == MineMode.Combat));
     public enum Priority {Surrounds, City, Dynamic}
 
+    //.equals woah amazing!!
     public Setting<Float> targetRange = register(new Setting<>("Target Range", 9.0f, 0.0f, 15.0f, v -> mineMode.getValue().equals(MineMode.Combat)));
     public Setting<Float> mineRange = register(new Setting<>("Mine Range", 5.0f, 0.0f, 6.0f, v -> mineMode.getValue().equals(MineMode.Combat)));
     public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v -> mineMode.getValue().equals(MineMode.Combat)));

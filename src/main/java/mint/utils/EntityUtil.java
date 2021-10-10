@@ -13,6 +13,8 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.CombatRules;
@@ -27,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class EntityUtil  {
+public class EntityUtil {
     static Minecraft mc = Minecraft.getMinecraft();
 
     public static float calculateEntityDamage(EntityEnderCrystal crystal, EntityPlayer player) {
@@ -76,6 +78,7 @@ public class EntityUtil  {
         }
         return baseSpeed;
     }
+
     public static double[] forward(final double speed) {
         float forward = Mint.INSTANCE.mc.player.movementInput.moveForward;
         float side = Mint.INSTANCE.mc.player.movementInput.moveStrafe;
@@ -83,15 +86,13 @@ public class EntityUtil  {
         if (forward != 0.0f) {
             if (side > 0.0f) {
                 yaw += ((forward > 0.0f) ? -45 : 45);
-            }
-            else if (side < 0.0f) {
+            } else if (side < 0.0f) {
                 yaw += ((forward > 0.0f) ? 45 : -45);
             }
             side = 0.0f;
             if (forward > 0.0f) {
                 forward = 1.0f;
-            }
-            else if (forward < 0.0f) {
+            } else if (forward < 0.0f) {
                 forward = -1.0f;
             }
         }
@@ -99,11 +100,13 @@ public class EntityUtil  {
         final double cos = Math.cos(Math.toRadians(yaw + 90.0f));
         final double posX = forward * speed * cos + side * speed * sin;
         final double posZ = forward * speed * sin - side * speed * cos;
-        return new double[] { posX, posZ };
+        return new double[]{posX, posZ};
     }
+
     public static boolean isMoving(final EntityLivingBase entity) {
         return entity.moveForward != 0.0f || entity.moveStrafing != 0.0f;
     }
+
     public static float calculatePos(final BlockPos pos, final EntityPlayer entity) {
         return calculate(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, entity);
     }
@@ -111,6 +114,7 @@ public class EntityUtil  {
     public static boolean isInFov(Entity entity) {
         return entity != null && (Mint.INSTANCE.mc.player.getDistanceSq(entity) < 4.0 || yawDist(entity) < (double) (getFov() + 2.0f));
     }
+
     public static float calculate(double posX, double posY, double posZ, EntityLivingBase entity) {
         final double v = (1.0D - entity.getDistance(posX, posY, posZ) / 12.0D) * getBlockDensity(new Vec3d(posX, posY, posZ), entity.getEntityBoundingBox());
         return getBlastReduction(entity, getDamageMultiplied((float) ((v * v + v) / 2.0 * 85.0 + 1.0)), new Explosion(Mint.INSTANCE.mc.world, null, posX, posY, posZ, 6F, false, true));
@@ -130,6 +134,7 @@ public class EntityUtil  {
 
         return damage;
     }
+
     public static float getBlockDensity(Vec3d vec, AxisAlignedBB bb) {
         double d0 = 1.0D / ((bb.maxX - bb.minX) * 2.0D + 1.0D);
         double d1 = 1.0D / ((bb.maxY - bb.minY) * 2.0D + 1.0D);
@@ -144,7 +149,7 @@ public class EntityUtil  {
             for (float f = 0.0F; f <= 1.0F; f = (float) ((double) f + d0)) {
                 for (float f1 = 0.0F; f1 <= 1.0F; f1 = (float) ((double) f1 + d1)) {
                     for (float f2 = 0.0F; f2 <= 1.0F; f2 = (float) ((double) f2 + d2)) {
-                        if (rayTraceBlocks(new Vec3d(bb.minX + (bb.maxX - bb.minX) * (double) f + d3, bb.minY + (bb.maxY - bb.minY) * (double) f1 , bb.minZ + (bb.maxZ - bb.minZ) * (double) f2 + d4), vec, false,false, false) == null) {
+                        if (rayTraceBlocks(new Vec3d(bb.minX + (bb.maxX - bb.minX) * (double) f + d3, bb.minY + (bb.maxY - bb.minY) * (double) f1, bb.minZ + (bb.maxZ - bb.minZ) * (double) f2 + d4), vec, false, false, false) == null) {
                             ++j2;
                         }
                         ++k2;
@@ -305,6 +310,7 @@ public class EntityUtil  {
         }
         return 0.0f;
     }
+
     public static float[] getLegitRotations(Vec3d vec) {
         Vec3d eyesPos = getEyesPos();
         double diffX = vec.x - eyesPos.x;
@@ -323,8 +329,7 @@ public class EntityUtil  {
             if (!EntityUtil.isntValid(player, range)) {
                 if (currentTarget == null) {
                     currentTarget = player;
-                }
-                else if (Mint.INSTANCE.mc.player.getDistanceSq( player ) < Mint.INSTANCE.mc.player.getDistanceSq( currentTarget )) {
+                } else if (Mint.INSTANCE.mc.player.getDistanceSq(player) < Mint.INSTANCE.mc.player.getDistanceSq(currentTarget)) {
                     currentTarget = player;
                 }
             }
@@ -388,7 +393,7 @@ public class EntityUtil  {
     }
 
     public static boolean isAlive(Entity entity) {
-        return EntityUtil.isLiving(entity) && !entity.isDead && ((EntityLivingBase)entity).getHealth() >= 0.0f;
+        return EntityUtil.isLiving(entity) && !entity.isDead && ((EntityLivingBase) entity).getHealth() >= 0.0f;
     }
 
     public static boolean isDead(Entity entity) {
@@ -427,14 +432,14 @@ public class EntityUtil  {
                 (Mint.INSTANCE.mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.north()).getBlock() == Blocks.BEDROCK) &&
                 (Mint.INSTANCE.mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.east()).getBlock() == Blocks.BEDROCK) &&
                 (Mint.INSTANCE.mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.south()).getBlock() == Blocks.BEDROCK) &&
-                (Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK)){
+                (Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.OBSIDIAN || Mint.INSTANCE.mc.world.getBlockState(playerPos.west()).getBlock() == Blocks.BEDROCK)) {
             return true;
         }
         return false;
     }
 
     public static boolean isBorderingChunk(final Entity boat, final Double mX, final Double mZ) {
-        return Mint.INSTANCE.mc.world.getChunk((int)(boat.posX + mX) / 16, (int)(boat.posZ + mZ) / 16) instanceof EmptyChunk;
+        return Mint.INSTANCE.mc.world.getChunk((int) (boat.posX + mX) / 16, (int) (boat.posZ + mZ) / 16) instanceof EmptyChunk;
     }
 
     public static double getDefaultSpeed() {
@@ -464,5 +469,38 @@ public class EntityUtil  {
             return true;
         }
         return false;
+    }
+
+    public static boolean startSneaking() {
+        if (mc.player != null) {
+            if (mc.player.isSneaking()) {
+                mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+                mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            } else {
+                mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            }
+        }
+        return false;
+    }
+
+    public static boolean stopSneaking(boolean forceStop) {
+        if (mc.player != null) {
+            if (mc.player.isSneaking() || forceStop) {
+                mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+            }
+        }
+        return false;
+    }
+
+    public static void setMotion(double motion) {
+        if (mc.player != null) {
+            if (mc.player.isRiding()) {
+                mc.player.ridingEntity.motionX = motion;
+                mc.player.ridingEntity.motionZ = motion;
+            } else {
+                mc.player.motionX = motion;
+                mc.player.motionZ = motion;
+            }
+        }
     }
 }
