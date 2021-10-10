@@ -2,6 +2,7 @@ package mint.modules.player;
 
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
+import mint.utils.InventoryUtil;
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
@@ -20,7 +21,7 @@ public class PacketEXP extends Module {
         if (rightClickOnly.getValue() && !mc.gameSettings.keyBindUseItem.isKeyDown()) {
             return;
         }
-        if (mc.player.getHeldItemMainhand().getItem() == Items.EXPERIENCE_BOTTLE) {
+        if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both)) {
             mc.player.connection.sendPacket(new CPacketHeldItemChange(HotbarEXP()));
             for (int i = 0; i < packets.getValue(); i++) {
                 mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));

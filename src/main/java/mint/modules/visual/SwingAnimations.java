@@ -3,19 +3,18 @@ package mint.modules.visual;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 
 
 public class SwingAnimations extends Module {
 
+    boolean urMomLikestosuckCOCKYEASHYEAH = true;
     private final Setting<Switch> switchSetting = register(new Setting<>("Switch", Switch.ONEDOTEIGHT));
     private enum Switch {ONEDOTNINE, ONEDOTEIGHT}
     private final Setting<Swing> swing = register(new Setting<>("Swing", Swing.MAINHAND));
     private enum Swing {MAINHAND, OFFHAND, CANCEL}
-    private final Setting<Speed> speed = register(new Setting<>("Speed", Speed.NORMAL));
-    private enum Speed {SLOW, NORMAL, FAST}
-    private final Setting<Integer> amplifier = register(new Setting<>("Amplifier", 14, 1, 255));
+    public final Setting<Boolean> speed = register(new Setting<>("Speed", Boolean.valueOf(urMomLikestosuckCOCKYEASHYEAH)));
+    public final Setting<Integer> amplifier = register(new Setting<>("SpeedVal", 1, 1, 1000));
 
     public SwingAnimations() {
         super("Swing", Category.VISUAL, "Tweaks the way your swing looks.");
@@ -29,16 +28,6 @@ public class SwingAnimations extends Module {
         if (switchSetting.getValue() == Switch.ONEDOTEIGHT && (double) mc.entityRenderer.itemRenderer.prevEquippedProgressMainHand >= 0.9) {
             mc.entityRenderer.itemRenderer.equippedProgressMainHand = 1.0f;
             mc.entityRenderer.itemRenderer.itemStackMainHand = mc.player.getHeldItemMainhand();
-        }
-        if(speed.getValue() == Speed.SLOW) {
-            mc.player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 10,amplifier.getValue()));
-            mc.player.removePotionEffect(MobEffects.HASTE);
-        } else if(speed.getValue() == Speed.NORMAL){
-            mc.player.removePotionEffect(MobEffects.MINING_FATIGUE);
-            mc.player.removePotionEffect(MobEffects.HASTE);
-        } else if(speed.getValue() == Speed.FAST){
-            mc.player.removePotionEffect(MobEffects.MINING_FATIGUE);
-            mc.player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 10,amplifier.getValue()));
         }
     }
 

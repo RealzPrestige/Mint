@@ -23,11 +23,11 @@ public class Clip extends Module {
             return;
         }
         if (mc.player.posY < 6 && !mc.player.isElytraFlying() && mc.player.onGround) {
-            mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+            EntityUtil.startSneaking();
             EntityUtil.packetJump(offground.getValue());
             double y = (mc.player.posY + offset.getValue()) * -1;
             mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, y, mc.player.posZ, offground.getValue()));
-            mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+            EntityUtil.stopSneaking(false);
             disable();
         }
     }

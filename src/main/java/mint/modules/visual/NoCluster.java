@@ -32,7 +32,6 @@ public class NoCluster extends Module {
     public boolean shouldRender(Entity entity) {
         if(!(entity instanceof EntityPlayer)) return false;
         if(entity.equals(mc.player)) return false;
-        if(mc.player.getDistance(mc.player) > range.getValue()) return true;
-        return false;
+        return mc.player.getDistance(mc.player) > range.getValue();
     }
 }

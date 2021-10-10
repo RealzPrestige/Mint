@@ -7,14 +7,14 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 @Cancelable
 public class RenderLivingEntityEvent extends EventProcessor {
 
-    private ModelBase modelBase;
-    private EntityLivingBase entityLivingBase;
-    private float limbSwing;
-    private float limbSwingAmount;
-    private float ageInTicks;
-    private float netHeadYaw;
-    private float headPitch;
-    private float scaleFactor;
+    private final ModelBase modelBase;
+    private final EntityLivingBase entityLivingBase;
+    private final float limbSwing;
+    private final float limbSwingAmount;
+    private final float ageInTicks;
+    private final float netHeadYaw;
+    private final float headPitch;
+    private final float scaleFactor;
 
     public RenderLivingEntityEvent(ModelBase modelBase, EntityLivingBase entityLivingBase, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
         this.modelBase = modelBase;

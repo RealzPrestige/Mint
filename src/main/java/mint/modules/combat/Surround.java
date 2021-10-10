@@ -60,15 +60,13 @@ public class Surround extends Module {
             CPos = EntityUtil.getCenter(mc.player.posX, mc.player.posY, mc.player.posZ);
             switch (center.getValue()) {
                 case Instant:
-                    mc.player.motionX = 0;
-                    mc.player.motionZ = 0;
+                    EntityUtil.setMotion(0.0);
                     mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x, CPos.y, CPos.z, true));
                     mc.player.setPosition(CPos.x, CPos.y, CPos.z);
                     break;
 
                 case Teleport:
-                    mc.player.motionX = 0;
-                    mc.player.motionZ = 0;
+                    EntityUtil.setMotion(0.0);
                     mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x - 0.2, CPos.y - 0.2, CPos.z - 0.2, true));
                     mc.getConnection().sendPacket(new CPacketPlayer.Position(CPos.x, CPos.y, CPos.z, true));
                     mc.player.setPosition(CPos.x, CPos.y, CPos.z);

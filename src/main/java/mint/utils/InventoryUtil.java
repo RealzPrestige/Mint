@@ -10,7 +10,7 @@ import net.minecraft.network.play.client.CPacketHeldItemChange;
 
 public class InventoryUtil {
 
-    private static Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static int getItemSlot(Item item) {
         int itemSlot = -1;
@@ -80,4 +80,28 @@ public class InventoryUtil {
         }
         return -1;
     }
+
+    public static boolean heldItem(Item item, Hand hand) {
+        switch (hand) {
+            case Main:
+                if (mc.player.getHeldItemMainhand().getItem() == item) {
+                    return true;
+                }
+                break;
+
+            case Off:
+                if (mc.player.getHeldItemOffhand().getItem() == item) {
+                    return true;
+                }
+                break;
+            case Both:
+                if (mc.player.getHeldItemOffhand().getItem() == item ||  mc.player.getHeldItemMainhand().getItem() == item) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public enum Hand {Main, Off, Both}
 }

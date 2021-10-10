@@ -51,7 +51,9 @@ public class SelfFill extends Module {
         int obbySlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
         if (ecSlot == -1 && obbySlot == -1) {
             MessageManager.sendMessage("Out of blocks, disabling");
+            disable(); //how did no1 notice this oml
         }
+
         if (prefer.getValue() == Block.EChest && ecSlot != -1) {
             InventoryUtil.SilentSwitchToSlot(ecSlot);
             if (ecSlot == -1 && obbySlot != -1) {
@@ -65,10 +67,7 @@ public class SelfFill extends Module {
             }
         }
 
-        if (mc.player.isSneaking()) {
-            mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
-        }
-        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+        EntityUtil.startSneaking();
         EntityUtil.packetJump(true);
         BlockUtil.placeBlock(startPos, EnumHand.MAIN_HAND, false, true, false, true, EnumHand.MAIN_HAND);
 
@@ -99,7 +98,7 @@ public class SelfFill extends Module {
                 break;
             }
         }
-        mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+        EntityUtil.stopSneaking(false);
 
         if (originalSlot != -1) {
             mc.player.inventory.currentItem = originalSlot;
