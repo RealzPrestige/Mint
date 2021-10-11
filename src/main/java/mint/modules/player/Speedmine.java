@@ -278,7 +278,7 @@ public class Speedmine extends Module {
     }
 
     public static double getMineTime(Block block, ItemStack stack) {
-        if (stack.item.equals(Items.AIR) || stack.item.equals(null))
+        if (stack.item.equals(Items.AIR))
             return -1;
 
         float speedMultiplier = stack.getDestroySpeed(block.getDefaultState());
