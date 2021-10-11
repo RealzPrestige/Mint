@@ -535,7 +535,7 @@ public class AutoCrystal extends Module {
                     return;
                 }
 
-                RenderUtil.drawCircle(entry.getKey().getX(), entry.getKey().getY() + (int) (entry.getValue() / 2), entry.getKey().getZ(), 0.6f, new Color(boxRed.getValue(),boxGreen.getValue(),boxBlue.getValue(),entry.getValue()));
+                RenderUtil.drawCircle(entry.getKey().getX(), entry.getKey().getY() + (int) (entry.getValue() / 20), entry.getKey().getZ(), 0.6f, new Color(boxRed.getValue(),boxGreen.getValue(),boxBlue.getValue(),entry.getValue()));
             }
         }
     }
