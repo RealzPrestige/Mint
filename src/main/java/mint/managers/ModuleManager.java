@@ -82,6 +82,7 @@ public class ModuleManager
         moduleList.add(new PacketEXP());
         //moduleList.add(new Speedmine()); breaks everything just like strafe
         moduleList.add(new BowHack());
+        moduleList.add(new Blink());
 
         /** Visual **/
         moduleList.add(new BreakESP());
