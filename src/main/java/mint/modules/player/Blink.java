@@ -34,7 +34,9 @@ public class Blink extends Module {
 
     public void onDisable() {
         if(renderPlayer.getValue()) {
+            try {
             mc.world.removeEntity(fake_player);
+            } catch (Exeption ignored) {}
         }
     }
 
