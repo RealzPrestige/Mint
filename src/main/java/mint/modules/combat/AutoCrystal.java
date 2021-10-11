@@ -37,10 +37,11 @@ import java.util.TreeMap;
 
 
 /**
- * @Author zPrestige_
- * @Since 05/10/21
+ * @author zPrestige_
+ * @since 05/10/21
+ * @author kambing
  */
-
+@SuppressWarnings("unchecked")
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
@@ -113,6 +114,7 @@ public class AutoCrystal extends Module {
 
     public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
     public Setting<Boolean> render = register(new Setting<>("Render", false, false, v -> renderParent.getValue()));
+    public Setting<Boolean> circle = register(new Setting<>("Circle", false, false, v -> renderParent.getValue()));
     public Setting<Boolean> fade = register(new Setting<>("Fade", false, false, v -> render.getValue() && renderParent.getValue()));
     public Setting<Integer> startAlpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
     public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 0, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
@@ -137,6 +139,7 @@ public class AutoCrystal extends Module {
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
     HashMap<BlockPos, Integer> possesToFade = new HashMap();
+    public HashMap<BlockPos, Integer> circlesToFade = new HashMap<>();
     bestPlacePos bestCrystalPos = new bestPlacePos(BlockPos.ORIGIN, 0);
     HashMap<Integer, Entity> attemptedEntityId = new HashMap();
 
@@ -523,6 +526,16 @@ public class AutoCrystal extends Module {
                 }
             } else if (finalPos != null) {
                 RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue() / 255f, boxGreen.getValue() / 255f, boxBlue.getValue() / 255f, boxAlpha.getValue() / 255f), true, new Color(outlineRed.getValue() / 255f, outlineGreen.getValue() / 255f, outlineBlue.getValue() / 255f, outlineAlpha.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), boxAlpha.getValue(), true);
+            }
+        } if (circle.getValue()) {
+            for (Map.Entry<BlockPos, Integer> entry : circlesToFade.entrySet()) {
+                circlesToFade.put(entry.getKey(), entry.getValue() - (fadeSpeed.getValue() / 10));
+                if (entry.getValue() <= 1) {
+                    circlesToFade.remove(entry.getKey());
+                    return;
+                }
+
+                RenderUtil.drawCircle(entry.getKey().getX(), entry.getKey().getY() + (int) (entry.getValue() / 20), entry.getKey().getZ(), 0.6f, new Color(boxRed.getValue(),boxGreen.getValue(),boxBlue.getValue(),entry.getValue()));
             }
         }
     }

@@ -63,6 +63,7 @@ public class ModuleManager
         moduleList.add(new SelfAnvil());
 
         /** Movement **/
+        moduleList.add(new AntiWeb());
         moduleList.add(new BoatFly());
         moduleList.add(new Clip());
         moduleList.add(new LongJump());
@@ -79,7 +80,7 @@ public class ModuleManager
         moduleList.add(new FastPlace());
         moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
-        moduleList.add(new Speedmine());
+        //moduleList.add(new Speedmine()); breaks everything just like strafe
         moduleList.add(new BowHack());
 
         /** Visual **/

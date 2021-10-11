@@ -6,6 +6,7 @@ import mint.Mint;
 import mint.commands.Command;
 import mint.events.*;
 import mint.modules.Feature;
+import mint.modules.combat.AutoCrystal;
 import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.SignExploit;
 import mint.modules.visual.PopESP;
@@ -17,6 +18,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.network.play.server.SPacketSpawnObject;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -135,6 +138,11 @@ public class EventManager extends Feature {
             if (!timer.passedMs(100)) {
                 MinecraftForge.EVENT_BUS.post(new ChorusEvent(((SPacketSoundEffect) event.getPacket()).getX(), ((SPacketSoundEffect) event.getPacket()).getY(), ((SPacketSoundEffect) event.getPacket()).getZ()));
                 timer.reset();
+            }
+        } if (event.getPacket() instanceof SPacketSpawnObject) {
+            final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
+            if (packet.getType() == 51) {
+                AutoCrystal.INSTANCE.circlesToFade.put(new BlockPos(packet.getX(),packet.getY(),packet.getZ()) , 255);
             }
         }
     }
