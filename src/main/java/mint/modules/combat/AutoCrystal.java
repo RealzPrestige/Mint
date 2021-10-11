@@ -3,7 +3,6 @@ package mint.modules.combat;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.events.CrystalAttackEvent;
-import mint.events.CrystalPlaceEvent;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
@@ -140,7 +139,7 @@ public class AutoCrystal extends Module {
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
     HashMap<BlockPos, Integer> possesToFade = new HashMap();
-    HashMap<BlockPos, Integer> circlesToFade = new HashMap<>();
+    public HashMap<BlockPos, Integer> circlesToFade = new HashMap<>();
     bestPlacePos bestCrystalPos = new bestPlacePos(BlockPos.ORIGIN, 0);
     HashMap<Integer, Entity> attemptedEntityId = new HashMap();
 
@@ -512,13 +511,6 @@ public class AutoCrystal extends Module {
     public void onCrystalAttacked(CrystalAttackEvent event) {
         if (limitAttack.getValue())
             attemptedEntityId.put(event.getEntityId(), event.getEntity());
-    }
-
-    @SubscribeEvent
-    public void onCrystalPlaced(CrystalPlaceEvent event) {
-        if (circle.getValue()) {
-            circlesToFade.put(event.getPos(), 255);
-        }
     }
 
     public void onRender3D(Render3DEvent event) {

@@ -6,6 +6,7 @@ import mint.Mint;
 import mint.commands.Command;
 import mint.events.*;
 import mint.modules.Feature;
+import mint.modules.combat.AutoCrystal;
 import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.SignExploit;
 import mint.modules.visual.PopESP;
@@ -141,9 +142,7 @@ public class EventManager extends Feature {
         } if (event.getPacket() instanceof SPacketSpawnObject) {
             final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
             if (packet.getType() == 51) {
-                CrystalPlaceEvent event1 = new CrystalPlaceEvent(new BlockPos(packet.getX(),packet.getY(),packet.getZ()));
-                MinecraftForge.EVENT_BUS.post(event1);
-                MessageManager.sendMessage("CrystalPlaceEvent post!");
+                AutoCrystal.INSTANCE.circlesToFade.put(new BlockPos(packet.getX(),packet.getY(),packet.getZ()) , 255);
             }
         }
     }
