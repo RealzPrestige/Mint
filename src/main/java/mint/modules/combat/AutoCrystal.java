@@ -3,6 +3,7 @@ package mint.modules.combat;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.events.CrystalAttackEvent;
+import mint.events.CrystalPlaceEvent;
 import mint.events.PacketEvent;
 import mint.events.Render3DEvent;
 import mint.modules.Module;
@@ -37,10 +38,11 @@ import java.util.TreeMap;
 
 
 /**
- * @Author zPrestige_
- * @Since 05/10/21
+ * @author zPrestige_
+ * @since 05/10/21
+ * @author kambing
  */
-
+@SuppressWarnings("unchecked")
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
@@ -70,10 +72,10 @@ public class AutoCrystal extends Module {
     public Setting<Integer> breakDelay = register(new Setting<>("Break Delay", 100, 0, 500, v -> delayParent.getValue()));
 
     public Setting<Boolean> raytraceParent = register(new Setting<>("Raytrace", true, false));
-    public Setting<Boolean> placeRaytrace = register(new Setting<>("Place Raytrace", false, false, v-> raytraceParent.getValue()));
-    public Setting<Float> placeRaytraceRange = register(new Setting<>("Place Raytrace Range", 5f, 0f, 6f, v-> raytraceParent.getValue() && placeRaytrace.getValue()));
-    public Setting<Boolean> breakRaytrace = register(new Setting<>("Break Raytrace", false, false, v-> raytraceParent.getValue()));
-    public Setting<Float> breakRaytraceRange = register(new Setting<>("Break Raytrace Range", 5f, 0f, 6f, v-> raytraceParent.getValue() && breakRaytrace.getValue()));
+    public Setting<Boolean> placeRaytrace = register(new Setting<>("Place Raytrace", false, false, v -> raytraceParent.getValue()));
+    public Setting<Float> placeRaytraceRange = register(new Setting<>("Place Raytrace Range", 5f, 0f, 6f, v -> raytraceParent.getValue() && placeRaytrace.getValue()));
+    public Setting<Boolean> breakRaytrace = register(new Setting<>("Break Raytrace", false, false, v -> raytraceParent.getValue()));
+    public Setting<Float> breakRaytraceRange = register(new Setting<>("Break Raytrace Range", 5f, 0f, 6f, v -> raytraceParent.getValue() && breakRaytrace.getValue()));
 
     public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
     public Setting<Boolean> updatedPlacements = register(new Setting<>("1.13+ Placements", false, false, v -> miscParent.getValue()));
@@ -113,6 +115,7 @@ public class AutoCrystal extends Module {
 
     public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
     public Setting<Boolean> render = register(new Setting<>("Render", false, false, v -> renderParent.getValue()));
+    public Setting<Boolean> circle = register(new Setting<>("Circle", false, false, v -> renderParent.getValue()));
     public Setting<Boolean> fade = register(new Setting<>("Fade", false, false, v -> render.getValue() && renderParent.getValue()));
     public Setting<Integer> startAlpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
     public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 0, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
@@ -137,6 +140,7 @@ public class AutoCrystal extends Module {
     Timer placeTimer = new Timer();
     Timer breakTimer = new Timer();
     HashMap<BlockPos, Integer> possesToFade = new HashMap();
+    HashMap<BlockPos, Integer> circlesToFade = new HashMap<>();
     bestPlacePos bestCrystalPos = new bestPlacePos(BlockPos.ORIGIN, 0);
     HashMap<Integer, Entity> attemptedEntityId = new HashMap();
 
@@ -163,8 +167,9 @@ public class AutoCrystal extends Module {
     private void setInstance() {
         INSTANCE = this;
     }
-    public void onLogin(){
-        if(isEnabled())
+
+    public void onLogin() {
+        if (isEnabled())
             disable();
     }
 
@@ -253,7 +258,7 @@ public class AutoCrystal extends Module {
                 if (limitAttack.getValue() && attemptedEntityId.containsValue(entity))
                     continue;
 
-                if(breakRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(entity.posX, entity.posY, entity.posZ)) && mc.player.getDistance(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRaytraceRange.getValue()))
+                if (breakRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(entity.posX, entity.posY, entity.posZ)) && mc.player.getDistance(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRaytraceRange.getValue()))
                     continue;
 
                 if (silentSwitch.getValue() && antiWeakness.getValue() && (mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD) && mc.player.getActivePotionEffects().equals(Potion.getPotionById(18)))
@@ -311,7 +316,7 @@ public class AutoCrystal extends Module {
                 if (targetDamage < minimumDamageValue)
                     continue;
 
-                if(placeRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(pos.getX(), pos.getY(), pos.getZ())) && mc.player.getDistance(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f) > MathUtil.square(placeRaytraceRange.getValue()))
+                if (placeRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(pos.getX(), pos.getY(), pos.getZ())) && mc.player.getDistance(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f) > MathUtil.square(placeRaytraceRange.getValue()))
                     continue;
 
                 posList.put(targetDamage, new bestPlacePos(pos, targetDamage));
@@ -327,7 +332,6 @@ public class AutoCrystal extends Module {
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof SPacketExplosion) {
-
             for (Entity entity : mc.world.loadedEntityList) {
                 if (entity instanceof EntityEnderCrystal) {
                     BlockPos predictedCrystalPos = new BlockPos(entity.posX, entity.posY - 1, entity.posZ);
@@ -350,7 +354,7 @@ public class AutoCrystal extends Module {
                         if (limitAttack.getValue() && attemptedEntityId.containsValue(entity))
                             continue;
 
-                        if(placeRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(predictedCrystalPos.getX(), predictedCrystalPos.getY(), predictedCrystalPos.getZ())) && mc.player.getDistance(predictedCrystalPos.getX() + 0.5f, predictedCrystalPos.getY() + 1, predictedCrystalPos.getZ() + 0.5f) > MathUtil.square(placeRaytraceRange.getValue()))
+                        if (placeRaytrace.getValue() && !rayTraceCheckPos(new BlockPos(predictedCrystalPos.getX(), predictedCrystalPos.getY(), predictedCrystalPos.getZ())) && mc.player.getDistance(predictedCrystalPos.getX() + 0.5f, predictedCrystalPos.getY() + 1, predictedCrystalPos.getZ() + 0.5f) > MathUtil.square(placeRaytraceRange.getValue()))
                             continue;
 
                         if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL))
@@ -453,7 +457,7 @@ public class AutoCrystal extends Module {
                                 possesToFade.put(predictedCrystalPos, startAlpha.getValue());
 
                             if (placeSwing.getValue())
-                               swingArm(true);
+                                swingArm(true);
 
                             if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
                                 mc.player.inventory.currentItem = mainOldSlot;
@@ -466,9 +470,9 @@ public class AutoCrystal extends Module {
         }
     }
 
-    public void swingArm(boolean place){
-        if(place){
-            switch(placeSwingHand.getValue()){
+    public void swingArm(boolean place) {
+        if (place) {
+            switch (placeSwingHand.getValue()) {
                 case MAINHAND:
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                     break;
@@ -480,7 +484,7 @@ public class AutoCrystal extends Module {
                     break;
             }
         } else {
-            switch(breakSwingHand.getValue()){
+            switch (breakSwingHand.getValue()) {
                 case MAINHAND:
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                     break;
@@ -493,6 +497,7 @@ public class AutoCrystal extends Module {
             }
         }
     }
+
     public void onEnable() {
         targetPlayer = null;
         finalPos = null;
@@ -509,6 +514,13 @@ public class AutoCrystal extends Module {
             attemptedEntityId.put(event.getEntityId(), event.getEntity());
     }
 
+    @SubscribeEvent
+    public void onCrystalPlaced(CrystalPlaceEvent event) {
+        if (circle.getValue()) {
+            circlesToFade.put(event.getPos(), 255);
+        }
+    }
+
     public void onRender3D(Render3DEvent event) {
         if (render.getValue()) {
             if (fade.getValue()) {
@@ -522,6 +534,16 @@ public class AutoCrystal extends Module {
                 }
             } else if (finalPos != null) {
                 RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue() / 255f, boxGreen.getValue() / 255f, boxBlue.getValue() / 255f, boxAlpha.getValue() / 255f), true, new Color(outlineRed.getValue() / 255f, outlineGreen.getValue() / 255f, outlineBlue.getValue() / 255f, outlineAlpha.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), boxAlpha.getValue(), true);
+            }
+        } if (circle.getValue()) {
+            for (Map.Entry<BlockPos, Integer> entry : circlesToFade.entrySet()) {
+                circlesToFade.put(entry.getKey(), entry.getValue() - (fadeSpeed.getValue() / 10));
+                if (entry.getValue() <= 1) {
+                    circlesToFade.remove(entry.getKey());
+                    return;
+                }
+
+                RenderUtil.drawCircle(entry.getKey().getX(), entry.getKey().getY() + (int) (entry.getValue() / 2), entry.getKey().getZ(), 0.6f, new Color(boxRed.getValue(),boxGreen.getValue(),boxBlue.getValue(),entry.getValue()));
             }
         }
     }
