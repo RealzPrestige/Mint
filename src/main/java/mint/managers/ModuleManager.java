@@ -40,6 +40,7 @@ public class ModuleManager
         moduleList.add(new Descriptions());
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
+        moduleList.add(new NoPotionHud());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());
@@ -52,6 +53,7 @@ public class ModuleManager
         moduleList.add(new Offhand());
         moduleList.add(new SelfFill());
         //moduleList.add(new Surround());
+        moduleList.add(new AutoPiston());
 
         /** Miscellaneous **/
         moduleList.add(new AutoEnderChest());
@@ -61,6 +63,7 @@ public class ModuleManager
         moduleList.add(new SelfAnvil());
 
         /** Movement **/
+        moduleList.add(new AntiWeb());
         moduleList.add(new BoatFly());
         moduleList.add(new Clip());
         moduleList.add(new LongJump());
@@ -68,6 +71,7 @@ public class ModuleManager
         moduleList.add(new ReverseStep());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
+        moduleList.add(new Anchor());
 
         /** Player **/
         moduleList.add(new AntiAim());
@@ -76,7 +80,7 @@ public class ModuleManager
         moduleList.add(new FastPlace());
         moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
-        moduleList.add(new Speedmine());
+        //moduleList.add(new Speedmine()); breaks everything just like strafe
         moduleList.add(new BowHack());
 
         /** Visual **/
@@ -90,6 +94,7 @@ public class ModuleManager
         moduleList.add(new SwingAnimations());
         moduleList.add(new NoCluster());
         moduleList.add(new ViewTweaks());
+        moduleList.add(new CrystalChams());
     }
 
     public Module getModuleByName(String name) {

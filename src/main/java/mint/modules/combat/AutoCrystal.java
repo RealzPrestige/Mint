@@ -46,7 +46,7 @@ import java.util.TreeMap;
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
-
+    //TODO: make terrain assist.
     public Setting<Boolean> rangesParent = register(new Setting<>("Ranges", true, false));
     public Setting<Float> placeRange = register(new Setting<>("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
     public Setting<Float> breakRange = register(new Setting<>("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
@@ -103,7 +103,7 @@ public class AutoCrystal extends Module {
 
     public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Delay", 15f, 0f, 36f, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
+    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Health", 15f, 0f, 36f, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
     public Setting<Bind> facePlaceBind = register(new Setting<>("Face Place Bind", new Bind(-1), v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue()));
 
     public Setting<Boolean> pauseParent = register(new Setting<>("Pauses", true, false));
@@ -286,7 +286,7 @@ public class AutoCrystal extends Module {
 
     bestPlacePos getBestPlacePos() {
         TreeMap<Float, bestPlacePos> posList = new TreeMap<>();
-        for (BlockPos pos : BlockUtil.getSphere(placeRange.getValue())) {
+        for (BlockPos pos : BlockUtil.getSphereAutoCrystal(placeRange.getValue(), true)) {
             float targetDamage = EntityUtil.calculatePosDamage(pos, targetPlayer);
             float selfHealth = mc.player.getHealth() + mc.player.getAbsorptionAmount();
             float selfDamage = EntityUtil.calculatePosDamage(pos, mc.player);
@@ -548,7 +548,7 @@ public class AutoCrystal extends Module {
         }
     }
 
-    private boolean rayTraceCheckPos(BlockPos pos) {
+    boolean rayTraceCheckPos(BlockPos pos) {
         return mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(pos.getX(), pos.getY(), pos.getZ()), false, true, false) == null;
     }
 

@@ -25,7 +25,6 @@ public class AutoMine extends Module {
 
     //.equals woah amazing!!
     public Setting<Float> targetRange = register(new Setting<>("Target Range", 9.0f, 0.0f, 15.0f, v -> mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Float> mineRange = register(new Setting<>("Mine Range", 5.0f, 0.0f, 6.0f, v -> mineMode.getValue().equals(MineMode.Combat)));
     public Setting<Boolean> boxParent = register(new Setting("Box", false, true, v -> mineMode.getValue().equals(MineMode.Combat)));
     public Setting<Boolean> boxSetting = register(new Setting("Box Setting", false, v -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
     public Setting<Integer> boxRed = register(new Setting<>("Box Red", 255, 0, 255, v -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));

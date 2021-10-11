@@ -18,7 +18,7 @@ public class Phase extends Module {
     public Setting<Integer> speed = register(new Setting("Speed", 1, 1, 10, v -> mode.getValue() == Mode.Test));
 
     public Setting<Boolean> spoofonGround = register(new Setting("Spoof onGround", true));
-    public Setting<Boolean> offground = register(new Setting("Offground", false));
+    public Setting<Boolean> offground = register(new Setting("Off ground", false));
 
     public static Phase getInstance(){
         return INSTANCE;

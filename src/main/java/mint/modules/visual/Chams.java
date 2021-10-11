@@ -161,6 +161,7 @@ public class Chams extends Module {
 
             glTranslated(event.getX(), event.getY(), event.getZ());
             glScaled(scale.getValue(), scale.getValue(), scale.getValue());
+
             if (blend.getValue()) {
                 glEnable(GL_BLEND);
             }

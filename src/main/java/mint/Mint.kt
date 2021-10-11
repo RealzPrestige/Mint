@@ -77,13 +77,13 @@ class Mint {
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent?) {
       //  Login().frame.isVisible = true
-      //  while (!Login.done) {
+       // while (!Login.done) {
        //     sleep(300)
-     //   }
+      //  }
     }
 
     @Mod.EventHandler
-    fun init(event: FMLInitializationEvent?) { // the hwid is in MixinMinecraft
+    fun init(event: FMLInitializationEvent?) {
         Display.setTitle("Mint 0.1.1")
         load()
     }

@@ -1,7 +1,7 @@
 package mint.utils;
 
 import mint.Mint;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -17,6 +17,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -31,23 +32,6 @@ public class BlockUtil {
     public static final List<net.minecraft.block.Block> blackList = Arrays.asList(Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER, Blocks.TRAPDOOR, Blocks.ENCHANTING_TABLE);
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    public static double[] calculateLookAt(final double px, final double py, final double pz, final EntityPlayer entity) {
-        double dirx = entity.posX - px;
-        double diry = entity.posY - py;
-        double dirz = entity.posZ - pz;
-        final double len = Math.sqrt(dirx * dirx + diry * diry + dirz * dirz);
-        dirx /= len;
-        diry /= len;
-        dirz /= len;
-        double pitch = Math.asin(diry);
-        double yaw = Math.atan2(dirz, dirx);
-        pitch = pitch * 180.0 / 3.141592653589793;
-        yaw = yaw * 180.0 / 3.141592653589793;
-        yaw += 90.0;
-        return new double[] {
-                yaw, pitch
-        };
-    }
     public static boolean isPlayerSafe(EntityPlayer target) {
         BlockPos playerPos = new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
         return (mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(playerPos.down()).getBlock() == Blocks.BEDROCK) &&
@@ -84,7 +68,9 @@ public class BlockUtil {
         return true;
     }
 
-    public static List<BlockPos> getSphere(double radius) {
+
+
+    public static List<BlockPos> getSphereAutoCrystal(double radius, boolean noAir) {
         ArrayList<BlockPos> posList = new ArrayList<>();
         BlockPos pos = new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
         for (int x = pos.getX() - (int) radius; x <= pos.getX() + radius; ++x) {
@@ -92,7 +78,7 @@ public class BlockUtil {
                 for (int z = pos.getZ() - (int) radius; z <= pos.getZ() + radius; ++z) {
                     double distance = (pos.getX() - x) * (pos.getX() - x) + (pos.getZ() - z) * (pos.getZ() - z) + (pos.getY() - y) * (pos.getY() - y);
                     BlockPos position = new BlockPos(x, y, z);
-                    if (distance < radius * radius && !mc.world.getBlockState(position).getBlock().equals(Blocks.AIR)) {
+                    if (distance < radius * radius && (noAir && !mc.world.getBlockState(position).getBlock().equals(Blocks.AIR))) {
                         posList.add(position);
                     }
                 }
@@ -291,16 +277,18 @@ public class BlockUtil {
         final float[] rotations = getNeededRotations2(vec);
         BlockUtil.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], rotations[1], BlockUtil.mc.player.onGround));
     }
+
     private static float[] getNeededRotations2(final Vec3d vec) {
         final Vec3d eyesPos = getEyesPos();
         final double diffX = vec.x - eyesPos.x;
         final double diffY = vec.y - eyesPos.y;
         final double diffZ = vec.z - eyesPos.z;
         final double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-        final float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0f;
-        final float pitch = (float)(-Math.toDegrees(Math.atan2(diffY, diffXZ)));
-        return new float[] { BlockUtil.mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - BlockUtil.mc.player.rotationYaw), BlockUtil.mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - BlockUtil.mc.player.rotationPitch) };
+        final float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0f;
+        final float pitch = (float) (-Math.toDegrees(Math.atan2(diffY, diffXZ)));
+        return new float[]{BlockUtil.mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - BlockUtil.mc.player.rotationYaw), BlockUtil.mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - BlockUtil.mc.player.rotationPitch)};
     }
+
     private static void processRightClickBlock(BlockPos pos, EnumFacing side, Vec3d hitVec) {
         mc.playerController.processRightClickBlock(mc.player, mc.world, pos, side, hitVec, EnumHand.MAIN_HAND);
     }
