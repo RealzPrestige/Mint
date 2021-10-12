@@ -57,6 +57,9 @@ public class CircleCrystal extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event){
+        if(!isEnabled())
+            return;
+
         if (event.getPacket() instanceof SPacketSoundEffect && crystalBreak.getValue()) {
             SPacketSoundEffect packet = event.getPacket();
             if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {

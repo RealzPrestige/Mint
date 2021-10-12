@@ -62,6 +62,7 @@ public class ModuleManager
         moduleList.add(new ChorusPredict());
         moduleList.add(new FakePlayer());
         moduleList.add(new SelfAnvil());
+        moduleList.add(new EntityCrammer());
 
         /** Movement **/
         moduleList.add(new AntiWeb());

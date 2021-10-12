@@ -328,8 +328,12 @@ public class AutoCrystal extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if(!isEnabled())
+            return;
         if (event.getPacket() instanceof SPacketExplosion) {
             for (Entity entity : mc.world.loadedEntityList) {
+                if(entity == null)
+                    return;
                 if (entity instanceof EntityEnderCrystal) {
                     BlockPos predictedCrystalPos = new BlockPos(entity.posX, entity.posY - 1, entity.posZ);
                     if (placePredict.getValue() && placePredictMode.getValue().equals(PlacePredictMode.EXPLOSION) && predictedCrystalPos.equals(bestCrystalPos)) {
@@ -415,6 +419,8 @@ public class AutoCrystal extends Module {
             SPacketSoundEffect packet = event.getPacket();
             if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
                 for (Entity entity : mc.world.loadedEntityList) {
+                    if(entity == null)
+                        return;
                     if (entity instanceof EntityEnderCrystal) {
 
                         if (limitAttack.getValue() && attemptedEntityId.containsValue(entity.getEntityId()))
