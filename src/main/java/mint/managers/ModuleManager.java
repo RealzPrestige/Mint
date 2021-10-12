@@ -54,6 +54,7 @@ public class ModuleManager
         moduleList.add(new SelfFill());
         //moduleList.add(new Surround());
         moduleList.add(new AutoPiston());
+        moduleList.add(new Waller());
 
         /** Miscellaneous **/
         moduleList.add(new AutoEnderChest());
