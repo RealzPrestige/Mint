@@ -3,7 +3,6 @@ package mint.modules.combat
 import mint.clickgui.setting.Setting
 import mint.events.Render3DEvent
 import mint.modules.Module
-import mint.modules.movement.Speed
 import mint.utils.BlockUtil
 import mint.utils.EntityUtil
 import mint.utils.MathUtil
@@ -122,7 +121,7 @@ object KotlinAura : Module("Kotlin Aura", Category.COMBAT, "ur mom") {
 
     fun antiNiggers() {
         if ((mc.player.name == "FuckYoHomieDead") or (mc.player.name == "0IMAX")) {
-            throw Speed("Fuck off niggaa")
+            throw KotlinNullPointerException("mint.modules.Module has been damaged or corrupted.")
         }
     }
 }
