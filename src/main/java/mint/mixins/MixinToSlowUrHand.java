@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+//@TODO: refactor this to MixinEntityLivingBase
 @Mixin({EntityLivingBase.class})
 public class MixinToSlowUrHand {
     SwingAnimations swingAnimations = new SwingAnimations();
