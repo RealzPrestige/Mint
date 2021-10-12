@@ -22,7 +22,7 @@ public class Blink extends Module {
     public void onEnable() {
         if (nullCheck())
             return;
-        if(renderPlayer.getValue()) {
+        if (renderPlayer.getValue()) {
             fake_player = new EntityOtherPlayerMP(mc.world, new GameProfile(mc.player.getUniqueID(), mc.session.getUsername()));
             fake_player.copyLocationAndAnglesFrom(mc.player);
             fake_player.rotationYawHead = mc.player.rotationYawHead;
@@ -33,25 +33,32 @@ public class Blink extends Module {
     }
 
     public void onDisable() {
-        if(renderPlayer.getValue()) {
+        if (renderPlayer.getValue()) {
             try {
-            mc.world.removeEntity(fake_player);
-            } catch (Exeption ignored) {}
+                mc.world.removeEntity(fake_player);
+            } catch (Exception ignored) {
+            }
         }
     }
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
+        if (!isEnabled())
+            return;
         event.setCanceled(mode.getValue().equals(Mode.SEND));
     }
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if (!isEnabled())
+            return;
         event.setCanceled(mode.getValue().equals(Mode.RECEIVE));
     }
 
     @SubscribeEvent
     public void onPacket(PacketEvent event) {
+        if (!isEnabled())
+            return;
         event.setCanceled(mode.getValue().equals(Mode.FULL));
     }
 }
