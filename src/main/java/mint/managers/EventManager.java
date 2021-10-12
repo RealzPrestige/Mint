@@ -6,7 +6,6 @@ import mint.Mint;
 import mint.commands.Command;
 import mint.events.*;
 import mint.modules.Feature;
-import mint.modules.combat.AutoCrystal;
 import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.SignExploit;
 import mint.modules.visual.PopESP;
@@ -18,8 +17,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.network.play.server.SPacketSoundEffect;
-import net.minecraft.network.play.server.SPacketSpawnObject;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -40,6 +37,7 @@ import static mint.managers.ModuleManager.doneLoad;
 public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
+
     public void init() {
         if (doneLoad) {
             SignExploit.nullCheck();
@@ -56,7 +54,7 @@ public class EventManager extends Feature {
     public void onUpdate(LivingEvent.LivingUpdateEvent event) {
         if (!fullNullCheck() && (event.getEntity().getEntityWorld()).isRemote && event.getEntityLiving().equals(Mint.INSTANCE.mc.player)) {
             Mint.moduleManager.onUpdate();
-                Mint.moduleManager.sortModules(true);
+            Mint.moduleManager.sortModules(true);
         }
     }
 
@@ -70,7 +68,7 @@ public class EventManager extends Feature {
     public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         Mint.moduleManager.onLogout();
     }
-    
+
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (fullNullCheck())
@@ -84,10 +82,10 @@ public class EventManager extends Feature {
             if (player == null || player.getHealth() > 0.0F) {
                 continue;
             }
-            if(PopESP.getInstance().isEnabled() && PopESP.getInstance().onDeath.getValue()){
+            if (PopESP.getInstance().isEnabled() && PopESP.getInstance().onDeath.getValue()) {
                 PopESP.getInstance().onDeath(player.getEntityId());
             }
-            if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
+            if (Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                 Notifications.getInstance().onDeath(player);
             }
         }
@@ -103,7 +101,7 @@ public class EventManager extends Feature {
             if (packet.getOpCode() == 35 && packet.getEntity(Mint.INSTANCE.mc.world) instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) packet.getEntity(Mint.INSTANCE.mc.world);
                 MinecraftForge.EVENT_BUS.post(new PopEvent(player.getEntityId()));
-                if(Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
+                if (Notifications.getInstance().isEnabled() && Notifications.getInstance().pops.getValue()) {
                     Notifications.getInstance().onTotemPop(player);
                 }
             }
@@ -133,18 +131,13 @@ public class EventManager extends Feature {
                                 break;
                         }
                     });
-            //this is so chink
         } else if (event.getPacket() instanceof SPacketSoundEffect && ((SPacketSoundEffect) event.getPacket()).getSound() == SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT) {
             if (!timer.passedMs(100)) {
                 MinecraftForge.EVENT_BUS.post(new ChorusEvent(((SPacketSoundEffect) event.getPacket()).getX(), ((SPacketSoundEffect) event.getPacket()).getY(), ((SPacketSoundEffect) event.getPacket()).getZ()));
                 timer.reset();
             }
-        } if (event.getPacket() instanceof SPacketSpawnObject) {
-            final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
-            if (packet.getType() == 51) {
-                AutoCrystal.INSTANCE.circlesToFade.put(new BlockPos(packet.getX(),packet.getY(),packet.getZ()) , 255);
-            }
         }
+
     }
 
     @SubscribeEvent
