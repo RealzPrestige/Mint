@@ -143,6 +143,7 @@ public class EventManager extends Feature {
             final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
             if (packet.getType() == 51) {
                 AutoCrystal.INSTANCE.circlesToFade.put(new BlockPos(packet.getX(),packet.getY(),packet.getZ()) , 255);
+
             }
         }
     }

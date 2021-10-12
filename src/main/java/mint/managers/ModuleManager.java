@@ -96,6 +96,7 @@ public class ModuleManager
         moduleList.add(new NoCluster());
         moduleList.add(new ViewTweaks());
         moduleList.add(new CrystalChams());
+        moduleList.add(new Test());
     }
 
     public Module getModuleByName(String name) {
