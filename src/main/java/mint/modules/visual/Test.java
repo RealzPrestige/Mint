@@ -29,7 +29,7 @@ public class Test extends Module {
         if (event.getPacket() instanceof SPacketSpawnObject) {
             final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
             if (packet.getType() == 51) {
-                if (mc.player.getDistance(packet.getX(),packet.getY(),packet.getZ()) > 10)
+                if (mc.player.getDistance(packet.getX(),packet.getY(),packet.getZ()) > 10)return;
                 circlesToFade.put(new Circle(new BlockPos(packet.getX(),packet.getY(),packet.getZ()), 0) , 255);
             }
         }
