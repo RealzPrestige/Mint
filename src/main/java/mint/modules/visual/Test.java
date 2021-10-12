@@ -29,6 +29,7 @@ public class Test extends Module {
         if (event.getPacket() instanceof SPacketSpawnObject) {
             final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
             if (packet.getType() == 51) {
+                if (mc.player.getDistance(packet.getX(),packet.getY(),packet.getZ()) > 10)
                 circlesToFade.put(new Circle(new BlockPos(packet.getX(),packet.getY(),packet.getZ()), 0) , 255);
             }
         }
@@ -50,8 +51,10 @@ public class Test extends Module {
      */
     @Override
     public void onRender3D(Render3DEvent event) {
+        if (mc.player == null)
+            return;
         for (Map.Entry<Circle, Integer> entry : circlesToFade.entrySet()) {
-            entry.getKey().height = entry.getKey().height + 0.1f;
+            entry.getKey().height = entry.getKey().height + 1;
             circlesToFade.put(entry.getKey(), entry.getValue() - (fadeSpeed.getValue()));
             if (entry.getValue() <= 1) {
                 circlesToFade.remove(entry.getKey());
@@ -64,7 +67,7 @@ public class Test extends Module {
     }
     static class Circle {
         BlockPos pos;
-        public float height;
+        public int height;
 
         public Circle(BlockPos pos, int height) {
             this.pos = pos;
@@ -75,7 +78,7 @@ public class Test extends Module {
             return pos;
         }
 
-        public float getHeight() {
+        public int getHeight() {
             return height;
         }
     }
