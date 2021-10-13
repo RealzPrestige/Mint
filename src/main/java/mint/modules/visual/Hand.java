@@ -25,7 +25,6 @@ public class Hand extends Module {
     public Setting<Float> mainhandRotationY = register(new Setting("Mainhand Rotation Y", 0.0f, 0.0f, 10.0f, v -> mainhandParent.getValue() && mainhandRotation.getValue()));
     public Setting<Float> mainhandRotationZ = register(new Setting("Mainhand Rotation Z", 0.0f, 0.0f, 10.0f, v -> mainhandParent.getValue() && mainhandRotation.getValue()));
 
-
     public Setting<Boolean> offhandParent = register(new Setting("Offhand", true, false));
 
     public Setting<Boolean> offhandTranslation = register(new Setting("Offhand Translation", false, true, v -> offhandParent.getValue()));
