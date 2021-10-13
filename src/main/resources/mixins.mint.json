@@ -7,14 +7,14 @@
     "MixinEntityPlayerSP",
     "MixinFontRenderer",
     "MixinGuiIngame",
-    "MixinItemRenderer",
+    "MixinRenderItem",
     "MixinMinecraft",
     "MixinNetworkManager",
     "MixinPlayerControllerMP",
     "MixinRenderLivingBase",
     "MixinRenderModifiedCrystal",
     "MixinRenderPlayer",
-    "MixinToSlowUrHand",
+    "MixinEntityLivingBase",
     "MixinWorld"
   ]
 }

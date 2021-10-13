@@ -13,6 +13,8 @@ public class ViewTweaks extends Module {
 
     private static ViewTweaks INSTANCE = new ViewTweaks();
 
+    public Setting<Float> alpha = register(new Setting("Item Opacity", 1.0f, 0.0f, 1.0f));
+
     public Setting<Boolean> fullBright = register(new Setting("Full Bright", false));
 
     private final Setting<Boolean> fovParent = register(new Setting<>("FOV", true, false));
