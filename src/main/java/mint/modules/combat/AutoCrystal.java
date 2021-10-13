@@ -418,8 +418,10 @@ public class AutoCrystal extends Module {
         if (event.getPacket() instanceof SPacketSoundEffect) {
             SPacketSoundEffect packet = event.getPacket();
             if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
-                for (Entity entity : mc.world.loadedEntityList) {
-                    if(entity == null)
+                java.util.List<Entity> loadedEntityList = mc.world.loadedEntityList;
+                for (int i = 0; i < loadedEntityList.size(); i++) {
+                    Entity entity = loadedEntityList.get(i);
+                    if (entity == null)
                         return;
                     if (entity instanceof EntityEnderCrystal) {
 

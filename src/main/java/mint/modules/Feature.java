@@ -4,7 +4,6 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.setting.Setting;
 import mint.managers.TextManager;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;

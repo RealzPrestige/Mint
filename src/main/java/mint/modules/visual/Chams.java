@@ -63,6 +63,8 @@ public class Chams extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
+        if(!isEnabled())
+            return;
         if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity) && (targets.getValue() == Targets.PLAYERS || targets.getValue() == Targets.BOTH)) {
         event.getEntityLivingBase().hurtTime = 0;
         event.getEntityLivingBase().maxHurtTime = 0;

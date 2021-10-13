@@ -2,7 +2,6 @@ package mint.modules.miscellaneous;
 
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
-import mint.managers.MessageManager;
 import mint.modules.Module;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -34,6 +33,7 @@ public class PacketManipulator extends Module {
             }
         } else {
             return;
+            // ur not returning anything dum dum
         }
     }
 }

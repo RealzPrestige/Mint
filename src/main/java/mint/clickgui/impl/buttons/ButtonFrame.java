@@ -4,7 +4,6 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
 import mint.clickgui.impl.Frame;
-import mint.clickgui.setting.EnumSetting;
 import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -19,9 +18,10 @@ public class ButtonFrame
         super(name);
         this.height = 15;
     }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(this.x + 1, this.y, this.x + (float) this.width - 1, this.y + (float) this.height - 0.5f, getState() ? ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().alpha.getValue() - 20 : Gui.getInstance().alpha.getValue()) : ColorUtil.toRGBA(Gui.getInstance().disabledRed.getValue(),Gui.getInstance().disabledGreen.getValue(),Gui.getInstance().disabledBlue.getValue(),Gui.getInstance().disabledAlpha.getValue()));
+        RenderUtil.drawRect(this.x + 1, this.y, this.x + (float) this.width - 1, this.y + (float) this.height - 0.5f, getState() ? ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), isHovering(mouseX, mouseY) ? Gui.getInstance().alpha.getValue() - 20 : Gui.getInstance().alpha.getValue()) : ColorUtil.toRGBA(Gui.getInstance().disabledRed.getValue(), Gui.getInstance().disabledGreen.getValue(), Gui.getInstance().disabledBlue.getValue(), Gui.getInstance().disabledAlpha.getValue()));
         Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 3.0f - (float) MintGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
     }
 
