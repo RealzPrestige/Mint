@@ -100,6 +100,7 @@ public class ModuleManager
         moduleList.add(new CrystalChams());
         moduleList.add(new CircleCrystal());
         moduleList.add(new ShaderChams());
+        moduleList.add(new PlayerChams());
     }
 
     public Module getModuleByName(String name) {
