@@ -1,4 +1,4 @@
-package mint.utils;
+package mint.utils.shader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -9,36 +9,40 @@ import net.minecraft.client.shader.Framebuffer;
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
-public abstract class ShaderUtil extends Shader {
 
-    static Framebuffer framebuffer;
-    static Minecraft mc = Minecraft.getMinecraft();
-    float red, green, blue, alpha = 1F;
-    float radius = 2F;
-    float quality = 1F;
+public abstract class FrameBuffer extends Shader {
 
-    static {
-        framebuffer = setupFrameBuffer(framebuffer);
-    }
+    Minecraft mc = Minecraft.getMinecraft();
+    private static Framebuffer framebuffer;
 
-    public ShaderUtil(String fragmentShader) {
+    protected float red, green, blue, alpha = 1F;
+    protected float radius = 2F;
+    protected float quality = 1F;
+
+    private boolean entityShadows;
+
+    public FrameBuffer(final String fragmentShader) {
         super(fragmentShader);
     }
 
-    public void startDraw(float partialTicks) {
+    public void startDraw(final float partialTicks) {
         GlStateManager.enableAlpha();
 
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
 
+        framebuffer = setupFrameBuffer(framebuffer);
         framebuffer.framebufferClear();
         framebuffer.bindFramebuffer(true);
+        entityShadows = mc.gameSettings.entityShadows;
         mc.gameSettings.entityShadows = false;
         mc.entityRenderer.orientCamera(partialTicks);
     }
 
-    public void stopDraw(Color color, float radius, float quality) {
+    public void stopDraw(final Color color, final float radius, final float quality) {
+        mc.gameSettings.entityShadows = entityShadows;
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         mc.getFramebuffer().bindFramebuffer(true);
@@ -53,8 +57,10 @@ public abstract class ShaderUtil extends Shader {
         mc.entityRenderer.disableLightmap();
         RenderHelper.disableStandardItemLighting();
 
+        startShader();
         mc.entityRenderer.setupOverlayRendering();
         drawFramebuffer(framebuffer);
+        stopShader();
 
         mc.entityRenderer.disableLightmap();
 
@@ -62,8 +68,9 @@ public abstract class ShaderUtil extends Shader {
         GlStateManager.popAttrib();
     }
 
-    public static Framebuffer setupFrameBuffer(Framebuffer frameBuffer) {
-        if (frameBuffer != null)
+
+    public Framebuffer setupFrameBuffer(Framebuffer frameBuffer) {
+        if(frameBuffer != null)
             frameBuffer.deleteFramebuffer();
 
         frameBuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
@@ -71,9 +78,9 @@ public abstract class ShaderUtil extends Shader {
         return frameBuffer;
     }
 
-    public void drawFramebuffer(Framebuffer framebuffer) {
-        startShader();
-        ScaledResolution scaledResolution = new ScaledResolution(mc);
+
+    public void drawFramebuffer(final Framebuffer framebuffer) {
+        final ScaledResolution scaledResolution = new ScaledResolution(mc);
         glBindTexture(GL_TEXTURE_2D, framebuffer.framebufferTexture);
         glBegin(GL_QUADS);
         glTexCoord2d(0, 1);
@@ -85,6 +92,6 @@ public abstract class ShaderUtil extends Shader {
         glTexCoord2d(1, 1);
         glVertex2d(scaledResolution.getScaledWidth(), 0);
         glEnd();
-        stopShader();
+        glUseProgram(0);
     }
 }
