@@ -14,7 +14,6 @@ public class ViewTweaks extends Module {
     private static ViewTweaks INSTANCE = new ViewTweaks();
 
     public Setting<Boolean> fullBright = register(new Setting("Full Bright", false));
-    public Setting<Boolean> glow = register(new Setting("Item Glow", false));
 
     private final Setting<Boolean> fovParent = register(new Setting<>("FOV", true, false));
     public Setting<Boolean> fov = register(new Setting("FOV Changer", true, v -> fovParent.getValue()));
