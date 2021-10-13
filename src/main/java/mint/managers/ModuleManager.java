@@ -98,7 +98,7 @@ public class ModuleManager
         moduleList.add(new NoCluster());
         moduleList.add(new ViewTweaks());
         moduleList.add(new CrystalChams());
-        moduleList.add(new CircleCrystal());
+        moduleList.add(new SpawnESP());
         moduleList.add(new ShaderChams());
         moduleList.add(new PlayerChams());
         moduleList.add(new Hand());

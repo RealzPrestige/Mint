@@ -16,14 +16,19 @@ import java.util.Map;
 /**
  * @author kambing
  * inspired by fbware circle render
- */
-public class CircleCrystal extends Module {
-    public CircleCrystal() {
-        super("Test", Category.VISUAL, "Test");
+ * @author FB for Y-travel
+ **/
+
+public class SpawnESP extends Module {
+    public SpawnESP() {
+        super("Spawn ESP", Category.VISUAL, "Renders circles around recently spawned end crystals.");
     }
     public HashMap<Circle, Integer> circlesToFade = new HashMap<>();
-    Setting<Integer> extension = register(new Setting("Extension", 1, 0, 255));
+    //Setting<Integer> extension = register(new Setting("Extension", 1, 0, 255));
     Setting<Integer> fadeSpeed = register(new Setting<>("Fade Speed", 5, 0, 10));
+    float heaven;
+    long startTime = 0;
+
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof SPacketSpawnObject) {
@@ -56,12 +61,14 @@ public class CircleCrystal extends Module {
         for (Map.Entry<Circle, Integer> entry : circlesToFade.entrySet()) {
             entry.getKey().height = entry.getKey().height + 1;
             circlesToFade.put(entry.getKey(), entry.getValue() - (fadeSpeed.getValue()));
+            startTime = System.currentTimeMillis();
+            heaven = ((System.currentTimeMillis() - startTime)/100f);
             if (entry.getValue() <= 1) {
                 circlesToFade.remove(entry.getKey());
                 return;
             }
 
-            RenderUtil.drawCircle(entry.getKey().getPos().getX(), entry.getKey().getPos().getY() + entry.getKey().getHeight(), entry.getKey().getPos().getZ(), 0.6f, new Color(255,255,255,entry.getValue()));
+            RenderUtil.drawCircle(entry.getKey().getPos().getX(), entry.getKey().getPos().getY() + entry.getKey().getHeight() + (heaven/10), entry.getKey().getPos().getZ(), 0.6f, new Color(255,255,255,entry.getValue()));
 
         }
     }
