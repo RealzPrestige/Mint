@@ -1,6 +1,7 @@
 package mint.mixins;
 
 import mint.events.RenderItemEvent;
+import mint.modules.visual.Hand;
 import mint.modules.visual.ViewTweaks;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -19,10 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 /**
- *
  * @author zPrestige_
  * 13/10/2021
- *
  * @author FB for itemOpacityChanger (inspired by Phobos.EU / Abyss)
  */
 
@@ -32,6 +31,7 @@ public abstract class MixinRenderItem {
     @Shadow
     private void renderModel(IBakedModel model, int color, ItemStack stack) {
     }
+
     @Inject(method = {"renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;Z)V"}, at = {@At("INVOKE")})
     public void renderItem(final ItemStack stack, final EntityLivingBase entityLivingBaseIn, final ItemCameraTransforms.TransformType transform, final boolean leftHanded, final CallbackInfo ci) {
         if (transform == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transform == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND) {
@@ -41,6 +41,7 @@ public abstract class MixinRenderItem {
                 MinecraftForge.EVENT_BUS.post(new RenderItemEvent.MainHand(stack));
         }
     }
+
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;color(FFFF)V"))
     private void itemColour(float colorRed, float colorGreen, float colorBlue, float colorAlpha) {
         if (ViewTweaks.getInstance() != null && ViewTweaks.getInstance().isEnabled()) {
@@ -52,10 +53,10 @@ public abstract class MixinRenderItem {
 
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderItem;renderModel(Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))
     private void renderModelColor(RenderItem renderItem, IBakedModel model, ItemStack stack) {
-        if (ViewTweaks.getInstance() != null && ViewTweaks.getInstance().isEnabled()) {
-            renderModel(model, new Color(1f, 1f, 1f, ViewTweaks.getInstance().alpha.getValue()).getRGB(), stack);
-        } else {
-            renderModel(model, -1, stack);
-        }
+        if (!Hand.getInstance().isEnabled())
+            return;
+
+        renderModel(model, new Color(1f, 1f, 1f, Hand.getInstance().alpha.getValue() / 255.0f).getRGB(), stack);
+
     }
 }
