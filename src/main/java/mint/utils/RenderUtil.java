@@ -27,6 +27,7 @@ public class RenderUtil {
     public static Minecraft mc = Minecraft.getMinecraft();
     public static Tessellator tessellator;
     public static BufferBuilder builder;
+    public static int deltaTime;
 
     static {
         Minecraft mc = Minecraft.getMinecraft();

@@ -99,6 +99,7 @@ public class ModuleManager
         moduleList.add(new ViewTweaks());
         moduleList.add(new CrystalChams());
         moduleList.add(new CircleCrystal());
+        moduleList.add(new ShaderChams());
     }
 
     public Module getModuleByName(String name) {

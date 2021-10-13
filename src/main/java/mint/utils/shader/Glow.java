@@ -1,8 +1,8 @@
-package mint.utils;
+package mint.utils.shader;
 
 import org.lwjgl.opengl.GL20;
 
-public final class Glow extends ShaderUtil {
+public final class Glow extends FrameBuffer {
 
     public static final Glow Glow_SHADER = new Glow();
 

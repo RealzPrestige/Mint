@@ -1,4 +1,4 @@
-package mint.utils;
+package mint.utils.shader;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.*;
@@ -18,11 +18,11 @@ public abstract class Shader {
         int vertexShaderID, fragmentShaderID;
 
         try {
-            InputStream vertexStream = getClass().getResourceAsStream("/assets/momentum/shader/vertex.vert");
+            InputStream vertexStream = getClass().getResourceAsStream("/assets/mint/shader/vertex.vert");
             vertexShaderID = createShader(IOUtils.toString(vertexStream), ARBVertexShader.GL_VERTEX_SHADER_ARB);
             IOUtils.closeQuietly(vertexStream);
 
-            InputStream fragmentStream = getClass().getResourceAsStream("/assets/momentum/shader/fragment/" + fragmentShader);
+            InputStream fragmentStream = getClass().getResourceAsStream("/assets/mint/shader/fragment/" + fragmentShader);
             fragmentShaderID = createShader(IOUtils.toString(fragmentStream), ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
             IOUtils.closeQuietly(fragmentStream);
         } catch (Exception e) {
