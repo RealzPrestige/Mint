@@ -28,7 +28,7 @@ public class SpawnESP extends Module {
     Setting<Boolean> otherParent = register(new Setting<>("Other", true, false));
     Setting<Float> travelSpeed = register(new Setting<>("Travel Speed", 1.0f, 0.0f, 100.0f, v-> otherParent.getValue()));
     Setting<Integer> fadeSpeed = register(new Setting<>("Fade Speed", 5, 0, 10, v-> otherParent.getValue()));
-    Setting<Boolean> colorParent = register(new Setting<>("Colour", true, false));
+    Setting<Boolean> colorParent = register(new Setting<>("Color", true, false));
     Setting<Integer> red = register(new Setting<>("Red", 255, 0, 255, v-> colorParent.getValue()));
     Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255, v-> colorParent.getValue()));
     Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255, v-> colorParent.getValue()));
