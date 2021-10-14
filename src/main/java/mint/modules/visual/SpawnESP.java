@@ -43,7 +43,7 @@ public class SpawnESP extends Module {
             if (packet.getType() == 51) {
                 if (mc.player.getDistance(packet.getX(), packet.getY(), packet.getZ()) > 10)
                     return;
-                circlesToFade.put(new Circle(new BlockPos(packet.getX(), packet.getY(), packet.getZ()), 0), 255);
+                circlesToFade.put(new Circle(new BlockPos(packet.getX(), packet.getY(), packet.getZ())), 255);
             }
         }
     }
@@ -72,7 +72,6 @@ public class SpawnESP extends Module {
             return;
 
         for (Map.Entry<Circle, Integer> entry : circlesToFade.entrySet()) {
-            entry.getKey().height = entry.getKey().height + 1;
             circlesToFade.put(entry.getKey(), entry.getValue() - (fadeSpeed.getValue()));
             startTime = System.currentTimeMillis();
             heaven = ((System.currentTimeMillis() - startTime) / 100f);
@@ -81,26 +80,21 @@ public class SpawnESP extends Module {
                 return;
             }
 
-            RenderUtil.drawCircle(entry.getKey().getPos().getX(), entry.getKey().getHeight() + (heaven/ 10 ), entry.getKey().getPos().getZ(), 0.6f, new Color(red.getValue(), green.getValue(), blue.getValue(), entry.getValue()));
+            RenderUtil.drawCircle(entry.getKey().getPos().getX(),  (heaven/ 10 ), entry.getKey().getPos().getZ(), 0.6f, new Color(red.getValue(), green.getValue(), blue.getValue(), entry.getValue()));
 
         }
     }
 
     static class Circle {
         BlockPos pos;
-        public int height;
 
-        public Circle(BlockPos pos, int height) {
+
+        public Circle(BlockPos pos) {
             this.pos = pos;
-            this.height = height;
         }
 
         public BlockPos getPos() {
             return pos;
-        }
-
-        public int getHeight() {
-            return height;
         }
     }
 }
