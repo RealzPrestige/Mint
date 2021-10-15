@@ -1,7 +1,8 @@
 package mint.commands;
 
 import mint.Mint;
-import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.server.SPacketDisconnect;
+import net.minecraft.util.text.TextComponentString;
 
 public class Kick extends Command {
 
@@ -11,6 +12,6 @@ public class Kick extends Command {
 
     @Override
     public void execute(String[] commands) {
-        Mint.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Position(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, !Mint.INSTANCE.mc.player.onGround));
+        Mint.INSTANCE.mc.getConnection().handleDisconnect(new SPacketDisconnect(new TextComponentString("admin abiss")));
     }
 }

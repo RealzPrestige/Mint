@@ -44,64 +44,68 @@ public class ModuleManager
 
         /** Combat **/
         moduleList.add(new AutoCrystal());
+        moduleList.add(new AutoPiston());
+        moduleList.add(new BowAmplifier());
         moduleList.add(new CityAnvil());
         moduleList.add(new Crits());
         moduleList.add(new HoleFiller());
         moduleList.add(new KillAura());
         moduleList.add(KotlinAura.INSTANCE);
-        //moduleList.add(new ObiAssist());
         moduleList.add(new Offhand());
         moduleList.add(new SelfFill());
         //moduleList.add(new Surround());
-        moduleList.add(new AutoPiston());
         moduleList.add(new Waller());
 
         /** Miscellaneous **/
         moduleList.add(new AutoEnderChest());
         moduleList.add(new Backpack());
+        //moduleList.add(new BuildHeight());
         moduleList.add(new ChorusPredict());
-        moduleList.add(new FakePlayer());
-        moduleList.add(new SelfAnvil());
         moduleList.add(new EntityCrammer());
+        moduleList.add(new FakePlayer());
+        //moduleList.add(new PacketManipulator());
+        moduleList.add(new SelfAnvil());
 
         /** Movement **/
+        moduleList.add(new Anchor());
         moduleList.add(new AntiWeb());
         moduleList.add(new BoatFly());
         moduleList.add(new Clip());
         moduleList.add(new LongJump());
         moduleList.add(new Phase());
         moduleList.add(new ReverseStep());
+        moduleList.add(new SSS());
         moduleList.add(new Step());
         moduleList.add(new Strafe());
-        moduleList.add(new Anchor());
+        moduleList.add(new YPort());
 
         /** Player **/
         moduleList.add(new AntiAim());
+        //moduleList.add(new AutoLog());
         moduleList.add(new AutoMine());
+        moduleList.add(new Blink());
         moduleList.add(new ChorusManipulator());
         moduleList.add(new FastPlace());
         moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
-        //moduleList.add(new Speedmine()); breaks everything just like strafe
-        moduleList.add(new BowHack());
-        moduleList.add(new Blink());
+        //moduleList.add(new Speedmine());
 
         /** Visual **/
         moduleList.add(new BreakESP());
         moduleList.add(new Chams());
         moduleList.add(new CripWalk());
+        moduleList.add(new CrystalChams());
+        moduleList.add(new Hand());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
+        moduleList.add(new NoCluster());
+        moduleList.add(new PlayerChams());
         moduleList.add(new PlayerTrails());
         moduleList.add(new PopESP());
-        moduleList.add(new SwingAnimations());
-        moduleList.add(new NoCluster());
-        moduleList.add(new ViewTweaks());
-        moduleList.add(new CrystalChams());
-        moduleList.add(new SpawnESP());
         moduleList.add(new ShaderChams());
-        moduleList.add(new PlayerChams());
-        moduleList.add(new Hand());
+        moduleList.add(new SpawnESP());
+        moduleList.add(new SwingAnimations());
+        moduleList.add(new ViewTweaks());
     }
 
     public Module getModuleByName(String name) {

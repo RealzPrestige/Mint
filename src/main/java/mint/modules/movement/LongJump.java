@@ -19,7 +19,7 @@ public class LongJump extends Module {
 
     public Setting<Float> acceleration = register(new Setting("Acceleration", 30.0f, 0.0f, 100.0f, v -> mode.getValue() == Mode.Factor));
     public Setting<Boolean> autoJump = register(new Setting("Auto Jump", true));
-    public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 415));
+    public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 420));
     public Setting<Boolean> disableOnLag = register(new Setting("Disable On Lag", true));
     double playerSpeed;
     float jumpFactor;
@@ -29,7 +29,7 @@ public class LongJump extends Module {
         playerSpeed = EntityUtil.getDefaultSpeed();
         jumpFactor = mc.player.jumpMovementFactor;
         if (mc.player.onGround && autoJump.getValue()) {
-            mc.player.motionY = jumpHeight.getValue() / 1000;
+            mc.player.motionY = jumpHeight.getValue() / 1000.0f;
         }
     }
 

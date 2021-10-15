@@ -25,8 +25,7 @@ public class Clip extends Module {
         if (mc.player.posY < 6 && !mc.player.isElytraFlying() && mc.player.onGround) {
             EntityUtil.startSneaking();
             EntityUtil.packetJump(offground.getValue());
-            double y = (mc.player.posY + offset.getValue()) * -1;
-            mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, y, mc.player.posZ, offground.getValue()));
+            mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, ((mc.player.posY + offset.getValue()) * -1), mc.player.posZ, offground.getValue()));
             EntityUtil.stopSneaking(false);
             disable();
         }
