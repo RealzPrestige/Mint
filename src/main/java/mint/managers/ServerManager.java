@@ -5,9 +5,6 @@ import mint.utils.Timer;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Objects;
-
-import static mint.modules.Module.mc;
 
 public class ServerManager
         extends Feature {
@@ -18,9 +15,6 @@ public class ServerManager
     private long lastUpdate = -1L;
     private String serverBrand = "";
 
-    public void onPacketReceived() {
-        this.timer.reset();
-    }
 
     public long serverRespondingTime() {
         return this.timer.getPassedTimeMs();
@@ -76,14 +70,4 @@ public class ServerManager
         this.serverBrand = brand;
     }
 
-    public int getPing() {
-        if (ServerManager.fullNullCheck()) {
-            return 0;
-        }
-        try {
-            return Objects.requireNonNull(mc.getConnection()).getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
-        } catch (Exception e) {
-            return 0;
-        }
-    }
 }

@@ -12,17 +12,16 @@ import java.awt.*;
 
 import static mint.managers.ModuleManager.doneLoad;
 
-public class TextManager
-        extends Feature {
+public class TextManager extends Feature {
     private final Timer idleTimer = new Timer();
     public int scaledWidth;
     public int scaledHeight;
     public int scaleFactor;
-    private CustomFont customFont = new CustomFont(new Font("Verdana", 0, 17), true, false);
+    private CustomFont customFont = new CustomFont(new Font("Verdana", Font.PLAIN, 17), true, false);
     private boolean idling;
 
     public TextManager() {
-        this.updateResolution();
+        updateResolution();
     }
 
     public void init() {
@@ -30,9 +29,10 @@ public class TextManager
             SignExploit.nullCheck();
             doneLoad = false;
         }
+        assert Mint.moduleManager != null;
         FontChanger cFont = Mint.moduleManager.getModuleByClass(FontChanger.class);
         try {
-            this.setFontRenderer(new Font("Dialog", getStyle(), cFont.fontSize.getValue()), true, true);
+            setFontRenderer(new Font("Dialog", getStyle(), cFont.fontSize.getValue()), true, true);
         } catch (Exception ignored) {
         }
     }
@@ -56,26 +56,28 @@ public class TextManager
     }
 
     public void drawStringWithShadow(String text, float x, float y, int color) {
-        this.drawString(text, x, y, color, true);
+        drawString(text, x, y, color, true);
     }
 
     public void drawString(String text, float x, float y, int color, boolean shadow) {
+        assert Mint.moduleManager != null;
         if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
             if (shadow) {
-                this.customFont.drawStringWithShadow(text, x, y, color);
+                customFont.drawStringWithShadow(text, x, y, color);
             } else {
-                this.customFont.drawString(text, x, y, color);
+                customFont.drawString(text, x, y, color);
             }
             return;
         }
         Mint.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, shadow);
     }
     public float drawStringFull(String text, float x, float y, int color, boolean shadow) {
+        assert Mint.moduleManager != null;
         if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
             if (shadow) {
-                this.customFont.drawStringWithShadow(text, x, y, color);
+                customFont.drawStringWithShadow(text, x, y, color);
             } else {
-                this.customFont.drawString(text, x, y, color);
+                customFont.drawString(text, x, y, color);
             }
             return x;
         }
@@ -84,50 +86,52 @@ public class TextManager
     }
 
     public int getStringWidth(String text) {
+        assert Mint.moduleManager != null;
         if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
-            return this.customFont.getStringWidth(text);
+            return customFont.getStringWidth(text);
         }
         return Mint.INSTANCE.mc.fontRenderer.getStringWidth(text);
     }
 
     public int getFontHeight() {
+        assert Mint.moduleManager != null;
         if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
-            return this.customFont.getStringHeight();
+            return customFont.getStringHeight();
         }
         return Mint.INSTANCE.mc.fontRenderer.FONT_HEIGHT;
     }
 
     public void setFontRenderer(Font font, boolean antiAlias, boolean fractionalMetrics) {
-        this.customFont = new CustomFont(font, antiAlias, fractionalMetrics);
+        customFont = new CustomFont(font, antiAlias, fractionalMetrics);
     }
 
     public void updateResolution() {
-        this.scaledWidth = Mint.INSTANCE.mc.displayWidth;
-        this.scaledHeight = Mint.INSTANCE.mc.displayHeight;
-        this.scaleFactor = 1;
+        scaledWidth = Mint.INSTANCE.mc.displayWidth;
+        scaledHeight = Mint.INSTANCE.mc.displayHeight;
+        scaleFactor = 1;
         boolean flag = Mint.INSTANCE.mc.isUnicode();
         int i = Mint.INSTANCE.mc.gameSettings.guiScale;
         if (i == 0) {
             i = 1000;
         }
-        while (this.scaleFactor < i && this.scaledWidth / (this.scaleFactor + 1) >= 320 && this.scaledHeight / (this.scaleFactor + 1) >= 240) {
-            ++this.scaleFactor;
+        while (scaleFactor < i && scaledWidth / (scaleFactor + 1) >= 320 && scaledHeight / (scaleFactor + 1) >= 240) {
+            ++scaleFactor;
         }
-        if (flag && this.scaleFactor % 2 != 0 && this.scaleFactor != 1) {
-            --this.scaleFactor;
+        if (flag && scaleFactor % 2 != 0 && scaleFactor != 1) {
+            --scaleFactor;
         }
         double scaledWidthD = scaledWidth / scaleFactor;
         double scaledHeightD = scaledHeight / scaleFactor;
-        this.scaledWidth = MathHelper.ceil(scaledWidthD);
-        this.scaledHeight = MathHelper.ceil(scaledHeightD);
+        scaledWidth = MathHelper.ceil(scaledWidthD);
+        scaledHeight = MathHelper.ceil(scaledHeightD);
     }
 
     public String getIdleSign() {
-        if (this.idleTimer.passedMs(500L)) {
-            this.idling = !this.idling;
-            this.idleTimer.reset();
+        if (idleTimer.passedMs(500L)) {
+            idling = !idling;
+            idleTimer.reset();
         }
-        if (this.idling) {
+        if (idling) {
             return "_";
         }
         return "";

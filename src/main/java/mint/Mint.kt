@@ -27,7 +27,6 @@ class Mint {
 
         @JvmField
         var moduleManager: ModuleManager? = null
-        var colorManager: ColorManager? = null
         var fileManager: FileManager? = null
 
         @JvmField
@@ -49,7 +48,6 @@ class Mint {
             moduleManager = ModuleManager()
             eventManager = EventManager()
             fileManager = FileManager()
-            colorManager = ColorManager()
             configManager = ConfigManager()
             moduleManager!!.init()
             eventManager!!.init()
