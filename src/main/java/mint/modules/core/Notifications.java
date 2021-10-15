@@ -2,7 +2,7 @@ package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.clickgui.setting.Setting;
-import mint.events.Render2DEvent;
+import mint.events.RenderOverlayEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
@@ -70,7 +70,7 @@ public class Notifications extends Module {
         this.setInstance();
     }
 
-    public void onRender2D(Render2DEvent event) {
+    public void renderOveylayEvent(RenderOverlayEvent event) {
         for (Map.Entry<String, Integer> entry : notification.entrySet()) {
             if (modules.getValue()) {
                 String moduleString = entry.getKey();

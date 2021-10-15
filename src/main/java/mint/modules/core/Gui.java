@@ -5,7 +5,7 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.setting.Setting;
 import mint.events.ClientEvent;
-import mint.events.Render2DEvent;
+import mint.events.RenderOverlayEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.modules.combat.KotlinAura;
@@ -91,7 +91,7 @@ public class Gui extends Module {
         }
     }
         @Override
-        public void onRender2D(Render2DEvent event) {
+        public void renderOveylayEvent(RenderOverlayEvent event) {
             final Minecraft mc = Minecraft.getMinecraft();
             ScaledResolution resolution = new ScaledResolution(mc);
             if (gradient.getValue()) {

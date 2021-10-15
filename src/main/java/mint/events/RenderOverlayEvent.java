@@ -2,12 +2,12 @@ package mint.events;
 
 import net.minecraft.client.gui.ScaledResolution;
 
-public class Render2DEvent
+public class RenderOverlayEvent
         extends EventProcessor {
     public float partialTicks;
     public ScaledResolution scaledResolution;
 
-    public Render2DEvent(float partialTicks, ScaledResolution scaledResolution) {
+    public RenderOverlayEvent(float partialTicks, ScaledResolution scaledResolution) {
         this.partialTicks = partialTicks;
         this.scaledResolution = scaledResolution;
     }

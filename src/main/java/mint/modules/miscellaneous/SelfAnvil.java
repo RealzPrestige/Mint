@@ -1,7 +1,7 @@
 package mint.modules.miscellaneous;
 
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -258,7 +258,7 @@ public class SelfAnvil extends Module {
         return 0;
     }
 
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         //BlockPos upperBlockPos = null;
         //BlockPos baseBlockPos = null;
         //BlockPos anvilBlockPos = null;

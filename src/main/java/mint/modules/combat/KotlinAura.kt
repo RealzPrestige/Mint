@@ -1,7 +1,7 @@
 package mint.modules.combat
 
 import mint.clickgui.setting.Setting
-import mint.events.Render3DEvent
+import mint.events.RenderWorldEvent
 import mint.modules.Module
 import mint.utils.BlockUtil
 import mint.utils.EntityUtil
@@ -112,7 +112,7 @@ object KotlinAura : Module("Kotlin Aura", Category.COMBAT, "ur mom") {
         }
     }
 
-    override fun onRender3D(event: Render3DEvent?) {
+    override fun renderWorldLastEvent(event: RenderWorldEvent?) {
         var color = Color(r.getValue().toInt(), g.getValue().toInt(), b.getValue().toInt(), a.getValue().toInt())
         if (placePos != null) {
             RenderUtil.drawBox(placePos, color)

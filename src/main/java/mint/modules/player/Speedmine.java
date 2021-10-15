@@ -5,7 +5,7 @@ import mint.Mint;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.events.BlockEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.InventoryUtil;
 import mint.utils.RenderUtil;
@@ -168,7 +168,7 @@ public class Speedmine extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if (currentPos != null) {
             if (getMineTime(currentBlock,item) == -1)
                 return;

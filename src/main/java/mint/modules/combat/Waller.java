@@ -2,7 +2,7 @@ package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;
@@ -113,7 +113,7 @@ public class Waller extends Module {
         disable();
     }
 
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if (!render.getValue())
             return;
 

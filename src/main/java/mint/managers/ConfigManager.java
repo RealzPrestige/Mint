@@ -1,79 +1,61 @@
 package mint.managers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import mint.Mint;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.EnumSetting;
 import mint.clickgui.setting.Setting;
 import mint.modules.Feature;
 import mint.modules.Module;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConfigManager {
-    public ArrayList<Feature> features = new ArrayList();
+    public ArrayList<Feature> features = new ArrayList<>();
     public String config = "mint/config/";
     public boolean loadingConfig;
     public boolean savingConfig;
 
     public void loadConfig(String name) {
-        this.loadingConfig = true;
-        List files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
-        this.config = files.contains(new File("mint/" + name + "/")) ? "mint/" + name + "/" : "mint/config/";
+        loadingConfig = true;
+        List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
+        config = files.contains(new File("mint/" + name + "/")) ? "mint/" + name + "/" : "mint/config/";
+        assert Mint.friendManager != null;
         Mint.friendManager.onLoad();
-        for (Feature feature : this.features) {
+        for (Feature feature : features) {
             try {
-                this.loadSettings(feature);
-            }
-            catch (IOException e) {
+                loadSettings(feature);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        this.saveCurrentConfig();
-        this.loadingConfig = false;
+        saveCurrentConfig();
+        loadingConfig = false;
     }
 
     public void saveConfig(String name) {
-        this.savingConfig = true;
-        this.config = "mint/" + name + "/";
-        File path = new File(this.config);
+        savingConfig = true;
+        config = "mint/" + name + "/";
+        File path = new File(config);
         if (!path.exists()) {
             path.mkdir();
         }
+        assert Mint.friendManager != null;
         Mint.friendManager.saveFriends();
-        for (Feature feature : this.features) {
+        for (Feature feature : features) {
             try {
-                this.saveSettings(feature);
-            }
-            catch (IOException e) {
+                saveSettings(feature);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        this.saveCurrentConfig();
-        this.savingConfig = false;
+        saveCurrentConfig();
+        savingConfig = false;
     }
 
     public void saveCurrentConfig() {
@@ -81,18 +63,17 @@ public class ConfigManager {
         try {
             if (currentConfig.exists()) {
                 FileWriter writer = new FileWriter(currentConfig);
-                String tempConfig = this.config.replaceAll("/", "");
+                String tempConfig = config.replaceAll("/", "");
                 writer.write(tempConfig.replaceAll("mint", ""));
                 writer.close();
             } else {
                 currentConfig.createNewFile();
                 FileWriter writer = new FileWriter(currentConfig);
-                String tempConfig = this.config.replaceAll("/", "");
+                String tempConfig = config.replaceAll("/", "");
                 writer.write(tempConfig.replaceAll("mint", ""));
                 writer.close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -108,41 +89,29 @@ public class ConfigManager {
                 }
                 reader.close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return name;
     }
 
-    public void resetConfig(boolean saveConfig, String name) {
-        for (Feature feature : this.features) {
-            feature.reset();
-        }
-        if (saveConfig) {
-            this.saveConfig(name);
-        }
-    }
-
     public void saveSettings(Feature feature) throws IOException {
-        String featureName;
         Path outputFile;
-        JsonObject object = new JsonObject();
-        File directory = new File(this.config + this.getDirectory(feature));
+        File directory = new File(config + getDirectory(feature));
         if (!directory.exists()) {
             directory.mkdir();
         }
-        if (!Files.exists(outputFile = Paths.get(featureName = this.config + this.getDirectory(feature) + feature.getName() + ".json"))) {
+        if (!Files.exists(outputFile = Paths.get(config + getDirectory(feature) + feature.getName() + ".json"))) {
             Files.createFile(outputFile);
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(this.writeSettings(feature));
+        String json = gson.toJson(writeSettings(feature));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(outputFile)));
         writer.write(json);
         writer.close();
     }
 
-    public static void setValueFromJson(Feature feature, Setting setting, JsonElement element) {
+    public static void setValueFromJson(Setting setting, JsonElement element) {
         switch (setting.getType()) {
             case "Boolean": {
                 setting.setValue(element.getAsBoolean());
@@ -153,7 +122,7 @@ public class ConfigManager {
                 break;
             }
             case "Float": {
-                setting.setValue(Float.valueOf(element.getAsFloat()));
+                setting.setValue(element.getAsFloat());
                 break;
             }
             case "Integer": {
@@ -171,67 +140,62 @@ public class ConfigManager {
             }
             case "Enum": {
                 try {
-                    EnumSetting converter = new EnumSetting(((Enum)setting.getValue()).getClass());
+                    EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
                     Enum value = converter.doBackward(element);
                     setting.setValue(value == null ? setting.getDefaultValue() : value);
+                } catch (Exception ignored) {
                 }
-                catch (Exception e) {}
                 break;
             }
         }
     }
 
     public void init() {
-        this.features.addAll(Mint.moduleManager.moduleList);
-        this.features.add(Mint.friendManager);
-        String name = this.loadCurrentConfig();
-        this.loadConfig(name);
+        assert Mint.moduleManager != null;
+        features.addAll(Mint.moduleManager.moduleList);
+        features.add(Mint.friendManager);
+        String name = loadCurrentConfig();
+        loadConfig(name);
     }
 
     private void loadSettings(Feature feature) throws IOException {
-        String featureName = this.config + this.getDirectory(feature) + feature.getName() + ".json";
+        String featureName = config + getDirectory(feature) + feature.getName() + ".json";
         Path featurePath = Paths.get(featureName);
         if (!Files.exists(featurePath)) {
             return;
         }
-        this.loadPath(featurePath, feature);
+        loadPath(featurePath, feature);
     }
 
     private void loadPath(Path path, Feature feature) throws IOException {
         InputStream stream = Files.newInputStream(path);
         try {
             ConfigManager.loadFile(new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             ConfigManager.loadFile(new JsonObject(), feature);
         }
         stream.close();
     }
 
     private static void loadFile(JsonObject input, Feature feature) {
-        for (Map.Entry entry : input.entrySet()) {
-            String settingName = (String)entry.getKey();
-            JsonElement element = (JsonElement)entry.getValue();
+        for (Map.Entry<String, JsonElement> entry : input.entrySet()) {
+            String settingName = entry.getKey();
+            JsonElement element = entry.getValue();
             if (feature instanceof FriendManager) {
                 try {
-                   Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
-                }
-                catch (Exception e) {
+                    Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                boolean settingFound = false;
                 for (Setting setting : feature.getSettings()) {
                     if (!settingName.equals(setting.getName())) continue;
                     try {
-                        ConfigManager.setValueFromJson(feature, setting, element);
-                    }
-                    catch (Exception e) {
+                        ConfigManager.setValueFromJson(setting, element);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    settingFound = true;
                 }
-                if (settingFound) continue;
             }
         }
     }
@@ -241,18 +205,17 @@ public class ConfigManager {
         JsonParser jp = new JsonParser();
         for (Setting setting : feature.getSettings()) {
             if (setting.isEnumSetting()) {
-                EnumSetting converter = new EnumSetting(((Enum)setting.getValue()).getClass());
-                object.add(setting.getName(), converter.doForward((Enum)setting.getValue()));
+                EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
+                object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
                 continue;
             }
             if (setting.isStringSetting()) {
-                String str = (String)setting.getValue();
+                String str = (String) setting.getValue();
                 setting.setValue(str.replace(" ", "_"));
             }
             try {
                 object.add(setting.getName(), jp.parse(setting.getValueAsString()));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -262,10 +225,11 @@ public class ConfigManager {
     public String getDirectory(Feature feature) {
         String directory = "";
         if (feature instanceof Module) {
-            directory = directory + ((Module)feature).getCategory().getName() + "/";
+            directory = directory + "/";
         }
         return directory;
     }
+
     public boolean configExists(String name) {
         final List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
         return files.contains(new File("mint/" + name + "/"));

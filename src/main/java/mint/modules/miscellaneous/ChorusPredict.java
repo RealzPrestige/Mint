@@ -2,7 +2,7 @@ package mint.modules.miscellaneous;
 
 import mint.clickgui.setting.Setting;
 import mint.events.ChorusEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -60,7 +60,7 @@ public class ChorusPredict extends Module {
         startTime = System.currentTimeMillis();
     }
     @Override
-    public void onRender3D(Render3DEvent render3DEvent) {
+    public void renderWorldLastEvent(RenderWorldEvent render3DEvent) {
         if (timer.passedMs(time.getValue())) return;
         if (System.currentTimeMillis() - this.startTime > this.time.getValue().longValue()) {
             urMom = System.currentTimeMillis() - this.startTime - this.time.getValue().longValue();

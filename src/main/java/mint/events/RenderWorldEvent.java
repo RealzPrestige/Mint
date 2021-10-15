@@ -1,10 +1,10 @@
 package mint.events;
 
-public class Render3DEvent
+public class RenderWorldEvent
         extends EventProcessor {
     private final float partialTicks;
 
-    public Render3DEvent(float partialTicks) {
+    public RenderWorldEvent(float partialTicks) {
         this.partialTicks = partialTicks;
     }
 

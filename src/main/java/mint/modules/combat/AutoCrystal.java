@@ -4,7 +4,7 @@ import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.events.CrystalAttackEvent;
 import mint.events.PacketEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
@@ -519,7 +519,7 @@ public class AutoCrystal extends Module {
             attemptedEntityId.put(event.getEntityId(), event.getEntity());
     }
 
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if (render.getValue()) {
             if (fade.getValue()) {
                 for (Map.Entry<BlockPos, Integer> entry : possesToFade.entrySet()) {

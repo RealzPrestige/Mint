@@ -2,11 +2,11 @@ package mint.modules;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.events.ClientEvent;
-import mint.events.Render2DEvent;
-import mint.events.Render3DEvent;
 import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
+import mint.events.ClientEvent;
+import mint.events.RenderOverlayEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.core.Notifications;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
@@ -30,9 +30,10 @@ public class Module extends Feature {
         this.category = category;
     }
 
-    public Minecraft getMc(){
+    public Minecraft getMc() {
         return Minecraft.getMinecraft();
     }
+
     public boolean isSliding() {
         return this.sliding;
     }
@@ -61,22 +62,17 @@ public class Module extends Feature {
     public void onUpdate() {
     }
 
-    public void onRender2D(Render2DEvent event) {
+    public void renderOveylayEvent(RenderOverlayEvent event) {
     }
 
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
     }
 
     public void onUnload() {
     }
 
-    public String getDisplayInfo() {
-        return null;
-    }
-
-    public boolean isOn() {
-        return this.enabled.getValue();
-    }
+    public String getDisplayInfo() { return null; }
+    public boolean isOn() { return this.enabled.getValue(); }
 
     public void setEnabled(boolean enabled) {
         if (enabled) {
@@ -91,10 +87,10 @@ public class Module extends Feature {
         onToggle();
         onEnable();
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
-        if(Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+        if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
-        if(Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue()  && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+        if (Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Notifications.getInstance().notification.clear();
             Notifications.getInstance().hasReachedEndState = false;
             Notifications.getInstance().waitTime = 0;
@@ -109,12 +105,12 @@ public class Module extends Feature {
         MinecraftForge.EVENT_BUS.unregister(this);
         enabled.setValue(false);
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
-        if(Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+        if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
         onToggle();
         onDisable();
-        if(Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
+        if (Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Notifications.getInstance().notification.clear();
             Notifications.getInstance().hasReachedEndState = false;
             Notifications.getInstance().waitTime = 0;
@@ -148,6 +144,7 @@ public class Module extends Feature {
     public void setDrawn() {
         this.drawn = true;
     }
+
     public void setUndrawn() {
         this.drawn = false;
     }

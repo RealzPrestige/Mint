@@ -1,18 +1,17 @@
 package mint.managers;
 
 import mint.Mint;
-import mint.events.Render2DEvent;
-import mint.events.Render3DEvent;
 import mint.clickgui.MintGui;
+import mint.events.RenderOverlayEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Feature;
 import mint.modules.Module;
-import mint.modules.visual.*;
 import mint.modules.combat.*;
 import mint.modules.core.*;
-import mint.modules.movement.*;
 import mint.modules.miscellaneous.*;
+import mint.modules.movement.*;
 import mint.modules.player.*;
-import mint.modules.miscellaneous.SignExploit;
+import mint.modules.visual.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class ModuleManager
         extends Feature {
-    public ArrayList<Module> moduleList = new ArrayList();
+    public ArrayList<Module> moduleList = new ArrayList<>();
     public List<Module> sortedModules = new ArrayList<>();
     public static Boolean doneLoad = true;
 
@@ -124,54 +123,13 @@ public class ModuleManager
         return null;
     }
 
-    public void enableModule(Class<Module> clazz) {
-        Module module = this.getModuleByClass(clazz);
-        if (module != null) {
-            module.enable();
-        }
-    }
-
-    public void disableModule(Class<Module> clazz) {
-        Module module = this.getModuleByClass(clazz);
-        if (module != null) {
-            module.disable();
-        }
-    }
-
-    public void enableModule(String name) {
-        Module module = this.getModuleByName(name);
-        if (module != null) {
-            module.enable();
-        }
-    }
-
-    public void disableModule(String name) {
-        Module module = this.getModuleByName(name);
-        if (module != null) {
-            module.disable();
-        }
-    }
-
     public boolean isModuleEnabled(String name) {
         Module module = this.getModuleByName(name);
-        return module != null && module.isOn();
-    }
-
-    public boolean isModuleEnabled(Class<Module> clazz) {
-        Module module = this.getModuleByClass(clazz);
-        return module != null && module.isOn();
-    }
-
-    public Module getModuleByDisplayName(String displayName) {
-        for (Module module : this.moduleList) {
-            if (!module.getDisplayName().equalsIgnoreCase(displayName)) continue;
-            return module;
-        }
-        return null;
+        return module != null && module.isEnabled();
     }
 
     public ArrayList<Module> getEnabledModules() {
-        ArrayList<Module> enabledModules = new ArrayList<Module>();
+        ArrayList<Module> enabledModules = new ArrayList<>();
         for (Module module : this.moduleList) {
             if (!module.isEnabled()) continue;
             enabledModules.add(module);
@@ -179,17 +137,8 @@ public class ModuleManager
         return enabledModules;
     }
 
-    public ArrayList<String> getEnabledModulesName() {
-        ArrayList<String> enabledModules = new ArrayList<String>();
-        for (Module module : this.moduleList) {
-            if (!module.isEnabled() || !module.isDrawn()) continue;
-            enabledModules.add(module.getFullArrayString());
-        }
-        return enabledModules;
-    }
-
     public ArrayList<Module> getModulesByCategory(Module.Category category) {
-        ArrayList<Module> modulesCategory = new ArrayList<Module>();
+        ArrayList<Module> modulesCategory = new ArrayList<>();
         this.moduleList.forEach(module -> {
             if (module.getCategory() == category) {
                 modulesCategory.add(module);
@@ -215,12 +164,12 @@ public class ModuleManager
         this.moduleList.stream().filter(Feature::isEnabled).forEach(Module::onTick);
     }
 
-    public void onRender2D(Render2DEvent event) {
-        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.onRender2D(event));
+    public void renderOverlayEvent(RenderOverlayEvent event) {
+        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.renderOveylayEvent(event));
     }
 
-    public void onRender3D(Render3DEvent event) {
-        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.onRender3D(event));
+    public void renderWorldEvent(RenderWorldEvent event) {
+        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.renderWorldLastEvent(event));
     }
 
     public void sortModules(boolean reverse) {

@@ -3,16 +3,13 @@ package mint.modules.combat;
 import com.google.common.collect.Sets;
 import mint.Mint;
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -82,7 +79,7 @@ public class HoleFiller extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if(render.getValue()) {
             if(renderMode.getValue() == RenderMode.FADE) {
                 for (Map.Entry<BlockPos, Integer> entry : filledFadeHoles.entrySet()) {

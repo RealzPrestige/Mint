@@ -54,9 +54,10 @@ public class FakePlayer extends Module {
         fake_player.setHealth(36);
         mc.world.addEntityToWorld(-100, fake_player);
     }
+
     public void onLogout() {
-        if (this.isOn()) {
-            this.disable();
+        if (isEnabled()) {
+            disable();
         }
     }
     public void onLogin() {

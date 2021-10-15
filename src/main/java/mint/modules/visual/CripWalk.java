@@ -3,7 +3,7 @@ package mint.modules.visual;
 import mint.modules.Module;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 
 public class CripWalk extends Module {
 
@@ -12,7 +12,7 @@ public class CripWalk extends Module {
     }
 
     @SubscribeEvent
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         for (EntityPlayer player : mc.world.playerEntities) {
             if (player.getName() == mc.player.getName()) continue;
             player.limbSwing = 0;

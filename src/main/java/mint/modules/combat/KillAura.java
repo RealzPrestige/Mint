@@ -1,7 +1,7 @@
 package mint.modules.combat;
 
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.InventoryUtil;
@@ -83,7 +83,7 @@ public class KillAura extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         boolean fill = false;
         boolean outline = false;
         if(renderMode.getValue().equals(RenderMode.BOTH)) {

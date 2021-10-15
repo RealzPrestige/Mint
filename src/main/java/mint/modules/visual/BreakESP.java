@@ -1,7 +1,7 @@
 package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.RenderUtil;
 
@@ -40,7 +40,7 @@ public class BreakESP extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         mc.renderGlobal.damagedBlocks.forEach((integer, destroyBlockProgress) -> {
             if (destroyBlockProgress.getPosition().getDistance((int) mc.player.posX, (int) mc.player.posY, (int) mc.player.posZ) <= range.getValue()) {
                 RenderUtil.drawBoxESP(destroyBlockProgress.getPosition(), new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), lineWidth.getDefaultValue(), outline.getValue(), box.getValue(), boxAlpha.getDefaultValue(), true);

@@ -152,8 +152,8 @@ public class EventManager extends Feature {
         GlStateManager.shadeModel(7425);
         GlStateManager.disableDepth();
         GlStateManager.glLineWidth(1.0F);
-        Render3DEvent render3dEvent = new Render3DEvent(event.getPartialTicks());
-        Mint.moduleManager.onRender3D(render3dEvent);
+        RenderWorldEvent render3dEvent = new RenderWorldEvent(event.getPartialTicks());
+        Mint.moduleManager.renderWorldEvent(render3dEvent);
         GlStateManager.glLineWidth(1.0F);
         GlStateManager.shadeModel(7424);
         GlStateManager.disableBlend();
@@ -179,8 +179,8 @@ public class EventManager extends Feature {
     public void onRenderGameOverlayEvent(RenderGameOverlayEvent.Text event) {
         if (event.getType().equals(RenderGameOverlayEvent.ElementType.TEXT)) {
             ScaledResolution resolution = new ScaledResolution(Mint.INSTANCE.mc);
-            Render2DEvent render2DEvent = new Render2DEvent(event.getPartialTicks(), resolution);
-            Mint.moduleManager.onRender2D(render2DEvent);
+            RenderOverlayEvent renderOverlayEvent = new RenderOverlayEvent(event.getPartialTicks(), resolution);
+            Mint.moduleManager.renderOverlayEvent(renderOverlayEvent);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }

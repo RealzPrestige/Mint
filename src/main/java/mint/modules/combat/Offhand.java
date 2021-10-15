@@ -2,7 +2,7 @@ package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.clickgui.setting.Setting;
-import mint.events.Render2DEvent;
+import mint.events.RenderOverlayEvent;
 import mint.modules.Module;
 import mint.modules.miscellaneous.EntityCrammer;
 import mint.utils.ColorUtil;
@@ -82,7 +82,7 @@ public class Offhand extends Module {
         mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
     }
 
-    public void onRender2D(Render2DEvent event) {
+    public void renderOveylayEvent(RenderOverlayEvent event) {
         int screenWidth = new ScaledResolution(mc).getScaledWidth();
         for (Map.Entry<String, Integer> entry : renderString.entrySet()) {
             if (render.getValue() == RenderMode.ALWAYS) {

@@ -2,7 +2,7 @@ package mint.modules.visual;
 
 import mint.Mint;
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.EntityUtil;
@@ -57,7 +57,7 @@ public class NameTags extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if (!NameTags.fullNullCheck()) {
             for (EntityPlayer player : mc.world.playerEntities) {
                 if (player == null || player.equals(mc.player) || !player.isEntityAlive() || player.isInvisible() && !EntityUtil.isInFov(player))

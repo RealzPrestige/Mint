@@ -2,7 +2,7 @@ package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
 import mint.events.PopEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -75,7 +75,7 @@ public class PopESP extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event){
+    public void renderWorldLastEvent(RenderWorldEvent event){
         for (Map.Entry<EntityPlayer, Integer> pop : poppedPlayers.entrySet()) {
             poppedPlayers.put(pop.getKey(), pop.getValue() - ((fadeStep.getValue() + 10) / 20));
             if (pop.getValue() <= endAlpha.getValue()) {

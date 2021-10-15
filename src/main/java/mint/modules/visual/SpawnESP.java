@@ -2,7 +2,7 @@ package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.RenderUtil;
 import net.minecraft.network.play.server.SPacketSpawnObject;
@@ -67,7 +67,7 @@ public class SpawnESP extends Module {
     // ok
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if(fullNullCheck())
             return;
 

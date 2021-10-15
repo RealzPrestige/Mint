@@ -2,7 +2,7 @@ package mint.modules.player;
 
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -121,7 +121,7 @@ public class ChorusManipulator extends Module {
     }
 
     @SubscribeEvent
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         for (Map.Entry<EntityPlayer, Integer> pop : playerCham.entrySet()) {
             if (wireFrameSetting.getValue()) {
                 GlStateManager.pushMatrix();

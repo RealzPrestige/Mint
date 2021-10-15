@@ -1,7 +1,7 @@
 package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.shader.Aqua;
@@ -24,7 +24,7 @@ public class ShaderChams extends Module {
     public enum Mode {AQUA, RED, GLOW}
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         final FrameBuffer shader = mode.getValue().equals(Mode.AQUA)
                 ? Aqua.AQUA_SHADER : mode.getValue().equals(Mode.RED)
                 ? Red.RED_SHADER : mode.getValue().equals(Mode.GLOW) ? Glow.Glow_SHADER :

@@ -2,7 +2,7 @@ package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.events.PacketEvent;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.Timer;
@@ -35,7 +35,7 @@ public class RubberbandNotify extends Module {
     }
 
     @Override
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         int screenWidth = new ScaledResolution(mc).getScaledWidth();
         for (Map.Entry<String, Integer> entry : rubberbandString.entrySet()) {
             rubberbandString.put(entry.getKey(), (int) (entry.getValue() - 0.25));

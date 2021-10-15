@@ -2,7 +2,7 @@ package mint.modules.combat;
 
 import mint.Mint;
 import mint.clickgui.setting.Setting;
-import mint.events.Render3DEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
@@ -230,7 +230,7 @@ public class CityAnvil extends Module {
         }
     }
 
-    public void onRender3D(Render3DEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         if (currentPos != null && render.getValue()) {
             RenderUtil.drawBlockOutline(currentPos, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 1, true);
         }

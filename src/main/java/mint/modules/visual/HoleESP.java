@@ -2,6 +2,7 @@ package mint.modules.visual;
 
 import com.google.common.collect.Sets;
 import mint.clickgui.setting.Setting;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -9,8 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -81,8 +80,7 @@ public class HoleESP extends Module {
         updates = 0;
     }
 
-    @SubscribeEvent
-    public void onWorldRender(RenderWorldLastEvent event) {
+    public void renderWorldLastEvent(RenderWorldEvent event) {
         for (BlockPos pos : bedrockholes) {
             double dynamicHeight = height.getValue() - mc.player.getDistanceSq(pos) / (range.getValue() * value.getValue());
             double finalDynamicHeight = (antiInverse.getValue() && dynamicHeight < -1) ? -1 : dynamicHeight;
