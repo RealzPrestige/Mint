@@ -19,25 +19,22 @@ import java.util.stream.Stream;
 
 public class FileManager
         extends Feature {
-    private final Path base = this.getMkDirectory(this.getRoot(), "mint");
-    private final Path config = this.getMkDirectory(this.base, "config");
+    private final Path base = getMkDirectory(getRoot(), "mint");
 
     public FileManager() {
-        this.getMkDirectory(this.base, "pvp");
-        for (Module.Category category : Mint.moduleManager.getCategories()) {
-            this.getMkDirectory(this.config, category.getName());
+        assert Mint.moduleManager != null;
+        for (Module.Category category : Mint.moduleManager.getCategories()) { ;
+            getMkDirectory(base, category.getName());
         }
     }
 
-    public static boolean appendTextFile(String data, String file) {
+    public static void appendTextFile(String data, String file) {
         try {
             Path path = Paths.get(file);
             Files.write(path, Collections.singletonList(data), StandardCharsets.UTF_8, Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
         } catch (IOException e) {
             System.out.println("WARNING: Unable to write file: " + file);
-            return false;
         }
-        return true;
     }
 
     public static List<String> readTextFileAllLines(String file) {
@@ -52,7 +49,7 @@ public class FileManager
     }
 
     private String[] expandPath(String fullPath) {
-        return fullPath.split(":?\\\\\\\\|\\/");
+        return fullPath.split(":?\\\\\\\\|/");
     }
 
     private Stream<String> expandPaths(String... paths) {
@@ -84,42 +81,38 @@ public class FileManager
         if (paths.length < 1) {
             return parent;
         }
-        Path dir = this.lookupPath(parent, paths);
-        this.createDirectory(dir);
+        Path dir = lookupPath(parent, paths);
+        createDirectory(dir);
         return dir;
     }
 
     public Path getBasePath() {
-        return this.base;
+        return base;
     }
 
     public Path getBaseResolve(String... paths) {
-        String[] names = this.expandPaths(paths).toArray(String[]::new);
+        String[] names = expandPaths(paths).toArray(String[]::new);
         if (names.length < 1) {
             throw new IllegalArgumentException("missing path");
         }
-        return this.lookupPath(this.getBasePath(), names);
+        return lookupPath(getBasePath(), names);
     }
 
     public Path getMkBaseResolve(String... paths) {
-        Path path = this.getBaseResolve(paths);
-        this.createDirectory(path.getParent());
+        Path path = getBaseResolve(paths);
+        createDirectory(path.getParent());
         return path;
     }
 
     public Path getConfig() {
-        return this.getBasePath().resolve("config");
+        return getBasePath().resolve("config");
     }
 
     public Path getCache() {
-        return this.getBasePath().resolve("cache");
-    }
-
-    public Path getMkBaseDirectory(String... names) {
-        return this.getMkDirectory(this.getBasePath(), this.expandPaths(names).collect(Collectors.joining(File.separator)));
+        return getBasePath().resolve("cache");
     }
 
     public Path getMkConfigDirectory(String... names) {
-        return this.getMkDirectory(this.getConfig(), this.expandPaths(names).collect(Collectors.joining(File.separator)));
+        return getMkDirectory(getConfig(), expandPaths(names).collect(Collectors.joining(File.separator)));
     }
 }

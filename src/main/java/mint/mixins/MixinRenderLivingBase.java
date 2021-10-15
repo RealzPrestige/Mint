@@ -24,6 +24,4 @@ public abstract class MixinRenderLivingBase {
         if (event.isCanceled())
             info.cancel();
     }
-
-
 }

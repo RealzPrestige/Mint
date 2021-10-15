@@ -279,18 +279,18 @@ public class Speedmine extends Module {
 
     public static double getMineTime(Block block, ItemStack stack) {
         if (stack.item.equals(Items.AIR))
-            return -1;
+            return -1.0;
 
         float speedMultiplier = stack.getDestroySpeed(block.getDefaultState());
         float damage;
 
         if (stack.canHarvestBlock(block.getDefaultState())) {
-            damage = speedMultiplier / block.blockHardness / 30;
+            damage = speedMultiplier / block.blockHardness / 30.0f;
         } else {
-            damage = speedMultiplier / block.blockHardness / 100;
+            damage = speedMultiplier / block.blockHardness / 100.0f;
         }
 
-        return (float) Math.ceil(1 / damage);
+        return (float) Math.ceil(1.0 / damage);
     }
 
     private double normalize(final double value, final double max, final double min) {

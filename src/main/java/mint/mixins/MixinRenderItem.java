@@ -2,8 +2,6 @@ package mint.mixins;
 
 import mint.events.RenderItemEvent;
 import mint.modules.visual.Hand;
-import mint.modules.visual.ViewTweaks;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -42,21 +40,11 @@ public abstract class MixinRenderItem {
         }
     }
 
-    @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;color(FFFF)V"))
-    private void itemColour(float colorRed, float colorGreen, float colorBlue, float colorAlpha) {
-        if (ViewTweaks.getInstance() != null && ViewTweaks.getInstance().isEnabled()) {
-            GlStateManager.color(colorRed, colorGreen, colorBlue, ViewTweaks.getInstance().alpha.getValue());
-        } else {
-            GlStateManager.color(colorRed, colorGreen, colorBlue, colorAlpha);
-        }
-    }
-
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderItem;renderModel(Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))
     private void renderModelColor(RenderItem renderItem, IBakedModel model, ItemStack stack) {
         if (!Hand.getInstance().isEnabled())
             return;
 
         renderModel(model, new Color(1f, 1f, 1f, Hand.getInstance().alpha.getValue() / 255.0f).getRGB(), stack);
-
     }
 }

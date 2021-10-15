@@ -78,10 +78,6 @@ public class Module extends Feature {
         return this.enabled.getValue();
     }
 
-    public boolean isOff() {
-        return !this.enabled.getValue();
-    }
-
     public void setEnabled(boolean enabled) {
         if (enabled) {
             this.enable();
