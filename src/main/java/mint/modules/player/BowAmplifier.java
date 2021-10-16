@@ -1,4 +1,4 @@
-package mint.modules.combat;
+package mint.modules.player;
 
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BowAmplifier extends Module {
 
     public BowAmplifier() {
-        super("BowAmplifier", Module.Category.COMBAT, "9b9t: Become hitman");
+        super("BowAmplifier", Category.PLAYER, "9b9t: Become hitman");
     }
 
     public Setting<Integer> spoofs = register(new Setting( "Spoofs", 300, 1, 300));
@@ -25,13 +25,16 @@ public class BowAmplifier extends Module {
     public enum Y {Positive, Negative}
 
     @SubscribeEvent
-    public void onPacketSend(PacketEvent.Send e) {
-        if (e.getStage() != 0) {
+    public void onPacketSend(PacketEvent.Send event) {
+        if(!isEnabled())
+            return;
+
+        if (event.getStage() != 0) {
             return;
         }
 
-        if (e.getPacket() instanceof CPacketPlayerDigging) {
-            CPacketPlayerDigging p = e.getPacket();
+        if (event.getPacket() instanceof CPacketPlayerDigging) {
+            CPacketPlayerDigging p = event.getPacket();
             if (p.getAction() == CPacketPlayerDigging.Action.RELEASE_USE_ITEM && InventoryUtil.heldItem(Items.BOW, InventoryUtil.Hand.Both)) {
 
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SPRINTING));

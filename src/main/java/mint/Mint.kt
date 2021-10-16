@@ -2,13 +2,11 @@ package mint
 
 import mint.commands.CommandManager
 import mint.managers.*
-import mint.security.Login
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.opengl.Display
-import java.lang.Thread.sleep
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
 class Mint {
@@ -74,10 +72,10 @@ class Mint {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent?) {
-      //  Login().frame.isVisible = true
-       // while (!Login.done) {
-       //     sleep(300)
-      //  }
+        //  Login().frame.isVisible = true
+        // while (!Login.done) {
+        //     sleep(300)
+        //  }
     }
 
     @Mod.EventHandler

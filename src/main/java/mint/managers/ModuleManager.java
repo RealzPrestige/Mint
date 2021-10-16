@@ -40,6 +40,7 @@ public class ModuleManager
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
         moduleList.add(new NoPotionHud());
+
         /** Combat **/
         moduleList.add(new AutoCrystal());
         moduleList.add(new AutoPiston());

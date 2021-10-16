@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = {Minecraft.class})
 public abstract class MixinMinecraft {
+
     @Inject(method = {"shutdownMinecraftApplet"}, at = {@At(value = "HEAD")})
     private void stopClient(CallbackInfo callbackInfo) {
         Mint.onUnload();
@@ -28,6 +29,7 @@ public abstract class MixinMinecraft {
     public void init(CallbackInfo ci) {
         SignExploit.nullCheck();
     }
+
     private long lastFrame = getTime();
 
     @Inject(method = "runGameLoop", at = @At("HEAD"))

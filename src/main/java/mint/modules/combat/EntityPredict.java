@@ -11,8 +11,9 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EntityPredict extends Module {
-    public Setting<Integer> attackAmount = register(new Setting("Attack Amount", 1, 1, 5));
-    public Setting<Boolean> holdingCrystalOnly = register(new Setting("Holding Crystal Only", false));
+
+    public Setting<Integer> attackAmount = register(new Setting<>("Attack Amount", 1, 1, 5));
+    public Setting<Boolean> holdingCrystalOnly = register(new Setting<>("Holding Crystal Only", false));
 
     public EntityPredict() {
         super("Entity Predict", Category.COMBAT, "Predict crystal ids and attack m");
