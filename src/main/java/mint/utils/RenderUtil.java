@@ -599,13 +599,6 @@ public class RenderUtil {
         RenderUtil.drawRectCol(x, y + height, width, 1, color);
     }
 
-    public static void drawOutline(float x, float y, float width, float height, Color color) {
-        RenderUtil.drawRectCol(x + 1, y, 1, height, color);
-        RenderUtil.drawRectCol(x + width - 2, y, 1, height, color);
-        RenderUtil.drawRectCol(x, y, width, 1, color);
-        RenderUtil.drawRectCol(x, y + height - 1, width, 1, color);
-    }
-
     public static void drawRect(float x, float y, float w, float h, int color) {
         float alpha = (float) (color >> 24 & 0xFF) / 255.0f;
         float red = (float) (color >> 16 & 0xFF) / 255.0f;
@@ -634,7 +627,6 @@ public class RenderUtil {
         GL11.glDisable(3042);
         GL11.glDisable(2848);
     }
-
     public static void drawColorPickerSquare(float x, float y, float w, float h, float hue, int alpha) {
         RenderUtil.prepare(1);
         builder.begin(7, DefaultVertexFormats.POSITION_COLOR);

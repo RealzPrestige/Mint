@@ -3,15 +3,15 @@ package mint.modules.movement;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
-import net.minecraft.block.material.Material;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 public class Step extends Module {
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));
+
     public enum Mode {Vanilla, Normal}
 
     public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
-    public Setting<Integer> stepHeight = register(new Setting("Height",2,1,4));
+    public Setting<Integer> stepHeight = register(new Setting("Height", 2, 1, 4));
     double[] oneblockPositions = new double[]{0.42, 0.75};
     double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
 
@@ -22,7 +22,7 @@ public class Step extends Module {
     int packets;
 
     public Step() {
-        super("Step", Category.MOVEMENT,"Allows you to step up blocks.");
+        super("Step", Category.MOVEMENT, "Allows you to step up blocks.");
     }
 
     @Override

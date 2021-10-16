@@ -40,7 +40,6 @@ public class ModuleManager
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
         moduleList.add(new NoPotionHud());
-
         /** Combat **/
         moduleList.add(new AutoCrystal());
         moduleList.add(new AutoPiston());
@@ -54,6 +53,7 @@ public class ModuleManager
         moduleList.add(new SelfFill());
         //moduleList.add(new Surround());
         moduleList.add(new Waller());
+        moduleList.add(new EntityPredict());
 
         /** Miscellaneous **/
         moduleList.add(new AutoEnderChest());
@@ -64,6 +64,8 @@ public class ModuleManager
         moduleList.add(new FakePlayer());
         //moduleList.add(new PacketManipulator());
         moduleList.add(new SelfAnvil());
+        moduleList.add(new NoEntityTrace());
+        moduleList.add(new TabTweaks());
 
         /** Movement **/
         moduleList.add(new Anchor());

@@ -19,64 +19,63 @@ public class FriendManager
     }
 
     public boolean isFriend(String name) {
-        this.cleanFriends();
-        return this.friends.stream().anyMatch(friend -> friend.username.equalsIgnoreCase(name));
+        cleanFriends();
+        return friends.stream().anyMatch(friend -> friend.username.equalsIgnoreCase(name));
     }
 
     public boolean isFriend(EntityPlayer player) {
-        return this.isFriend(player.getName());
+        return isFriend(player.getName());
     }
 
     public void addFriend(String name) {
-        Friend friend = this.getFriendByName(name);
+        Friend friend = getFriendByName(name);
         if (friend != null) {
-            this.friends.add(friend);
+            friends.add(friend);
         }
-        this.cleanFriends();
+        cleanFriends();
     }
 
     public void removeFriend(String name) {
-        this.cleanFriends();
-        for (Friend friend : this.friends) {
+        cleanFriends();
+        for (Friend friend : friends) {
             if (!friend.getUsername().equalsIgnoreCase(name)) continue;
-            this.friends.remove(friend);
+            friends.remove(friend);
             break;
         }
     }
 
     public void onLoad() {
-        this.friends = new ArrayList<Friend>();
-        this.clearSettings();
+        friends = new ArrayList<>();
+        clearSettings();
     }
 
     public void saveFriends() {
-        this.clearSettings();
-        this.cleanFriends();
-        for (Friend friend : this.friends) {
-            this.register(new Setting<>(friend.getUuid().toString(), friend.getUsername()));
+        clearSettings();
+        cleanFriends();
+        for (Friend friend : friends) {
+            register(new Setting<>(friend.getUuid().toString(), friend.getUsername()));
         }
     }
 
     public void cleanFriends() {
-        this.friends.stream().filter(Objects::nonNull).filter(friend -> friend.getUsername() != null);
+        friends.stream().filter(Objects::nonNull).filter(friend -> friend.getUsername() != null);
     }
 
     public List<Friend> getFriends() {
-        this.cleanFriends();
-        return this.friends;
+        cleanFriends();
+        return friends;
     }
 
     public Friend getFriendByName(String input) {
         UUID uuid = PlayerUtil.getUUIDFromName(input);
         if (uuid != null) {
-            Friend friend = new Friend(input, uuid);
-            return friend;
+            return new Friend(input, uuid);
         }
         return null;
     }
 
     public void addFriend(Friend friend) {
-        this.friends.add(friend);
+        friends.add(friend);
     }
 
     public static class Friend {
@@ -89,11 +88,11 @@ public class FriendManager
         }
 
         public String getUsername() {
-            return this.username;
+            return username;
         }
 
         public UUID getUuid() {
-            return this.uuid;
+            return uuid;
         }
     }
 }

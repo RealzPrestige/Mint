@@ -5,8 +5,7 @@ import mint.clickgui.setting.Setting;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 
 @Cancelable
-public class ClientEvent
-        extends EventProcessor {
+public class ClientEvent extends EventProcessor {
     private Feature feature;
     private Setting setting;
 

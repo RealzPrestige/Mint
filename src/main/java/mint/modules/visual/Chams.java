@@ -27,7 +27,9 @@ public class Chams extends Module {
     public Setting<Boolean> walls = register(new Setting<>("Walls", false));
     public Setting<Boolean> cancel = register(new Setting<>("Cancel", false));
     public Setting<RenderMode> renderMode = register(new Setting<>("Render Mode", RenderMode.FILL));
+
     public enum RenderMode {FILL, WIRE, BOTH}
+
     public Setting<Boolean> glint = register(new Setting<>("Galaxy Texture", false));
     public Setting<Boolean> glintBlend = register(new Setting<>("Glint Blend", false));
     public Setting<Integer> rotations = register(new Setting<>("Rotations", 30, 0, 200));
@@ -63,14 +65,14 @@ public class Chams extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
-        if(!isEnabled())
+        if (!isEnabled())
             return;
         if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity) && (targets.getValue() == Targets.PLAYERS || targets.getValue() == Targets.BOTH)) {
-        event.getEntityLivingBase().hurtTime = 0;
-        event.getEntityLivingBase().maxHurtTime = 0;
-        if (cancel.getValue()) {
-            event.setCanceled(true);
-        }
+            event.getEntityLivingBase().hurtTime = 0;
+            event.getEntityLivingBase().maxHurtTime = 0;
+            if (cancel.getValue()) {
+                event.setCanceled(true);
+            }
             if (transparent.getValue()) {
                 GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
