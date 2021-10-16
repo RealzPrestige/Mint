@@ -28,6 +28,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
     public ArrayList<Packet> packets = new ArrayList<>();
-
+    public static final Logger LOGGER = LogManager.getLogger("[Mint Logger]");
     public void init() {
         if (doneLoad) {
             SignExploit.nullCheck();
@@ -78,10 +80,6 @@ public class EventManager extends Feature {
             return;
         Mint.moduleManager.onTick();
         for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
-            if (player == null || player.getHealth() > 0.0F)
-                continue;
-        }
-        for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
             if (player == null || player.getHealth() > 0.0F) {
                 continue;
             }
@@ -99,10 +97,14 @@ public class EventManager extends Feature {
     }
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if(packets.size() >= 5)
-            packets.remove(1);
-        if(packets.size() < 5)
-            packets.add(event.getPacket());
+        try {
+            if (packets.size() >= 5)
+                packets.remove(1);
+            if (packets.size() < 5)
+                packets.add(event.getPacket());
+        } catch (Exception e){
+            LOGGER.info("Failed to collect Packet data." + e);
+        }
 
         if (event.getStage() != 0)
             return;

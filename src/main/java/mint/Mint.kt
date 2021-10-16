@@ -12,7 +12,6 @@ import org.lwjgl.opengl.Display
 class Mint {
     @JvmField
     var mc = Minecraft.getMinecraft()
-
     companion object {
         @kotlin.jvm.JvmField
         var eventManager: EventManager? = null
