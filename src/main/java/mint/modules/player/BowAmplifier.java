@@ -20,8 +20,8 @@ public class BowAmplifier extends Module {
         super("BowAmplifier", Category.PLAYER, "9b9t: Become hitman");
     }
 
-    public Setting<Integer> spoofs = register(new Setting( "Spoofs", 300, 1, 300));
-    public Setting<Y> y = register ( new Setting( "First Y", Y.Positive));
+    public Setting<Integer> spoofs = register(new Setting<>( "Spoofs", 300, 1, 300));
+    public Setting<Y> y = register ( new Setting<>( "First Y", Y.Positive));
     public enum Y {Positive, Negative}
 
     @SubscribeEvent

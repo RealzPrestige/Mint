@@ -94,7 +94,6 @@ public class ModuleManager
 
         /** Visual **/
         moduleList.add(new BreakESP());
-        moduleList.add(new Chams());
         moduleList.add(new CripWalk());
         moduleList.add(new CrystalChams());
         moduleList.add(new Hand());
