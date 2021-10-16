@@ -38,6 +38,9 @@ public class SpawnESP extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if(!isEnabled())
+            return;
+
         if (event.getPacket() instanceof SPacketSpawnObject) {
             SPacketSpawnObject packet = event.getPacket();
             if (packet.getType() == 51) {

@@ -7,6 +7,7 @@ import mint.managers.MessageManager;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Config extends Command {
@@ -23,10 +24,10 @@ public class Config extends Command {
             if ("list".equals(commands[0])) {
                 String configs = "Configs: ";
                 File file = new File("mint/");
-                List<File> directories = Arrays.stream(file.listFiles()).filter(File::isDirectory).filter(f -> !f.getName().equals("util")).collect(Collectors.toList());
+                List<File> directories = Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(File::isDirectory).filter(f -> !f.getName().equals("util")).collect(Collectors.toList());
                 StringBuilder builder = new StringBuilder(configs);
                 for (File file1 : directories)
-                    builder.append(file1.getName() + ", ");
+                    builder.append(file1.getName()).append(", ");
                 configs = builder.toString();
                 MessageManager.sendMessage(configs);
             } else {
@@ -35,10 +36,12 @@ public class Config extends Command {
         if (commands.length >= 3) {
             switch (commands[0]) {
                 case "save":
+                    assert Mint.configManager != null;
                     Mint.configManager.saveConfig(commands[1]);
                     MessageManager.sendMessage(ChatFormatting.GREEN + "Config '" + commands[1] + "' has been saved.");
                     return;
                 case "load":
+                    assert Mint.configManager != null;
                     if (Mint.configManager.configExists(commands[1])) {
                         Mint.configManager.loadConfig(commands[1]);
                         MessageManager.sendMessage(ChatFormatting.GREEN + "Config '" + commands[1] + "' has been loaded.");

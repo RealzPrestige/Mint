@@ -12,8 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class BooleanFrame
-        extends ButtonFrame {
+public class BooleanFrame extends ButtonFrame {
     private final Setting setting;
 
     public BooleanFrame(Setting setting) {

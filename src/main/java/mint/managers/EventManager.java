@@ -14,6 +14,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.network.play.server.SPacketSoundEffect;
@@ -29,6 +30,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ import static mint.managers.ModuleManager.doneLoad;
 public class EventManager extends Feature {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
+    public ArrayList<Packet> packets = new ArrayList<>();
 
     public void init() {
         if (doneLoad) {
@@ -91,9 +94,16 @@ public class EventManager extends Feature {
         }
     }
 
-
+    @SubscribeEvent
+    public void onPacketSend(PacketEvent.Send event){
+    }
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if(packets.size() >= 5)
+            packets.remove(1);
+        if(packets.size() < 5)
+            packets.add(event.getPacket());
+
         if (event.getStage() != 0)
             return;
         if (event.getPacket() instanceof SPacketEntityStatus) {

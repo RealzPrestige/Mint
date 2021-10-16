@@ -38,6 +38,7 @@ public class MintGui
         }
         return INSTANCE;
     }
+
     @Override
     public void initGui() {
         if (OpenGlHelper.shadersSupported && mc.getRenderViewEntity() instanceof EntityPlayer && Gui.getInstance().blur.getValue()) {
@@ -49,8 +50,8 @@ public class MintGui
     }
 
     public void onGuiClosed() {
-        if (this.mc.entityRenderer.getShaderGroup() != null)
-            this.mc.entityRenderer.getShaderGroup().deleteShaderGroup();
+        if (mc.entityRenderer.getShaderGroup() != null)
+            mc.entityRenderer.getShaderGroup().deleteShaderGroup();
     }
 
     public static MintGui getClickGui() {
@@ -61,11 +62,11 @@ public class MintGui
         INSTANCE = this;
     }
 
-    private void load() {
+    public void load() {
         int x = -119;
         for (final Module.Category category : Mint.moduleManager.getCategories()) {
-            this.components.add(new Component(category.getName(), x += 121, 2, true) {
 
+            this.components.add(new Component(category.getName(), x += 121, 2, true) {
                 @Override
                 public void setupItems() {
                     counter1 = new int[]{1};
@@ -138,8 +139,9 @@ public class MintGui
         super.keyTyped(typedChar, keyCode);
         this.components.forEach(component -> component.onKeyTyped(typedChar, keyCode));
     }
-            public void drawGradient(double left, double top, double right, double bottom, int startColor, int endColor) {
-        drawGradientRect((int)left, (int)top, (int)right, (int)bottom, startColor, endColor);
+
+    public void drawGradient(double left, double top, double right, double bottom, int startColor, int endColor) {
+        drawGradientRect((int) left, (int) top, (int) right, (int) bottom, startColor, endColor);
     }
 }
 

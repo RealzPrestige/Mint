@@ -30,7 +30,6 @@ public class ModuleFrame extends ButtonFrame {
         this.initSettings();
     }
 
-
     public void initSettings() {
         ArrayList<Frame> newItems = new ArrayList<>();
         if (!this.module.getSettings().isEmpty()) {
@@ -41,19 +40,6 @@ public class ModuleFrame extends ButtonFrame {
                 if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind") && !this.module.getName().equalsIgnoreCase("Hud")) {
                     newItems.add(new BindFrame(setting));
                 }
-                if (setting.isColorSetting()) {
-                    newItems.add(new ColorFrame(setting));
-                    //TODO: make open setitng ro smth
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                    newItems.add(new EmptyFrame(setting));
-                }
                 if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName")) {
                     newItems.add(new StringFrame(setting));
                 }
@@ -61,8 +47,8 @@ public class ModuleFrame extends ButtonFrame {
                     newItems.add(new IntegerFrame(setting));
                     continue;
                 }
-                if (!setting.isEnumSetting()) continue;
-                newItems.add(new EnumFrame(setting));
+                if (setting.isEnumSetting())
+                    newItems.add(new EnumFrame(setting));
             }
         }
         newItems.add(new BindFrame(this.module.getSettingByName("Keybind")));

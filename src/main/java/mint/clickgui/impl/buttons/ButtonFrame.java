@@ -10,8 +10,7 @@ import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
-public class ButtonFrame
-        extends Frame {
+public class ButtonFrame extends Frame {
     private boolean state;
 
     public ButtonFrame(String name) {

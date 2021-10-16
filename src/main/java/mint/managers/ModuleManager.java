@@ -33,6 +33,7 @@ public class ModuleManager
             SignExploit.nullCheck();
             doneLoad = false;
         }
+
         /** Core **/
         moduleList.add(new Gui());
         moduleList.add(new FontChanger());
@@ -40,6 +41,7 @@ public class ModuleManager
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
         moduleList.add(new NoPotionHud());
+        moduleList.add(new PacketManager());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());

@@ -14,6 +14,9 @@ class Mint {
     var mc = Minecraft.getMinecraft()
 
     companion object {
+        @kotlin.jvm.JvmField
+        var eventManager: EventManager? = null
+
         @JvmField
         var INSTANCE = Mint()
 
@@ -29,7 +32,6 @@ class Mint {
 
         @JvmField
         var configManager: ConfigManager? = null
-        var eventManager: EventManager? = null
 
         @JvmField
         var textManager: TextManager? = null
