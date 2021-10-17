@@ -56,11 +56,16 @@ public class Window {
             int y = this.y;
             for (Module module : Mint.moduleManager.getModulesByCategory(category))
                 modules.add(new ModuleWindow(module.getName(), x, y += height, width, 10, new Color(
-                    NewGuiModule.getInstance().moduleRed.getValue(),
-                    NewGuiModule.getInstance().moduleGreen.getValue(),
-                    NewGuiModule.getInstance().moduleBlue.getValue(),
-                    NewGuiModule.getInstance().moduleAlpha.getValue()
-            )));
+                        NewGuiModule.getInstance().moduleRed.getValue(),
+                        NewGuiModule.getInstance().moduleGreen.getValue(),
+                        NewGuiModule.getInstance().moduleBlue.getValue(),
+                        NewGuiModule.getInstance().moduleAlpha.getValue()
+                ), new Color(
+                        NewGuiModule.getInstance().enabledRed.getValue(),
+                        NewGuiModule.getInstance().enabledGreen.getValue(),
+                        NewGuiModule.getInstance().enabledBlue.getValue(),
+                        NewGuiModule.getInstance().enabledAlpha.getValue()
+                ), module));
         }
         if (isOpened)
             modules.forEach(modules -> modules.drawScreen(mouseX, mouseY, partialTicks));
@@ -75,8 +80,9 @@ public class Window {
         if (mouseButton == 0 && isInsideCloseButton(mouseX, mouseY)) {
             isOpened = !isOpened;
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
-
         }
+        for(ModuleWindow moduleWindow : modules)
+            modules.forEach(modules -> modules.mouseClicked(mouseX, mouseY, mouseButton));
     }
 
     public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
