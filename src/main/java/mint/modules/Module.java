@@ -22,12 +22,14 @@ public class Module extends Feature {
     public Setting<String> displayName;
     public boolean hidden;
     public boolean sliding;
+    public boolean isOpened;
 
     public Module(String name, Category category, String description) {
         super(name);
         this.displayName = register(new Setting<>("DisplayName", name));
         this.description = description;
         this.category = category;
+        isOpened = false;
     }
 
     public Minecraft getMc() {

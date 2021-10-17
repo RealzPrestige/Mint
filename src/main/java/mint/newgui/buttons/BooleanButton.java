@@ -17,4 +17,8 @@ public class BooleanButton extends Button {
         RenderUtil.drawRect(x, y, x + width, y + height, -1);
         Mint.textManager.drawStringWithShadow(setting.getName(), x, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
     }
+
+    public boolean getValue(){
+        return (boolean) setting.getValue();
+    }
 }

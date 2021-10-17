@@ -5,6 +5,7 @@ import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.buttons.BooleanButton;
 import mint.newgui.buttons.Button;
+import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -43,7 +44,10 @@ public class ModuleWindow {
             if (module.getSettings().isEmpty())
                 continue;
 
-            if (setting.getValue() instanceof Boolean)
+            if (!setting.isVisible())
+                continue;
+
+            if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled"))
                 items.add(new BooleanButton(setting));
 
         }
@@ -52,14 +56,17 @@ public class ModuleWindow {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(x, y, x + width, y + height, module.isEnabled() ? enabledColor.getRGB() : disabledColor.getRGB());
+        if (isInside(mouseX, mouseY))
+            RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, x, y, -1);
-        if (subOpen) {
+        if (module.isOpened) {
+            int y = this.y;
             for (Button button : button) {
                 button.setX(x);
-                button.setY(y + height);
+                button.setY(y += height);
                 button.setWidth(width);
-                button.setHeight(y + height + height);
+                button.setHeight(height);
                 button.drawScreen(mouseX, mouseY, partialTicks);
             }
         }
@@ -67,7 +74,7 @@ public class ModuleWindow {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (mouseButton == 1 && isInside(mouseX, mouseY)) {
-            subOpen = !subOpen;
+            module.isOpened = !module.isOpened;
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
         if (isInside(mouseX, mouseY) && mouseButton == 0)
@@ -76,5 +83,9 @@ public class ModuleWindow {
 
     public boolean isInside(int mouseX, int mouseY) {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
+    }
+
+    public int getHeight(){
+        return height;
     }
 }

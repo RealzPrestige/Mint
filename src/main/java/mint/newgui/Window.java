@@ -2,6 +2,7 @@ package mint.newgui;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
 import mint.utils.ColorUtil;
@@ -49,13 +50,24 @@ public class Window {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragScreen(mouseX, mouseY);
         RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(NewGuiModule.getInstance().topRed.getValue(), NewGuiModule.getInstance().topGreen.getValue(), NewGuiModule.getInstance().topBlue.getValue(), NewGuiModule.getInstance().topAlpha.getValue()));
+        assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, x + (width / 2f) - (Mint.textManager.getStringWidth(name) / 2f), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         Mint.textManager.drawStringWithShadow(isOpened ? (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "x" : "x") : (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "+" : "+"), x + width - Mint.textManager.getStringWidth("x"), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (isOpened) {
             modules.clear();
             int y = this.y;
-            for (Module module : Mint.moduleManager.getModulesByCategory(category))
-                modules.add(new ModuleWindow(module.getName(), x, y += height, width, 10, new Color(
+            assert Mint.moduleManager != null;
+            for (Module module : Mint.moduleManager.getModulesByCategory(category)) {
+                int openedHeight = 0;
+                if (module.isOpened) {
+                    for (Setting setting : module.getSettings()) {
+                        //we can here make a check for setting instance of ColorSetting to then increase the height being added.
+                        if(setting.isVisible() && !setting.getName().equals("Enabled") && !setting.getName().equals("DisplayName"))
+                            openedHeight += 10;
+                        //need bindbutton now to fix the complete height, because it will make an empty line for the keyBind.
+                    }
+                }
+                modules.add(new ModuleWindow(module.getName(), x, y += height, width,height, new Color(
                         NewGuiModule.getInstance().moduleRed.getValue(),
                         NewGuiModule.getInstance().moduleGreen.getValue(),
                         NewGuiModule.getInstance().moduleBlue.getValue(),
@@ -66,6 +78,8 @@ public class Window {
                         NewGuiModule.getInstance().enabledBlue.getValue(),
                         NewGuiModule.getInstance().enabledAlpha.getValue()
                 ), module));
+                y += openedHeight;
+            }
         }
         if (isOpened)
             modules.forEach(modules -> modules.drawScreen(mouseX, mouseY, partialTicks));
