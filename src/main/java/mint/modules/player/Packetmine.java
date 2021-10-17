@@ -168,23 +168,23 @@ public class Packetmine extends Module {
         if (colorMode.getValue().equals(ColorMode.READYFADE)) {
             if (red0 != readyRed.getValue()) {
                 if (red0 > readyRed.getValue()) {
-                    red0 = red0 + speed.getValue();
-                } else {
                     red0 = red0 - speed.getValue();
+                } else {
+                    red0 = red0 + speed.getValue();
                 }
             }
             if (green0 != readyGreen.getValue()) {
                 if (green0 > readyGreen.getValue()) {
-                    green0 = green0 + speed.getValue();
-                } else {
                     green0 = green0 - speed.getValue();
+                } else {
+                    green0 = green0 + speed.getValue();
                 }
             }
             if (blue0 != readyBlue.getValue()) {
                 if (blue0 > readyBlue.getValue()) {
-                    blue0 = blue0 + speed.getValue();
-                } else {
                     blue0 = blue0 - speed.getValue();
+                } else {
+                    blue0 = blue0 + speed.getValue();
                 }
             }
         }
