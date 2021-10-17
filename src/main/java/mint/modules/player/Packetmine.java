@@ -60,14 +60,14 @@ public class Packetmine extends Module {
 
     public enum BoxMode {FILL, OUTLINE, BOTH}
 
-    public Setting<Integer> red = register(new Setting<>("Red", 255, 0, 255, v -> render.getValue()));
-    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 255, v -> render.getValue()));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 0, 0, 255, v -> render.getValue()));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 255, v -> render.getValue()));
+    public Setting<Integer> red = register(new Setting<>("Red", 254, 0, 254, v -> render.getValue()));
+    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 254, v -> render.getValue()));
+    public Setting<Integer> blue = register(new Setting<>("Blue", 0, 0, 254, v -> render.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 254, v -> render.getValue()));
 
-    public Setting<Integer> readyRed = register(new Setting<>("ReadyRed", 0, 0, 255, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
-    public Setting<Integer> readyGreen = register(new Setting<>("ReadyGreen", 255, 0, 255, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
-    public Setting<Integer> readyBlue = register(new Setting<>("ReadyBlue", 0, 0, 255, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> readyRed = register(new Setting<>("ReadyRed", 0, 0, 254, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> readyGreen = register(new Setting<>("ReadyGreen", 254, 0, 254, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> readyBlue = register(new Setting<>("ReadyBlue", 0, 0, 254, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
     public Setting<Integer> speed = register(new Setting<>("ReadySpeed", 2, 1, 5, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
 
     int currentAlpha;
