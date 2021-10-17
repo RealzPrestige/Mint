@@ -82,7 +82,7 @@ public class Window {
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
         for(ModuleWindow moduleWindow : modules)
-            modules.forEach(modules -> modules.mouseClicked(mouseX, mouseY, mouseButton));
+            moduleWindow.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
