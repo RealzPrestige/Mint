@@ -2,8 +2,7 @@ package mint.clickgui.impl;
 
 import mint.modules.Feature;
 
-public class Frame
-        extends Feature {
+public class Frame extends Feature {
     protected float x;
     protected float y;
     protected int width;

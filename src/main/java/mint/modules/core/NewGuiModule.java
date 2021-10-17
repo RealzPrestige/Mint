@@ -16,10 +16,11 @@ public class NewGuiModule extends Module {
     public Setting<Integer> moduleBlue = register(new Setting("Module Blue", 0, 0, 255));
     public Setting<Integer> moduleAlpha = register(new Setting("Module Alpha", 100, 0, 255));
 
-    public Setting<Integer> enabledRed = register(new Setting("Enabled Red", 0, 0, 255));
-    public Setting<Integer> enabledGreen = register(new Setting("Enabled Green", 0, 0, 255));
-    public Setting<Integer> enabledBlue = register(new Setting("Enabled Blue", 0, 0, 255));
+    public Setting<Integer> enabledRed = register(new Setting("Enabled Red", 255, 0, 255));
+    public Setting<Integer> enabledGreen = register(new Setting("Enabled Green", 255, 0, 255));
+    public Setting<Integer> enabledBlue = register(new Setting("Enabled Blue", 255, 0, 255));
     public Setting<Integer> enabledAlpha = register(new Setting("Enabled Alpha", 100, 0, 255));
+
     public NewGuiModule() {
         super("New Gui", Category.CORE, "");
         this.setInstance();
