@@ -21,4 +21,5 @@ public class BooleanButton extends Button {
     public boolean getValue(){
         return (boolean) setting.getValue();
     }
+
 }
