@@ -42,6 +42,7 @@ public class ModuleManager
         moduleList.add(new RubberbandNotify());
         moduleList.add(new NoPotionHud());
         moduleList.add(new PacketManager());
+        moduleList.add(new NewGuiModule());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());

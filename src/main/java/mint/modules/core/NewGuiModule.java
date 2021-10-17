@@ -1,0 +1,44 @@
+package mint.modules.core;
+
+import mint.clickgui.setting.Setting;
+import mint.modules.Module;
+import mint.newgui.NewGui;
+
+public class NewGuiModule extends Module {
+    static NewGuiModule INSTANCE = new NewGuiModule();
+    public Setting<Integer> topRed = register(new Setting("Top Red", 255, 0, 255));
+    public Setting<Integer> topGreen = register(new Setting("Top Green", 255, 0, 255));
+    public Setting<Integer> topBlue = register(new Setting("Top Blue", 255, 0, 255));
+    public Setting<Integer> topAlpha = register(new Setting("Top Alpha", 100, 0, 255));
+
+    public Setting<Integer> moduleRed = register(new Setting("module Red", 0, 0, 255));
+    public Setting<Integer> moduleGreen = register(new Setting("module Green", 0, 0, 255));
+    public Setting<Integer> moduleBlue = register(new Setting("module Blue", 0, 0, 255));
+    public Setting<Integer> moduleAlpha = register(new Setting("module Alpha", 100, 0, 255));
+
+    public NewGuiModule() {
+        super("New Gui", Category.CORE, "");
+        this.setInstance();
+    }
+
+    public static NewGuiModule getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NewGuiModule();
+        }
+        return INSTANCE;
+    }
+
+    private void setInstance() {
+        INSTANCE = this;
+    }
+
+    public void onEnable() {
+        mc.displayGuiScreen(NewGui.getInstance());
+    }
+
+    public void onUpdate() {
+        if (!(mc.currentScreen instanceof NewGui))
+            disable();
+
+    }
+}
