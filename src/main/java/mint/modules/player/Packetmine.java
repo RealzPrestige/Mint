@@ -252,15 +252,15 @@ public class Packetmine extends Module {
         }
 
         if (event.pos != currentPos && currentPos != null) {
+            red0 = red.getValue();
+            green0 = green.getValue();
+            blue0 = blue.getValue();
             currentAlpha = 0;
             count = 0;
             mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, currentPos, event.facing));
             mc.playerController.isHittingBlock = false;
             mc.playerController.curBlockDamageMP = 0;
             currentPos = event.pos;
-            red0 = red.getValue();
-            green0 = green.getValue();
-            blue0 = blue.getValue();
         }
 
         if (event.getStage() == 4) {
