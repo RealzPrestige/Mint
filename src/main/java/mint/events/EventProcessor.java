@@ -15,9 +15,5 @@ public class EventProcessor extends Event {
     public int getStage() {
         return stage;
     }
-
-    public void setStage(int stage) {
-        this.stage = stage;
-    }
 }
 
