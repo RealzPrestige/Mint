@@ -12,7 +12,7 @@ import java.awt.*;
 public class NumberButton extends Button{
 
     Setting setting;
-    int minmax;
+    int minimax;
     Number min;
     Number max;
 
@@ -21,7 +21,7 @@ public class NumberButton extends Button{
         this.setting = setting;
         min = (Number) setting.getMin();
         max = (Number) setting.getMax();
-        minmax = max.intValue() - min.intValue();
+        minimax = max.intValue() - min.intValue();
     }
 
     @Override
@@ -48,13 +48,13 @@ public class NumberButton extends Button{
     void setSliderValue(int mouseX) {
         float percent = ((float) mouseX - x - 1) / ((float) width + 7.4f);
         if (setting.getValue() instanceof Double) {
-            double result = (Double) setting.getMin() + (double) ((float) minmax * percent);
+            double result = (Double) setting.getMin() + (double) ((float) minimax * percent);
             setting.setValue((double) Math.round(10.0 * result) / 10.0);
         } else if (setting.getValue() instanceof Float) {
-            float result = (Float) setting.getMin() + (float) minmax * percent;
+            float result = (Float) setting.getMin() + (float) minimax * percent;
             setting.setValue((float) Math.round(10.0f * result) / 10.0f);
         } else if (setting.getValue() instanceof Integer)
-            setting.setValue((Integer) setting.getMin() + (int) ((float) minmax * percent));
+            setting.setValue((Integer) setting.getMin() + (int) ((float) minimax * percent));
 
     }
 }
