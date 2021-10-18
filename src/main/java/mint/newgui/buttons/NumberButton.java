@@ -35,18 +35,10 @@ public class NumberButton extends Button{
         Mint.textManager.drawStringWithShadow(setting.getName() + " " + (setting.getValue() instanceof Float ? setting.getValue() : Double.valueOf(((Number) setting.getValue()).doubleValue())), x, y, - 1);
     }
 
-    @Override
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-    }
-
-    @Override
-    public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
-    }
-
     void dragSlider(int mouseX, int mouseY) {
-        if (isInsideExtended(mouseX, mouseY) && Mouse.isButtonDown(0)) {
+        if (isInsideExtended(mouseX, mouseY) && Mouse.isButtonDown(0))
             setSliderValue(mouseX);
-        }
+
     }
 
     public boolean isInsideExtended(int mouseX, int mouseY) {
