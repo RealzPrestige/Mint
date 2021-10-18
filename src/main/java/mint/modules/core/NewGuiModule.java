@@ -1,5 +1,6 @@
 package mint.modules.core;
 
+import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.NewGui;
@@ -40,6 +41,11 @@ public class NewGuiModule extends Module {
     public void onEnable() {
         mc.displayGuiScreen(NewGui.getInstance());
     }
+    public void onDisable() {
+        assert Mint.configManager != null;
+        Mint.configManager.saveConfig("Default");
+    }
+
 
     public void onUpdate() {
         if (!(mc.currentScreen instanceof NewGui))

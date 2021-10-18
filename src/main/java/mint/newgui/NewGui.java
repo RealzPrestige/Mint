@@ -44,6 +44,7 @@ public class NewGui extends GuiScreen {
 
     @Override
     public void keyTyped(char typedChar, int keyCode) throws IOException {
+        super.keyTyped(typedChar, keyCode);
         windows.forEach(windows -> windows.onKeyTyped(typedChar, keyCode));
     }
 

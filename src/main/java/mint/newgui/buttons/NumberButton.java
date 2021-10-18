@@ -12,7 +12,7 @@ import java.awt.*;
 public class NumberButton extends Button{
 
     Setting setting;
-    int difference;
+    int minmax;
     Number min;
     Number max;
 
@@ -21,14 +21,14 @@ public class NumberButton extends Button{
         this.setting = setting;
         min = (Number) setting.getMin();
         max = (Number) setting.getMax();
-        difference = max.intValue() - min.intValue();
+        minmax = max.intValue() - min.intValue();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragSlider(mouseX, mouseY);
         RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
-        RenderUtil.drawRect(x, y, ((Number) setting.getValue()).floatValue() <= min.floatValue() ? x : x + ((float) width + 2f) * partialMultiplier() - 2, y + (float) height, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB());
+        RenderUtil.drawRect(x, y, ((Number) setting.getValue()).floatValue() <= min.floatValue() ? x : x + ((float) width + 2f) * ((((Number) setting.getValue()).floatValue() - min.floatValue()) / (max.floatValue() - min.floatValue())) - 2, y + (float) height, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
@@ -48,24 +48,13 @@ public class NumberButton extends Button{
     void setSliderValue(int mouseX) {
         float percent = ((float) mouseX - x - 1) / ((float) width + 7.4f);
         if (setting.getValue() instanceof Double) {
-            double result = (Double) setting.getMin() + (double) ((float) difference * percent);
+            double result = (Double) setting.getMin() + (double) ((float) minmax * percent);
             setting.setValue((double) Math.round(10.0 * result) / 10.0);
         } else if (setting.getValue() instanceof Float) {
-            float result = (Float) setting.getMin() + (float) difference * percent;
+            float result = (Float) setting.getMin() + (float) minmax * percent;
             setting.setValue((float) Math.round(10.0f * result) / 10.0f);
         } else if (setting.getValue() instanceof Integer)
-            setting.setValue((Integer) setting.getMin() + (int) ((float) difference * percent));
+            setting.setValue((Integer) setting.getMin() + (int) ((float) minmax * percent));
 
-    }
-    float middle() {
-        return max.floatValue() - min.floatValue();
-    }
-
-    float part() {
-        return ((Number) setting.getValue()).floatValue() - min.floatValue();
-    }
-
-    float partialMultiplier() {
-        return part() / middle();
     }
 }
