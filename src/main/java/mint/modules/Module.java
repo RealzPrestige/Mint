@@ -172,6 +172,7 @@ public class Module extends Feature {
         return this.getDisplayName() + ChatFormatting.GRAY + (this.getDisplayInfo() != null ? " [" + ChatFormatting.WHITE + this.getDisplayInfo() + ChatFormatting.GRAY + "]" : "");
     }
 
+
     public enum Category {
         COMBAT("Combat"),
         MISCELLANEOUS("Miscellaneous"),

@@ -3,6 +3,7 @@ package mint.modules.visual;
 import mint.clickgui.setting.Setting;
 import mint.events.RenderItemEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -65,6 +66,8 @@ public class Hand extends Module {
 
     @SubscribeEvent
     public void onRenderMainhand(RenderItemEvent.MainHand event) {
+        if(NullUtil.fullNullCheck() || !isEnabled())
+            return;
         GL11.glTranslated(mainhandX.getValue() / 40.0f, mainhandY.getValue() / 40.0f, mainhandZ.getValue() / 40.0f);
         GlStateManager.scale((mainhandScaleX.getValue() / 10.0f) + 1.0f, (mainhandScaleY.getValue() / 10.0f) + 1.0f, (mainhandScaleZ.getValue() / 10.0f) + 1.0f);
         GlStateManager.rotate(mainhandRotationX.getValue() * 36.0f, 1.0f, 0.0f, 0.0f);
@@ -74,6 +77,8 @@ public class Hand extends Module {
 
     @SubscribeEvent
     public void onRenderOffhand(RenderItemEvent.Offhand event) {
+        if(NullUtil.fullNullCheck() || !isEnabled())
+            return;
         GL11.glTranslated(offhandX.getValue() / 40.0f, offhandY.getValue() / 40.0f, offhandZ.getValue() / 40.0f);
         GlStateManager.scale((offhandScaleX.getValue() / 10.0f) + 1.0f, (offhandScaleY.getValue() / 10.0f) + 1.0f, (offhandScaleZ.getValue() / 10.0f) + 1.0f);
         GlStateManager.rotate(offhandRotationX.getValue() * 36.0f, 1.0f, 0.0f, 0.0f);

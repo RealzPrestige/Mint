@@ -99,6 +99,8 @@ public class HoleFiller extends Module {
     }
 
     public void onUpdate(){
+        if(NullUtil.fullNullCheck())
+            return;
         for(BlockPos pos : fillableHoles){
             switch(block.getValue()){
                 case OBSIDIAN:

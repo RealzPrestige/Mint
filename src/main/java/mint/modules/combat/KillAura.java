@@ -5,6 +5,7 @@ import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
 import mint.utils.InventoryUtil;
+import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -57,6 +58,9 @@ public class KillAura extends Module {
 
     @Override
     public void onUpdate() {
+        if(NullUtil.fullNullCheck())
+            return;
+
         for (Entity e : mc.world.loadedEntityList) {
             int swordSlot = InventoryUtil.getItemSlot(Items.DIAMOND_SWORD);
             if (shouldAttack(e)) {

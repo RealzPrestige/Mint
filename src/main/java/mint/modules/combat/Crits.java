@@ -23,7 +23,6 @@ public class Crits extends Module {
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
         if (e.getPacket() instanceof CPacketUseEntity && ((CPacketUseEntity)e.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK) {
-            //someone check if crystal check is correct cuz my brain ded
             if (!(e.getPacket() instanceof EntityEnderCrystal && crystal.getValue()) || ((mc.player.isInLava() || mc.player.isInWater()) && pauseInLiquids.getValue()) && !mc.player.onGround) {
                 return;
             }

@@ -7,6 +7,7 @@ import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.modules.core.Notifications;
 import mint.modules.visual.PopESP;
+import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -42,7 +43,7 @@ public class FakePlayer extends Module {
 
     @Override
     public void onEnable() {
-        if (nullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             return;
         }
         fake_player = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString("ee11ee92-8148-47e8-b416-72908a6a2275"), name.getValue()));
@@ -73,8 +74,7 @@ public class FakePlayer extends Module {
 
     @Override
     public void onUpdate() {
-        if (nullCheck()) {
-            //china.com or something
+        if (NullUtil.fullNullCheck()) {
             setEnabled(false);
         }
     }
@@ -82,7 +82,7 @@ public class FakePlayer extends Module {
     @Override
     public void onDisable() {
         try {
-            if (nullCheck()) {
+            if (NullUtil.fullNullCheck()) {
                 return;
             }
             mc.world.removeEntity(fake_player);

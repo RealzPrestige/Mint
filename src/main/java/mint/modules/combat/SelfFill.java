@@ -3,10 +3,7 @@ package mint.modules.combat;
 import mint.clickgui.setting.Setting;
 import mint.managers.MessageManager;
 import mint.modules.Module;
-import mint.utils.BlockUtil;
-import mint.utils.EntityUtil;
-import mint.utils.InventoryUtil;
-import mint.utils.Timer;
+import mint.utils.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -32,7 +29,7 @@ public class SelfFill extends Module {
 
     @Override
     public void onEnable() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             disable();
             return;
         }
@@ -41,7 +38,7 @@ public class SelfFill extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             disable();
             return;
         }

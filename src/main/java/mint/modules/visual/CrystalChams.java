@@ -4,6 +4,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.CrystalTextureEvent;
 import mint.events.RenderCrystalEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,6 +45,8 @@ public class CrystalChams extends Module {
 
     @SubscribeEvent
     public void onRenderCrystalPost(RenderCrystalEvent.RenderCrystalPostEvent event) {
+        if(NullUtil.fullNullCheck() || !isEnabled())
+            return;
         glPushMatrix();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         float rotation = event.getEntityEnderCrystal().innerRotation + event.getPartialTicks();

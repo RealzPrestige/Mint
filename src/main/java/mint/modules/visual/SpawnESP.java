@@ -4,6 +4,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +39,7 @@ public class SpawnESP extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if(!isEnabled())
+        if(NullUtil.fullNullCheck() || !isEnabled())
             return;
 
         if (event.getPacket() instanceof SPacketSpawnObject) {
@@ -71,7 +72,7 @@ public class SpawnESP extends Module {
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if(fullNullCheck())
+        if(NullUtil.fullNullCheck())
             return;
 
         for (Map.Entry<Circle, Integer> entry : circlesToFade.entrySet()) {

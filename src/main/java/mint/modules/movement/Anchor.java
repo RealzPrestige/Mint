@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
+import mint.utils.NullUtil;
 import mint.utils.Timer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +30,7 @@ public class Anchor extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         if (updates > 5) {

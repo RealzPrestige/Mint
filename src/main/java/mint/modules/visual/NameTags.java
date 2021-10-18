@@ -4,10 +4,7 @@ import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
-import mint.utils.ColorUtil;
-import mint.utils.EntityUtil;
-import mint.utils.PlayerUtil;
-import mint.utils.RenderUtil;
+import mint.utils.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.enchantment.Enchantment;
@@ -30,7 +27,7 @@ public class NameTags extends Module {
     private final Setting<Integer> y = register(new Setting<>("Y", 0, 0, 20));
 
     private final Setting<Boolean> boxParent = register(new Setting<>("Rect", true, false));
-    private final Setting<Boolean> rect = register(new Setting("RectSetting", true, v-> boxParent.getValue()));
+    private final Setting<Boolean> rect = register(new Setting("RectSetting", true, v -> boxParent.getValue()));
     private final Setting<Integer> rectRed = register(new Setting<>("RectRed", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
     private final Setting<Integer> rectGreen = register(new Setting<>("RectGreen", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
     private final Setting<Integer> rectBlue = register(new Setting<>("RectBlue", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
@@ -38,11 +35,11 @@ public class NameTags extends Module {
     private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
     private final Setting<Boolean> fullHealthLine = register(new Setting("FullHealthLine", true));
     private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));
-    private final Setting<Integer> yOff = register(new Setting<>("EnchantYOff", 8, 1, 20,v-> enchant.getValue()));
+    private final Setting<Integer> yOff = register(new Setting<>("EnchantYOff", 8, 1, 20, v -> enchant.getValue()));
 
     public NameTags() {
         super("Name Tags", Category.VISUAL, "Draws info about an entity above their head.");
-        this.setInstance();
+        setInstance();
     }
 
     public static NameTags getInstance() {
@@ -58,19 +55,21 @@ public class NameTags extends Module {
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (!NameTags.fullNullCheck()) {
-            for (EntityPlayer player : mc.world.playerEntities) {
-                if (player == null || player.equals(mc.player) || !player.isEntityAlive() || player.isInvisible() && !EntityUtil.isInFov(player))
-                    continue;
-                double x = this.interpolate(player.lastTickPosX, player.posX, event.getPartialTicks()) - mc.getRenderManager().renderPosX;
-                double y = this.interpolate(player.lastTickPosY, player.posY, event.getPartialTicks()) - mc.getRenderManager().renderPosY;
-                double z = this.interpolate(player.lastTickPosZ, player.posZ, event.getPartialTicks()) - mc.getRenderManager().renderPosZ;
-                this.renderNameTag(player, x, y, z, event.getPartialTicks());
-            }
+        if (!NullUtil.fullNullCheck())
+            return;
+        
+        for (EntityPlayer player : mc.world.playerEntities) {
+            if (player == null || player.equals(mc.player) || !player.isEntityAlive() || player.isInvisible() && !EntityUtil.isInFov(player))
+                continue;
+            double x = interpolate(player.lastTickPosX, player.posX, event.getPartialTicks()) - mc.getRenderManager().renderPosX;
+            double y = interpolate(player.lastTickPosY, player.posY, event.getPartialTicks()) - mc.getRenderManager().renderPosY;
+            double z = interpolate(player.lastTickPosZ, player.posZ, event.getPartialTicks()) - mc.getRenderManager().renderPosZ;
+            renderNameTag(player, x, y, z, event.getPartialTicks());
+
         }
     }
 
-    private void renderNameTag(EntityPlayer player, double x, double y, double z, float delta) {
+    void renderNameTag(EntityPlayer player, double x, double y, double z, float delta) {
         double tempY = y;
         tempY += player.isSneaking() ? 0.5 : 0.7;
         Entity camera = mc.getRenderViewEntity();
@@ -100,17 +99,17 @@ public class NameTags extends Module {
         GlStateManager.disableDepth();
         GlStateManager.enableBlend();
         GlStateManager.enableBlend();
-        if(rect.getValue()) {
+        if (rect.getValue()) {
             RenderUtil.drawRect(-width - 1, -9, (float) width + 2.0f, 0.5f, ColorUtil.toRGBA(rectRed.getValue(), rectGreen.getValue(), rectBlue.getValue(), rectAlpha.getValue()));
         }
-        if (healthLine.getValue()){
-            final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
-            final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
-            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), (width + healthAmount), 0, lineColor, lineColor);
-        }else if (fullHealthLine.getValue()) {
-            final float healthAmount = player.getHealth() + player.getAbsorptionAmount();
-            final int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
-            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT -8), width + 2, 0, lineColor, lineColor);
+        if (healthLine.getValue()) {
+            float healthAmount = player.getHealth() + player.getAbsorptionAmount();
+            int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
+            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT - 8), (width + healthAmount), 0, lineColor, lineColor);
+        } else if (fullHealthLine.getValue()) {
+            float healthAmount = player.getHealth() + player.getAbsorptionAmount();
+            int lineColor = (healthAmount >= 33) ? ColorUtil.toRGBA(0, 255, 0, 255) : (healthAmount >= 30) ? ColorUtil.toRGBA(150, 255, 0, 255) : ((healthAmount > 25) ? ColorUtil.toRGBA(75, 255, 0, 255) : ((healthAmount > 20) ? ColorUtil.toRGBA(255, 255, 0, 255) : ((healthAmount > 15) ? ColorUtil.toRGBA(255, 200, 0, 255) : ((healthAmount > 10) ? ColorUtil.toRGBA(255, 150, 0, 255) : ((healthAmount > 5) ? ColorUtil.toRGBA(255, 50, 0, 255) : ColorUtil.toRGBA(255, 0, 0, 255))))));
+            RenderUtil.drawGradientRect(-width - 1, -(mc.fontRenderer.FONT_HEIGHT - 8), width + 2, 0, lineColor, lineColor);
         }
         GlStateManager.disableBlend();
         ItemStack renderMainHand = player.getHeldItemMainhand().copy();
@@ -132,7 +131,7 @@ public class NameTags extends Module {
         if (renderOffhand.hasEffect() && (renderOffhand.getItem() instanceof ItemTool || renderOffhand.getItem() instanceof ItemArmor)) {
             renderOffhand.stackSize = 1;
         }
-        this.renderItemStack(renderOffhand, xOffset);
+        renderItemStack(renderOffhand, xOffset);
         xOffset += 16;
         for (ItemStack stack : player.inventory.armorInventory) {
             if (stack == null) continue;
@@ -140,12 +139,12 @@ public class NameTags extends Module {
             if (armourStack.hasEffect() && (armourStack.getItem() instanceof ItemTool || armourStack.getItem() instanceof ItemArmor)) {
                 armourStack.stackSize = 1;
             }
-            this.renderItemStack(armourStack, xOffset);
+            renderItemStack(armourStack, xOffset);
             xOffset += 16;
         }
-        this.renderItemStack(renderMainHand, xOffset);
+        renderItemStack(renderMainHand, xOffset);
         GlStateManager.popMatrix();
-        this.renderer.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
+        renderer.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
         camera.posX = originalPositionX;
         camera.posY = originalPositionY;
         camera.posZ = originalPositionZ;
@@ -173,7 +172,7 @@ public class NameTags extends Module {
         GlStateManager.enableAlpha();
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         GlStateManager.disableDepth();
-        this.renderEnchantmentText(stack, x);
+        renderEnchantmentText(stack, x);
         GlStateManager.enableDepth();
         GlStateManager.scale(2.0f, 2.0f, 2.0f);
         GlStateManager.popMatrix();
@@ -182,7 +181,7 @@ public class NameTags extends Module {
     private void renderEnchantmentText(ItemStack stack, int x) {
         int enchantmentY = -28 + 1;
         if (stack.getItem() == Items.GOLDEN_APPLE && stack.hasEffect()) {
-            this.renderer.drawStringWithShadow("God", x * 2, enchantmentY, -3977919);
+            renderer.drawStringWithShadow("God", x * 2, enchantmentY, -3977919);
             enchantmentY -= 8;
         }
         if (enchant.getValue()) {
@@ -193,14 +192,14 @@ public class NameTags extends Module {
                 Enchantment enc = Enchantment.getEnchantmentByID(id);
                 if (enc == null) continue;
                 String encName = findStringForEnchants(enc, level);
-                this.renderer.drawStringWithShadow(encName, x * 2, enchantmentY, -1);
+                renderer.drawStringWithShadow(encName, x * 2, enchantmentY, -1);
                 enchantmentY -= 8;
             }
         }
         if (PlayerUtil.hasDurability(stack)) {
             int percent = PlayerUtil.getRoundedDamage(stack);
             String color = percent >= 60 ? "\u00a7a" : (percent >= 25 ? "\u00a7e" : "\u00a7c");
-            this.renderer.drawStringWithShadow(color + percent + "%", x * 2, enchantmentY, -1);
+            renderer.drawStringWithShadow(color + percent + "%", x * 2, enchantmentY, -1);
         }
     }
 
@@ -231,7 +230,7 @@ public class NameTags extends Module {
             pingStr = pingStr + responseTime + "ms ";
         } catch (Exception ignored) {
         }
-        return name + " " +  pingStr + color + health;
+        return name + " " + pingStr + color + health;
     }
 
 

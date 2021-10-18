@@ -3,9 +3,8 @@ package mint.modules.movement;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
-import net.minecraft.network.play.client.CPacketEntityAction;
+import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.util.math.BlockPos;
 
 public class Clip extends Module {
 
@@ -18,7 +17,7 @@ public class Clip extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             disable();
             return;
         }

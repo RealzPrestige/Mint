@@ -5,6 +5,7 @@ import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -74,9 +75,9 @@ public class ChorusManipulator extends Module {
 
     @SubscribeEvent
     public void onPacket(PacketEvent event) {
-        if(fullNullCheck()){
+        if(NullUtil.fullNullCheck())
             return;
-        }
+
         if (event.getPacket() instanceof SPacketPlayerPosLook && cancel.getValue()) {
             xPos = ((SPacketPlayerPosLook) event.getPacket()).getX();
             yPos = ((SPacketPlayerPosLook) event.getPacket()).getY();

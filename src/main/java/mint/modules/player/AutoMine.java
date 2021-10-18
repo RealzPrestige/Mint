@@ -3,10 +3,7 @@ package mint.modules.player;
 import mint.clickgui.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
-import mint.utils.EntityUtil;
-import mint.utils.PlayerUtil;
-import mint.utils.RenderUtil;
-import mint.utils.Timer;
+import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -52,9 +49,9 @@ public class AutoMine extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
 
         EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
         if (mineMode.getValue() == MineMode.Normal) {
@@ -129,10 +126,6 @@ public class AutoMine extends Module {
     }
 
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (fullNullCheck()) {
-            return;
-        }
-
         if (targetBlock != null && !mc.world.getBlockState(targetBlock).getBlock().equals(Blocks.AIR)) {
             RenderUtil.drawBoxESP(targetBlock, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 1, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), true);
         }

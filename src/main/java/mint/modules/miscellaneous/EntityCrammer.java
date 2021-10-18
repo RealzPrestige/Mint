@@ -58,6 +58,9 @@ public class EntityCrammer extends Module {
     }
 
     public void onUpdate() {
+        if(NullUtil.fullNullCheck())
+            return;
+
         target = EntityUtil.getTarget(targetRange.getValue());
         if(target == null)
             return;

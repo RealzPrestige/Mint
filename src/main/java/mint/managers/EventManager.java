@@ -5,10 +5,10 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.commands.Command;
 import mint.events.*;
-import mint.modules.Feature;
 import mint.modules.core.Notifications;
 import mint.modules.miscellaneous.SignExploit;
 import mint.modules.visual.PopESP;
+import mint.utils.NullUtil;
 import mint.utils.Timer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,7 +38,7 @@ import java.util.UUID;
 
 import static mint.managers.ModuleManager.doneLoad;
 
-public class EventManager extends Feature {
+public class EventManager  {
     private final Timer logoutTimer = new Timer();
     private final Timer timer = new Timer();
     public ArrayList<Packet> packets = new ArrayList<>();
@@ -57,7 +57,7 @@ public class EventManager extends Feature {
 
     @SubscribeEvent
     public void onUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (!fullNullCheck() && (event.getEntity().getEntityWorld()).isRemote && event.getEntityLiving().equals(Mint.INSTANCE.mc.player)) {
+        if (!NullUtil.fullNullCheck() && (event.getEntity().getEntityWorld()).isRemote && event.getEntityLiving().equals(Mint.INSTANCE.mc.player)) {
             Mint.moduleManager.onUpdate();
             Mint.moduleManager.sortModules(true);
         }
@@ -76,7 +76,7 @@ public class EventManager extends Feature {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
         Mint.moduleManager.onTick();
         for (EntityPlayer player : Mint.INSTANCE.mc.world.playerEntities) {
@@ -118,7 +118,7 @@ public class EventManager extends Feature {
                 }
             }
         }
-        if (event.getPacket() instanceof SPacketPlayerListItem && !fullNullCheck() && this.logoutTimer.passedS(1.0D)) {
+        if (event.getPacket() instanceof SPacketPlayerListItem && !NullUtil.fullNullCheck() && this.logoutTimer.passedS(1.0D)) {
             SPacketPlayerListItem packet = event.getPacket();
             if (!SPacketPlayerListItem.Action.ADD_PLAYER.equals(packet.getAction()) && !SPacketPlayerListItem.Action.REMOVE_PLAYER.equals(packet.getAction()))
                 return;

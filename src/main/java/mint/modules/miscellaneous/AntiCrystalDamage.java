@@ -25,11 +25,15 @@ public class AntiCrystalDamage extends Module {
     public enum Hand {Mainhand, Offhand}
 
     Timer timer = new Timer();
+
     public AntiCrystalDamage() {
         super("Anti Crystal Damage", Category.MISCELLANEOUS, "Places strings inside crystals to avoid damage.");
     }
 
     public void onUpdate() {
+        if(NullUtil.fullNullCheck())
+            return;
+
         int stringSlot = InventoryUtil.getItemFromHotbar(Items.STRING);
         int currentItem = mc.player.inventory.currentItem;
         if(timer.passedMs(placeDelay.getValue())) {

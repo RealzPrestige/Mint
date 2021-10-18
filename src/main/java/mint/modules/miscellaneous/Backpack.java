@@ -4,6 +4,7 @@ import mint.clickgui.MintGui;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -59,7 +60,7 @@ public class Backpack extends Module {
 
     @Override
     public void onDisable() {
-        if (!fullNullCheck() && cancelledGui != null && open.getValue()) {
+        if (!NullUtil.fullNullCheck() && cancelledGui != null && open.getValue()) {
             mc.displayGuiScreen(cancelledGui);
         }
         cancelledGui = null;

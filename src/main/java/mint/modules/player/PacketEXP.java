@@ -3,6 +3,7 @@ package mint.modules.player;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.InventoryUtil;
+import mint.utils.NullUtil;
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
@@ -18,14 +19,17 @@ public class PacketEXP extends Module {
     }
 
     public void onUpdate() {
-        if (rightClickOnly.getValue() && !mc.gameSettings.keyBindUseItem.isKeyDown()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
+        if (rightClickOnly.getValue() && !mc.gameSettings.keyBindUseItem.isKeyDown())
+            return;
+
         if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both)) {
             mc.player.connection.sendPacket(new CPacketHeldItemChange(HotbarEXP()));
-            for (int i = 0; i < packets.getValue(); i++) {
+            for (int i = 0; i < packets.getValue(); i++)
                 mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-            }
+
             mc.player.connection.sendPacket(new CPacketHeldItemChange(mc.player.inventory.currentItem));
         }
     }

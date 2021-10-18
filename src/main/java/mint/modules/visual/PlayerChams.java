@@ -3,6 +3,7 @@ package mint.modules.visual;
 import mint.clickgui.setting.Setting;
 import mint.events.RenderLivingEntityEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
@@ -34,7 +35,7 @@ public class PlayerChams extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
-        if(!isEnabled())
+        if(NullUtil.fullNullCheck() || !isEnabled())
             return;
 
         if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {

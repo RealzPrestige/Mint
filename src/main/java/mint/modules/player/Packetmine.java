@@ -8,6 +8,7 @@ import mint.events.BlockEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.InventoryUtil;
+import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import mint.utils.Timer;
 import net.minecraft.block.Block;
@@ -34,13 +35,12 @@ import java.util.Objects;
  * <p>
  * also this shit is p messy so lol
  */
-@SuppressWarnings("unchecked")
+
 public class Packetmine extends Module {
     private static Packetmine INSTANCE = new Packetmine();
     int delay;
     public Timer timer = new Timer();
     private final Timer readyTimer = new Timer();
-
 
     public Setting<Boolean> silentSwitch = register(new Setting("SilentSwitch", false));
     public Setting<SilentSwitchMode> silentSwitchMode = register(new Setting<>("SilentSwitchMode", SilentSwitchMode.AUTO));
@@ -193,7 +193,7 @@ public class Packetmine extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             return;
         }
         mc.playerController.blockHitDelay = 0;
@@ -244,7 +244,7 @@ public class Packetmine extends Module {
 
     @SubscribeEvent
     public void onBlockEvent(BlockEvent event) {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             return;
         }
         if (event.getStage() == 3 && mc.playerController.curBlockDamageMP > 0.1f) {

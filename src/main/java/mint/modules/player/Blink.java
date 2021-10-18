@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -20,7 +21,7 @@ public class Blink extends Module {
     }
 
     public void onEnable() {
-        if (nullCheck())
+        if (NullUtil.fullNullCheck())
             return;
         if (renderPlayer.getValue()) {
             fake_player = new EntityOtherPlayerMP(mc.world, new GameProfile(mc.player.getUniqueID(), mc.session.getUsername()));

@@ -4,6 +4,7 @@ import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
 import mint.utils.MathUtil;
+import mint.utils.NullUtil;
 import net.minecraft.entity.item.EntityBoat;
 
 public class BoatFly extends Module {
@@ -24,9 +25,8 @@ public class BoatFly extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
 
         if (!(mc.player.ridingEntity instanceof EntityBoat)) {
             return;

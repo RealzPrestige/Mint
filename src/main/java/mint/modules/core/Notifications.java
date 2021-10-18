@@ -6,6 +6,7 @@ import mint.events.RenderOverlayEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
+import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -157,9 +158,9 @@ public class Notifications extends Module {
     }
 
     public void onTotemPop(EntityPlayer player) {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         if (mc.player.equals(player)) {
             return;
         }

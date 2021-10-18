@@ -3,6 +3,7 @@ package mint.modules.movement;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
+import mint.utils.NullUtil;
 
 public class YPort extends Module {
 
@@ -21,7 +22,7 @@ public class YPort extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             disable();
             return;
         }

@@ -4,18 +4,19 @@ import mint.clickgui.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
+import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import mint.utils.Timer;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class PlayerTrails extends Module {
 
@@ -41,41 +42,40 @@ public class PlayerTrails extends Module {
     }
 
     public void onTick() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         if (trails.containsKey(mc.player.getUniqueID())) {
-                final ItemTrail playerTrail = trails.get(mc.player.getUniqueID());
-                playerTrail.timer.reset();
-                final List<Position> toRemove = new ArrayList<>();
-                for (final Position position : playerTrail.positions) {
-                    if (System.currentTimeMillis() - position.time > selfTime.getValue().longValue()) {
-                        toRemove.add(position);
-                    }
+            final ItemTrail playerTrail = trails.get(mc.player.getUniqueID());
+            playerTrail.timer.reset();
+            final List<Position> toRemove = new ArrayList<>();
+            for (final Position position : playerTrail.positions) {
+                if (System.currentTimeMillis() - position.time > selfTime.getValue().longValue()) {
+                    toRemove.add(position);
                 }
-                playerTrail.positions.removeAll(toRemove);
-                playerTrail.positions.add(new Position(mc.player.getPositionVector()));
-        }
-            else {
-                trails.put(mc.player.getUniqueID(), new ItemTrail(mc.player));
             }
+            playerTrail.positions.removeAll(toRemove);
+            playerTrail.positions.add(new Position(mc.player.getPositionVector()));
+        } else {
+            trails.put(mc.player.getUniqueID(), new ItemTrail(mc.player));
+        }
     }
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         for (final Map.Entry<UUID, ItemTrail> entry : trails.entrySet()) {
             if (entry.getValue().entity.isDead || mc.world.getEntityByID(entry.getValue().entity.getEntityId()) == null) {
-                if (entry.getValue().timer.isPaused()) {
+                if (entry.getValue().timer.isPaused())
                     entry.getValue().timer.reset();
-                }
+
                 entry.getValue().timer.setPaused(false);
             }
-            if (!entry.getValue().timer.isPassed()) {
+            if (!entry.getValue().timer.isPassed())
                 drawTrail(entry.getValue());
-            }
+
         }
     }
 
@@ -94,7 +94,7 @@ public class PlayerTrails extends Module {
         for (final Position p : trail.positions) {
             final Vec3d pos = RenderUtil.updateToCamera(p.pos);
             final double value = normalize(trail.positions.indexOf(p), trail.positions.size());
-            RenderUtil.addBuilderVertex(builder, pos.x, pos.y, pos.z, ColorUtil.interpolate((float)value, start, end));
+            RenderUtil.addBuilderVertex(builder, pos.x, pos.y, pos.z, ColorUtil.interpolate((float) value, start, end));
         }
     }
 
@@ -132,7 +132,7 @@ public class PlayerTrails extends Module {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            final Position position = (Position)o;
+            final Position position = (Position) o;
             return time == position.time && Objects.equals(pos, position.pos);
         }
 

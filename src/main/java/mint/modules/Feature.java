@@ -20,24 +20,12 @@ public class Feature {
         this.name = name;
     }
 
-    public static boolean nullCheck() {
-        return Mint.INSTANCE.mc.player == null;
-    }
-
-    public static boolean fullNullCheck() {
-        return Mint.INSTANCE.mc.player == null || Mint.INSTANCE.mc.world == null;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public List<Setting> getSettings() {
         return this.settings;
-    }
-
-    public boolean hasSettings() {
-        return !this.settings.isEmpty();
     }
 
     public boolean isEnabled() {
@@ -60,20 +48,6 @@ public class Feature {
         return setting;
     }
 
-    public void unregister(Setting settingIn) {
-        ArrayList<Setting> removeList = new ArrayList<Setting>();
-        for (Setting setting : this.settings) {
-            if (!setting.equals(settingIn)) continue;
-            removeList.add(setting);
-        }
-        if (!removeList.isEmpty()) {
-            this.settings.removeAll(removeList);
-        }
-        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
-            MintGui.getInstance().updateModule((Module) this);
-        }
-    }
-
     public Setting getSettingByName(String name) {
         for (Setting setting : this.settings) {
             if (!setting.getName().equalsIgnoreCase(name)) continue;
@@ -89,7 +63,7 @@ public class Feature {
     }
 
     public void clearSettings() {
-        this.settings = new ArrayList<Setting>();
+        this.settings = new ArrayList<>();
     }
 }
 

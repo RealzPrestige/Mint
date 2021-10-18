@@ -31,9 +31,6 @@ public class PacketManipulator extends Module {
             if (e.getPacket() instanceof CPacketPlayer && cplayer.getValue()) {
                 e.setCanceled(true);
             }
-        } else {
-            return;
-            // ur not returning anything dum dum
         }
     }
 }

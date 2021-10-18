@@ -3,6 +3,7 @@ package mint.modules.player;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.InventoryUtil;
+import mint.utils.NullUtil;
 import net.minecraft.init.Items;
 
 public class FastPlace extends Module {
@@ -16,9 +17,9 @@ public class FastPlace extends Module {
 
     @Override
     public void onUpdate(){
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both) && exp.getValue()) {
             mc.rightClickDelayTimer = 0;
         }

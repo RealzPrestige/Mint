@@ -8,6 +8,7 @@ import mint.events.MoveEvent;
 import mint.events.UpdateWalkingPlayerEvent;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
+import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -74,7 +75,7 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onPlayerUpdateWalking(UpdateWalkingPlayerEvent event) {
-        if(Phase.getInstance().isEnabled())
+        if (Phase.getInstance().isEnabled())
             return;
         if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
             final double xDist = mc.player.posX - mc.player.prevPosX;
@@ -84,7 +85,7 @@ public class Strafe extends Module {
     }
 
     public void onTick() {
-        if(Phase.getInstance().isEnabled())
+        if (Phase.getInstance().isEnabled())
             return;
         if (ticks < 12) {
             ++ticks;
@@ -123,8 +124,9 @@ public class Strafe extends Module {
     }
 
     public void onUpdate() {
-        if(fullNullCheck()) return;
-        if(Phase.getInstance().isEnabled())
+        if (NullUtil.fullNullCheck())
+            return;
+        if (Phase.getInstance().isEnabled())
             return;
         if (mc.player != null) {
             prevDist = Math.sqrt((mc.player.posX - mc.player.prevPosX) * (mc.player.posX - mc.player.prevPosX) + (mc.player.posZ - mc.player.prevPosZ) * (mc.player.posZ - mc.player.prevPosZ));
@@ -142,12 +144,12 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onMove(MoveEvent event) {
-        if (fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
-        if(Phase.getInstance().isEnabled())
+        if (Phase.getInstance().isEnabled())
             return;
-       if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
+        if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
             if (EntityUtil.isMoving()) {
                 final EntityPlayerSP player2 = mc.player;
                 player2.motionX *= 1.0199999809265137;
@@ -213,7 +215,7 @@ public class Strafe extends Module {
                 event.z = (0.0);
             }
         } else if (strafeMode.getValue().equals(StrafeMode.Instant)) {
-            if (!(event.getStage() != 0 || nullCheck() || mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
+            if (!(event.getStage() != 0 || NullUtil.fullNullCheck() || mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
                 MovementInput movementInput = mc.player.movementInput;
                 float moveForward = movementInput.moveForward;
                 float moveStrafe = movementInput.moveStrafe;

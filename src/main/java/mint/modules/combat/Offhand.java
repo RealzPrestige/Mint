@@ -5,10 +5,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.RenderOverlayEvent;
 import mint.modules.Module;
 import mint.modules.miscellaneous.EntityCrammer;
-import mint.utils.ColorUtil;
-import mint.utils.EntityUtil;
-import mint.utils.InventoryUtil;
-import mint.utils.Timer;
+import mint.utils.*;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -61,9 +58,9 @@ public class Offhand extends Module {
 
     @Override
     public void onUpdate() {
-        if (mc.player == null || mc.world == null) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         int offhandSlot = InventoryUtil.getItemSlot(getOffhandItem());
         if (mc.player.getHeldItemOffhand().getItem() != getOffhandItem() && offhandSlot != -1 && switchTimer.passedMs(switchDelay.getValue())) {
             switchItem(offhandSlot < 9 ? offhandSlot + 36 : offhandSlot);

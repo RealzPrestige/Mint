@@ -171,7 +171,7 @@ public class AutoCrystal extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         if ((pauseOnGapple.getValue() && mc.player.getHeldItemMainhand().getItem().equals(Items.GOLDEN_APPLE) && mc.gameSettings.keyBindUseItem.isKeyDown())

@@ -2,6 +2,7 @@ package mint.modules.movement;
 
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
 
@@ -31,9 +32,9 @@ public class Phase extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         Vec3d direction = new Vec3d(Math.cos((mc.player.rotationYaw + 90.0f) * 3.141592653589793 / 180.0f), 0.0, Math.sin((mc.player.rotationYaw + 90f) * 3.141592653589793 / 180.0f));
 
         mc.player.noClip = true;

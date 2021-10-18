@@ -2,6 +2,7 @@ package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -58,6 +59,9 @@ public class ViewTweaks extends Module {
 
     @Override
     public void onUpdate() {
+        if(NullUtil.fullNullCheck())
+            return;
+
         if (fov.getValue() && !fovStay.getValue()) {
             mc.gameSettings.setOptionFloatValue(GameSettings.Options.FOV, fovValue.getValue());
         }

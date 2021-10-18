@@ -51,14 +51,16 @@ public class SelfAnvil extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck()) return;
+        if (NullUtil.fullNullCheck())
+            return;
         playerPos = PlayerUtil.getPlayerPos(mc.player);
         EntityPlayer target = EntityUtil.getTarget(smartRange.getValue());
-        if (target == null) return;
+        if (target == null)
+            return;
 
-        if (smart.getValue()) {
-            if (target.getDistance(mc.player) > smartRange.getValue()) return;
-        }
+        if (smart.getValue())
+            if (target.getDistance(mc.player) > smartRange.getValue())
+                return;
 
         if (startTimer.passedMs(startDelay.getValue()) && !mc.world.getBlockState(playerPos).getBlock().equals(Blocks.ANVIL)) {
             doAnvil();

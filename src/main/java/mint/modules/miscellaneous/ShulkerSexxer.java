@@ -34,7 +34,7 @@ public class ShulkerSexxer extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         if (safeOnly.getValue() && !EntityUtil.isPlayerSafe(mc.player))

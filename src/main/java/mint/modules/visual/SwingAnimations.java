@@ -2,6 +2,7 @@ package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumHand;
 
@@ -21,7 +22,7 @@ public class SwingAnimations extends Module {
     }
     @Override
     public void onUpdate() {
-        if (nullCheck()) {
+        if (NullUtil.fullNullCheck()) {
             return;
         }
 

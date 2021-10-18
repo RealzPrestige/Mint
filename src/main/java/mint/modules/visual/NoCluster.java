@@ -3,6 +3,7 @@ package mint.modules.visual;
 import mint.clickgui.setting.Setting;
 import mint.events.RenderLivingEntityEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,6 +19,9 @@ public class NoCluster extends Module {
 
     @SubscribeEvent
     public void onRenderLivingEntityEvent(RenderLivingEntityEvent event) {
+        if(NullUtil.fullNullCheck() || !isEnabled())
+            return;
+
         for(Entity entity : mc.world.loadedEntityList) {
             if(shouldRender(entity)) {
                 GL11.glPushMatrix();

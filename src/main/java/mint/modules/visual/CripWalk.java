@@ -1,6 +1,7 @@
 package mint.modules.visual;
 
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mint.events.RenderWorldEvent;
@@ -13,6 +14,8 @@ public class CripWalk extends Module {
 
     @SubscribeEvent
     public void renderWorldLastEvent(RenderWorldEvent event) {
+        if(NullUtil.fullNullCheck())
+            return;
         for (EntityPlayer player : mc.world.playerEntities) {
             if (player.getName() == mc.player.getName()) continue;
             player.limbSwing = 0;

@@ -22,7 +22,9 @@ public class AutoEnderChest extends Module {
     public Setting<Boolean> swing = register(new Setting("Swing", false));
     //EnumHand.Main_hand looks so fucking chinese in game, so i replaced it with this
     public Setting<Hand> enumHand = register(new Setting("Hand", Hand.Mainhand, v -> swing.getValue()));
+
     public enum Hand {Mainhand, Offhand}
+
     public Setting<Boolean> autoSwitch = register(new Setting("Auto Switch", false));
     public Setting<Boolean> safeOnly = register(new Setting("Only Safe", false));
     Timer timer = new Timer();
@@ -33,9 +35,9 @@ public class AutoEnderChest extends Module {
     }
 
     public void onUpdate() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         BlockPos pos = PlayerUtil.getPlayerPos(mc.player);
         int enderChestSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ENDER_CHEST));
         int pickaxeSlot = InventoryUtil.getItemFromHotbar(Items.DIAMOND_PICKAXE);
@@ -122,9 +124,9 @@ public class AutoEnderChest extends Module {
     }
 
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         BlockPos pos = PlayerUtil.getPlayerPos(mc.player);
         if (getFace() == 1) {
             RenderUtil.drawBlockOutline(pos.north().up(), new Color(255, 255, 255, 255), 1, true);

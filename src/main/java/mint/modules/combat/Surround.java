@@ -1,15 +1,12 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.Mint;
 import mint.clickgui.setting.Setting;
-import mint.commands.Command;
 import mint.managers.MessageManager;
 import mint.modules.Module;
-import mint.utils.BlockUtil;
 import mint.utils.EntityUtil;
 import mint.utils.InventoryUtil;
-import net.minecraft.entity.Entity;
+import mint.utils.NullUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -48,9 +45,9 @@ public class Surround extends Module {
 
     @Override
     public void onEnable() {
-        if (fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
+
         ticks = 0;
         if (obbySlot == -1 && ecSlot == -1) {
             MessageManager.sendMessage("Out of blocks, disabling");

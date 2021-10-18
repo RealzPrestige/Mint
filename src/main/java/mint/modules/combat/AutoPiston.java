@@ -100,7 +100,7 @@ public class AutoPiston extends Module {
 
 
     public void onUpdate() {
-        if (fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         target = EntityUtil.getTarget(targetRange.getValue());
