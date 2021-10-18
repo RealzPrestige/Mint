@@ -20,7 +20,6 @@ public class Setting<T> {
     private Color color;
     private boolean isColorSetting;
     public int r,g,b,a;
-    private String description;
     private Feature feature;
     public boolean isOpen;
 
@@ -29,8 +28,6 @@ public class Setting<T> {
         this.defaultValue = defaultValue;
         this.value = defaultValue;
         this.plannedValue = defaultValue;
-        this.description = "";
-
     }
 
     public Setting(String name, T defaultValue, Boolean parent, Predicate<T> visibility) {
@@ -47,7 +44,6 @@ public class Setting<T> {
         this.defaultValue = defaultValue;
         this.value = defaultValue;
         this.plannedValue = defaultValue;
-        this.description = "";
         this.isParent = parent;
     }
 
@@ -59,25 +55,6 @@ public class Setting<T> {
         this.plannedValue = defaultValue;
     }
 
-    public Setting(String name, T defaultValue, String description) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.plannedValue = defaultValue;
-        this.description = description;
-    }
-
-    public Setting(String name, T defaultValue, T min, T max, String description) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.min = min;
-        this.max = max;
-        this.plannedValue = defaultValue;
-        this.description = description;
-        this.hasRestriction = true;
-    }
-
     public Setting(String name, T defaultValue, T min, T max) {
         this.name = name;
         this.defaultValue = defaultValue;
@@ -85,19 +62,6 @@ public class Setting<T> {
         this.min = min;
         this.max = max;
         this.plannedValue = defaultValue;
-        this.description = "";
-        this.hasRestriction = true;
-    }
-
-    public Setting(String name, T defaultValue, T min, T max, Predicate<T> visibility, String description) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.min = min;
-        this.max = max;
-        this.plannedValue = defaultValue;
-        this.visibility = visibility;
-        this.description = description;
         this.hasRestriction = true;
     }
 
@@ -109,7 +73,6 @@ public class Setting<T> {
         this.max = max;
         this.plannedValue = defaultValue;
         this.visibility = visibility;
-        this.description = "";
         this.hasRestriction = true;
     }
 
@@ -122,7 +85,6 @@ public class Setting<T> {
         this.b = blue;
         this.a = alpha;
         this.visibility = visibility;
-        this.description = "";
         this.hasRestriction = true;
     }
 
@@ -135,7 +97,6 @@ public class Setting<T> {
         this.b = blue;
         this.a = alpha;
         this.isOpen = openByDefault;
-        this.description = "";
         this.hasRestriction = true;
     }
 
@@ -179,29 +140,12 @@ public class Setting<T> {
         return this.min;
     }
 
-    public void setMin(T min) {
-        this.min = min;
-    }
-
     public T getMax() {
         return this.max;
     }
 
     public void setMax(T max) {
         this.max = max;
-    }
-
-    public void setValueNoEvent(T value) {
-        this.setPlannedValue(value);
-        if (this.hasRestriction) {
-            if (((Number) this.min).floatValue() > ((Number) value).floatValue()) {
-                this.setPlannedValue(this.min);
-            }
-            if (((Number) this.max).floatValue() < ((Number) value).floatValue()) {
-                this.setPlannedValue(this.max);
-            }
-        }
-        this.value = this.plannedValue;
     }
 
     public Feature getFeature() {
@@ -219,13 +163,6 @@ public class Setting<T> {
             return i;
         }
         return -1;
-    }
-
-    public void setEnumValue(String value) {
-        for (Enum e : ((Enum) this.value).getClass().getEnumConstants()) {
-            if (!e.name().equalsIgnoreCase(value)) continue;
-            this.value = (T) e;
-        }
     }
 
     public String currentEnumName() {
@@ -247,10 +184,6 @@ public class Setting<T> {
         }
     }
 
-    public void increaseEnumNoEvent() {
-        this.value = (T) EnumSetting.increaseEnum((Enum) this.value);
-    }
-
     public String getType() {
         if (this.isEnumSetting()) {
             return "Enum";
@@ -258,15 +191,8 @@ public class Setting<T> {
         return this.getClassName(this.defaultValue);
     }
 
-    public <T> String getClassName(T value) {
+    public <t> String getClassName(t value) {
         return value.getClass().getSimpleName();
-    }
-
-    public String getDescription() {
-        if (this.description == null) {
-            return "";
-        }
-        return this.description;
     }
 
     public boolean isNumberSetting() {
@@ -297,17 +223,10 @@ public class Setting<T> {
         return this.isParent;
     }
 
-    public boolean isColorSetting() {
-        return this.isColorSetting;
-    }
-
     public Color getColor() {
         return this.color;
     }
 
-    public void setVisibility(Predicate<T> visibility) {
-        this.visibility = visibility;
-    }
 
     public boolean isVisible() {
         if (this.visibility == null) {
