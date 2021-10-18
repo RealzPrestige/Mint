@@ -61,7 +61,6 @@ public class Window {
                 int openedHeight = 0;
                 if (module.isOpened) {
                     for (Setting setting : module.getSettings()) {
-                        //we can here make a check for setting instance of ColorSetting to then increase the height being added.
                         if(setting.isVisible() && !setting.getName().equals("Enabled") && !setting.getName().equals("DisplayName"))
                             openedHeight += 10;
                         //need bindbutton now to fix the complete height, because it will make an empty line for the keyBind.

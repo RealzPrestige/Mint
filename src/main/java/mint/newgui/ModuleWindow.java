@@ -22,7 +22,6 @@ public class ModuleWindow {
     public Color disabledColor;
     public Color enabledColor;
     public Module module;
-    private boolean subOpen;
     ArrayList<Button> button = new ArrayList<>();
 
     public ModuleWindow(String name, int x, int y, int width, int height, Color disabledColor, Color enabledColor, Module module) {
@@ -34,7 +33,6 @@ public class ModuleWindow {
         this.disabledColor = disabledColor;
         this.enabledColor = enabledColor;
         this.module = module;
-        subOpen = false;
         getSettings();
     }
 
@@ -46,6 +44,9 @@ public class ModuleWindow {
 
             if (!setting.isVisible())
                 continue;
+
+            if(setting.getValue() instanceof Boolean && setting.isParent())
+                //items.add(new ParentButton(setting));
 
             if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled"))
                 items.add(new BooleanButton(setting));
@@ -79,6 +80,8 @@ public class ModuleWindow {
         }
         if (isInside(mouseX, mouseY) && mouseButton == 0)
             module.toggle();
+
+        button.forEach(button -> button.mouseClicked(mouseX, mouseY, mouseButton));
     }
 
     public boolean isInside(int mouseX, int mouseY) {
