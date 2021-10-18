@@ -2,13 +2,12 @@ package mint.clickgui.impl.buttons;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
-import mint.modules.core.Gui;
 import mint.clickgui.setting.Setting;
+import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -26,7 +25,7 @@ public class BooleanFrame extends ButtonFrame {
         if (getState()) {
             RenderUtil.drawBorder(this.x + width - 4, this.y + (this.height / 2) - 3, 7, this.height / 2 + 1, new Color(0,0,0,100));
             RenderUtil.drawRect(this.x + 110, this.y + 12, this.x + 103, this.y + 4, ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), 255));
-            drawCheckmark(this.x + width - 4, this.y + (this.height / 2), new Color(255, 255, 255));
+            RenderUtil.drawCheckmark(this.x + width - 4, this.y + (this.height / 2), new Color(255, 255, 255));
         }else{
             RenderUtil.drawBorder(this.x + width - 4, this.y + (this.height / 2) - 3, 7, this.height / 2 + 1, new Color(0,0,0,150));
         }
@@ -48,26 +47,6 @@ public class BooleanFrame extends ButtonFrame {
         }
     }
 
-    public static void drawCheckmark(float x, float y, Color color) {
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-        GL11.glLineWidth(2);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex2d(x + 1, y + 1);
-        GL11.glVertex2d(x + 3, y + 4);
-        GL11.glEnd();
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex2d(x + 3, y + 4);
-        GL11.glVertex2d(x + 6, y - 2);
-        GL11.glEnd();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        GL11.glPopMatrix();
-    }
     @Override
     public void update() {
         this.setHidden(!this.setting.isVisible());

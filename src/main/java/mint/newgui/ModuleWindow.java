@@ -5,6 +5,7 @@ import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.buttons.BooleanButton;
 import mint.newgui.buttons.Button;
+import mint.newgui.buttons.ParentButton;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -45,10 +46,10 @@ public class ModuleWindow {
             if (!setting.isVisible())
                 continue;
 
-            if(setting.getValue() instanceof Boolean && setting.isParent())
-                //items.add(new ParentButton(setting));
+            if (setting.getValue() instanceof Boolean && setting.isParent())
+                items.add(new ParentButton(setting));
 
-            if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled"))
+            if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled") && !setting.isParent())
                 items.add(new BooleanButton(setting));
 
         }
@@ -88,7 +89,7 @@ public class ModuleWindow {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 }

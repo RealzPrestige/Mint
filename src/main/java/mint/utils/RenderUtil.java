@@ -37,6 +37,28 @@ public class RenderUtil {
         builder = RenderUtil.tessellator.getBuffer();
     }
 
+    public static void drawCheckmark(float x, float y, Color color) {
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        GL11.glLineWidth(2);
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex2d(x + 1, y + 1);
+        GL11.glVertex2d(x + 3, y + 4);
+        GL11.glEnd();
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex2d(x + 3, y + 4);
+        GL11.glVertex2d(x + 6, y - 2);
+        GL11.glEnd();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glPopMatrix();
+    }
+
+
     public static void drawGlowBox(BlockPos pos, Color color, double height) {
         AxisAlignedBB axisAlignedBB = new AxisAlignedBB(pos.getX() - mc.getRenderManager().viewerPosX, pos.getY() - mc.getRenderManager().viewerPosY, pos.getZ() - mc.getRenderManager().viewerPosZ, pos.getX() + 1 - mc.getRenderManager().viewerPosX, pos.getY() + 1 - mc.getRenderManager().viewerPosY, pos.getZ() + 1 - mc.getRenderManager().viewerPosZ);
         glSetup();
