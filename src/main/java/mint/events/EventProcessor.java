@@ -2,8 +2,7 @@ package mint.events;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class EventProcessor
-        extends Event {
+public class EventProcessor extends Event {
     private int stage;
 
     public EventProcessor() {
@@ -14,11 +13,11 @@ public class EventProcessor
     }
 
     public int getStage() {
-        return this.stage;
+        return stage;
     }
 
     public void setStage(int stage) {
-        this.stage = stage;
+        stage = stage;
     }
 }
 
