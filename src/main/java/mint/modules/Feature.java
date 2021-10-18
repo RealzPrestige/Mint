@@ -56,12 +56,6 @@ public class Feature {
         return null;
     }
 
-    public void reset() {
-        for (Setting setting : this.settings) {
-            setting.setValue(setting.getDefaultValue());
-        }
-    }
-
     public void clearSettings() {
         this.settings = new ArrayList<>();
     }

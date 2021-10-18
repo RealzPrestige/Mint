@@ -1,18 +1,18 @@
 package mint.managers;
 
 import mint.Mint;
-import mint.modules.Feature;
 import mint.clickgui.impl.font.CustomFont;
 import mint.modules.core.FontChanger;
 import mint.modules.miscellaneous.SignExploit;
 import mint.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
+
 import java.awt.*;
 
 import static mint.managers.ModuleManager.doneLoad;
 
-public class TextManager extends Feature {
+public class TextManager {
     private final Timer idleTimer = new Timer();
     public int scaledWidth;
     public int scaledHeight;

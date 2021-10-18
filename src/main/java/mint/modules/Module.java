@@ -73,8 +73,13 @@ public class Module extends Feature {
     public void onUnload() {
     }
 
-    public String getDisplayInfo() { return null; }
-    public boolean isOn() { return this.enabled.getValue(); }
+    public String getDisplayInfo() {
+        return null;
+    }
+
+    public boolean isOn() {
+        return enabled.getValue();
+    }
 
     public void setEnabled(boolean enabled) {
         if (enabled) {

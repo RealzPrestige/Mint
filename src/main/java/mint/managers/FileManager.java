@@ -1,7 +1,6 @@
 package mint.managers;
 
 import mint.Mint;
-import mint.modules.Feature;
 import mint.modules.Module;
 
 import java.io.File;
@@ -17,13 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FileManager
-        extends Feature {
+public class FileManager {
     private final Path base = getMkDirectory(getRoot(), "mint");
 
     public FileManager() {
         assert Mint.moduleManager != null;
-        for (Module.Category category : Mint.moduleManager.getCategories()) { ;
+        for (Module.Category category : Mint.moduleManager.getCategories()) {
             getMkDirectory(base, category.getName());
         }
     }

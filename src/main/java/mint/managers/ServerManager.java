@@ -1,13 +1,11 @@
 package mint.managers;
 
-import mint.modules.Feature;
 import mint.utils.Timer;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-public class ServerManager
-        extends Feature {
+public class ServerManager {
     private final float[] tpsCounts = new float[10];
     private final DecimalFormat format = new DecimalFormat("##.00#");
     private final Timer timer = new Timer();
@@ -48,10 +46,10 @@ public class ServerManager
         this.lastUpdate = currentTime;
     }
 
-    @Override
+
     public void reset() {
-        Arrays.fill(this.tpsCounts, 20.0f);
-        this.TPS = 20.0f;
+        Arrays.fill(tpsCounts, 20.0f);
+        TPS = 20.0f;
     }
 
     public float getTpsFactor() {

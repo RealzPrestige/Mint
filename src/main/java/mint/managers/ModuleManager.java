@@ -4,7 +4,6 @@ import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
-import mint.modules.Feature;
 import mint.modules.Module;
 import mint.modules.combat.*;
 import mint.modules.core.*;
@@ -22,8 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ModuleManager
-        extends Feature {
+public class ModuleManager {
     public ArrayList<Module> moduleList = new ArrayList<>();
     public List<Module> sortedModules = new ArrayList<>();
     public static Boolean doneLoad = true;
@@ -41,7 +39,6 @@ public class ModuleManager
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
         moduleList.add(new NoPotionHud());
-        moduleList.add(new PacketManager());
         moduleList.add(new NewGuiModule());
 
         /** Combat **/
@@ -113,7 +110,7 @@ public class ModuleManager
     }
 
     public Module getModuleByName(String name) {
-        for (Module module : this.moduleList) {
+        for (Module module : moduleList) {
             if (!module.getName().equalsIgnoreCase(name)) continue;
             return module;
         }
@@ -121,7 +118,7 @@ public class ModuleManager
     }
 
     public <T extends Module> T getModuleByClass(Class<T> clazz) {
-        for (Module module : this.moduleList) {
+        for (Module module : moduleList) {
             if (!clazz.isInstance(module)) continue;
             return (T) module;
         }
@@ -129,13 +126,13 @@ public class ModuleManager
     }
 
     public boolean isModuleEnabled(String name) {
-        Module module = this.getModuleByName(name);
+        Module module = getModuleByName(name);
         return module != null && module.isEnabled();
     }
 
     public ArrayList<Module> getEnabledModules() {
         ArrayList<Module> enabledModules = new ArrayList<>();
-        for (Module module : this.moduleList) {
+        for (Module module : moduleList) {
             if (!module.isEnabled()) continue;
             enabledModules.add(module);
         }
@@ -144,11 +141,7 @@ public class ModuleManager
 
     public ArrayList<Module> getModulesByCategory(Module.Category category) {
         ArrayList<Module> modulesCategory = new ArrayList<>();
-        this.moduleList.forEach(module -> {
-            if (module.getCategory() == category) {
-                modulesCategory.add(module);
-            }
-        });
+        moduleList.forEach(module -> { if (module.getCategory() == category) { modulesCategory.add(module); } });
         return modulesCategory;
     }
 
@@ -157,55 +150,58 @@ public class ModuleManager
     }
 
     public void onLoad() {
-        this.moduleList.stream().filter(Module::listening).forEach(((EventBus) MinecraftForge.EVENT_BUS)::register);
-        this.moduleList.forEach(Module::onLoad);
+        moduleList.stream().filter(Module::listening).forEach(((EventBus) MinecraftForge.EVENT_BUS)::register);
+        moduleList.forEach(Module::onLoad);
     }
 
     public void onUpdate() {
-        this.moduleList.stream().filter(Feature::isEnabled).forEach(Module::onUpdate);
+        moduleList.stream().filter(Module::isEnabled).forEach(Module::onUpdate);
     }
 
     public void onTick() {
-        this.moduleList.stream().filter(Feature::isEnabled).forEach(Module::onTick);
+        moduleList.stream().filter(Module::isEnabled).forEach(Module::onTick);
     }
 
     public void renderOverlayEvent(RenderOverlayEvent event) {
-        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.renderOveylayEvent(event));
+        moduleList.stream().filter(Module::isEnabled).forEach(module -> module.renderOveylayEvent(event));
     }
 
     public void renderWorldEvent(RenderWorldEvent event) {
-        this.moduleList.stream().filter(Feature::isEnabled).forEach(module -> module.renderWorldLastEvent(event));
+        moduleList.stream().filter(Module::isEnabled).forEach(module -> module.renderWorldLastEvent(event));
     }
 
     public void sortModules(boolean reverse) {
-        this.sortedModules = this.getEnabledModules().stream().filter(Module::isDrawn).sorted(Comparator.comparing(module -> this.renderer.getStringWidth(module.getFullArrayString()) * (reverse ? -1 : 1))).collect(Collectors.toList());
+        sortedModules = getEnabledModules().stream().filter(Module::isDrawn).sorted(Comparator.comparing(module -> {
+            assert Mint.textManager != null;
+            return Mint.textManager.getStringWidth(module.getFullArrayString()) * (reverse ? -1 : 1);
+        })).collect(Collectors.toList());
     }
 
 
     public void onLogout() {
-        this.moduleList.forEach(Module::onLogout);
+        moduleList.forEach(Module::onLogout);
     }
 
     public void onLogin() {
-        this.moduleList.forEach(Module::onLogin);
+        moduleList.forEach(Module::onLogin);
     }
 
     public void onUnload() {
-        this.moduleList.forEach(MinecraftForge.EVENT_BUS::unregister);
-        this.moduleList.forEach(Module::onUnload);
+        moduleList.forEach(MinecraftForge.EVENT_BUS::unregister);
+        moduleList.forEach(Module::onUnload);
     }
 
     public void onUnloadPost() {
-        for (Module module : this.moduleList) {
+        for (Module module : moduleList) {
             module.enabled.setValue(false);
         }
     }
 
     public void onKeyPressed(int eventKey) {
-        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
+        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof MintGui)
             return;
-        }
-        this.moduleList.forEach(module -> {
+
+        moduleList.forEach(module -> {
             if (module.getBind().getKey() == eventKey) {
                 module.toggle();
             }

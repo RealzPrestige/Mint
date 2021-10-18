@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class FriendManager
-        extends Feature {
+public class FriendManager extends Feature {
     private List<Friend> friends = new ArrayList<>();
 
     public FriendManager() {
