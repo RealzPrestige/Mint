@@ -98,6 +98,10 @@ public class Window {
             moduleWindow.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+    public void onKeyTyped(char typedChar, int keyCode) {
+        modules.forEach(modules -> modules.onKeyTyped(typedChar, keyCode));
+    }
+
     public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
         if (releaseButton == 0)
             isDragging = false;

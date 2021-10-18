@@ -5,6 +5,7 @@ import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.buttons.BooleanButton;
 import mint.newgui.buttons.Button;
+import mint.newgui.buttons.NumberButton;
 import mint.newgui.buttons.ParentButton;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -38,7 +39,7 @@ public class ModuleWindow {
     }
 
     public void getSettings() {
-        ArrayList<Button> items = new ArrayList<>();
+        ArrayList<Button> buttons = new ArrayList<>();
         for (Setting setting : module.getSettings()) {
             if (module.getSettings().isEmpty())
                 continue;
@@ -47,13 +48,16 @@ public class ModuleWindow {
                 continue;
 
             if (setting.getValue() instanceof Boolean && setting.isParent())
-                items.add(new ParentButton(setting));
+                buttons.add(new ParentButton(setting));
 
             if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled") && !setting.isParent())
-                items.add(new BooleanButton(setting));
+                buttons.add(new BooleanButton(setting));
+
+            if (setting.isNumberSetting() && setting.hasRestriction())
+                buttons.add(new NumberButton(setting));
 
         }
-        button = items;
+        button = buttons;
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -83,6 +87,10 @@ public class ModuleWindow {
             module.toggle();
 
         button.forEach(button -> button.mouseClicked(mouseX, mouseY, mouseButton));
+    }
+
+    public void onKeyTyped(char typedChar, int keyCode) {
+        button.forEach(button -> button.onKeyTyped(typedChar, keyCode));
     }
 
     public boolean isInside(int mouseX, int mouseY) {

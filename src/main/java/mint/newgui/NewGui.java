@@ -4,6 +4,7 @@ import mint.Mint;
 import mint.modules.Module;
 import net.minecraft.client.gui.GuiScreen;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class NewGui extends GuiScreen {
@@ -39,6 +40,11 @@ public class NewGui extends GuiScreen {
     @Override
     public void mouseReleased(int mouseX, int mouseY, int releasedButton) {
         windows.forEach(windows -> windows.mouseReleased(mouseX, mouseY, releasedButton));
+    }
+
+    @Override
+    public void keyTyped(char typedChar, int keyCode) throws IOException {
+        windows.forEach(windows -> windows.onKeyTyped(typedChar, keyCode));
     }
 
     public void load() {

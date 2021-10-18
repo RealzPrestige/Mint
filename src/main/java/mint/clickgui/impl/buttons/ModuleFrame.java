@@ -43,10 +43,9 @@ public class ModuleFrame extends ButtonFrame {
                 if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName")) {
                     newItems.add(new StringFrame(setting));
                 }
-                if (setting.isNumberSetting() && setting.hasRestriction()) {
+                if (setting.isNumberSetting() && setting.hasRestriction())
                     newItems.add(new IntegerFrame(setting));
-                    continue;
-                }
+
                 if (setting.isEnumSetting())
                     newItems.add(new EnumFrame(setting));
             }

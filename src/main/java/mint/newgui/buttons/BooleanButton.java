@@ -38,10 +38,6 @@ public class BooleanButton extends Button {
 
     }
 
-    public boolean isInside(int mouseX, int mouseY) {
-        return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
-    }
-
     public boolean getValue() {
         return (boolean) setting.getValue();
     }

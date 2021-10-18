@@ -1,6 +1,5 @@
 package mint.clickgui.impl.buttons;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.clickgui.MintGui;
 import mint.clickgui.impl.Component;
@@ -47,7 +46,8 @@ public class IntegerFrame
     @Override
     public boolean isHovering(int mouseX, int mouseY) {
         for (Component component : MintGui.getClickGui().getComponents()) {
-            if (!component.drag) continue;
+            if (!component.drag)
+                continue;
             return false;
         }
         return (float) mouseX >= this.getX() && (float) mouseX <= this.getX() + (float) this.getWidth() + 8.0f && (float) mouseY >= this.getY() && (float) mouseY <= this.getY() + (float) this.height;
@@ -73,12 +73,12 @@ public class IntegerFrame
         float percent = ((float) mouseX - this.x) / ((float) this.width + 7.4f);
         if (this.setting.getValue() instanceof Double) {
             double result = (Double) this.setting.getMin() + (double) ((float) this.difference * percent);
-            this.setting.setValue((double) Math.round(10.0 * result) / 10.0);
+            setting.setValue((double) Math.round(10.0 * result) / 10.0);
         } else if (this.setting.getValue() instanceof Float) {
             float result = ((Float) this.setting.getMin()).floatValue() + (float) this.difference * percent;
-            this.setting.setValue(Float.valueOf((float) Math.round(10.0f * result) / 10.0f));
+            setting.setValue(Float.valueOf((float) Math.round(10.0f * result) / 10.0f));
         } else if (this.setting.getValue() instanceof Integer) {
-            this.setting.setValue((Integer) this.setting.getMin() + (int) ((float) this.difference * percent));
+            setting.setValue((Integer) this.setting.getMin() + (int) ((float) this.difference * percent));
         }
     }
 

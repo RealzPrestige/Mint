@@ -18,6 +18,9 @@ public class Button {
     public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
     }
 
+    public void onKeyTyped(char typedChar, int keyCode) {
+    }
+
     public void setX(int x){
         this.x = x;
     }
@@ -33,4 +36,9 @@ public class Button {
     public void setHeight(int height){
         this.height = height;
     }
+
+    public boolean isInside(int mouseX, int mouseY) {
+        return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
+    }
+
 }

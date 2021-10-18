@@ -1,6 +1,5 @@
 package mint.newgui.buttons;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.clickgui.setting.Setting;
 import mint.modules.core.NewGuiModule;
@@ -25,7 +24,7 @@ public class ParentButton extends Button {
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(getValue() ? (isInside(mouseX, mouseY) ? ChatFormatting.UNDERLINE + ">" : ">") : (isInside(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "v" : "v"), x + width - Mint.textManager.getStringWidth(">") - 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+        Mint.textManager.drawStringWithShadow(getValue() ?  ">" : "v", x + width - Mint.textManager.getStringWidth(getValue() ?  ">" : "v") - 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(setting.getName(), x, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
     }
@@ -38,10 +37,6 @@ public class ParentButton extends Button {
             else setting.setValue(true);
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
-    }
-
-    public boolean isInside(int mouseX, int mouseY) {
-        return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
     }
 
     public boolean getValue() {
