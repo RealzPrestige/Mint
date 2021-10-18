@@ -20,7 +20,7 @@ public class ParentButton extends Button {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(x, y, x + width, y + height, (boolean) setting.getValue() ? new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB() : new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
+        RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;

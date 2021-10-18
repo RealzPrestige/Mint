@@ -6,7 +6,7 @@ import com.google.gson.JsonPrimitive;
 import org.lwjgl.input.Keyboard;
 
 public class Bind {
-    private int key;
+    private final int key;
 
     public Bind(int key) {
         this.key = key;
@@ -20,10 +20,6 @@ public class Bind {
         return this.key;
     }
 
-    public void setKey(int key) {
-        this.key = key;
-    }
-
     public boolean isEmpty() {
         return this.key < 0;
     }
@@ -34,13 +30,6 @@ public class Bind {
 
     public boolean isDown() {
         return !this.isEmpty() && Keyboard.isKeyDown(this.getKey());
-    }
-
-    private String capitalise(String str) {
-        if (str.isEmpty()) {
-            return "";
-        }
-        return Character.toUpperCase(str.charAt(0)) + (str.length() != 1 ? str.substring(1).toLowerCase() : "");
     }
 
     public static class BindConverter
@@ -57,8 +46,7 @@ public class Bind {
             int key = -1;
             try {
                 key = Keyboard.getKeyIndex(s.toUpperCase());
-            } catch (Exception exception) {
-                // empty catch block
+            } catch (Exception ignored) {
             }
             if (key == 0) {
                 return Bind.none();

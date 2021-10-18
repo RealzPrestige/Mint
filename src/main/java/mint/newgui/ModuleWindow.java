@@ -1,12 +1,11 @@
 package mint.newgui;
 
 import mint.Mint;
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
-import mint.newgui.buttons.BooleanButton;
 import mint.newgui.buttons.Button;
-import mint.newgui.buttons.NumberButton;
-import mint.newgui.buttons.ParentButton;
+import mint.newgui.buttons.*;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -47,6 +46,9 @@ public class ModuleWindow {
             if (!setting.isVisible())
                 continue;
 
+            if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind"))
+                buttons.add(new BindButton(setting));
+
             if (setting.getValue() instanceof Boolean && setting.isParent())
                 buttons.add(new ParentButton(setting));
 
@@ -55,8 +57,8 @@ public class ModuleWindow {
 
             if (setting.isNumberSetting() && setting.hasRestriction())
                 buttons.add(new NumberButton(setting));
-
         }
+        buttons.add(new BindButton(module.getSettingByName("Keybind")));
         button = buttons;
     }
 
