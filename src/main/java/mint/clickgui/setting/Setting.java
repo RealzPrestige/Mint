@@ -19,9 +19,7 @@ public class Setting<T> {
     private Predicate<T> visibility;
     private Color color;
     private boolean isColorSetting;
-    public int r,g,b,a;
     private Feature feature;
-    public boolean isOpen;
 
     public Setting(String name, T defaultValue) {
         this.name = name;
@@ -76,27 +74,18 @@ public class Setting<T> {
         this.hasRestriction = true;
     }
 
-    public Setting(String name, int red, int green, int blue, int alpha, Predicate<T> visibility) {
+    public Setting(String name, Color color, Predicate<T> visibility) {
         this.name = name;
         this.isColorSetting = true;
-        this.color = new Color(red,green,blue,alpha);
-        this.r = red;
-        this.g = green;
-        this.b = blue;
-        this.a = alpha;
+        this.color = color;
         this.visibility = visibility;
         this.hasRestriction = true;
     }
 
-    public Setting(String name, int red, int green, int blue, int alpha, boolean openByDefault) {
+    public Setting(String name, Color color) {
         this.name = name;
         this.isColorSetting = true;
-        this.color = new Color(red,green,blue,alpha);
-        this.r = red;
-        this.g = green;
-        this.b = blue;
-        this.a = alpha;
-        this.isOpen = openByDefault;
+        this.color = color;
         this.hasRestriction = true;
     }
 
@@ -225,6 +214,14 @@ public class Setting<T> {
 
     public Color getColor() {
         return this.color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public boolean isColorSetting() {
+        return isColorSetting;
     }
 
 
