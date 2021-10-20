@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TickShift extends Module {
 
-    public Setting<Boolean> step = register(new Setting<>("Step", true));
+    public Setting<Boolean> step = register(new Setting<>("Step", Boolean.valueOf(Boolean.FALSE)));
     public Setting<Integer> timerFactor = register(new Setting<>("Factor", 1, 0, 9));
 
     public Setting<DisableMode> disableMode = register(new Setting<>("Disable", DisableMode.Distance));
