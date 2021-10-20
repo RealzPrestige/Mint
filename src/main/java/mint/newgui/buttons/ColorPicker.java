@@ -1,4 +1,4 @@
-package mint.clickgui.impl;
+package mint.newgui.buttons;
 
 import mint.clickgui.setting.Setting;
 import net.minecraft.client.gui.GuiScreen;

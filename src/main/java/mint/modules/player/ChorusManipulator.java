@@ -28,15 +28,13 @@ import static org.lwjgl.opengl.GL11.glEnable;
 
 
 /**
- *
  * @Author zPrestige_
  * Inspired by KamiV
  * @Since 24/09/2021
- *
  */
 public class ChorusManipulator extends Module {
     public static ChorusManipulator INSTANCE = new ChorusManipulator();
-    public Setting<Boolean> cancel = register(new Setting<>("Cancel",false));
+    public Setting<Boolean> cancel = register(new Setting<>("Cancel", false));
     public Setting<Boolean> tpOnSwitch = register(new Setting<>("Tp on Switch", true));
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
     public Setting<Boolean> solidSetting = register(new Setting("Render Solid", true, v -> solidParent.getValue()));
@@ -69,13 +67,13 @@ public class ChorusManipulator extends Module {
         tpPackets = new LinkedList<>();
     }
 
-    public void onLogin() {
+    public void onLogout() {
         disable();
     }
 
     @SubscribeEvent
     public void onPacket(PacketEvent event) {
-        if(NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         if (event.getPacket() instanceof SPacketPlayerPosLook && cancel.getValue()) {
@@ -97,7 +95,7 @@ public class ChorusManipulator extends Module {
     }
 
     public void onTick() {
-        if(isCancelled && mc.player.getHeldItemMainhand().getItem() != Items.CHORUS_FRUIT && tpOnSwitch.getValue()) {
+        if (isCancelled && mc.player.getHeldItemMainhand().getItem() != Items.CHORUS_FRUIT && tpOnSwitch.getValue()) {
             while (!packets.isEmpty()) {
                 mc.getConnection().sendPacket(packets.poll());
             }
@@ -112,7 +110,7 @@ public class ChorusManipulator extends Module {
     @Override
     public void onDisable() {
         while (!packets.isEmpty()) {
-           mc.getConnection().sendPacket(packets.poll());
+            mc.getConnection().sendPacket(packets.poll());
         }
         while (!tpPackets.isEmpty()) {
             mc.getConnection().sendPacket(tpPackets.poll());
@@ -185,7 +183,7 @@ public class ChorusManipulator extends Module {
                 fakeEntity.cameraYaw = fakeEntity.rotationYaw;
                 fakeEntity.cameraPitch = fakeEntity.rotationPitch;
                 playerCham.put(fakeEntity, 255);
-                if(isCancelled = false) {
+                if (isCancelled = false) {
                     MessageManager.sendMessage("TEST isCancelled has been set [True] TEST");
                     isCancelled = true;
                 }

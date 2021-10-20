@@ -31,7 +31,6 @@ public class ModuleManager {
             SignExploit.nullCheck();
             doneLoad = false;
         }
-
         /** Core **/
         moduleList.add(new Gui());
         moduleList.add(new FontChanger());
@@ -133,7 +132,8 @@ public class ModuleManager {
     public ArrayList<Module> getEnabledModules() {
         ArrayList<Module> enabledModules = new ArrayList<>();
         for (Module module : moduleList) {
-            if (!module.isEnabled()) continue;
+            if (!module.isEnabled())
+                continue;
             enabledModules.add(module);
         }
         return enabledModules;
@@ -141,7 +141,11 @@ public class ModuleManager {
 
     public ArrayList<Module> getModulesByCategory(Module.Category category) {
         ArrayList<Module> modulesCategory = new ArrayList<>();
-        moduleList.forEach(module -> { if (module.getCategory() == category) { modulesCategory.add(module); } });
+        moduleList.forEach(module -> {
+            if (module.getCategory() == category) {
+                modulesCategory.add(module);
+            }
+        });
         return modulesCategory;
     }
 

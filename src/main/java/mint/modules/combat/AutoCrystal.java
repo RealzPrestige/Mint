@@ -77,6 +77,7 @@ public class AutoCrystal extends Module {
     public Setting<Float> breakRaytraceRange = register(new Setting<>("Break Raytrace Range", 5f, 0f, 6f, v -> raytraceParent.getValue() && breakRaytrace.getValue()));
 
     public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
+    public Setting<Boolean> preparePlace = register(new Setting<>("Prepare Place", true, false, v -> miscParent.getValue()));
     public Setting<Boolean> updatedPlacements = register(new Setting<>("1.13+ Placements", false, false, v -> miscParent.getValue()));
     public Setting<Boolean> limitAttack = register(new Setting<>("Limit Attack", false, false, v -> miscParent.getValue()));
     public Setting<Boolean> packetBreak = register(new Setting<>("Packet Break", false, false, v -> miscParent.getValue()));
@@ -185,14 +186,29 @@ public class AutoCrystal extends Module {
         if (targetPlayer == null)
             return;
 
+        if(preparePlace.getValue() && breakTimer.passedMs((long) breakDelay.getValue()) && needsPlacePreparation()){
+            doBreak();
+            breakTimer.reset();
+        }
+
         if (placeTimer.passedMs((long) placeDelay.getValue())) {
             doPlace();
             placeTimer.reset();
         }
+
         if (breakTimer.passedMs((long) breakDelay.getValue())) {
             doBreak();
             breakTimer.reset();
         }
+    }
+
+    boolean needsPlacePreparation(){
+        bestCrystalPos = getBestPlacePos();
+
+        if(bestCrystalPos == null)
+            return false;
+
+        return mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(bestCrystalPos.getBlockPos().up())).isEmpty();
     }
 
     void doPlace() {
@@ -284,6 +300,8 @@ public class AutoCrystal extends Module {
     bestPlacePos getBestPlacePos() {
         TreeMap<Float, bestPlacePos> posList = new TreeMap<>();
         for (BlockPos pos : BlockUtil.getSphereAutoCrystal(placeRange.getValue(), true)) {
+            if(targetPlayer == null)
+                continue;
             float targetDamage = EntityUtil.calculatePosDamage(pos, targetPlayer);
             float selfHealth = mc.player.getHealth() + mc.player.getAbsorptionAmount();
             float selfDamage = EntityUtil.calculatePosDamage(pos, mc.player);

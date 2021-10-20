@@ -2,18 +2,26 @@ package mint.modules.combat;
 
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
+import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.utils.RenderUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EntityPredict extends Module {
-
     public Setting<Integer> attackAmount = register(new Setting<>("Attack Amount", 1, 1, 5));
     public Setting<Boolean> holdingCrystalOnly = register(new Setting<>("Holding Crystal Only", false));
+    public Setting<Boolean> render = register(new Setting<>("Render", false));
+    public Setting<Boolean> down = register(new Setting("Down", false, v -> render.getValue()));
+
+    int currentId;
+    BlockPos currentPos;
 
     public EntityPredict() {
         super("Entity Predict", Category.COMBAT, "Predict crystal ids and attack m");
@@ -27,16 +35,20 @@ public class EntityPredict extends Module {
         if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock) {
             int entityId = 0;
             CPacketPlayerTryUseItemOnBlock packet = event.getPacket();
-            if (!mc.world.getBlockState(packet.position).getBlock().equals(Blocks.OBSIDIAN))
+
+            if (!mc.world.getBlockState(packet.position).getBlock().equals(Blocks.OBSIDIAN) && !mc.world.getBlockState(packet.position).getBlock().equals(Blocks.BEDROCK))
                 return;
 
             if (holdingCrystalOnly.getValue() && !(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) || mc.player.getHeldItemOffhand().getItem().equals(Items.END_CRYSTAL)))
                 return;
 
-            for (Entity entity : mc.world.loadedEntityList)
-                if (entity.entityId > entityId)
-                    entityId = entity.entityId;
 
+            for (Entity entity : mc.world.loadedEntityList) {
+                if (entity instanceof EntityEnderCrystal)
+                    if (entity.entityId > entityId)
+                        entityId = entity.entityId;
+            }
+            currentPos = packet.getPos();
             switch (attackAmount.getValue()) {
                 case 1:
                     attackEntity(entityId + 1);
@@ -73,5 +85,13 @@ public class EntityPredict extends Module {
         packet.entityId = entityId;
         packet.action = CPacketUseEntity.Action.ATTACK;
         mc.player.connection.sendPacket(packet);
+        currentId = entityId;
+    }
+
+    public void renderWorldLastEvent(RenderWorldEvent event) {
+        if (currentPos == null || !render.getValue())
+            return;
+
+        RenderUtil.drawText(down.getValue() ? currentPos : currentPos.up(), "Id: " + currentId, -1);
     }
 }
