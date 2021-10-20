@@ -90,6 +90,7 @@ public class Setting<T> {
     }
 
 
+
     public String getName() {
         return this.name;
     }

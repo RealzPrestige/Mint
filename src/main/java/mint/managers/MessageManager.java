@@ -14,10 +14,6 @@ public class MessageManager {
         }
     }
 
-    public static void sendChatMessage(String message) {
-        Minecraft.getMinecraft().player.sendChatMessage(message);
-    }
-
     public static void sendMessage(String message) {
         sendRawMessage(messagePrefix + message);
     }

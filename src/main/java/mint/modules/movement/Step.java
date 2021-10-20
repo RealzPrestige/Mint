@@ -3,7 +3,6 @@ package mint.modules.movement;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
-import mint.utils.NullUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
 
@@ -19,35 +18,22 @@ public class Step extends Module {
     public enum Mode {Vanilla, Normal, Timer, NCP}
 
     public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
-    public Setting<Float> height = register(new Setting("Height", 2.0, 1.0, 4.0));
-    double[] oneblockPositions = new double[]{0.42, 0.75};
-    double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
-
-    //why do these even exist what the fuck
-    double[] twoFiveOffset = new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.907};
-    double[] fourBlockPositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43, 1.78, 1.63, 1.51, 1.9, 2.21, 2.45, 2.43, 2.78, 2.63, 2.51, 2.9, 3.21, 3.45, 3.43};
-    double[] selectedPositions = new double[0];
-    int packets;
+    public Setting<Float> height = register(new Setting("Height", 2.0f, 1.0f, 4.0f));
 
     public Step() {
         super("Step", Category.MOVEMENT, "Allows you to step up blocks.");
     }
 
-    @Override
     public void onEnable() {
         ticks = 0;
     }
 
-    @Override
     public void onDisable() {
-        mc.player.stepHeight = 0.6f;
+        if (mc.player.stepHeight != 0.6f)
+            mc.player.stepHeight = 0.6f;
     }
 
-    @Override
     public void onUpdate() {
-        if (NullUtil.fullNullCheck())
-            return;
-
         if (cancelLiquids.getValue() && EntityUtil.isInLiquid())
             return;
 
@@ -85,16 +71,16 @@ public class Step extends Module {
                     }
                     if (b3 && this.height.getValue() >= 1.5) {
                         final double[] array2 = {0.42, 0.75, 1.0, 1.16, 1.23, 1.2};
-                        for (int j = 0; j < array2.length; ++j) {
-                            Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + array2[j], Step.mc.player.posZ, Step.mc.player.onGround));
+                        for (double v : array2) {
+                            Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + v, Step.mc.player.posZ, Step.mc.player.onGround));
                         }
                         Step.mc.player.setPosition(Step.mc.player.posX, Step.mc.player.posY + 1.5, Step.mc.player.posZ);
                         this.ticks = 1;
                     }
                     if (b2 && this.height.getValue() >= 2.0) {
                         final double[] array3 = {0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
-                        for (int k = 0; k < array3.length; ++k) {
-                            Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + array3[k], Step.mc.player.posZ, Step.mc.player.onGround));
+                        for (double v : array3) {
+                            Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + v, Step.mc.player.posZ, Step.mc.player.onGround));
                         }
                         Step.mc.player.setPosition(Step.mc.player.posX, Step.mc.player.posY + 2.0, Step.mc.player.posZ);
                         this.ticks = 2;

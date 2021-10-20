@@ -59,7 +59,7 @@ public class ConfigManager {
     }
 
     public void saveCurrentConfig() {
-        File currentConfig = new File("mint/activeConfig.txt/");
+        File currentConfig = new File("mint/Default/activeConfig.txt/");
         try {
             if (currentConfig.exists()) {
                 FileWriter writer = new FileWriter(currentConfig);
@@ -79,7 +79,7 @@ public class ConfigManager {
     }
 
     public String loadCurrentConfig() {
-        File currentConfig = new File("mint/activeConfig.txt");
+        File currentConfig = new File("mint/Default/activeConfig.txt");
         String name = "config";
         try {
             if (currentConfig.exists()) {
@@ -183,6 +183,7 @@ public class ConfigManager {
             JsonElement element = entry.getValue();
             if (feature instanceof FriendManager) {
                 try {
+                    assert Mint.friendManager != null;
                     Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -117,7 +117,7 @@ public class FakePlayer extends Module {
 
                                 try {
                                     mc.player.connection.handleEntityStatus(new SPacketEntityStatus(fake_player, (byte) 35));
-                                } catch (Exception e) {
+                                } catch (Exception ignored) {
                                 }
                                 PopESP.getInstance().handlePopESP(fake_player.entityId);
                                 if (Notifications.TotemPopCounter.containsKey(fake_player)) {
