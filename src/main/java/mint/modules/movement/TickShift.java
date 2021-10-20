@@ -103,25 +103,57 @@ public class TickShift extends Module {
     }
 
     @SubscribeEvent
-    public void onMove(MoveEvent event) {
+    public void onMode(MoveEvent event) {
         if (!isEnabled())
             return;
-
         if (event.getStage() == 0 && !NullUtil.fullNullCheck() && !mc.player.isSneaking() && !EntityUtil.isInLiquid() && (mc.player.movementInput.moveForward != 0.0f || mc.player.movementInput.moveStrafe != 0.0f) || mc.player.isOnLadder()) {
             if (timerFactor.getValue() != 0) {
                 if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both) && mc.player.isHandActive()) {
                     return;
                 } else {
-                    if (timerFactor.getValue() != 0) {
-                        Timer.setTimer(1 + (timerFactor.getValue() / 10f));
-                    } else {
-                        Timer.resetTimer();
+                    switch (timerFactor.getValue()) {
+                        case 1: {
+                            Timer.setTimer(1.15f);
+                            break;
+                        }
+                        case 2: {
+                            Timer.setTimer(1.3f);
+                            break;
+                        }
+                        case 3: {
+                            Timer.setTimer(1.45f);
+                            break;
+                        }
+                        case 4: {
+                            Timer.setTimer(1.6f);
+                            break;
+                        }
+                        case 5: {
+                            Timer.setTimer(1.75f);
+                            break;
+                        }
+                        case 6: {
+                            Timer.setTimer(1.9f);
+                            break;
+                        }
+                        case 7: {
+                            Timer.setTimer(2.05f);
+                            break;
+                        }
+                        case 8: {
+                            Timer.setTimer(2.2f);
+                            break;
+                        }
+                        case 9: {
+                            Timer.setTimer(2.35f);
+                            break;
+                        }
                     }
                 }
             }
-            if (step.getValue()) {
+            if (step.getValue())
                 mc.player.stepHeight = 2.0f;
-            }
+
             final MovementInput movementInput = mc.player.movementInput;
             float moveForward = movementInput.moveForward;
             float moveStrafe = movementInput.moveStrafe;
@@ -131,11 +163,11 @@ public class TickShift extends Module {
                 event.z = (0.0);
             } else {
                 if (moveForward != 0.0) {
-                    if (moveStrafe > 0.0) {
+                    if (moveStrafe > 0.0)
                         rotationYaw += ((moveForward > 0.0) ? -45 : 45);
-                    } else if (moveStrafe < 0.0) {
+                    else if (moveStrafe < 0.0)
                         rotationYaw += ((moveForward > 0.0) ? 45 : -45);
-                    }
+
                     moveStrafe = 0.0f;
                     moveForward = ((moveForward == 0.0f) ? moveForward : ((moveForward > 0.0) ? 1.0f : -1.0f));
                 }
