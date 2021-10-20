@@ -7,9 +7,11 @@ import mint.modules.core.NewGuiModule;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
+@SuppressWarnings("unchecked")
 public class BindButton extends Button {
     Setting setting;
     boolean isTyping;
@@ -38,13 +40,16 @@ public class BindButton extends Button {
     public void onKeyTyped(char typedChar, int keyCode) {
         super.onKeyTyped(typedChar, keyCode);
         if (isTyping) {
-            Bind bindChar = new Bind(keyCode);
-
-            if (bindChar.toString().equalsIgnoreCase("Delete") || bindChar.toString().equalsIgnoreCase("Escape"))
-                bindChar = new Bind(-1);
-
-            setting.setValue(bindChar);
-            isTyping = !isTyping;
+            if (Keyboard.isKeyDown(Keyboard.KEY_DELETE)) {
+                setting.setValue(new Bind(-1));
+                isTyping = false;
+            } else if (Keyboard.isKeyDown(Keyboard.KEY_BACK)) {
+                setting.setValue(new Bind(-1));
+                isTyping = false;
+            } else {
+                setting.setValue(new Bind(keyCode));
+                isTyping = false;
+            }
         }
     }
 }
