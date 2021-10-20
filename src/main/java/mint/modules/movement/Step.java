@@ -19,7 +19,7 @@ public class Step extends Module {
     public enum Mode {Vanilla, Normal, Timer, NCP}
 
     public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
-    public Setting<Integer> height = register(new Setting("Height", 2, 1, 4));
+    public Setting<Float> height = register(new Setting("Height", 2.0, 1.0, 4.0));
     double[] oneblockPositions = new double[]{0.42, 0.75};
     double[] futurePositions = new double[]{0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
 
@@ -50,36 +50,6 @@ public class Step extends Module {
         }
         if (mode.getValue() == Mode.Vanilla) {
             mc.player.stepHeight = height.getValue();
-
-        } else if (mode.getValue() == Mode.Normal) {
-            switch (height.getValue()) {
-                case 1: {
-                    selectedPositions = oneblockPositions;
-                    break;
-                }
-                case 2: {
-                    selectedPositions = futurePositions;
-                    break;
-                }
-                case 3: {
-                    selectedPositions = twoFiveOffset;
-                    break;
-                }
-                case 4: {
-                    selectedPositions = fourBlockPositions;
-                    break;
-                }
-            }
-            if (mc.player.collidedHorizontally && mc.player.onGround) {
-                ++packets;
-            }
-            if (mc.player.onGround && mc.player.collidedVertically && mc.player.fallDistance == 0.0f && !mc.gameSettings.keyBindJump.pressed && mc.player.collidedHorizontally && !mc.player.isOnLadder() && (packets > selectedPositions.length - 2 || packets > 0)) {
-                for (double position : selectedPositions) {
-                    mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + position, mc.player.posZ, true));
-                }
-                mc.player.setPosition(mc.player.posX, mc.player.posY + selectedPositions[selectedPositions.length - 1], mc.player.posZ);
-                packets = 0;
-            }
         }else if (mode.getValue() == Mode.NCP) {
             final double[] forward = forward(0.1);
             boolean b = false;
