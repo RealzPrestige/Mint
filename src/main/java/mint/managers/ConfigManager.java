@@ -59,7 +59,7 @@ public class ConfigManager {
     }
 
     public void saveCurrentConfig() {
-        File currentConfig = new File("mint/activeConfig.txt");
+        File currentConfig = new File("mint/activeConfig.txt/");
         try {
             if (currentConfig.exists()) {
                 FileWriter writer = new FileWriter(currentConfig);

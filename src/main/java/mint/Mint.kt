@@ -30,8 +30,6 @@ class Mint {
 
         @JvmField
         var moduleManager: ModuleManager? = null
-        var fileManager: FileManager? = null
-
         @JvmField
         var configManager: ConfigManager? = null
 
@@ -49,7 +47,6 @@ class Mint {
             friendManager = FriendManager()
             moduleManager = ModuleManager()
             eventManager = EventManager()
-            fileManager = FileManager()
             configManager = ConfigManager()
             moduleManager!!.init()
             eventManager!!.init()
