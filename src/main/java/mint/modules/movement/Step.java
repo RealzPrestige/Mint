@@ -3,8 +3,8 @@ package mint.modules.movement;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
+import mint.utils.NullUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 /**
@@ -45,35 +45,38 @@ public class Step extends Module {
 
     @Override
     public void onUpdate() {
-        if (cancelLiquids.getValue() && EntityUtil.isInLiquid()) {
+        if (NullUtil.fullNullCheck())
             return;
-        }
-        if (mode.getValue() == Mode.Vanilla) {
+
+        if (cancelLiquids.getValue() && EntityUtil.isInLiquid())
+            return;
+
+        if (mode.getValue() == Mode.Vanilla)
             mc.player.stepHeight = height.getValue();
-        }else if (mode.getValue() == Mode.NCP) {
+        else if (mode.getValue() == Mode.NCP) {
             final double[] forward = forward(0.1);
             boolean b = false;
             boolean b2 = false;
             boolean b3 = false;
             boolean b4 = false;
-            if (Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 2.6, forward[1])).isEmpty() && !Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 2.4, forward[1])).isEmpty()) {
+            if (Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 2.6, forward[1])).isEmpty() && !Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 2.4, forward[1])).isEmpty()) {
                 b = true;
             }
-            if (Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 2.1, forward[1])).isEmpty()) {
-                if (!Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.9, forward[1])).isEmpty()) {
+            if (Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 2.1, forward[1])).isEmpty()) {
+                if (!Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.9, forward[1])).isEmpty())
                     b2 = true;
-                }
+
             }
-            if (Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.6, forward[1])).isEmpty() && !Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.4, forward[1])).isEmpty()) {
+            if (Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.6, forward[1])).isEmpty() && !Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.4, forward[1])).isEmpty())
                 b3 = true;
-            }
-            if (Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.0, forward[1])).isEmpty() && !Step.mc.world.getCollisionBoxes((Entity)Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 0.6, forward[1])).isEmpty()) {
+
+            if (Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 1.0, forward[1])).isEmpty() && !Step.mc.world.getCollisionBoxes(Step.mc.player, Step.mc.player.getEntityBoundingBox().offset(forward[0], 0.6, forward[1])).isEmpty())
                 b4 = true;
-            }
+
             if (Step.mc.player.collidedHorizontally && (Step.mc.player.moveForward != 0.0f || Step.mc.player.moveStrafing != 0.0f)) {
                 if (Step.mc.player.onGround) {
                     if (b4 && this.height.getValue() >= 1.0) {
-                        final double[] array = { 0.42, 0.753 };
+                        final double[] array = {0.42, 0.753};
                         for (int length = array.length, i = 0; i < length; ++i) {
                             Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + array[i], Step.mc.player.posZ, Step.mc.player.onGround));
                         }
@@ -81,7 +84,7 @@ public class Step extends Module {
                         this.ticks = 1;
                     }
                     if (b3 && this.height.getValue() >= 1.5) {
-                        final double[] array2 = { 0.42, 0.75, 1.0, 1.16, 1.23, 1.2 };
+                        final double[] array2 = {0.42, 0.75, 1.0, 1.16, 1.23, 1.2};
                         for (int j = 0; j < array2.length; ++j) {
                             Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + array2[j], Step.mc.player.posZ, Step.mc.player.onGround));
                         }
@@ -89,7 +92,7 @@ public class Step extends Module {
                         this.ticks = 1;
                     }
                     if (b2 && this.height.getValue() >= 2.0) {
-                        final double[] array3 = { 0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43 };
+                        final double[] array3 = {0.42, 0.78, 0.63, 0.51, 0.9, 1.21, 1.45, 1.43};
                         for (int k = 0; k < array3.length; ++k) {
                             Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + array3[k], Step.mc.player.posZ, Step.mc.player.onGround));
                         }
@@ -97,7 +100,7 @@ public class Step extends Module {
                         this.ticks = 2;
                     }
                     if (b && this.height.getValue() >= 2.5) {
-                        final double[] array4 = { 0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.907 };
+                        final double[] array4 = {0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.907};
                         for (double v : array4) {
                             Step.mc.player.connection.sendPacket(new CPacketPlayer.Position(Step.mc.player.posX, Step.mc.player.posY + v, Step.mc.player.posZ, Step.mc.player.onGround));
                         }
@@ -109,13 +112,14 @@ public class Step extends Module {
 
         } else if (mode.getValue() == Mode.Timer) {
             mc.player.stepHeight = height.getValue();
-            if (Step.mc.player.collidedHorizontally && (Step.mc.player.moveForward != 0.0f || Step.mc.player.moveStrafing != 0.0f)) {
+            if (Step.mc.player.collidedHorizontally && (Step.mc.player.moveForward != 0.0f || Step.mc.player.moveStrafing != 0.0f))
                 mc.timer.tickLength = 50.0f / 0.6f;
-            } else {
+            else
                 mc.timer.tickLength = 50.0f;
-            }
+
         }
     }
+
     public static double[] forward(final double kambingdarealnigga) {
         float moveForward = Minecraft.getMinecraft().player.movementInput.moveForward;
         float moveStrafe = Minecraft.getMinecraft().player.movementInput.moveStrafe;
@@ -123,20 +127,18 @@ public class Step extends Module {
         if (moveForward != 0.0f) {
             if (moveStrafe > 0.0f) {
                 n2 += ((moveForward > 0.0f) ? -45 : 45);
-            }
-            else if (moveStrafe < 0.0f) {
+            } else if (moveStrafe < 0.0f) {
                 n2 += ((moveForward > 0.0f) ? 45 : -45);
             }
             moveStrafe = 0.0f;
             if (moveForward > 0.0f) {
                 moveForward = 1.0f;
-            }
-            else if (moveForward < 0.0f) {
+            } else if (moveForward < 0.0f) {
                 moveForward = -1.0f;
             }
         }
         final double sin = Math.sin(Math.toRadians(n2 + 90.0f));
         final double cos = Math.cos(Math.toRadians(n2 + 90.0f));
-        return new double[] { moveForward * kambingdarealnigga * cos + moveStrafe * kambingdarealnigga * sin, moveForward * kambingdarealnigga * sin - moveStrafe * kambingdarealnigga * cos };
+        return new double[]{moveForward * kambingdarealnigga * cos + moveStrafe * kambingdarealnigga * sin, moveForward * kambingdarealnigga * sin - moveStrafe * kambingdarealnigga * cos};
     }
 }

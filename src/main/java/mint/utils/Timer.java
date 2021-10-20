@@ -1,5 +1,7 @@
 package mint.utils;
 
+import mint.Mint;
+
 public class Timer {
     private long time = -1L;
     private final long current;
@@ -13,6 +15,7 @@ public class Timer {
         this.paused = false;
         current = -1;
     }
+
     public final boolean hasReached(final long delay) {
         return System.currentTimeMillis() - this.current >= delay;
     }
@@ -82,5 +85,16 @@ public class Timer {
         return this.startTime;
     }
 
+    public static float getTimer() {
+        return Mint.INSTANCE.mc.timer.tickLength;
+    }
+
+    public static void setTimer(float speed) {
+        Mint.INSTANCE.mc.timer.tickLength = 50 / speed;
+    }
+
+    public static void resetTimer() {
+        Mint.INSTANCE.mc.timer.tickLength = 50;
+    }
 }
 

@@ -346,7 +346,7 @@ public class AutoCrystal extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if(!isEnabled())
+        if(!isEnabled() || targetPlayer == null)
             return;
         if (event.getPacket() instanceof SPacketExplosion) {
             for (Entity entity : mc.world.loadedEntityList) {

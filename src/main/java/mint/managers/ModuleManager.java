@@ -79,6 +79,7 @@ public class ModuleManager {
         moduleList.add(new Step());
         moduleList.add(new Strafe());
         moduleList.add(new YPort());
+        moduleList.add(new TickShift());
 
         /** Player **/
         moduleList.add(new AntiAim());
