@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 
 public class MessageManager {
-    public static final String messagePrefix = ChatFormatting.AQUA + "[Mint] " + ChatFormatting.RESET;
+    public static final String messagePrefix = ChatFormatting.AQUA + "[FBware] " + ChatFormatting.RESET;
     public static final String errorPrefix = ChatFormatting.DARK_RED + "[Mint] " + ChatFormatting.RESET;
 
     public static void sendRawMessage(String message) {
