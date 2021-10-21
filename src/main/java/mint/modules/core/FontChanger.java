@@ -38,6 +38,11 @@ public class FontChanger
         return INSTANCE;
     }
 
+    @Override
+    public void onUpdate() {
+        MessageManager.sendRemovableMessage(color.getColor().getRed() + ", " + color.getColor().getGreen() + ", " + color.getColor().getBlue(), 1);
+    }
+
     public static boolean checkFont(String font, boolean message) {
         for (String s : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) {
             if (!message && s.equals(font)) {

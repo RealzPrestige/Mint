@@ -37,7 +37,9 @@ public class ColorPicker extends GuiScreen {
         if (Mouse.isButtonDown(0)) {
             setting.setColor(robot.getPixelColor(mouseX, mouseY));
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
             setting.isOpen = false;
+            mc.displayGuiScreen(null);
+        }
     }
 }
