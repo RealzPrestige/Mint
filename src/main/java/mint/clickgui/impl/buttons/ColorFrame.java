@@ -2,9 +2,9 @@ package mint.clickgui.impl.buttons;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
-import mint.newgui.buttons.ColorPicker;
 import mint.clickgui.setting.Setting;
 import mint.modules.core.Gui;
+import mint.newgui.buttons.ColorPicker;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 
 public class ColorFrame extends ButtonFrame {
     public static final Minecraft mc = Minecraft.getMinecraft();
+    int bgColor = ColorUtil.toRGBA(Gui.getInstance().backgroundRed.getValue(), Gui.getInstance().backgroundGreen.getValue(), Gui.getInstance().backgroundBlue.getValue(), Gui.getInstance().backgroundAlpha.getValue());
     public Setting setting;
 
     public ColorFrame(Setting setting) {
@@ -27,9 +28,8 @@ public class ColorFrame extends ButtonFrame {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int sideColor = ColorUtil.toRGBA(Gui.getInstance().sideRed.getValue(), Gui.getInstance().sideGreen.getValue(), Gui.getInstance().sideBlue.getValue(), Gui.getInstance().sideAlpha.getValue());
-        RenderUtil.drawRect(this.x + 83.0f - 4.0f, this.y + 4.0f, this.x + this.width, this.y + this.height - 3.0f, ColorUtil.toRGBA(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue()));
-        RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 8.0f, this.y + (float) this.height - 0.5f, sideColor);
+        RenderUtil.drawRect(this.x + 83.0f - 4.0f, this.y + 4.0f, this.x + this.width - 10, this.y + this.height - 3.0f, ColorUtil.toRGBA(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue()));
+        RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 8.0f, this.y + (float) this.height - 0.5f, bgColor);
         Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), -1);
         if (this.setting.isOpen) {
             mc.displayGuiScreen(null);
