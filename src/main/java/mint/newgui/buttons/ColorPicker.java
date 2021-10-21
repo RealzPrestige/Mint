@@ -1,11 +1,12 @@
 package mint.newgui.buttons;
 
 import mint.clickgui.setting.Setting;
+import mint.utils.RenderUtil;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * @author kambing
@@ -13,9 +14,7 @@ import java.awt.image.BufferedImage;
  */
 
 public class ColorPicker extends GuiScreen {
-    public ResourceLocation resourceLocation;
     Setting setting;
-    public static BufferedImage image;
     Robot robot;
 
     public ColorPicker(Setting setting) {
@@ -29,18 +28,16 @@ public class ColorPicker extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        // @zPrestige_
-        this.resourceLocation = new ResourceLocation("textures/colorPicker.png");
-        /**
-         * ive made a color picker image to make it easier
-         * you can easily get the color
-         * by using:
-         */
+        RenderUtil.drawRect(0, 0, 100.0f, 300.0f, setting.getColor().getRGB());
         try {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
         }
-        setting.setColor(robot.getPixelColor(mouseX,mouseY));
+        if (Mouse.isButtonDown(0)) {
+            setting.setColor(robot.getPixelColor(mouseX, mouseY));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+            setting.isOpen = false;
     }
 }

@@ -17,7 +17,6 @@ import net.minecraft.client.Minecraft;
 public class ColorFrame extends ButtonFrame { //TODO: finish this
     public static final Minecraft mc = Minecraft.getMinecraft();
     public Setting setting;
-    public Boolean open = false;
 
     public ColorFrame(Setting setting) {
         super(setting.getName());
@@ -32,7 +31,8 @@ public class ColorFrame extends ButtonFrame { //TODO: finish this
         RenderUtil.drawRect(this.x + 83.0f - 4.0f, this.y + 4.0f, this.x + this.width, this.y + this.height - 3.0f, ColorUtil.toRGBA(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue()));
         RenderUtil.drawRect(this.x, this.y, this.x + (float) this.width + 8.0f, this.y + (float) this.height - 0.5f, sideColor);
         Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), -1);
-        if (this.open) {
+        if (this.setting.isOpen) {
+            mc.displayGuiScreen(null);
             mc.displayGuiScreen(new ColorPicker(setting));
         }
     }
@@ -45,10 +45,10 @@ public class ColorFrame extends ButtonFrame { //TODO: finish this
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         this.setHidden(!this.setting.isVisible());
-        if (mouseButton == 0 && this.isHovering(mouseX, mouseY) && !this.open) {
-            this.open = true;
-        }else if (mouseButton == 0 && this.isHovering(mouseX, mouseY) && this.open) {
-            this.open = false;
+        if (mouseButton == 0 && this.isHovering(mouseX, mouseY) && !this.setting.isOpen) {
+            this.setting.isOpen = true;
+        }else if (mouseButton == 0 && this.isHovering(mouseX, mouseY) && this.setting.isOpen) {
+            this.setting.isOpen = false;
         }
     }
 }
