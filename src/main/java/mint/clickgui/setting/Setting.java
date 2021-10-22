@@ -20,6 +20,7 @@ public class Setting<T> {
     private Color color;
     private boolean isColorSetting;
     private Feature feature;
+    public boolean isOpen = false;
 
     public Setting(String name, T defaultValue) {
         this.name = name;

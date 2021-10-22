@@ -13,19 +13,22 @@ import java.awt.*;
 public class FontChanger
         extends Module {
     private static FontChanger INSTANCE = new FontChanger();
-    public Setting<Boolean> override = this.register(new Setting<>("Full", false));
-    public Setting<Integer> fontSize = this.register(new Setting<>("Size", 17, 15, 20));
-    public Setting<Integer> w = this.register(new Setting<>("W", 72, 0, 200));
-    public Setting<Integer> h = this.register(new Setting<>("H", 72, 0, 200));
-    public Setting<Integer> x = this.register(new Setting<>("X", 72, 0, 200));
-    public Setting<Integer> y = this.register(new Setting<>("Y", 72, 0, 200));
+    public Setting<Boolean> override = register(new Setting<>("Full", false));
+    public Setting<Integer> fontSize = register(new Setting<>("Size", 17, 15, 20));
+    public Setting<Integer> w = register(new Setting<>("W", 72, 0, 200));
+    public Setting<Integer> h = register(new Setting<>("H", 72, 0, 200));
+    public Setting<Integer> x = register(new Setting<>("X", 72, 0, 200));
+    public Setting<Integer> y = register(new Setting<>("Y", 72, 0, 200));
+    public Setting<Float> x1 = register(new Setting<>("X1", 72.0f, 0.0f, 200.0f));
+    public Setting<Float> y1 = register(new Setting<>("Y1", 72.0f, 0.0f, 200.0f));
+    public Setting color = register(new Setting("Color", new Color(199, 45, 45)));
     public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD));
     public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}
     private boolean reloadFont = false;
 
     public FontChanger() {
         super("Font", Category.CORE, "Changes the font.");
-        this.setInstance();
+        setInstance();
     }
 
     public static FontChanger getInstance() {
@@ -33,6 +36,11 @@ public class FontChanger
             INSTANCE = new FontChanger();
         }
         return INSTANCE;
+    }
+
+    @Override
+    public void onUpdate() {
+        MessageManager.sendRemovableMessage(color.getColor().getRed() + ", " + color.getColor().getGreen() + ", " + color.getColor().getBlue(), 1);
     }
 
     public static boolean checkFont(String font, boolean message) {
@@ -59,15 +67,15 @@ public class FontChanger
                 event.setCanceled(true);
                 return;
             }
-            this.reloadFont = true;
+            reloadFont = true;
         }
     }
 
     @Override
     public void onTick() {
-        if (this.reloadFont) {
+        if (reloadFont) {
             Mint.textManager.init();
-            this.reloadFont = false;
+            reloadFont = false;
         }
     }
 }

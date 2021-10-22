@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 /**
  * @author kambing, zPrestige
  */
+
 public class ViewTweaks extends Module {
 
     private static ViewTweaks INSTANCE = new ViewTweaks();
