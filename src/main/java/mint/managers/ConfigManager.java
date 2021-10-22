@@ -23,7 +23,7 @@ public class ConfigManager {
 
     public void loadConfig(String name) {
         loadingConfig = true;
-        List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
+        final List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
         config = files.contains(new File("mint/" + name + "/")) ? "mint/" + name + "/" : "mint/config/";
         assert Mint.friendManager != null;
         Mint.friendManager.onLoad();

@@ -17,7 +17,8 @@ public class CripWalk extends Module {
         if(NullUtil.fullNullCheck())
             return;
         for (EntityPlayer player : mc.world.playerEntities) {
-            if (player.getName() == mc.player.getName()) continue;
+            if (player.getName() == mc.player.getName())
+                continue;
             player.limbSwing = 0;
             player.limbSwingAmount = 0;
             player.prevLimbSwingAmount = 0;

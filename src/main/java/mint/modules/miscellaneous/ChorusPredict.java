@@ -5,6 +5,7 @@ import mint.events.ChorusEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;
+import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import mint.utils.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,7 +17,6 @@ import java.awt.*;
 public class ChorusPredict extends Module {
 
     public Setting<Integer> time = register(new Setting<>("Duration", 500, 50, 3000));
-    public Setting<Boolean> blocker = register(new Setting<>("Blocker", true));
     public Setting<Boolean> boxParent = register(new Setting<>("Box", true, false));
     public Setting<Boolean> box = register(new Setting("BoxSetting", true, v -> boxParent.getValue()));
     public Setting<Integer> boxRed = register(new Setting<>("BoxRed", 255, 0, 255, v -> box.getValue() && boxParent.getValue()));
@@ -53,6 +53,8 @@ public class ChorusPredict extends Module {
 
     @SubscribeEvent
     public void onEntityChorus(ChorusEvent event) {
+        if (!isEnabled() || NullUtil.fullNullCheck())
+            return;
         x = event.getEventPosX();
         y = event.getEventY();
         z = event.getEventZ();

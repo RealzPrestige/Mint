@@ -51,10 +51,8 @@ public class SSS extends Module {
 
     @Override
     public void onUpdate() {
-        if (NullUtil.fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             disable();
-            return;
-        }
         ticks++;
         if (disableMode.getValue() == DisableMode.Ticks && ticks >= ticksVal.getValue()) {
             disable();
@@ -116,6 +114,8 @@ public class SSS extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
+        if(!isEnabled())
+            return;
         if (isEnabled() && playerType.getValue() == PlayerType.Blink && mode.getValue() != Mode.Server) {
             event.setCanceled(true); // or add == client || == both
         }
@@ -123,6 +123,8 @@ public class SSS extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if(!isEnabled())
+            return;
         if (isEnabled() && playerType.getValue() == PlayerType.Blink && mode.getValue() != Mode.Client) {
             event.setCanceled(true);
         }

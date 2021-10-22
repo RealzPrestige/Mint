@@ -3,6 +3,7 @@ package mint.modules.player;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBoat;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
@@ -40,9 +41,8 @@ public class Interaction extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
-        if (!isEnabled()) {
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
-        }
         //tryuseitemonblock packet + held item check(boat) + boatPlace setting check
         if (e.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && mc.player.getHeldItemMainhand().getItem() instanceof ItemBoat && boatPlace.getValue()) {
             e.setCanceled(true);

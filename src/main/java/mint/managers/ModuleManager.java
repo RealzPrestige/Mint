@@ -64,7 +64,6 @@ public class ModuleManager {
         moduleList.add(new FakePlayer());
         //moduleList.add(new PacketManipulator());
         moduleList.add(new SelfAnvil());
-        moduleList.add(new NoEntityTrace());
         moduleList.add(new TabTweaks());
 
         /** Movement **/

@@ -42,7 +42,6 @@ public class EntityPredict extends Module {
             if (holdingCrystalOnly.getValue() && !(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) || mc.player.getHeldItemOffhand().getItem().equals(Items.END_CRYSTAL)))
                 return;
 
-
             for (Entity entity : mc.world.loadedEntityList) {
                 if (entity instanceof EntityEnderCrystal)
                     if (entity.entityId > entityId)

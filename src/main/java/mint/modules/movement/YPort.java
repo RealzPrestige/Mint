@@ -22,13 +22,12 @@ public class YPort extends Module {
 
     @Override
     public void onUpdate() {
-        if (NullUtil.fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             disable();
+
+        if (mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.isOnLadder())
             return;
-        }
-        if (mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.isOnLadder()) {
-            return;
-        }
+
         mc.player.stepHeight = 2.0f;
         if (mc.player.onGround) {
             EntityUtil.setSpeed(mc.player, EntityUtil.getDefaultMoveSpeed() + speed.getValue());

@@ -30,6 +30,7 @@ class Mint {
 
         @JvmField
         var moduleManager: ModuleManager? = null
+
         @JvmField
         var configManager: ConfigManager? = null
 

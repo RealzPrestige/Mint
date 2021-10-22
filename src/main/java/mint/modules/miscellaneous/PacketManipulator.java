@@ -3,6 +3,7 @@ package mint.modules.miscellaneous;
 import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -27,10 +28,10 @@ public class PacketManipulator extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
-        if (isEnabled()) {
-            if (e.getPacket() instanceof CPacketPlayer && cplayer.getValue()) {
-                e.setCanceled(true);
-            }
+        if (!isEnabled() || NullUtil.fullNullCheck())
+            return;
+        if (e.getPacket() instanceof CPacketPlayer && cplayer.getValue()) {
+            e.setCanceled(true);
         }
     }
 }

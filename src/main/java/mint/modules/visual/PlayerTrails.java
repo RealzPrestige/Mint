@@ -42,7 +42,7 @@ public class PlayerTrails extends Module {
     }
 
     public void onTick() {
-        if (NullUtil.fullNullCheck())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
 
         if (trails.containsKey(mc.player.getUniqueID())) {
@@ -63,7 +63,7 @@ public class PlayerTrails extends Module {
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (NullUtil.fullNullCheck())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
 
         for (final Map.Entry<UUID, ItemTrail> entry : trails.entrySet()) {

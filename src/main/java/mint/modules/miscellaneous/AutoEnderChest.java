@@ -20,7 +20,6 @@ public class AutoEnderChest extends Module {
     public Setting<Boolean> rotate = register(new Setting("Rotate", false));
     public Setting<Boolean> packet = register(new Setting("PacketPlace", false));
     public Setting<Boolean> swing = register(new Setting("Swing", false));
-    //EnumHand.Main_hand looks so fucking chinese in game, so i replaced it with this
     public Setting<Hand> enumHand = register(new Setting("Hand", Hand.Mainhand, v -> swing.getValue()));
 
     public enum Hand {Mainhand, Offhand}

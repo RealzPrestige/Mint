@@ -32,7 +32,7 @@ public class Backpack extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
-        if(!isEnabled())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
         if (e.getPacket() instanceof CPacketCloseWindow && close.getValue()) {
             e.setCanceled(true);
@@ -41,7 +41,7 @@ public class Backpack extends Module {
 
     @Override
     public void onUpdate() {
-        if(!isEnabled())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
         if (mc.currentScreen instanceof GuiContainer && open.getValue()) {
             if (mc.currentScreen instanceof MintGui ||

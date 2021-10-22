@@ -104,7 +104,7 @@ public class TickShift extends Module {
 
     @SubscribeEvent
     public void onMode(MoveEvent event) {
-        if (!isEnabled())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
         if (event.getStage() == 0 && !NullUtil.fullNullCheck() && !mc.player.isSneaking() && !EntityUtil.isInLiquid() && (mc.player.movementInput.moveForward != 0.0f || mc.player.movementInput.moveStrafe != 0.0f) || mc.player.isOnLadder()) {
             if (timerFactor.getValue() != 0) {
@@ -180,7 +180,7 @@ public class TickShift extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
-        if (!isEnabled())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
 
         if (event.getStage() == 0 && mc.world != null && !mc.isSingleplayer() && (mode.getValue() != D.Server) && blink.getValue() && isEnabled()) {
@@ -203,7 +203,7 @@ public class TickShift extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if (!isEnabled())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
         if (mc.world != null && !mc.isSingleplayer() && (mode.getValue() != D.Client) && blink.getValue() && isEnabled()) {
             event.setCanceled(true);

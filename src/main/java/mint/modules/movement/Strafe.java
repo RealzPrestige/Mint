@@ -75,7 +75,7 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onPlayerUpdateWalking(UpdateWalkingPlayerEvent event) {
-        if (Phase.getInstance().isEnabled())
+        if (Phase.getInstance().isEnabled() || !isEnabled())
             return;
         if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
             final double xDist = mc.player.posX - mc.player.prevPosX;
@@ -124,9 +124,7 @@ public class Strafe extends Module {
     }
 
     public void onUpdate() {
-        if (NullUtil.fullNullCheck())
-            return;
-        if (Phase.getInstance().isEnabled())
+        if (NullUtil.fullNullCheck() || Phase.getInstance().isEnabled())
             return;
         if (mc.player != null) {
             prevDist = Math.sqrt((mc.player.posX - mc.player.prevPosX) * (mc.player.posX - mc.player.prevPosX) + (mc.player.posZ - mc.player.prevPosZ) * (mc.player.posZ - mc.player.prevPosZ));
@@ -144,11 +142,9 @@ public class Strafe extends Module {
 
     @SubscribeEvent
     public void onMove(MoveEvent event) {
-        if (NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck() || !isEnabled() || Phase.getInstance().isEnabled())
             return;
 
-        if (Phase.getInstance().isEnabled())
-            return;
         if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
             if (EntityUtil.isMoving()) {
                 final EntityPlayerSP player2 = mc.player;

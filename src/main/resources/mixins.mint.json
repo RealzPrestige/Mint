@@ -5,7 +5,6 @@
   "refmap": "mixins.mint.refmap.json",
   "mixins": [
     "MixinEntityPlayerSP",
-    "MixinEntityRenderer",
     "MixinFontRenderer",
     "MixinGuiIngame",
     "MixinRenderItem",

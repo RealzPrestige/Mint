@@ -73,7 +73,7 @@ public class ChorusManipulator extends Module {
 
     @SubscribeEvent
     public void onPacket(PacketEvent event) {
-        if (NullUtil.fullNullCheck())
+        if (!isEnabled() || NullUtil.fullNullCheck())
             return;
 
         if (event.getPacket() instanceof SPacketPlayerPosLook && cancel.getValue()) {

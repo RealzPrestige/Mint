@@ -17,10 +17,9 @@ public class Clip extends Module {
 
     @Override
     public void onUpdate() {
-        if (NullUtil.fullNullCheck()) {
+        if (NullUtil.fullNullCheck())
             disable();
-            return;
-        }
+        
         if (mc.player.posY < 6 && !mc.player.isElytraFlying() && mc.player.onGround) {
             EntityUtil.startSneaking();
             EntityUtil.packetJump(offground.getValue());

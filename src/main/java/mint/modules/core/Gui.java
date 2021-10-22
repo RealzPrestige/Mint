@@ -128,9 +128,10 @@ public class Gui extends Module {
 
     @Override
     public void onTick() {
-        if (!(Mint.INSTANCE.mc.currentScreen instanceof MintGui)) {
-            this.disable();
-        }
+        if (isEnabled())
+            if (!(Mint.INSTANCE.mc.currentScreen instanceof MintGui))
+                disable();
     }
+
 }
 
