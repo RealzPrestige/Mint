@@ -57,9 +57,10 @@ public class ColorPicker extends GuiScreen {
             color[0] = (float) (rainbowState / 360.0);
         }
         drawDefaultBackground();
-        RenderUtil.drawRect(pickerX - 3, pickerY - 16, pickerX + pickerWidth + alphaSliderWidth + 9, pickerY + pickerHeight + hueSliderHeight + 24, ColorUtil.toRGBA(mint.modules.core.Gui.getInstance().red.getValue(), mint.modules.core.Gui.getInstance().green.getValue(), mint.modules.core.Gui.getInstance().blue.getValue(), mint.modules.core.Gui.getInstance().alpha.getValue()));
+        RenderUtil.drawRect(pickerX - 3, pickerY - 16, pickerX + pickerWidth + alphaSliderWidth + 9, pickerY + pickerHeight + hueSliderHeight + 24, ColorUtil.toRGBA(mint.modules.core.Gui.getInstance().backgroundRed.getValue(), mint.modules.core.Gui.getInstance().backgroundGreen.getValue(), mint.modules.core.Gui.getInstance().backgroundBlue.getValue(), mint.modules.core.Gui.getInstance().backgroundAlpha.getValue()));
+        RenderUtil.drawRect(pickerX - 3, pickerY - 16, pickerX + pickerWidth + alphaSliderWidth + 9, pickerY - 6, ColorUtil.toRGBA(mint.modules.core.Gui.getInstance().red.getValue(), mint.modules.core.Gui.getInstance().green.getValue(), mint.modules.core.Gui.getInstance().blue.getValue(), mint.modules.core.Gui.getInstance().alpha.getValue()));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.getFeature().getName() + " - " + setting.getName(), pickerX, pickerY - 8 - (Mint.textManager.getFontHeight() / 2f), -1);
+        Mint.textManager.drawStringWithShadow(setting.getFeature().getName() + " - " + setting.getName(), pickerX, pickerY - 12 - (Mint.textManager.getFontHeight() / 2f), -1);
         if (pickingHue) {
             if (hueSliderWidth > hueSliderHeight) {
                 float restrictedX = (float) Math.min(Math.max(hueSliderX, mouseX), hueSliderX + hueSliderWidth);

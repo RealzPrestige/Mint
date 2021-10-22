@@ -70,6 +70,7 @@ class Mint {
             configManager!!.init()
             moduleManager!!.onLoad()
             hudComponentManager!!.load()
+            moduleManager!!.registerAllModules()
         }
 
         @JvmStatic
