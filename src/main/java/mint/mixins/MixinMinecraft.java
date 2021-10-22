@@ -25,11 +25,10 @@ public abstract class MixinMinecraft {
 
     @Redirect(method = {"run"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayCrashReport(Lnet/minecraft/crash/CrashReport;)V"))
     public void displayCrashReport(Minecraft minecraft, CrashReport crashReport) {
-        Mint.INSTANCE.getLOGGER().info(" Crash Found: ");
-        Mint.INSTANCE.getSimpleLOGGER().info("Crash Category: " + crashReport.getCategory());
-        Mint.INSTANCE.getSimpleLOGGER().info("Crash Cause: " + crashReport.getCrashCause());
-        Mint.INSTANCE.getSimpleLOGGER().info("Crash Description: " + crashReport.getDescription());
-        Mint.INSTANCE.getSimpleLOGGER().info("Crash Complete Report: " + crashReport.getCompleteReport());
+        Mint.INSTANCE.getLOGGER().info("Crash Category: " + crashReport.getCategory());
+        Mint.INSTANCE.getLOGGER().info("Crash Cause: " + crashReport.getCrashCause());
+        Mint.INSTANCE.getLOGGER().info("Crash Description: " + crashReport.getDescription());
+        Mint.INSTANCE.getLOGGER().info("Crash Complete Report: " + crashReport.getCompleteReport());
         Mint.onUnload();
     }
 

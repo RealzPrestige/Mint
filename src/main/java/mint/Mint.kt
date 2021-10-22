@@ -14,17 +14,7 @@ import org.lwjgl.opengl.Display
 class Mint {
     @JvmField
     var mc = Minecraft.getMinecraft()
-    val LOGGER = LogManager.getLogger(
-            "Mint" +
-                    "\n CrashCather:" +
-                    "\n " +
-                    "\n " +
-                    "\n " +
-                    "\n " +
-                    "\n " +
-                    "\n " +
-                    "\n Report:")
-    val SimpleLOGGER = LogManager.getLogger("Mint")
+    val LOGGER = LogManager.getLogger("Mint ExceptionCatcher: ")
 
     companion object {
         @kotlin.jvm.JvmField
@@ -70,7 +60,6 @@ class Mint {
             configManager!!.init()
             moduleManager!!.onLoad()
             hudComponentManager!!.load()
-            moduleManager!!.registerAllModules()
         }
 
         @JvmStatic
@@ -92,10 +81,10 @@ class Mint {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent?) {
-        // Login().frame.isVisible = true
-        // while (!Login.done) {
-        //     sleep(300)
-        // }
+       // Login().frame.isVisible = true
+       // while (!Login.done) {
+       //     sleep(300)
+       // }
     }
 
     @Mod.EventHandler
