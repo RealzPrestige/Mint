@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -35,6 +36,33 @@ public class RenderUtil {
         camera = new Frustum();
         tessellator = Tessellator.getInstance();
         builder = RenderUtil.tessellator.getBuffer();
+    }
+
+    private static void drawCompleteImage(int posX, int posY, int width, int height) {
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float) posX, (float) posY, 0.0f);
+        GL11.glBegin(7);
+        GL11.glTexCoord2f(0.0f, 0.0f);
+        GL11.glVertex3f(0.0f, 0.0f, 0.0f);
+        GL11.glTexCoord2f(0.0f, 1.0f);
+        GL11.glVertex3f(0.0f, (float) height, 0.0f);
+        GL11.glTexCoord2f(1.0f, 1.0f);
+        GL11.glVertex3f((float) width, (float) height, 0.0f);
+        GL11.glTexCoord2f(1.0f, 0.0f);
+        GL11.glVertex3f((float) width, 0.0f, 0.0f);
+        GL11.glEnd();
+        GL11.glPopMatrix();
+    }
+
+    public static void drawImage(ResourceLocation resourceLocation, int x, int y, int width, int height) {
+        ResourceLocation logo = resourceLocation;
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        mc.getTextureManager().bindTexture(logo);
+        drawCompleteImage(x, y, width, height);
+        mc.getTextureManager().deleteTexture(logo);
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
     }
 
     public static void drawCheckmark(float x, float y, Color color) {

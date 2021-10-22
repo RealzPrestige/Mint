@@ -1,11 +1,13 @@
 package mint.modules.visual;
 
+import mint.clickgui.setting.Bind;
 import mint.clickgui.setting.Setting;
 import mint.modules.Module;
 import mint.utils.NullUtil;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 /**
  * @author kambing, zPrestige
@@ -35,6 +37,9 @@ public class ViewTweaks extends Module {
     public Setting<Float> green = register(new Setting<>("Sky Green", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue()));
     public Setting<Float> blue = register(new Setting<>("Sky Blue", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue()));
 
+    public Setting<Bind> bind = this.register(new Setting<Object>("Third Person Hold Bind", new Bind(-1)));
+
+
     public ViewTweaks() {
         super("View Tweaks", Category.VISUAL, "Tweak how your game looks.");
         setInstance();
@@ -62,6 +67,14 @@ public class ViewTweaks extends Module {
     public void onUpdate() {
         if(NullUtil.fullNullCheck())
             return;
+
+        if(bind.getValue().getKey() > -1) {
+            if (Keyboard.isKeyDown(bind.getValue().getKey())) {
+                mc.gameSettings.thirdPersonView = 1;
+            } else {
+                mc.gameSettings.thirdPersonView = 0;
+            }
+        }
 
         if (fov.getValue() && !fovStay.getValue()) {
             mc.gameSettings.setOptionFloatValue(GameSettings.Options.FOV, fovValue.getValue());

@@ -58,11 +58,6 @@ public class AutoCrystal extends Module {
 
     public Setting<Boolean> predictParent = register(new Setting<>("Predicts", true, false));
     public Setting<Boolean> soundPredict = register(new Setting<>("Sound Predict", false, false, v -> predictParent.getValue()));
-    public Setting<Boolean> placePredict = register(new Setting<>("Place Predict", false, false, v -> predictParent.getValue()));
-    public Setting<PlacePredictMode> placePredictMode = register(new Setting<>("Place Predict Mode", PlacePredictMode.SOUND, v -> predictParent.getValue() && placePredict.getValue()));
-
-    public enum PlacePredictMode {SOUND, EXPLOSION}
-
     public Setting<Boolean> breakPredict = register(new Setting<>("Break Predict", false, false, v -> predictParent.getValue()));
     public Setting<Boolean> breakPredictCalc = register(new Setting<>("Break Predict Calc", false, false, v -> predictParent.getValue() && breakPredict.getValue()));
 
@@ -350,51 +345,6 @@ public class AutoCrystal extends Module {
         if (!isEnabled() || targetPlayer == null || targetPlayer.isDead || targetPlayer.getHealth() == 0.0f)
             return;
         if (event.getPacket() instanceof SPacketExplosion) {
-            for (Entity entity : mc.world.loadedEntityList) {
-                if (entity == null)
-                    return;
-                if (entity instanceof EntityEnderCrystal) {
-                    BlockPos predictedCrystalPos = new BlockPos(entity.posX, entity.posY - 1, entity.posZ);
-                    if (placePredict.getValue() && placePredictMode.getValue().equals(PlacePredictMode.EXPLOSION) && predictedCrystalPos.equals(bestCrystalPos)) {
-                        if (entity.getDistance(mc.player) > placeRange.getValue())
-                            continue;
-
-                        if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
-                            mainMinimumDamageValue = 2;
-
-                        if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
-                            continue;
-
-                        if (mainSelfDamage > maximumSelfDamage.getValue())
-                            continue;
-
-                        if (mainMinimumDamageValue > mainTargetDamage)
-                            continue;
-
-                        if (limitAttack.getValue() && attemptedEntityId.containsValue(entity))
-                            continue;
-
-                        if (placeRaytrace.getValue() && rayTraceCheckPos(new BlockPos(predictedCrystalPos.getX(), predictedCrystalPos.getY(), predictedCrystalPos.getZ())) && mc.player.getDistance(predictedCrystalPos.getX() + 0.5f, predictedCrystalPos.getY() + 1, predictedCrystalPos.getZ() + 0.5f) > placeRaytraceRange.getValue())
-                            continue;
-
-                        if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL))
-                            InventoryUtil.switchToSlot(mainSlot);
-
-                        mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(predictedCrystalPos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-
-                        if (render.getValue() && fade.getValue())
-                            possesToFade.put(predictedCrystalPos, startAlpha.getValue());
-
-                        if (placeSwing.getValue())
-                            swingArm(true);
-
-                        if (silentSwitch.getValue() && (mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL || mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)) {
-                            mc.player.inventory.currentItem = mainOldSlot;
-                            mc.playerController.updateController();
-                        }
-                    }
-                }
-            }
             if (cancelExplosion.getValue())
                 event.setCanceled(true);
         }

@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.File;
-import java.io.FileWriter;
-
 @Mixin(value = {Minecraft.class})
 public abstract class MixinMinecraft {
 
@@ -28,21 +25,11 @@ public abstract class MixinMinecraft {
 
     @Redirect(method = {"run"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayCrashReport(Lnet/minecraft/crash/CrashReport;)V"))
     public void displayCrashReport(Minecraft minecraft, CrashReport crashReport) {
-        File crashFile = new File("mint/latestCrash.txt/");
-        try {
-            if (crashFile.exists()) {
-                FileWriter writer = new FileWriter(crashFile);
-                writer.write(crashReport.getCompleteReport());
-                crashReport.saveToFile(crashFile);
-            } else {
-                crashFile.createNewFile();
-                FileWriter writer = new FileWriter(crashFile);
-                writer.write(crashReport.getCompleteReport());
-                crashReport.saveToFile(crashFile);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        Mint.INSTANCE.getLOGGER().info(" Crash Found: ");
+        Mint.INSTANCE.getSimpleLOGGER().info("Crash Category: " + crashReport.getCategory());
+        Mint.INSTANCE.getSimpleLOGGER().info("Crash Cause: " + crashReport.getCrashCause());
+        Mint.INSTANCE.getSimpleLOGGER().info("Crash Description: " + crashReport.getDescription());
+        Mint.INSTANCE.getSimpleLOGGER().info("Crash Complete Report: " + crashReport.getCompleteReport());
         Mint.onUnload();
     }
 

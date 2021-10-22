@@ -1,6 +1,10 @@
 package mint.newgui.buttons;
 
+import mint.Mint;
+import mint.clickgui.MintGui;
 import mint.clickgui.setting.Setting;
+import mint.utils.ColorUtil;
+import mint.utils.RenderUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -43,7 +47,8 @@ public class ColorPicker extends GuiScreen {
         alphaSliderWidth = 10;
         alphaSliderHeight = pickerHeight;
     }
-
+    // need to remember this
+    // " R: " + setting.getColor().getRed() + " G: " + setting.getColor().getGreen() +  " B: " + setting.getColor().getBlue()
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if (rainbowState) {
@@ -52,6 +57,9 @@ public class ColorPicker extends GuiScreen {
             color[0] = (float) (rainbowState / 360.0);
         }
         drawDefaultBackground();
+        RenderUtil.drawRect(pickerX - 3, pickerY - 16, pickerX + pickerWidth + alphaSliderWidth + 9, pickerY + pickerHeight + hueSliderHeight + 24, ColorUtil.toRGBA(mint.modules.core.Gui.getInstance().red.getValue(), mint.modules.core.Gui.getInstance().green.getValue(), mint.modules.core.Gui.getInstance().blue.getValue(), mint.modules.core.Gui.getInstance().alpha.getValue()));
+        assert Mint.textManager != null;
+        Mint.textManager.drawStringWithShadow(setting.getFeature().getName() + " - " + setting.getName(), pickerX, pickerY - 8 - (Mint.textManager.getFontHeight() / 2f), -1);
         if (pickingHue) {
             if (hueSliderWidth > hueSliderHeight) {
                 float restrictedX = (float) Math.min(Math.max(hueSliderX, mouseX), hueSliderX + hueSliderWidth);
@@ -126,13 +134,16 @@ public class ColorPicker extends GuiScreen {
         pickingColor = check(pickerX, pickerY, pickerX + pickerWidth, pickerY + pickerHeight, mouseX, mouseY);
         pickingHue = check(hueSliderX, hueSliderY, hueSliderX + hueSliderWidth, hueSliderY + hueSliderHeight, mouseX, mouseY);
         pickingAlpha = check(alphaSliderX, alphaSliderY, alphaSliderX + alphaSliderWidth, alphaSliderY + alphaSliderHeight, mouseX, mouseY);
-        if (!(pickingColor == pickingHue == pickingAlpha)) {
+        if (!isInsideBox(mouseX, mouseY)) {
             setting.isOpen = false;
-            mc.displayGuiScreen(null);
+            mc.displayGuiScreen(MintGui.getClickGui());
             mint.modules.core.Gui.getInstance().enable();
         }
     }
 
+    public boolean isInsideBox(int mouseX, int mouseY){
+        return (mouseX > pickerX - 3 && mouseX < pickerX + pickerWidth + alphaSliderWidth + 9) && (mouseY > pickerY - 16 && mouseY < pickerY + pickerHeight + hueSliderHeight + 24);
+    }
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         pickingColor = pickingHue = pickingAlpha = false;
@@ -263,5 +274,10 @@ public class ColorPicker extends GuiScreen {
         if (keyCode == Keyboard.KEY_LEFT) {
             rainbowSpeed -= 0.1;
         } else if (keyCode == Keyboard.KEY_RIGHT) rainbowSpeed += 0.1;
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 }

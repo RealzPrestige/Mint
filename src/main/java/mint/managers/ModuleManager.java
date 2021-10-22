@@ -39,6 +39,8 @@ public class ModuleManager {
         moduleList.add(new RubberbandNotify());
         moduleList.add(new NoPotionHud());
         moduleList.add(new NewGuiModule());
+        moduleList.add(new HudEditor());
+        moduleList.add(new Hud());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());
@@ -51,7 +53,7 @@ public class ModuleManager {
         moduleList.add(KotlinAura.INSTANCE);
         moduleList.add(new Offhand());
         moduleList.add(new SelfFill());
-        //moduleList.add(new Surround());
+        moduleList.add(new Surround());
         moduleList.add(new Waller());
         moduleList.add(new EntityPredict());
 
@@ -65,6 +67,8 @@ public class ModuleManager {
         //moduleList.add(new PacketManipulator());
         moduleList.add(new SelfAnvil());
         moduleList.add(new TabTweaks());
+        moduleList.add(new AntiCrystalDamage());
+        moduleList.add(new HotbarRefiller());
 
         /** Movement **/
         moduleList.add(new Anchor());

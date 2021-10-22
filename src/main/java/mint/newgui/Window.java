@@ -25,7 +25,6 @@ public class Window {
     boolean isDragging;
     int dragX;
     int dragY;
-
     boolean isOpened;
 
     ArrayList<ModuleWindow> modules = new ArrayList<>();

@@ -22,6 +22,7 @@ public class EntityPredict extends Module {
 
     int currentId;
     BlockPos currentPos;
+    Entity entity;
 
     public EntityPredict() {
         super("Entity Predict", Category.COMBAT, "Predict crystal ids and attack m");
@@ -43,38 +44,43 @@ public class EntityPredict extends Module {
                 return;
 
             for (Entity entity : mc.world.loadedEntityList) {
-                if (entity instanceof EntityEnderCrystal)
+                if (entity instanceof EntityEnderCrystal) {
                     if (entity.entityId > entityId)
                         entityId = entity.entityId;
+
+                    this.entity = entity;
+                }
             }
             currentPos = packet.getPos();
-            switch (attackAmount.getValue()) {
-                case 1:
-                    attackEntity(entityId + 1);
-                    break;
-                case 2:
-                    attackEntity(entityId + 1);
-                    attackEntity(entityId + 2);
-                    break;
-                case 3:
-                    attackEntity(entityId + 1);
-                    attackEntity(entityId + 2);
-                    attackEntity(entityId + 3);
-                    break;
-                case 4:
-                    attackEntity(entityId + 1);
-                    attackEntity(entityId + 2);
-                    attackEntity(entityId + 3);
-                    attackEntity(entityId + 4);
-                    break;
-                case 5:
-                    attackEntity(entityId + 1);
-                    attackEntity(entityId + 2);
-                    attackEntity(entityId + 3);
-                    attackEntity(entityId + 4);
-                    attackEntity(entityId + 5);
-                    break;
+            if(entity != null) {
+                switch (attackAmount.getValue()) {
+                    case 1:
+                        attackEntity(entityId + 1);
+                        break;
+                    case 2:
+                        attackEntity(entityId + 1);
+                        attackEntity(entityId + 2);
+                        break;
+                    case 3:
+                        attackEntity(entityId + 1);
+                        attackEntity(entityId + 2);
+                        attackEntity(entityId + 3);
+                        break;
+                    case 4:
+                        attackEntity(entityId + 1);
+                        attackEntity(entityId + 2);
+                        attackEntity(entityId + 3);
+                        attackEntity(entityId + 4);
+                        break;
+                    case 5:
+                        attackEntity(entityId + 1);
+                        attackEntity(entityId + 2);
+                        attackEntity(entityId + 3);
+                        attackEntity(entityId + 4);
+                        attackEntity(entityId + 5);
+                        break;
 
+                }
             }
         }
     }

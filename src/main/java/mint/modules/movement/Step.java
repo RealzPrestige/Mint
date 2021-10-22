@@ -13,6 +13,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
  */
 public class Step extends Module {
     public int ticks;
+    public static Step INSTANCE = new Step();
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));
 
     public enum Mode {Vanilla, Normal, Timer, NCP}
@@ -22,6 +23,18 @@ public class Step extends Module {
 
     public Step() {
         super("Step", Category.MOVEMENT, "Allows you to step up blocks.");
+        this.setInstance();
+    }
+
+    public static Step getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Step();
+        }
+        return INSTANCE;
+    }
+
+    private void setInstance() {
+        INSTANCE = this;
     }
 
     public void onEnable() {

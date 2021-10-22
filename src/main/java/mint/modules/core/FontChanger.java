@@ -15,12 +15,6 @@ public class FontChanger
     private static FontChanger INSTANCE = new FontChanger();
     public Setting<Boolean> override = register(new Setting<>("Full", false));
     public Setting<Integer> fontSize = register(new Setting<>("Size", 17, 15, 20));
-    public Setting<Integer> w = register(new Setting<>("W", 72, 0, 200));
-    public Setting<Integer> h = register(new Setting<>("H", 72, 0, 200));
-    public Setting<Integer> x = register(new Setting<>("X", 72, 0, 200));
-    public Setting<Integer> y = register(new Setting<>("Y", 72, 0, 200));
-    public Setting<Float> x1 = register(new Setting<>("X1", 72.0f, 0.0f, 200.0f));
-    public Setting<Float> y1 = register(new Setting<>("Y1", 72.0f, 0.0f, 200.0f));
     public Setting color = register(new Setting("Color", new Color(199, 45, 45)));
     public Setting<Style> style = register(new Setting<>("Style", Style.ITALICBOLD));
     public enum Style{NORMAL, ITALIC, BOLD, ITALICBOLD}
@@ -36,11 +30,6 @@ public class FontChanger
             INSTANCE = new FontChanger();
         }
         return INSTANCE;
-    }
-
-    @Override
-    public void onUpdate() {
-        MessageManager.sendRemovableMessage(color.getColor().getRed() + ", " + color.getColor().getGreen() + ", " + color.getColor().getBlue(), 1);
     }
 
     public static boolean checkFont(String font, boolean message) {

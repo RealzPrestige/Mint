@@ -25,6 +25,9 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class PlayerUtil {
+    public static BlockPos getCenterPos(final double posX, final double posY, final double posZ) {
+        return new BlockPos(Math.floor(posX) + 0.5, Math.floor(posY), Math.floor(posZ) + 0.5);
+    }
 
     public static BlockPos getPlayerPos(EntityPlayer player) {
         return new BlockPos(Math.floor(player.posX), Math.floor(player.posY), Math.floor(player.posZ));

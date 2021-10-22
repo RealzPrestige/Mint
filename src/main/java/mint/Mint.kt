@@ -2,18 +2,29 @@ package mint
 
 import mint.commands.CommandManager
 import mint.managers.*
-import mint.security.Login
+import mint.newgui.hud.HudComponentManager
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import org.apache.logging.log4j.LogManager
 import org.lwjgl.opengl.Display
-import java.lang.Thread.sleep
 
 @Mod(modid = "mint", name = "Mint", version = "0.1.1")
 class Mint {
     @JvmField
     var mc = Minecraft.getMinecraft()
+    val LOGGER = LogManager.getLogger(
+            "Mint" +
+                    "\n CrashCather:" +
+                    "\n " +
+                    "\n " +
+                    "\n " +
+                    "\n " +
+                    "\n " +
+                    "\n " +
+                    "\n Report:")
+    val SimpleLOGGER = LogManager.getLogger("Mint")
 
     companion object {
         @kotlin.jvm.JvmField
@@ -39,6 +50,9 @@ class Mint {
 
         @JvmField
         var serverManager: ServerManager? = null
+
+        @JvmField
+        var hudComponentManager: HudComponentManager? = null
         private var unloaded = false
         fun load() {
             unloaded = false
@@ -49,11 +63,13 @@ class Mint {
             moduleManager = ModuleManager()
             eventManager = EventManager()
             configManager = ConfigManager()
+            hudComponentManager = HudComponentManager()
             moduleManager!!.init()
             eventManager!!.init()
             textManager!!.init()
             configManager!!.init()
             moduleManager!!.onLoad()
+            hudComponentManager!!.load()
         }
 
         @JvmStatic
@@ -63,6 +79,7 @@ class Mint {
                 moduleManager!!.onUnload()
                 configManager!!.saveConfig(configManager!!.config.replaceFirst("mint/".toRegex(), ""))
                 moduleManager!!.onUnloadPost()
+                hudComponentManager!!.Unload()
                 unloaded = true
             }
         }
@@ -74,10 +91,10 @@ class Mint {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent?) {
-       // Login().frame.isVisible = true
-       // while (!Login.done) {
-       //     sleep(300)
-       // }
+        // Login().frame.isVisible = true
+        // while (!Login.done) {
+        //     sleep(300)
+        // }
     }
 
     @Mod.EventHandler
