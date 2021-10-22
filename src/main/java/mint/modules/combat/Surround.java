@@ -62,7 +62,7 @@ public class Surround extends Module {
     public enum RenderMode {Static, Fade}
 
     public Surround() {
-        super("SurroundRewrite", Category.COMBAT, "Surrounds you with Obsidian.");
+        super("Surround", Category.COMBAT, "Surrounds you with Obsidian.");
     }
 
     public void onUpdate() {
