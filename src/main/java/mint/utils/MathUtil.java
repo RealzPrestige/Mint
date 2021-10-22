@@ -1,6 +1,7 @@
 package mint.utils;
 
 import mint.Mint;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +13,15 @@ import java.math.RoundingMode;
 import java.util.*;
 
 public class MathUtil {
+
+    public static Vec3d getInterpolatedRenderPos(final Entity entity, final float ticks) {
+        return interpolateEntity(entity, ticks).subtract(Minecraft.getMinecraft().getRenderManager().renderPosX, Minecraft.getMinecraft().getRenderManager().renderPosY, Minecraft.getMinecraft().getRenderManager().renderPosZ);
+    }
+
+    public static Vec3d interpolateEntity(final Entity entity, final float time) {
+        return new Vec3d(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * time, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * time, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * time);
+    }
+
     private static final Random random = new Random();
 
     public static int getRandom(int min, int max) {

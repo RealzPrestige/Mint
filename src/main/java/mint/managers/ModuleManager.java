@@ -102,7 +102,6 @@ public class ModuleManager {
         moduleList.add(new PlayerChams());
         moduleList.add(new PlayerTrails());
         moduleList.add(new PopESP());
-        moduleList.add(new ShaderChams());
         moduleList.add(new SpawnESP());
         moduleList.add(new SwingAnimations());
         moduleList.add(new ViewTweaks());
