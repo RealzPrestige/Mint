@@ -258,7 +258,7 @@ public class AutoCrystal extends Module {
                     int sword = InventoryUtil.getItemFromHotbar(Items.DIAMOND_SWORD);
                     int oldSlot = mc.player.inventory.currentItem;
 
-                    if (mc.player.getDistance(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > breakRange.getValue())
+                    if (mc.player.getDistanceSq(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRange.getValue()))
                         continue;
 
                     if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
@@ -314,7 +314,7 @@ public class AutoCrystal extends Module {
                 mainSelfHealth = selfHealth;
                 mainMinimumDamageValue = minimumDamageValue;
                 if (BlockUtil.isPosValidForCrystal(pos, updatedPlacements.getValue())) {
-                    if (mc.player.getDistance(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f) > placeRange.getValue())
+                    if (mc.player.getDistanceSq(pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f) > MathUtil.square(placeRange.getValue()))
                         continue;
 
                     if (!allowCollision.getValue() && !mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty())
@@ -363,7 +363,7 @@ public class AutoCrystal extends Module {
                 predict.action = CPacketUseEntity.Action.ATTACK;
 
                 if (breakPredictCalc.getValue()) {
-                    if (mc.player.getDistance(packet.getX(), packet.getY(), packet.getZ()) > breakRange.getValue())
+                    if (mc.player.getDistanceSq(packet.getX(), packet.getY(), packet.getZ()) > MathUtil.square(breakRange.getValue()))
                         return;
 
                     if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
@@ -397,7 +397,7 @@ public class AutoCrystal extends Module {
                             if (limitAttack.getValue() && attemptedEntityId.containsValue(entity.getEntityId()))
                                 attemptedEntityId.remove(entity, entity.getEntityId());
 
-                            if (soundPredict.getValue() && entity.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= breakRange.getValue())
+                            if (soundPredict.getValue() && entity.getDistanceSq(packet.getX(), packet.getY(), packet.getZ()) <= MathUtil.square(breakRange.getValue()))
                                 entity.setDead();
                         }
                     }

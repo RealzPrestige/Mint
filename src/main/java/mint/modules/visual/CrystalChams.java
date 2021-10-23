@@ -35,17 +35,19 @@ public class CrystalChams extends Module {
 
     @SubscribeEvent
     public void renderCrystalTexture(CrystalTextureEvent event) {
-        event.setCanceled(true);
+        if (isEnabled())
+            event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onRenderCrystalPre(RenderCrystalEvent.RenderCrystalPreEvent event) {
-        event.setCanceled(true);
+        if (isEnabled())
+            event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onRenderCrystalPost(RenderCrystalEvent.RenderCrystalPostEvent event) {
-        if(NullUtil.fullNullCheck() || !isEnabled())
+        if (NullUtil.fullNullCheck() || !isEnabled())
             return;
         glPushMatrix();
         glPushAttrib(GL_ALL_ATTRIB_BITS);

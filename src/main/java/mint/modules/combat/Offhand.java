@@ -21,30 +21,30 @@ import java.util.Map;
 
 public class Offhand extends Module {
 
-    public Setting<Boolean> itemParent = register(new Setting("Item", true, false));
+    public Setting<Boolean> itemParent = register(new Setting<>("Item", true, false));
     public Setting<Boolean> crystal = register(new Setting("Crystal", false, v -> itemParent.getValue()));
     public Setting<Boolean> crystalOnSword = register(new Setting("Sword Crystal", false, v -> !crystal.getValue() && itemParent.getValue()));
     public Setting<Boolean> crystalOnPickaxe = register(new Setting("Pickaxe Crystal", false, v -> !crystal.getValue() && itemParent.getValue()));
 
-    public Setting<Boolean> miscParent = register(new Setting("Misc", true, false));
-    public Setting<Integer> switchDelay = register(new Setting("Switch Delay", 50, 0, 200, v -> miscParent.getValue()));
+    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
+    public Setting<Integer> switchDelay = register(new Setting<>("Switch Delay", 50, 0, 200, v -> miscParent.getValue()));
     public Setting<Boolean> fallBack = register(new Setting("FallBack", false, v -> miscParent.getValue()));
 
-    public Setting<Boolean> healthParent = register(new Setting("Health", true, false));
-    public Setting<Float> totemHealth = register(new Setting("Totem Health", 10f, 0f, 20f, v -> healthParent.getValue()));
+    public Setting<Boolean> healthParent = register(new Setting<>("Health", true, false));
+    public Setting<Float> totemHealth = register(new Setting<>("Totem Health", 10f, 0f, 20f, v -> healthParent.getValue()));
     public Setting<Boolean> hole = register(new Setting("Hole Check", false, v -> healthParent.getValue()));
-    public Setting<Float> holeHealth = register(new Setting("Totem Hole Health", 10f, 0f, 20f, v -> healthParent.getValue() && hole.getValue()));
+    public Setting<Float> holeHealth = register(new Setting<>("Totem Hole Health", 10f, 0f, 20f, v -> healthParent.getValue() && hole.getValue()));
 
-    public Setting<Boolean> fallDistanceParent = register(new Setting("Fall Distance", true, false));
+    public Setting<Boolean> fallDistanceParent = register(new Setting<>("Fall Distance", true, false));
     public Setting<Boolean> fallDistance = register(new Setting("Fall Distance Check", false, v -> fallDistanceParent.getValue()));
-    public Setting<Float> minDistance = register(new Setting("Min Distance", 10f, 1f, 100f, v -> fallDistance.getValue() && fallDistanceParent.getValue()));
+    public Setting<Float> minDistance = register(new Setting<>("Min Distance", 10f, 1f, 100f, v -> fallDistance.getValue() && fallDistanceParent.getValue()));
 
-    public Setting<Boolean> gappleParent = register(new Setting("Gapple", true, false));
+    public Setting<Boolean> gappleParent = register(new Setting<>("Gapple", true, false));
     public Setting<Boolean> gapple = register(new Setting("Gapple Switch", false, v -> gappleParent.getValue()));
     public Setting<Boolean> rightClick = register(new Setting("Right Click Only", false, v -> gapple.getValue() && gappleParent.getValue()));
 
-    public Setting<Boolean> visualParent = register(new Setting("Visual", true, false));
-    public Setting<RenderMode> render = register(new Setting("RenderMode", RenderMode.ALWAYS, v -> visualParent.getValue()));
+    public Setting<Boolean> visualParent = register(new Setting<>("Visual", true, false));
+    public Setting<RenderMode> render = register(new Setting<>("RenderMode", RenderMode.ALWAYS, v -> visualParent.getValue()));
 
     public enum RenderMode {ALWAYS, ONSWITCH, NEVER}
 

@@ -83,6 +83,7 @@ public class ModuleManager {
         moduleList.add(new Strafe());
         moduleList.add(new YPort());
         moduleList.add(new TickShift());
+        moduleList.add(new WaterSpeed());
 
         /** Player **/
         moduleList.add(new AntiAim());
