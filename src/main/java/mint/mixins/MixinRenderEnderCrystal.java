@@ -17,8 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = {RenderEnderCrystal.class})
-//why isnt this called MixinRenderEnderCrystal? 
-public class MixinRenderModifiedCrystal {
+public class MixinRenderEnderCrystal {
 
     @Final
     @Shadow
