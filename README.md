@@ -9,4 +9,3 @@ Notable features:
 - VClip Bypass
 
 [Discord server Soon](https://discordserver.com/Mint!)
-
