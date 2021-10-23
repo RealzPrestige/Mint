@@ -115,7 +115,7 @@ public class ConfigManager {
 
     public static void setValueFromJson(Setting setting, JsonElement element) {
         if (setting.isColorSetting()) {
-            setting.setColor(new Color(element.getAsInt()));
+            setting.setColor(new Color(element.getAsInt(),true));
         }
         switch (setting.getType()) {
             case "Boolean": {
