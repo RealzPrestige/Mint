@@ -13,11 +13,18 @@ public class RenderItemEvent extends EventProcessor {
         public MainHand(ItemStack stack) {
             super(stack);
         }
+        public ItemStack getItemStack(){
+            return stack;
+        }
     }
 
     public static class Offhand extends RenderItemEvent {
         public Offhand(ItemStack stack) {
             super(stack);
         }
+        public ItemStack getItemStack(){
+            return stack;
+        }
     }
+
 }

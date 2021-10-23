@@ -71,7 +71,7 @@ public class Notifications extends Module {
         this.setInstance();
     }
 
-    public void renderOveylayEvent(RenderOverlayEvent event) {
+    public void renderOverlayEvent(RenderOverlayEvent event) {
         for (Map.Entry<String, Integer> entry : notification.entrySet()) {
             if (modules.getValue()) {
                 String moduleString = entry.getKey();

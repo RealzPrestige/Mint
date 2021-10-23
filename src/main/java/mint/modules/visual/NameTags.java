@@ -23,9 +23,6 @@ import java.util.Objects;
 
 public class NameTags extends Module {
     private static NameTags INSTANCE = new NameTags();
-    private final Setting<Integer> bottom = register(new Setting<>("Bottom", 0, 0, 20));
-    private final Setting<Integer> y = register(new Setting<>("Y", 0, 0, 20));
-
     private final Setting<Boolean> boxParent = register(new Setting<>("Rect", true, false));
     private final Setting<Boolean> rect = register(new Setting("RectSetting", true, v -> boxParent.getValue()));
     private final Setting<Integer> rectRed = register(new Setting<>("RectRed", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
@@ -35,7 +32,6 @@ public class NameTags extends Module {
     private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
     private final Setting<Boolean> fullHealthLine = register(new Setting("FullHealthLine", true));
     private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));
-    private final Setting<Integer> yOff = register(new Setting<>("EnchantYOff", 8, 1, 20, v -> enchant.getValue()));
 
     public NameTags() {
         super("Name Tags", Category.VISUAL, "Draws info about an entity above their head.");
@@ -57,7 +53,7 @@ public class NameTags extends Module {
     public void renderWorldLastEvent(RenderWorldEvent event) {
         if (!NullUtil.fullNullCheck())
             return;
-        
+
         for (EntityPlayer player : mc.world.playerEntities) {
             if (player == null || player.equals(mc.player) || !player.isEntityAlive() || player.isInvisible() && !EntityUtil.isInFov(player))
                 continue;
@@ -144,6 +140,7 @@ public class NameTags extends Module {
         }
         renderItemStack(renderMainHand, xOffset);
         GlStateManager.popMatrix();
+        assert Mint.friendManager != null;
         renderer.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
         camera.posX = originalPositionX;
         camera.posY = originalPositionY;

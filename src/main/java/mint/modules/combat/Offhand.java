@@ -79,7 +79,7 @@ public class Offhand extends Module {
         mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
     }
 
-    public void renderOveylayEvent(RenderOverlayEvent event) {
+    public void renderOverlayEvent(RenderOverlayEvent event) {
         int screenWidth = new ScaledResolution(mc).getScaledWidth();
         for (Map.Entry<String, Integer> entry : renderString.entrySet()) {
             if (render.getValue() == RenderMode.ALWAYS) {

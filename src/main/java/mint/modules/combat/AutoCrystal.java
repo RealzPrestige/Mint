@@ -286,9 +286,7 @@ public class AutoCrystal extends Module {
                         mc.getConnection().sendPacket(new CPacketUseEntity(entity));
                     else mc.playerController.attackEntity(mc.player, entity);
 
-
-                    CrystalAttackEvent event = new CrystalAttackEvent(entity.getEntityId(), entity);
-                    MinecraftForge.EVENT_BUS.post(event);
+                    MinecraftForge.EVENT_BUS.post(new CrystalAttackEvent(entity.getEntityId(), entity));
 
                     if (breakSwing.getValue())
                         swingArm(false);
@@ -380,6 +378,10 @@ public class AutoCrystal extends Module {
                 }
 
                 mc.getConnection().sendPacket(predict);
+
+                MinecraftForge.EVENT_BUS.post(new CrystalAttackEvent(predict.entityId, predict.getEntityFromWorld(mc.world)));
+
+
                 if (breakSwing.getValue())
                     swingArm(false);
             }

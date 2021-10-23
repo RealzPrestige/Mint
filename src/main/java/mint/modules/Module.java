@@ -64,7 +64,7 @@ public class Module extends Feature {
     public void onUpdate() {
     }
 
-    public void renderOveylayEvent(RenderOverlayEvent event) {
+    public void renderOverlayEvent(RenderOverlayEvent event) {
     }
 
     public void renderWorldLastEvent(RenderWorldEvent event) {

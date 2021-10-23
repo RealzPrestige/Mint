@@ -94,7 +94,7 @@ public class Gui extends Module {
     }
 
     @Override
-    public void renderOveylayEvent(RenderOverlayEvent event) {
+    public void renderOverlayEvent(RenderOverlayEvent event) {
         final Minecraft mc = Minecraft.getMinecraft();
         ScaledResolution resolution = new ScaledResolution(mc);
         if (gradient.getValue()) {

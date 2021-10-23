@@ -29,7 +29,7 @@ public class Hud extends Module {
     }
 
     @Override
-    public void renderOveylayEvent(RenderOverlayEvent event) {
+    public void renderOverlayEvent(RenderOverlayEvent event) {
         assert Mint.hudComponentManager != null;
         Mint.hudComponentManager.drawText();
     }

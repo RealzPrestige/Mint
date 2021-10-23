@@ -69,6 +69,7 @@ public class ModuleManager {
         moduleList.add(new TabTweaks());
         moduleList.add(new AntiCrystalDamage());
         moduleList.add(new HotbarRefiller());
+        moduleList.add(new SinglePieceMend());
 
         /** Movement **/
         moduleList.add(new Anchor());
@@ -103,13 +104,13 @@ public class ModuleManager {
         moduleList.add(new Hand());
         moduleList.add(new HoleESP());
         moduleList.add(new NameTags());
-        moduleList.add(new NoCluster());
         moduleList.add(new PlayerChams());
         moduleList.add(new PlayerTrails());
         moduleList.add(new PopESP());
-        moduleList.add(new SpawnESP());
         moduleList.add(new SwingAnimations());
         moduleList.add(new ViewTweaks());
+        moduleList.add(new ShaderChams());
+        moduleList.add(new ArmorRemover());
     }
 
     public Module getModuleByName(String name) {
@@ -171,7 +172,7 @@ public class ModuleManager {
     }
 
     public void renderOverlayEvent(RenderOverlayEvent event) {
-        moduleList.stream().filter(Module::isEnabled).forEach(module -> module.renderOveylayEvent(event));
+        moduleList.stream().filter(Module::isEnabled).forEach(module -> module.renderOverlayEvent(event));
     }
 
     public void renderWorldEvent(RenderWorldEvent event) {

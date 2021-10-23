@@ -22,6 +22,7 @@ public class InventoryUtil {
         }
         return itemSlot;
     }
+
     public static int getStackCount(Item item) {
         int count = 0;
         for (int size = mc.player.inventory.mainInventory.size(), i = 0; i < size; ++i) {

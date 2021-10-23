@@ -37,8 +37,8 @@ public class PlayerChams extends Module {
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
         if(NullUtil.fullNullCheck() || !isEnabled())
             return;
-
         if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {
+            event.getEntityLivingBase().hurtTime = 0;
             beginSolid();
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
             endSolid();
