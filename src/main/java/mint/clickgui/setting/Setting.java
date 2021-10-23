@@ -206,6 +206,10 @@ public class Setting<T> {
         return this.value.toString();
     }
 
+    public String getColorAsString() {
+        return String.valueOf(this.color.getRGB());
+    }
+
     public boolean hasRestriction() {
         return this.hasRestriction;
     }

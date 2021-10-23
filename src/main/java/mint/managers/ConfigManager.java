@@ -8,11 +8,13 @@ import mint.clickgui.setting.Setting;
 import mint.modules.Feature;
 import mint.modules.Module;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConfigManager {
@@ -112,6 +114,9 @@ public class ConfigManager {
     }
 
     public static void setValueFromJson(Setting setting, JsonElement element) {
+        if (setting.isColorSetting()) {
+            setting.setColor(new Color(element.getAsInt()));
+        }
         switch (setting.getType()) {
             case "Boolean": {
                 setting.setValue(element.getAsBoolean());
@@ -213,6 +218,10 @@ public class ConfigManager {
             if (setting.isStringSetting()) {
                 String str = (String) setting.getValue();
                 setting.setValue(str.replace(" ", "_"));
+                continue;
+            }
+            if (setting.isColorSetting()) {
+                object.add(setting.getName(), jp.parse(setting.getColorAsString()));
             }
             try {
                 object.add(setting.getName(), jp.parse(setting.getValueAsString()));
