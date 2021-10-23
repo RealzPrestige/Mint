@@ -4,6 +4,7 @@
   "package": "mint.mixins",
   "refmap": "mixins.mint.refmap.json",
   "mixins": [
+    "IEntityRenderer",
     "MixinEntityPlayerSP",
     "MixinFontRenderer",
     "MixinGuiIngame",
@@ -11,8 +12,9 @@
     "MixinMinecraft",
     "MixinNetworkManager",
     "MixinPlayerControllerMP",
+    "MixinRenderArmor",
     "MixinRenderLivingBase",
-    "MixinRenderModifiedCrystal",
+    "MixinRenderEnderCrystal",
     "MixinRenderPlayer",
     "MixinEntityLivingBase",
     "MixinTabOverlay",
