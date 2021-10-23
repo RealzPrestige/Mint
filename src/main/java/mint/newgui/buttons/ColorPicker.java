@@ -27,7 +27,8 @@ public class ColorPicker extends GuiScreen {
     private boolean rainbowState = false;
 
     public ColorPicker(Setting setting) {
-        color = new float[]{0.4f, 1.0f, 1.0f, 1.0f};
+        float[] settingColor = Color.RGBtoHSB(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue(), null);
+        this.color = new float[] {settingColor[0], settingColor[1], settingColor[2], setting.getColor().getAlpha() / 255.0f};
         pickingColor = false;
         this.setting = setting;
     }

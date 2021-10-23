@@ -34,7 +34,6 @@ public class ColorFrame extends ButtonFrame {
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(this.getName(), this.x + 2.3f, this.y - 1.7f - (float) MintGui.getClickGui().getTextOffset(), -1);
         if (this.setting.isOpen) {
-            mc.displayGuiScreen(null);
             mc.displayGuiScreen(new ColorPicker(setting));
         }
     }
