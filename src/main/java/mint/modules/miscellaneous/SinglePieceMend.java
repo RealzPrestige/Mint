@@ -25,6 +25,10 @@ public class SinglePieceMend extends Module {
         super("Single Piece Mend", Category.MISCELLANEOUS, "Mends armor piece by piece.");
     }
 
+    public void onDisable(){
+        reset();
+    }
+
     public void onUpdate() {
         if (NullUtil.fullNullCheck())
             return;
