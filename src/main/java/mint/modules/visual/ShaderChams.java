@@ -14,13 +14,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class ShaderChams extends Module {
     //TODO: make full alpha?
     static ShaderChams INSTANCE = new ShaderChams();
     public Setting<modes> mode = register(new Setting<>("Mode", modes.Aqua));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 100, 0, 255));
 
     public ShaderChams() {
         super("Shader Chams", Category.VISUAL, "Makes shader on cham");
@@ -131,6 +128,7 @@ public class ShaderChams extends Module {
         GlStateManager.matrixMode(5888);
         GlStateManager.popMatrix();
     }
+
 
     public enum modes {
         Smoke,

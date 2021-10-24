@@ -52,8 +52,8 @@ public class AutoCrystal extends Module {
     public Setting<Float> targetRange = register(new Setting<>("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
 
     public Setting<Boolean> damagesParent = register(new Setting<>("Damages", true, false));
-    public Setting<Float> minimumDamage = register(new Setting<>("Minimum Damage", 6f, 0f, 12f, v -> damagesParent.getValue()));
-    public Setting<Float> maximumSelfDamage = register(new Setting<>("Maximum Self Damage", 8f, 0f, 12f, v -> damagesParent.getValue()));
+    public Setting<Float> minimumDamage = register(new Setting<>("Minimum Damage", 6f, 0f, 16f, v -> damagesParent.getValue()));
+    public Setting<Float> maximumSelfDamage = register(new Setting<>("Maximum Self Damage", 8f, 0f, 16f, v -> damagesParent.getValue()));
     public Setting<Boolean> antiSuicide = register(new Setting<>("Anti Suicide", false, false, v -> damagesParent.getValue()));
 
     public Setting<Boolean> predictParent = register(new Setting<>("Predicts", true, false));
