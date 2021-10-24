@@ -45,7 +45,6 @@ import java.util.TreeMap;
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
-    //TODO: make terrain assist.
     public Setting<Boolean> rangesParent = register(new Setting<>("Ranges", true, false));
     public Setting<Float> placeRange = register(new Setting<>("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
     public Setting<Float> breakRange = register(new Setting<>("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));

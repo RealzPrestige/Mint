@@ -56,7 +56,6 @@ public class ModuleManager {
         moduleList.add(new Surround());
         moduleList.add(new Waller());
         moduleList.add(new EntityPredict());
-
         /** Miscellaneous **/
         moduleList.add(new AutoEnderChest());
         moduleList.add(new Backpack());
