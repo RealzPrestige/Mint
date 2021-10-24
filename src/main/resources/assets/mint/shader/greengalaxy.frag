@@ -2,6 +2,9 @@
 //Parallax scrolling fractal galaxy.
 //Inspired by JoshP's Simplicity shader: https://www.shadertoy.com/view/lslGWr
 
+uniform float time;
+uniform vec2 resolution;
+
 // http://www.fractalforums.com/new-theories-and-research/very-simple-formula-for-fractal-patterns/
 float field(in vec3 p,float s) {
     float strength = 7. + .03 * log(1.e-6 + fract(sin(time) * 4373.11));

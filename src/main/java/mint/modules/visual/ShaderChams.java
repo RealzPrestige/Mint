@@ -11,11 +11,12 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 public class ShaderChams extends Module {
-    //TODO: make full alpha?
     static ShaderChams INSTANCE = new ShaderChams();
     public Setting<modes> mode = register(new Setting<>("Mode", modes.Aqua));
+    Setting<Boolean> kambingChadMode = register(new Setting("GL_ENABLE_KAMBING", true));
 
     public ShaderChams() {
         super("Shader Chams", Category.VISUAL, "Makes shader on cham");
@@ -30,6 +31,29 @@ public class ShaderChams extends Module {
 
     void setInstance() {
         INSTANCE = this;
+    }
+
+    public static void beginSolid() {
+        GL11.glPushAttrib(GL11.GL_ALL_CLIENT_ATTRIB_BITS);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false);
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GL11.glColor4f(1f / 255f, 1f / 255f, 1f / 255f, 255);
+    }
+
+    public static void endSolid() {
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+        GL11.glPopAttrib();
     }
 
     @Override
@@ -96,10 +120,16 @@ public class ShaderChams extends Module {
         if (framebufferShader2 == null) {
             return;
         }
-        GlStateManager.matrixMode(5889);
-        GlStateManager.pushMatrix();
-        GlStateManager.matrixMode(5888);
-        GlStateManager.pushMatrix();
+
+        if (kambingChadMode.getValue()) {
+            beginSolid();
+        } else {
+            GlStateManager.matrixMode(5889);
+            GlStateManager.pushMatrix();
+            GlStateManager.matrixMode(5888);
+            GlStateManager.pushMatrix();
+        }
+
         framebufferShader2.startDraw(event.getPartialTicks());
         try {
             for (final Entity entity : mc.world.loadedEntityList) {
@@ -119,12 +149,17 @@ public class ShaderChams extends Module {
             e.printStackTrace();
         }
         final float radius = Float.intBitsToFloat(Float.floatToIntBits(1799.2811f) ^ 0x7BE0E8FF) + Float.intBitsToFloat(Float.floatToIntBits(0.9867451f) ^ 0x7F3C9B54);
-        framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), Float.intBitsToFloat(Float.floatToIntBits(0.096559145f) ^ 0x7EBAC0CD), radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
-        GlStateManager.color(1f, 1f, 1f, 255.0f);
-        GlStateManager.matrixMode(5889);
-        GlStateManager.popMatrix();
-        GlStateManager.matrixMode(5888);
-        GlStateManager.popMatrix();
+        framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), 255, radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
+        if (kambingChadMode.getValue()) {
+            endSolid();
+        } else {
+            GlStateManager.color(1f, 1f, 1f, 255.0f);
+            GlStateManager.matrixMode(5889);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(5888);
+            GlStateManager.popMatrix();
+        }
+
     }
 
     public enum modes {
@@ -169,5 +204,6 @@ public class ShaderChams extends Module {
                     modes.Custom
             };
         }
+
     }
 }

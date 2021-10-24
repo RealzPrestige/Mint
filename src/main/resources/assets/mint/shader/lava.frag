@@ -1,3 +1,5 @@
+uniform float time;
+uniform vec2 resolution;
 const float scale = 3.0f;
 const float intensivity = 0.05f;
 const int iteration = 3;

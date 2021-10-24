@@ -1,3 +1,6 @@
+uniform float time;
+uniform vec2 resolution;
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord ){
     vec2 uv =  (2.0 * fragCoord - resolution.xy) / min(resolution.x, resolution.y);
 
