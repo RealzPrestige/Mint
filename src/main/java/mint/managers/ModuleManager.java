@@ -94,6 +94,7 @@ public class ModuleManager {
         moduleList.add(new Interaction());
         moduleList.add(new PacketEXP());
         moduleList.add(new Packetmine());
+        moduleList.add(new CancelRubberband());
 
         /** Visual **/
         moduleList.add(new BreakESP());
