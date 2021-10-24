@@ -9,6 +9,8 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
+
 /**
  * @author kambing, zPrestige
  */
@@ -33,11 +35,12 @@ public class ViewTweaks extends Module {
 
     public Setting<Boolean> skyParent = register(new Setting("Sky", true, false));
     public Setting<Boolean> skyColorChange = register(new Setting("Sky Color Changer", true, v -> skyParent.getValue()));
-    public Setting<Float> red = register(new Setting<>("Sky Red", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue()));
-    public Setting<Float> green = register(new Setting<>("Sky Green", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue()));
-    public Setting<Float> blue = register(new Setting<>("Sky Blue", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue()));
+    public Setting<Boolean> rainbow = register(new Setting("Rainbow", false, v -> skyParent.getValue()));
+    public Setting<Float> red = register(new Setting<>("Sky Red", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue() && !rainbow.getValue()));
+    public Setting<Float> green = register(new Setting<>("Sky Green", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue() && !rainbow.getValue()));
+    public Setting<Float> blue = register(new Setting<>("Sky Blue", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue() && !rainbow.getValue()));
 
-    public Setting<Bind> bind = this.register(new Setting<Object>("Third Person Hold Bind", new Bind(-1)));
+    public Setting<Bind> bind = register(new Setting<Object>("Third Person Hold Bind", new Bind(-1)));
 
 
     public ViewTweaks() {
@@ -65,10 +68,14 @@ public class ViewTweaks extends Module {
 
     @Override
     public void onUpdate() {
-        if(NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
-        if(bind.getValue().getKey() > -1) {
+        if (rainbow.getValue())
+            doRainbow();
+
+
+        if (bind.getValue().getKey() > -1) {
             if (Keyboard.isKeyDown(bind.getValue().getKey())) {
                 mc.gameSettings.thirdPersonView = 1;
             } else {
@@ -124,7 +131,19 @@ public class ViewTweaks extends Module {
         if (fovStay.getValue()) {
             event.setFOV(fovValue.getValue());
         }
+    }
 
+    public void doRainbow() {
+
+        float[] tick_color = {
+                (System.currentTimeMillis() % (360 * 32)) / (360f * 32)
+        };
+
+        int color_rgb_o = Color.HSBtoRGB(tick_color[0], 0.8f, 0.8f);
+
+        red.setValue((float) ((color_rgb_o >> 16) & 0xFF));
+        green.setValue((float) ((color_rgb_o >> 8) & 0xFF));
+        blue.setValue((float) (color_rgb_o & 0xFF));
     }
 
 }

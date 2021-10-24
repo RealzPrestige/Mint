@@ -23,7 +23,7 @@ public class HotbarRefiller extends Module {
     }
 
     public void onUpdate() {
-        if (NullUtil.fullNullCheck() || HotbarRefiller.mc.currentScreen != null)
+        if (NullUtil.fullNullCheck() || mc.currentScreen != null)
             return;
 
         if (!timer.passedMs(delay.getValue()))
@@ -45,7 +45,7 @@ public class HotbarRefiller extends Module {
 
         hotbarItems.clear();
         for (int i = 0; i < 9; ++i) {
-            ItemStack itemStack = HotbarRefiller.mc.player.inventory.getStackInSlot(i);
+            ItemStack itemStack = mc.player.inventory.getStackInSlot(i);
             if(itemStack.isEmpty())
                 hotbarItems.add(Items.AIR);
             if (!hotbarItems.contains(itemStack.getItem()))
@@ -54,7 +54,7 @@ public class HotbarRefiller extends Module {
     }
 
     boolean getFillableSlot(int slot) {
-        ItemStack itemStack = HotbarRefiller.mc.player.inventory.getStackInSlot(slot);
+        ItemStack itemStack = mc.player.inventory.getStackInSlot(slot);
         if (itemStack.isEmpty() || itemStack.getItem() == Items.AIR)
             return false;
 
@@ -68,10 +68,10 @@ public class HotbarRefiller extends Module {
             return false;
 
         for (int i = 9; i < 36; ++i) {
-            ItemStack inventoryItemStack = HotbarRefiller.mc.player.inventory.getStackInSlot(i);
+            ItemStack inventoryItemStack = mc.player.inventory.getStackInSlot(i);
             if (!inventoryItemStack.isEmpty() && itemStack.getItem() == inventoryItemStack.getItem() && itemStack.getDisplayName().equals(inventoryItemStack.getDisplayName())) {
-                HotbarRefiller.mc.playerController.windowClick(HotbarRefiller.mc.player.inventoryContainer.windowId, i, 0, ClickType.QUICK_MOVE, HotbarRefiller.mc.player);
-                HotbarRefiller.mc.playerController.updateController();
+                mc.playerController.windowClick(mc.player.inventoryContainer.windowId, i, 0, ClickType.QUICK_MOVE, mc.player);
+                mc.playerController.updateController();
                 return true;
             }
         }

@@ -68,7 +68,6 @@ public class ModuleManager {
         moduleList.add(new TabTweaks());
         moduleList.add(new AntiCrystalDamage());
         moduleList.add(new HotbarRefiller());
-        moduleList.add(new SinglePieceMend());
 
         /** Movement **/
         moduleList.add(new Anchor());
