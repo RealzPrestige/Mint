@@ -4,7 +4,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.MathUtil;
-import mint.utils.shader.*;
+import mint.utils.shader.FramebufferShader;
 import mint.utils.shader.shaders.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -13,11 +13,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 
 public class ShaderChams extends Module {
-
+    //TODO: make full alpha?
+    static ShaderChams INSTANCE = new ShaderChams();
     public Setting<modes> mode = register(new Setting<>("Mode", modes.Aqua));
 
     public ShaderChams() {
         super("Shader Chams", Category.VISUAL, "Makes shader on cham");
+        setInstance();
+    }
+
+    public static ShaderChams getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new ShaderChams();
+        return INSTANCE;
+    }
+
+    void setInstance() {
+        INSTANCE = this;
     }
 
     @Override
@@ -82,30 +94,23 @@ public class ShaderChams extends Module {
         try {
             for (final Entity entity : mc.world.loadedEntityList) {
                 if (entity != mc.player && entity != mc.getRenderViewEntity()) {
-                    if (!(entity instanceof EntityPlayer)) {
+                    if (!(entity instanceof EntityPlayer))
                         continue;
-                    }
                     final Render getEntityRenderObject = mc.getRenderManager().getEntityRenderObject(entity);
-                    if (getEntityRenderObject == null) {
+                    if (getEntityRenderObject == null)
                         continue;
-                    }
                     final Vec3d vector = MathUtil.getInterpolatedRenderPos(entity, event.getPartialTicks());
+                    ((EntityPlayer) entity).hurtTime = 0;
                     getEntityRenderObject.doRender(entity, vector.x, vector.y, vector.z, entity.rotationYaw, event.getPartialTicks());
+
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        final float n2 = Float.intBitsToFloat(Float.floatToIntBits(3.651715f) ^ 0x7F69B5B3);
-        final Float value3 = Float.intBitsToFloat(Float.floatToIntBits(0.9867451f) ^ 0x7F3C9B54);
-        final Float radius;
-        final Float n3 = radius = Float.intBitsToFloat(Float.floatToIntBits(1799.2811f) ^ 0x7BE0E8FF) + value3;
-        final float red = Float.intBitsToFloat(Float.floatToIntBits(1.4528846f) ^ 0x7CC6F81F);
-        final float green = Float.intBitsToFloat(Float.floatToIntBits(8.874367E37f) ^ 0x7E8586D1);
-        final float blue = Float.intBitsToFloat(Float.floatToIntBits(0.01116983f) ^ 0x7F4801AA);
-        final float alpha = Float.intBitsToFloat(Float.floatToIntBits(0.008144599f) ^ 0x7F7A70ED);
+        final float radius = Float.intBitsToFloat(Float.floatToIntBits(1799.2811f) ^ 0x7BE0E8FF) + Float.intBitsToFloat(Float.floatToIntBits(0.9867451f) ^ 0x7F3C9B54);
         framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), Float.intBitsToFloat(Float.floatToIntBits(0.096559145f) ^ 0x7EBAC0CD), radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
-        GlStateManager.color(Float.intBitsToFloat(Float.floatToIntBits(4.0344067f) ^ 0x7F0119DC), Float.intBitsToFloat(Float.floatToIntBits(10.789216f) ^ 0x7EACA0A1), Float.intBitsToFloat(Float.floatToIntBits(5.1625485f) ^ 0x7F253399));
+        GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.matrixMode(5889);
         GlStateManager.popMatrix();
         GlStateManager.matrixMode(5888);

@@ -5,7 +5,6 @@ import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.utils.NullUtil;
 import net.minecraft.network.play.server.SPacketExplosion;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -15,7 +14,6 @@ public class NoRender extends Module {
     public Setting<Boolean> fire = register(new Setting<>("Fire Overlay", false));
     public Setting<Boolean> hurtCam = register(new Setting<>("Hurt Camera Effect", false));
     public Setting<Boolean> insideBlocks = register(new Setting<>("Inside Blocks Overlay", false));
-    public Setting<Boolean> backgroundDrawn = register(new Setting<>("Background Drawn", false));
     public Setting<Boolean> explosions = register(new Setting<>("Explosions Effect", false));
     public Setting<Boolean> armorRemover = register(new Setting<>("Armor Remover", false));
 
@@ -42,14 +40,6 @@ public class NoRender extends Module {
 
         if (event.getOverlayType().equals(RenderBlockOverlayEvent.OverlayType.BLOCK))
             event.setCanceled(insideBlocks.getValue());
-    }
-
-    @SubscribeEvent
-    public void onRenderOverlay(GuiScreenEvent.BackgroundDrawnEvent event) {
-        if (NullUtil.fullNullCheck() || !isEnabled())
-            return;
-
-        event.setCanceled(backgroundDrawn.getValue());
     }
 
     @SubscribeEvent

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemArmor;
 import java.util.ArrayList;
 
 public class SinglePieceMend extends Module {
+    //TODO: finish this, is very useful :) make no exp waste..
     public Setting<Integer> thresholdValue = register(new Setting<>("Threshold Value", 90, 1, 100));
 
     public SinglePieceMend() {

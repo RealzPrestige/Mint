@@ -17,7 +17,7 @@ public class Velocity extends Module {
 
     public enum WebCollisionMode {Speed, Cancel}
 
-    public Setting<Float> webCollisionSpeed = register(new Setting<>("Entity Web Collision Speed", 1.0f, 0.1f, 50.0f, v -> webCollisionMode.getValue().equals(WebCollisionMode.Speed)));
+    public Setting<Float> webCollisionSpeed = register(new Setting<>("Web Speed", 1.0f, 0.1f, 50.0f, v -> webCollisionMode.getValue().equals(WebCollisionMode.Speed)));
 
     public Velocity() {
         super("Velocity", Category.MOVEMENT, "Changes Velocity of stuff");
@@ -30,17 +30,20 @@ public class Velocity extends Module {
             return;
 
         if (event.getPacket() instanceof SPacketEntityVelocity)
-            event.setCanceled(entityVelocity.getValue() && ((SPacketEntityVelocity) event.getPacket()).getEntityID() == mc.player.getEntityId());
+            if (isEnabled())
+                event.setCanceled(entityVelocity.getValue() && ((SPacketEntityVelocity) event.getPacket()).getEntityID() == mc.player.getEntityId());
     }
 
     @SubscribeEvent
     public void onEntityCollision(EntityCollisionEvent.Entity event) {
-        event.setCanceled(entityCollisionPush.getValue());
+        if (isEnabled())
+            event.setCanceled(entityCollisionPush.getValue());
     }
 
     @SubscribeEvent
     public void onEntityCollision(EntityCollisionEvent.Block event) {
-        event.setCanceled(entityCollisionBlock.getValue());
+        if (isEnabled())
+            event.setCanceled(entityCollisionBlock.getValue());
     }
 
     @Override
