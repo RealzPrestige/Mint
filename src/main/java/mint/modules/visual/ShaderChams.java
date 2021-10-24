@@ -1,3 +1,5 @@
+
+
 package mint.modules.visual;
 
 import mint.clickgui.setting.Setting;
@@ -84,6 +86,16 @@ public class ShaderChams extends Module {
             case Custom:
                 framebufferShader = CustomShader.CUSTOM_SHADER;
                 break;
+            case Lava:
+                framebufferShader = LavaShader.LAVA_SHADER;
+                break;
+            case Black:
+                framebufferShader = BlackShader.BLACK_SHADER;
+                break;
+            case GreenGalaxy:
+                framebufferShader = GreenGalaxyShader.GREENGALAXY_SHADER;
+                break;
+
         }
         final FramebufferShader framebufferShader2 = framebufferShader;
         if (framebufferShader2 == null) {
@@ -112,7 +124,7 @@ public class ShaderChams extends Module {
             e.printStackTrace();
         }
         final float radius = Float.intBitsToFloat(Float.floatToIntBits(1799.2811f) ^ 0x7BE0E8FF) + Float.intBitsToFloat(Float.floatToIntBits(0.9867451f) ^ 0x7F3C9B54);
-        framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), Float.intBitsToFloat(Float.floatToIntBits(0.096559145f) ^ 0x7EBAC0CD), radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
+        framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), 255.0f, radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.matrixMode(5889);
         GlStateManager.popMatrix();
@@ -134,6 +146,9 @@ public class ShaderChams extends Module {
         BlueSpace,
         Aurora,
         Hamburger,
+        Black,
+        GreenGalaxy,
+        Lava,
         Custom;
 
         public static modes[] $VALUES;
@@ -153,6 +168,9 @@ public class ShaderChams extends Module {
                     modes.BlueSpace,
                     modes.Aurora,
                     modes.Hamburger,
+                    modes.Black,
+                    modes.GreenGalaxy,
+                    modes.Lava,
                     modes.Custom
             };
         }
