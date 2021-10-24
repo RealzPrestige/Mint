@@ -13,8 +13,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConfigManager {
@@ -58,6 +58,25 @@ public class ConfigManager {
         }
         saveCurrentConfig();
         savingConfig = false;
+    }
+
+    public void createFragFile() {
+        File fragFile = new File("mint/customShader.frag/");
+        try {
+            if (!fragFile.exists())
+                fragFile.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public File getFragFile() {
+        File fragFile = new File("mint/customShader.frag/");
+
+        if (!fragFile.exists())
+            return null;
+
+        return fragFile;
     }
 
     public void saveCurrentConfig() {
@@ -115,7 +134,7 @@ public class ConfigManager {
 
     public static void setValueFromJson(Setting setting, JsonElement element) {
         if (setting.isColorSetting()) {
-            setting.setColor(new Color(element.getAsInt(),true));
+            setting.setColor(new Color(element.getAsInt(), true));
         }
         switch (setting.getType()) {
             case "Boolean": {
@@ -161,6 +180,7 @@ public class ConfigManager {
         features.add(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
+        createFragFile();
     }
 
     private void loadSettings(Feature feature) throws IOException {

@@ -1,6 +1,6 @@
 package mint.mixins;
 
-import mint.modules.visual.ArmorRemover;
+import mint.modules.visual.NoRender;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -21,25 +21,26 @@ public abstract class MixinRenderArmor {
     @Overwrite
     protected void setModelSlotVisible(ModelBiped p_188359_1_, EntityEquipmentSlot slotIn) {
         setModelVisible(p_188359_1_);
-        switch (slotIn) {
-            case HEAD:
-                p_188359_1_.bipedHead.showModel = !ArmorRemover.getInstance().isEnabled();
-                p_188359_1_.bipedHeadwear.showModel = !ArmorRemover.getInstance().isEnabled();
-                break;
-            case CHEST:
-                p_188359_1_.bipedBody.showModel = !ArmorRemover.getInstance().isEnabled();
-                p_188359_1_.bipedRightArm.showModel = !ArmorRemover.getInstance().isEnabled();
-                p_188359_1_.bipedLeftArm.showModel = !ArmorRemover.getInstance().isEnabled();
-                break;
-            case LEGS:
-                p_188359_1_.bipedBody.showModel = !ArmorRemover.getInstance().isEnabled();
-                p_188359_1_.bipedRightLeg.showModel = !ArmorRemover.getInstance().isEnabled();
-                p_188359_1_.bipedLeftLeg.showModel = !ArmorRemover.getInstance().isEnabled();
-                break;
-            case FEET:
-                p_188359_1_.bipedRightLeg.showModel = !ArmorRemover.getInstance().isEnabled();
-                p_188359_1_.bipedLeftLeg.showModel = !ArmorRemover.getInstance().isEnabled();
-        }
+        if (NoRender.getInstance().isEnabled())
+            switch (slotIn) {
+                case HEAD:
+                    p_188359_1_.bipedHead.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    p_188359_1_.bipedHeadwear.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    break;
+                case CHEST:
+                    p_188359_1_.bipedBody.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    p_188359_1_.bipedRightArm.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    p_188359_1_.bipedLeftArm.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    break;
+                case LEGS:
+                    p_188359_1_.bipedBody.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    p_188359_1_.bipedRightLeg.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    p_188359_1_.bipedLeftLeg.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    break;
+                case FEET:
+                    p_188359_1_.bipedRightLeg.showModel = !NoRender.getInstance().armorRemover.getValue();
+                    p_188359_1_.bipedLeftLeg.showModel = !NoRender.getInstance().armorRemover.getValue();
+            }
     }
 }
 

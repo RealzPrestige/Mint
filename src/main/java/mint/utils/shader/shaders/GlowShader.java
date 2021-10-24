@@ -1,5 +1,6 @@
-package mint.utils.shader;
+package mint.utils.shader.shaders;
 
+import mint.utils.shader.FramebufferShader;
 import org.lwjgl.opengl.GL20;
 
 public class GlowShader extends FramebufferShader

@@ -1,17 +1,19 @@
-package mint.utils.shader;
+package mint.utils.shader.shaders;
+
 
 import mint.utils.RenderUtil;
+import mint.utils.shader.FramebufferShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL20;
 
-public class RedShader extends FramebufferShader
+public class AquaShader extends FramebufferShader
 {
-    public static RedShader RED_SHADER;
+    public static AquaShader AQUA_SHADER;
     public float time;
     
-    public RedShader() {
-        super("red.frag");
+    public AquaShader() {
+        super("aqua.frag");
     }
     
     @Override
@@ -24,10 +26,10 @@ public class RedShader extends FramebufferShader
     public void updateUniforms() {
         GL20.glUniform2f(this.getUniform("resolution"), (float)new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth(), (float)new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight());
         GL20.glUniform1f(this.getUniform("time"), this.time);
-        this.time += Float.intBitsToFloat(Float.floatToIntBits(626.72473f) ^ 0x7F5835C4) * RenderUtil.deltaTime;
+        this.time += Float.intBitsToFloat(Float.floatToIntBits(1015.0615f) ^ 0x7F395856) * RenderUtil.deltaTime;
     }
     
     static {
-        RedShader.RED_SHADER = new RedShader();
+        AquaShader.AQUA_SHADER = new AquaShader();
     }
 }

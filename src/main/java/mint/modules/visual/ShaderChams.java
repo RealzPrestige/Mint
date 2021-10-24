@@ -5,6 +5,7 @@ import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.MathUtil;
 import mint.utils.shader.*;
+import mint.utils.shader.shaders.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -25,27 +26,49 @@ public class ShaderChams extends Module {
             return;
         }
         FramebufferShader framebufferShader = null;
-        switch ((modes) mode.getValue()) {
-            case Smoke: {
+        switch (mode.getValue()) {
+            case Smoke:
                 framebufferShader = SmokeShader.SMOKE_SHADER;
                 break;
-            }
-            case Aqua: {
+            case Aqua:
                 framebufferShader = AquaShader.AQUA_SHADER;
                 break;
-            }
-            case Flow: {
+            case Flow:
                 framebufferShader = FlowShader.FLOW_SHADER;
                 break;
-            }
-            case Red: {
+            case Red:
                 framebufferShader = RedShader.RED_SHADER;
                 break;
-            }
-            case Outline: {
+            case Outline:
                 framebufferShader = GlowShader.GLOW_SHADER;
                 break;
-            }
+            case Rainbow:
+                framebufferShader = RainbowShader.RAINBOW_SHADER;
+                break;
+            case Star:
+                framebufferShader = StarShader.STAR_SHADER;
+                break;
+            case Galaxy:
+                framebufferShader = GalaxyShader.GALAXY_SHADER;
+                break;
+            case IIV:
+                framebufferShader = IIVShader.IIV_SHADER;
+                break;
+            case Cloud:
+                framebufferShader = CloudShader.CLOUD_SHADER;
+                break;
+            case BlueSpace:
+                framebufferShader = BlueSpaceShader.BLUE_SPACE_SHADER;
+                break;
+            case Aurora:
+                framebufferShader = AuroraShader.AURORA_SHADER;
+                break;
+            case Hamburger:
+                framebufferShader = HamburgerShader.HAMBURGER_SHADER;
+                break;
+            case Custom:
+                framebufferShader = CustomShader.CUSTOM_SHADER;
+                break;
         }
         final FramebufferShader framebufferShader2 = framebufferShader;
         if (framebufferShader2 == null) {
@@ -94,12 +117,36 @@ public class ShaderChams extends Module {
         Aqua,
         Flow,
         Red,
-        Outline;
+        Outline,
+        Rainbow,
+        Star,
+        Galaxy,
+        IIV,
+        Cloud,
+        BlueSpace,
+        Aurora,
+        Hamburger,
+        Custom;
 
         public static modes[] $VALUES;
 
         static {
-            modes.$VALUES = new modes[]{modes.Smoke, modes.Aqua, modes.Flow, modes.Red, modes.Outline};
+            modes.$VALUES = new modes[]{
+                    modes.Smoke,
+                    modes.Aqua,
+                    modes.Flow,
+                    modes.Red,
+                    modes.Outline,
+                    modes.Rainbow,
+                    modes.Star,
+                    modes.Galaxy,
+                    modes.IIV,
+                    modes.Cloud,
+                    modes.BlueSpace,
+                    modes.Aurora,
+                    modes.Hamburger,
+                    modes.Custom
+            };
         }
     }
 }

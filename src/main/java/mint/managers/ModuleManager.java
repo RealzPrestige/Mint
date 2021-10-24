@@ -73,7 +73,6 @@ public class ModuleManager {
 
         /** Movement **/
         moduleList.add(new Anchor());
-        moduleList.add(new AntiWeb());
         moduleList.add(new BoatFly());
         moduleList.add(new Clip());
         moduleList.add(new LongJump());
@@ -85,6 +84,7 @@ public class ModuleManager {
         moduleList.add(new YPort());
         moduleList.add(new TickShift());
         moduleList.add(new WaterSpeed());
+        moduleList.add(new Velocity());
 
         /** Player **/
         moduleList.add(new AntiAim());
@@ -110,7 +110,7 @@ public class ModuleManager {
         moduleList.add(new SwingAnimations());
         moduleList.add(new ViewTweaks());
         moduleList.add(new ShaderChams());
-        moduleList.add(new ArmorRemover());
+        moduleList.add(new NoRender());
     }
 
     public Module getModuleByName(String name) {

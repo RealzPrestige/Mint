@@ -5,7 +5,10 @@
   "refmap": "mixins.mint.refmap.json",
   "mixins": [
     "IEntityRenderer",
+    "MixinEntityLivingBase",
+    "MixinEntityPlayer",
     "MixinEntityPlayerSP",
+    "MixinEntityRenderer",
     "MixinFontRenderer",
     "MixinGuiIngame",
     "MixinRenderItem",
@@ -16,7 +19,6 @@
     "MixinRenderLivingBase",
     "MixinRenderEnderCrystal",
     "MixinRenderPlayer",
-    "MixinEntityLivingBase",
     "MixinTabOverlay",
     "MixinWorld"
   ]

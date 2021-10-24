@@ -1,5 +1,6 @@
 package mint.mixins;
 
+import mint.events.EntityCollisionEvent;
 import mint.events.MoveEvent;
 import mint.modules.movement.Strafe;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = {EntityPlayerSP.class})
 public class MixinEntityPlayerSP extends AbstractClientPlayer {
@@ -32,6 +34,12 @@ public class MixinEntityPlayerSP extends AbstractClientPlayer {
             return Strafe.getInstance().minY;
         }
         return bb.minY;
+    }
+
+    @Inject(method = {"pushOutOfBlocks"}, at = {@At("HEAD")}, cancellable = true)
+    private void pushOutOfBlock(double x, double y, double z, CallbackInfoReturnable<Boolean> info) {
+        MinecraftForge.EVENT_BUS.post(new EntityCollisionEvent.Block());
+        info.setReturnValue(!new EntityCollisionEvent.Block().isCanceled());
     }
 
     @Inject(method = {"move"}, at = {@At("HEAD")}, cancellable = true)

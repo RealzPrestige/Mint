@@ -2,11 +2,11 @@
 precision mediump float;
 #endif
 
-uniform sampler2D texture;
 
 uniform float time;
+uniform vec2 mouse;
 uniform vec2 resolution;
-
+uniform sampler2D texture;
 
 #define iterations 4
 #define formuparam2 0.89
@@ -60,7 +60,6 @@ float field(in vec3 p) {
 
 void main()
 {
-    vec4 centerCol = texture2D(texture, gl_TexCoord[0].xy);
 
      	vec2 uv2 = 2. * gl_FragCoord.xy / resolution.xy - 1.;
 	vec2 uvs = uv2 * resolution.xy / max(resolution.x, resolution.y);
@@ -208,11 +207,14 @@ void main()
 
 
 
-}
+		}
 
 	v=mix(vec3(length(v)),v,saturation); //color adjust
 
-	vec4 forCol2 = vec4(v*.01,centerCol.a);
+
+
+
+	vec4 forCol2 = vec4(v*.01,1.);
 
 	#ifdef cloud
 	backCol2 *= cloud;
@@ -222,5 +224,17 @@ void main()
 
 	backCol2.r *= 0.05;
 
-	gl_FragColor = forCol2 + vec4(backCol2, centerCol.a);
+
+
+//	backCol2.b = 0.5*mix(backCol2.b, backCol2.g, 0.2);
+//	backCol2.g = 0.0;
+//
+//	backCol2.bg = mix(backCol2.gb, backCol2.bg, 0.5*(cos(time*0.01) + 1.0));
+	vec4 centerCol = texture2D(texture, gl_TexCoord[0].xy);
+	gl_FragColor = vec4(backCol2, centerCol.a);
+
+
+
+
+
 }
