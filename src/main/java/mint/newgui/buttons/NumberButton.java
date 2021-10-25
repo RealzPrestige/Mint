@@ -17,7 +17,7 @@ public class NumberButton extends Button{
     Number max;
 
     public NumberButton(Setting setting) {
-        super(setting.getName());
+        super(setting.getName(), setting);
         this.setting = setting;
         min = (Number) setting.getMin();
         max = (Number) setting.getMax();
@@ -41,11 +41,11 @@ public class NumberButton extends Button{
     }
 
     public boolean isInsideExtended(int mouseX, int mouseY) {
-        return (mouseX > x && mouseX < x + width + 10) && (mouseY > y && mouseY < y + height);
+        return (mouseX > x && mouseX < x + width + 5) && (mouseY > y && mouseY < y + height);
     }
 
     void setSliderValue(int mouseX) {
-        float percent = ((float) mouseX - x - 1) / ((float) width + 7.4f);
+        float percent = ((float) mouseX - x - 1) / ((float) width - 5);
         if (setting.getValue() instanceof Double) {
             double result = (Double) setting.getMin() + (double) ((float) minimax * percent);
             setting.setValue((double) Math.round(10.0 * result) / 10.0);

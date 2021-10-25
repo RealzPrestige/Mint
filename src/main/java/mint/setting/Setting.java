@@ -46,7 +46,7 @@ public class Setting<T> {
         this.isParent = parent;
     }
 
-    public Setting(String name, T defaultValue, Predicate<T> visibility) {
+    public Setting(String name, T defaultValue, Predicate visibility) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.value = defaultValue;

@@ -41,6 +41,7 @@ public class ModuleManager {
         moduleList.add(new NewGuiModule());
         moduleList.add(new HudEditor());
         moduleList.add(new Hud());
+        moduleList.add(new GuiTest());
 
         /** Combat **/
         moduleList.add(new AutoCrystal());

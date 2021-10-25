@@ -1,13 +1,17 @@
 package mint.newgui.buttons;
 
+import mint.setting.Setting;
+
 public class Button {
     public int x;
     public int y;
     public int width;
     public int height;
     boolean isTyping;
+    Setting setting;
 
-    public Button(String name){
+    public Button(String name, Setting setting){
+        this.setting = setting;
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -44,6 +48,10 @@ public class Button {
 
     public boolean isInside(int mouseX, int mouseY) {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
+    }
+
+    public Setting getSetting(){
+        return setting;
     }
 
 }

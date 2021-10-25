@@ -15,7 +15,7 @@ public class StringButton extends Button {
     Setting setting;
 
     public StringButton(Setting setting) {
-        super(setting.getName());
+        super(setting.getName(), setting);
         this.setting = setting;
     }
 

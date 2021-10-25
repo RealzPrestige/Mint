@@ -2,9 +2,9 @@ package mint.newgui;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.setting.Setting;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
+import mint.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -60,12 +60,13 @@ public class Window {
                 int openedHeight = 0;
                 if (module.isOpened) {
                     for (Setting setting : module.getSettings()) {
-                        if(setting.isVisible() && !setting.getName().equals("Enabled") && !setting.getName().equals("DisplayName"))
+                        if (setting.isVisible() && !setting.getName().equals("Enabled") && !setting.getName().equals("DisplayName"))
                             openedHeight += 10;
-                        //need bindbutton now to fix the complete height, because it will make an empty line for the keyBind.
+                        if (setting.isColorSetting() && setting.isOpen)
+                            openedHeight += 100;
                     }
                 }
-                modules.add(new ModuleWindow(module.getName(), x, y += height, width,height, new Color(
+                modules.add(new ModuleWindow(module.getName(), x, y += height, width, height, new Color(
                         NewGuiModule.getInstance().moduleRed.getValue(),
                         NewGuiModule.getInstance().moduleGreen.getValue(),
                         NewGuiModule.getInstance().moduleBlue.getValue(),
@@ -93,7 +94,7 @@ public class Window {
             isOpened = !isOpened;
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
-        for(ModuleWindow moduleWindow : modules)
+        for (ModuleWindow moduleWindow : modules)
             moduleWindow.mouseClicked(mouseX, mouseY, mouseButton);
     }
 

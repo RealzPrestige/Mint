@@ -26,7 +26,7 @@ public class RubberbandNotify extends Module {
     float seconds;
 
     @SubscribeEvent
-    public void onPacketReceived(PacketEvent.Receive event) {
+    public void onPacketEvent(PacketEvent event) {
         if (event.getPacket() instanceof SPacketPlayerPosLook) {
             timer.reset();
             rubberbandString.put("Rubberband detected! ", 255);

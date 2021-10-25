@@ -15,7 +15,7 @@ public class KeybindButton extends Button {
     Setting setting;
 
     public KeybindButton(Setting setting) {
-        super(setting.getName());
+        super(setting.getName(), setting);
         this.setting = setting;
     }
 

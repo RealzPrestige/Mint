@@ -1,11 +1,11 @@
 package mint.newgui;
 
 import mint.Mint;
-import mint.setting.Bind;
-import mint.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.buttons.Button;
 import mint.newgui.buttons.*;
+import mint.setting.Bind;
+import mint.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -64,6 +64,9 @@ public class ModuleWindow {
 
             if (setting.isEnumSetting())
                 buttons.add(new ModeButton(setting));
+
+            if (setting.isColorSetting())
+                buttons.add(new ColorButton(setting));
         }
         buttons.add(new KeybindButton(module.getSettingByName("Keybind")));
         button = buttons;
@@ -74,7 +77,7 @@ public class ModuleWindow {
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(name, x, y, -1);
+        Mint.textManager.drawStringWithShadow(name, isInside(mouseX, mouseY) ? x + 1 : x, y, -1);
         if (module.isOpened) {
             int y = this.y;
             for (Button button : button) {
@@ -83,6 +86,8 @@ public class ModuleWindow {
                 button.setWidth(width);
                 button.setHeight(height);
                 button.drawScreen(mouseX, mouseY, partialTicks);
+                if(button instanceof ColorButton && button.getSetting().isOpen)
+                    y += 100;
             }
         }
     }

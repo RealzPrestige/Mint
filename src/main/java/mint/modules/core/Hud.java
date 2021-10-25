@@ -10,9 +10,7 @@ import java.awt.*;
 public class Hud extends Module {
 
     static Hud INSTANCE = new Hud();
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.one));
     public Setting color = register(new Setting<>("Color", new Color(199, 45, 45)));
-    public enum Mode {one, two, three, four, five}
     public Hud() {
         super("Hud", Category.CORE, "Draws hud stuff");
         setInstance();
