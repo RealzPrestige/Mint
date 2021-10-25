@@ -46,8 +46,13 @@ public class ModuleWindow {
             if (!setting.isVisible())
                 continue;
 
+
             if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind"))
                 buttons.add(new KeybindButton(setting));
+
+            if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName"))
+                buttons.add(new StringButton(setting));
+
 
             if (setting.getValue() instanceof Boolean && setting.isParent())
                 buttons.add(new ParentButton(setting));
