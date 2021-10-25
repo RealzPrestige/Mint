@@ -7,11 +7,8 @@ import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-
-import static mint.utils.RenderUtil.drawGradientRect;
 
 public class ColorButton extends Button {
     private Setting setting;
@@ -22,7 +19,6 @@ public class ColorButton extends Button {
     private int pickerX, pickerY, pickerWidth, pickerHeight;
     private int hueSliderX, hueSliderY, hueSliderWidth, hueSliderHeight;
     private int alphaSliderX, alphaSliderY, alphaSliderWidth, alphaSliderHeight;
-    private float rainbowSpeed = 20.0f;
     private boolean rainbowState = false;
 
     public ColorButton(Setting setting) {
@@ -40,36 +36,29 @@ public class ColorButton extends Button {
         RenderUtil.drawRect(x + width - 12, y + 1, x + width - 3, y + 9, setting.getColor().getRGB());
         if (setting.isOpen) {
             setHeight(height + 100);
-            pickerWidth = 120;
-            pickerHeight = 100;
+
             pickerX = x;
             pickerY = y + 10;
+            pickerWidth = 120;
+            pickerHeight = 100;
+
             hueSliderX = pickerX;
             hueSliderY = pickerY + pickerHeight + 6;
             hueSliderWidth = pickerWidth;
             hueSliderHeight = 10;
+
             alphaSliderX = pickerX + pickerWidth + 6;
             alphaSliderY = pickerY;
             alphaSliderWidth = 10;
             alphaSliderHeight = pickerHeight;
 
             if (pickingHue) {
-                if (hueSliderWidth > hueSliderHeight) {
-                    float restrictedX = (float) Math.min(Math.max(hueSliderX, mouseX), hueSliderX + hueSliderWidth);
-                    color[0] = (restrictedX - (float) hueSliderX) / hueSliderWidth;
-                } else {
-                    float restrictedY = (float) Math.min(Math.max(hueSliderY, mouseY), hueSliderY + hueSliderHeight);
-                    color[0] = (restrictedY - (float) hueSliderY) / hueSliderHeight;
-                }
+                float restrictedX = (float) Math.min(Math.max(hueSliderX, mouseX), hueSliderX + hueSliderWidth);
+                color[0] = (restrictedX - (float) hueSliderX) / hueSliderWidth;
             }
             if (pickingAlpha) {
-                if (alphaSliderWidth > alphaSliderHeight) {
-                    float restrictedX = (float) Math.min(Math.max(alphaSliderX, mouseX), alphaSliderX + alphaSliderWidth);
-                    color[3] = 1 - (restrictedX - (float) alphaSliderX) / alphaSliderWidth;
-                } else {
-                    float restrictedY = (float) Math.min(Math.max(alphaSliderY, mouseY), alphaSliderY + alphaSliderHeight);
-                    color[3] = 1 - (restrictedY - (float) alphaSliderY) / alphaSliderHeight;
-                }
+                float restrictedY = (float) Math.min(Math.max(alphaSliderY, mouseY), alphaSliderY + alphaSliderHeight);
+                color[3] = 1 - (restrictedY - (float) alphaSliderY) / alphaSliderHeight;
             }
             if (pickingColor) {
                 float restrictedX = (float) Math.min(Math.max(pickerX, mouseX), pickerX + pickerWidth);
@@ -88,9 +77,9 @@ public class ColorButton extends Button {
             float selectedRed = (selectedColor >> 16 & 0xFF) / 255.0f;
             float selectedGreen = (selectedColor >> 8 & 0xFF) / 255.0f;
             float selectedBlue = (selectedColor & 0xFF) / 255.0f;
-            drawPickerBase(pickerX, pickerY, pickerWidth, pickerHeight, selectedRed, selectedGreen, selectedBlue, color[3]);
-            drawHueSlider(hueSliderX, hueSliderY, hueSliderWidth, hueSliderHeight, color[0]);
-            drawAlphaSlider(alphaSliderX, alphaSliderY, alphaSliderWidth, alphaSliderHeight, selectedRed, selectedGreen, selectedBlue, color[3]);
+            RenderUtil.drawPickerBase(pickerX, pickerY, pickerWidth, pickerHeight, selectedRed, selectedGreen, selectedBlue, color[3]);
+            RenderUtil.drawHueSlider(hueSliderX, hueSliderY, hueSliderWidth, hueSliderHeight, color[0]);
+            RenderUtil.drawAlphaSlider(alphaSliderX, alphaSliderY, alphaSliderWidth, alphaSliderHeight, selectedRed, selectedGreen, selectedBlue, color[3]);
             final int selectedColorFinal = alpha(new Color(Color.HSBtoRGB(color[0], color[1], color[2])), color[3]);
             Gui.drawRect(selectedX - 2, selectedY - 2, selectedX + selectedWidth + 2, selectedY + selectedHeight + 2, 0xFC000000);
             Gui.drawRect(selectedX, selectedY, selectedX + selectedWidth, selectedY + selectedHeight, selectedColorFinal);
@@ -100,9 +89,6 @@ public class ColorButton extends Button {
                 Gui.drawRect(cursorX - 2, cursorY - 2, cursorX + 2, cursorY + 2, -1);
             }
             setting.setColor(urmom(new Color(Color.HSBtoRGB(color[0], color[1], color[2])), color[3]));
-//        for (int i = 1; i < pickerHeight/10; i++) {
-//            Gui.drawRect(selectedX - 2, pickerY + i * 14, selectedX + 12, pickerY + i * 14, 0xFC000000);
-//        }
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                 setting.isOpen = false;
             }
@@ -118,18 +104,13 @@ public class ColorButton extends Button {
         pickingColor = check(pickerX, pickerY, pickerX + pickerWidth, pickerY + pickerHeight, mouseX, mouseY);
         pickingHue = check(hueSliderX, hueSliderY, hueSliderX + hueSliderWidth, hueSliderY + hueSliderHeight, mouseX, mouseY);
         pickingAlpha = check(alphaSliderX, alphaSliderY, alphaSliderX + alphaSliderWidth, alphaSliderY + alphaSliderHeight, mouseX, mouseY);
-        if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1) {
+        if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1)
             setting.isOpen = !setting.isOpen;
-        }
-    }
 
+    }
 
     public boolean isInsideButtonOnly(int mouseX, int mouseY) {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + 10);
-    }
-
-    public boolean isInsideBox(int mouseX, int mouseY) {
-        return (mouseX > pickerX - 3 && mouseX < pickerX + pickerWidth + alphaSliderWidth + 9) && (mouseY > pickerY - 16 && mouseY < pickerY + pickerHeight + hueSliderHeight + 24);
     }
 
     @Override
@@ -137,119 +118,8 @@ public class ColorButton extends Button {
         pickingColor = pickingHue = pickingAlpha = false;
     }
 
-    private void drawHueSlider(int x, int y, int width, int height, float hue) {
-        int step = 0;
-        if (height > width) {
-            Gui.drawRect(x, y, x + width, y + 4, 0xFFFF0000);
-            y += 4;
-            for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
-                int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
-                int nextStep = Color.HSBtoRGB((float) (step + 1) / 6, 1.0f, 1.0f);
-                drawGradientRect(x, y + step * (height / 6), x + width, y + (step + 1) * (height / 6), previousStep, nextStep);
-                step++;
-            }
-            final int sliderMinY = (int) (y + (height * hue)) - 4;
-            Gui.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1, -1);
-        } else {
-            for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
-                int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
-                int nextStep = Color.HSBtoRGB((float) (step + 1) / 6, 1.0f, 1.0f);
-                gradient(x + step * (width / 6), y, x + (step + 1) * (width / 6), y + height, previousStep, nextStep, true);
-                step++;
-            }
-            final int sliderMinX = (int) (x + (width * hue));
-            Gui.drawRect(sliderMinX - 1, y, sliderMinX + 1, y + height, -1);
-        }
-    }
 
-    private void drawAlphaSlider(int x, int y, int width, int height, float red, float green, float blue, float alpha) {
-        boolean left = true;
-        int checkerBoardSquareSize = width / 2;
-        for (int squareIndex = -checkerBoardSquareSize; squareIndex < height; squareIndex += checkerBoardSquareSize) {
-            if (!left) {
-                Gui.drawRect(x, y + squareIndex, x + width, y + squareIndex + checkerBoardSquareSize, 0xFFFFFFFF);
-                Gui.drawRect(x + checkerBoardSquareSize, y + squareIndex, x + width, y + squareIndex + checkerBoardSquareSize, 0xFF909090);
-                if (squareIndex < height - checkerBoardSquareSize) {
-                    int minY = y + squareIndex + checkerBoardSquareSize;
-                    int maxY = Math.min(y + height, y + squareIndex + checkerBoardSquareSize * 2);
-                    Gui.drawRect(x, minY, x + width, maxY, 0xFF909090);
-                    Gui.drawRect(x + checkerBoardSquareSize, minY, x + width, maxY, 0xFFFFFFFF);
-                }
-            }
-            left = !left;
-        }
-        gradient(x, y, x + width, y + height, new Color(red, green, blue, alpha).getRGB(), 0, false);
-        final int sliderMinY = (int) (y + height - (height * alpha));
-        Gui.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1, -1);
-    }
-
-    private void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red, float green, float blue, float alpha) {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glBegin(GL11.GL_POLYGON);
-        {
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            GL11.glVertex2f(pickerX, pickerY);
-            GL11.glVertex2f(pickerX, pickerY + pickerHeight);
-            GL11.glColor4f(red, green, blue, alpha);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY);
-        }
-        GL11.glEnd();
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glBegin(GL11.GL_POLYGON);
-        {
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-            GL11.glVertex2f(pickerX, pickerY);
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-            GL11.glVertex2f(pickerX, pickerY + pickerHeight);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY);
-        }
-        GL11.glEnd();
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glShadeModel(GL11.GL_FLAT);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
-    }
-
-    protected void gradient(int minX, int minY, int maxX, int maxY, int startColor, int endColor, boolean left) {
-        if (left) {
-
-            final float startA = (startColor >> 24 & 0xFF) / 255.0f;
-            final float startR = (startColor >> 16 & 0xFF) / 255.0f;
-            final float startG = (startColor >> 8 & 0xFF) / 255.0f;
-            final float startB = (startColor & 0xFF) / 255.0f;
-
-            final float endA = (endColor >> 24 & 0xFF) / 255.0f;
-            final float endR = (endColor >> 16 & 0xFF) / 255.0f;
-            final float endG = (endColor >> 8 & 0xFF) / 255.0f;
-            final float endB = (endColor & 0xFF) / 255.0f;
-
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glShadeModel(GL11.GL_SMOOTH);
-            GL11.glBegin(GL11.GL_POLYGON);
-            {
-                GL11.glColor4f(startR, startG, startB, startA);
-                GL11.glVertex2f(minX, minY);
-                GL11.glVertex2f(minX, maxY);
-                GL11.glColor4f(endR, endG, endB, endA);
-                GL11.glVertex2f(maxX, maxY);
-                GL11.glVertex2f(maxX, minY);
-            }
-            GL11.glEnd();
-            GL11.glShadeModel(GL11.GL_FLAT);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_BLEND);
-        } else drawGradientRect(minX, minY, maxX, maxY, startColor, endColor);
-    }
-
-    protected boolean check(int minX, int minY, int maxX, int maxY, int curX, int curY) {
+    public boolean check(int minX, int minY, int maxX, int maxY, int curX, int curY) {
         return curX >= minX && curY >= minY && curX < maxX && curY < maxY;
     }
 
@@ -258,10 +128,8 @@ public class ColorButton extends Button {
         if (keyCode == Keyboard.KEY_R) {
             rainbowState = !rainbowState;
         }
-        if (keyCode == Keyboard.KEY_LEFT) {
-            rainbowSpeed -= 0.1;
-        } else if (keyCode == Keyboard.KEY_RIGHT) rainbowSpeed += 0.1;
     }
+
     final int alpha(Color color, float alpha) {
         final float red = (float) color.getRed() / 255;
         final float green = (float) color.getGreen() / 255;
