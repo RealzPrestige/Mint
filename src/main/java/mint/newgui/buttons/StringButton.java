@@ -14,8 +14,6 @@ import java.awt.*;
 public class StringButton extends Button {
     Setting setting;
 
-    CurrentString currentString = new CurrentString("");
-
     public StringButton(Setting setting) {
         super(setting.getName());
         this.setting = setting;
@@ -27,7 +25,7 @@ public class StringButton extends Button {
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.isOpen ? currentString.getString() + Mint.textManager.getIdleSign() : setting.getName() + " " + ChatFormatting.GRAY + setting.getValue().toString().toUpperCase(), x, y, -1);
+        Mint.textManager.drawStringWithShadow(setting.isOpen ? setting.getName() + " " + ChatFormatting.GRAY + setting.getValueAsString() + Mint.textManager.getIdleSign() : setting.getName() + " " + ChatFormatting.GRAY + setting.getValueAsString(), x, y, -1);
 
     }
 
@@ -41,50 +39,15 @@ public class StringButton extends Button {
 
     @Override
     public void onKeyTyped(char typedChar, int keyCode) {
-        if (setting.isOpen) {
+        if (!setting.isOpen)
+            return;
 
-            if (keyCode == 1)
-                return;
-
-            if (keyCode == 28)
-                enterString();
-            else if (keyCode == 14)
-                setString(removeLastChar(currentString.getString()));
-
-            setString(currentString.getString() + typedChar);
-
-        }
-    }
-
-    private void enterString() {
-        if (currentString.getString().isEmpty())
-            setting.setValue(setting.getValue());
-        else setting.setValue(currentString.getString());
-
-        setString("");
-    }
-
-    public void setString(String newString) {
-        currentString = new CurrentString(newString);
-    }
-
-    public static String removeLastChar(String str) {
-        String output = "";
-        if (str != null && str.length() > 0)
-            output = str.substring(0, str.length() - 1);
-        return output;
-    }
-
-    public static class CurrentString {
-        private String string;
-
-        public CurrentString(String string) {
-            this.string = string;
-        }
-
-        public String getString() {
-            return string;
-        }
+        if (keyCode == 14) {
+            if (setting.getValueAsString() != null && setting.getValueAsString().length() > 0)
+                setting.setValue(setting.getValueAsString().substring(0, setting.getValueAsString().length() - 1));
+        } else if (keyCode == 28)
+            setting.isOpen = false;
+        else setting.setValue(setting.getValue() + "" + typedChar);
     }
 }
 
