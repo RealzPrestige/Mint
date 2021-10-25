@@ -5,6 +5,7 @@ public class Button {
     public int y;
     public int width;
     public int height;
+    boolean isTyping;
 
     public Button(String name){
     }
@@ -35,6 +36,10 @@ public class Button {
 
     public void setHeight(int height){
         this.height = height;
+    }
+
+    public boolean isTyping(){
+        return isTyping;
     }
 
     public boolean isInside(int mouseX, int mouseY) {

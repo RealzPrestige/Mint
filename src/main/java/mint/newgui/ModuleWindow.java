@@ -47,7 +47,7 @@ public class ModuleWindow {
                 continue;
 
             if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind"))
-                buttons.add(new BindButton(setting));
+                buttons.add(new KeybindButton(setting));
 
             if (setting.getValue() instanceof Boolean && setting.isParent())
                 buttons.add(new ParentButton(setting));
@@ -58,7 +58,7 @@ public class ModuleWindow {
             if (setting.isNumberSetting() && setting.hasRestriction())
                 buttons.add(new NumberButton(setting));
         }
-        buttons.add(new BindButton(module.getSettingByName("Keybind")));
+        buttons.add(new KeybindButton(module.getSettingByName("Keybind")));
         button = buttons;
     }
 

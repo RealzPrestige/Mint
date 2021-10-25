@@ -5,6 +5,7 @@ import mint.clickgui.setting.Setting;
 import mint.events.PacketEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,8 +32,8 @@ public class CancelRubberband extends Module {
 
 
     @SubscribeEvent
-    public void onPacketSend(PacketEvent event) {
-        if (!isEnabled())
+    public void onPacketEvent(PacketEvent event) {
+        if(NullUtil.fullNullCheck() || !isEnabled())
             return;
         if (onGroundOnly.getValue() && !mc.player.onGround)
             return;

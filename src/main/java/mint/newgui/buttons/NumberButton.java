@@ -38,7 +38,6 @@ public class NumberButton extends Button{
     void dragSlider(int mouseX, int mouseY) {
         if (isInsideExtended(mouseX, mouseY) && Mouse.isButtonDown(0))
             setSliderValue(mouseX);
-
     }
 
     public boolean isInsideExtended(int mouseX, int mouseY) {
