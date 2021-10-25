@@ -17,7 +17,7 @@ public class NumberButton extends Button{
     Number max;
 
     public NumberButton(Setting setting) {
-        super(setting.getName(), setting);
+        super(setting);
         this.setting = setting;
         min = (Number) setting.getMin();
         max = (Number) setting.getMax();

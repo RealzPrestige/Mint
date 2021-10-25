@@ -15,7 +15,7 @@ public class ModeButton extends Button {
 
 
     public ModeButton(Setting setting) {
-        super(setting.getName(), setting);
+        super(setting);
         this.setting = setting;
         this.width = 15;
     }

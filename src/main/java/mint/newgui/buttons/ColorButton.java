@@ -12,10 +12,9 @@ public class ColorButton extends Button {
     Setting setting;
 
     public ColorButton(Setting setting) {
-        super(setting.getName(), setting);
+        super(setting);
         this.setting = setting;
     }
-
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {

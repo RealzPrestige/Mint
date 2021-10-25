@@ -14,7 +14,7 @@ public class BooleanButton extends Button {
     Setting setting;
 
     public BooleanButton(Setting setting) {
-        super(setting.getName(), setting);
+        super(setting);
         this.setting = setting;
     }
 

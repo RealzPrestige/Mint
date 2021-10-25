@@ -10,7 +10,7 @@ public class Button {
     boolean isTyping;
     Setting setting;
 
-    public Button(String name, Setting setting){
+    public Button(Setting setting){
         this.setting = setting;
     }
 

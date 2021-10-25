@@ -14,7 +14,7 @@ public class ParentButton extends Button {
     Setting setting;
 
     public ParentButton(Setting setting) {
-        super(setting.getName(), setting);
+        super(setting);
         this.setting = setting;
     }
 
