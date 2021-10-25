@@ -37,20 +37,7 @@ public class ColorButton extends Button {
         if (setting.isOpen) {
             setHeight(height + 100);
 
-            pickerX = x;
-            pickerY = y + 10;
-            pickerWidth = 120;
-            pickerHeight = 100;
 
-            hueSliderX = pickerX;
-            hueSliderY = pickerY + pickerHeight + 6;
-            hueSliderWidth = pickerWidth;
-            hueSliderHeight = 10;
-
-            alphaSliderX = pickerX + pickerWidth + 6;
-            alphaSliderY = pickerY;
-            alphaSliderWidth = 10;
-            alphaSliderHeight = pickerHeight;
 
             if (pickingHue) {
                 float restrictedX = (float) Math.min(Math.max(hueSliderX, mouseX), hueSliderX + hueSliderWidth);
@@ -93,6 +80,25 @@ public class ColorButton extends Button {
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(setting.getName(), x, y, -1);
+    }
+
+    @Override
+    public void initGui() {
+        if (setting.isOpen)
+            pickerX = x;
+        pickerY = y + 10;
+        pickerWidth = 120;
+        pickerHeight = 100;
+
+        hueSliderX = pickerX;
+        hueSliderY = pickerY + pickerHeight + 6;
+        hueSliderWidth = pickerWidth;
+        hueSliderHeight = 10;
+
+        alphaSliderX = pickerX + pickerWidth + 6;
+        alphaSliderY = pickerY;
+        alphaSliderWidth = 10;
+        alphaSliderHeight = pickerHeight;
     }
 
     @Override
