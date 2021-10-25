@@ -11,3 +11,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ){
 
     fragColor = vec4(vec3(0.1)/abs(sin(time-uv.y-uv.x)),1.0);
 }
+void main(void)
+{
+    iTime = time;
+    iResolution = vec3(resolution, 0.0);
+
+    mainImage(gl_FragColor, gl_FragCoord.xy);
+}

@@ -86,3 +86,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 
     fragColor = mix(freqs[3]-.3, 1., v) * vec4(1.5*freqs[2] * t * t* t , 1.2*freqs[1] * t * t, freqs[3]*t, 1.0)+c2+starcolor;
 }
+void main(void)
+{
+    iTime = time;
+    iResolution = vec3(resolution, 0.0);
+
+    mainImage(gl_FragColor, gl_FragCoord.xy);
+}
