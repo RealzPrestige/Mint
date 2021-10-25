@@ -45,6 +45,7 @@ public class KeybindButton extends Button {
             bindChar = new Bind(-1);
 
         setting.setValue(bindChar);
+        Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         setting.isOpen = !setting.isOpen;
 
     }
