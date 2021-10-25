@@ -117,14 +117,14 @@ public class ColorPicker extends GuiScreen {
         }
     }
 
-    final int alpha(Color color, float alpha) {
+    public static final int alpha(Color color, float alpha) {
         final float red = (float) color.getRed() / 255;
         final float green = (float) color.getGreen() / 255;
         final float blue = (float) color.getBlue() / 255;
         return new Color(red, green, blue, alpha).getRGB();
     }
 
-    final Color urmom(Color color, float alpha) {
+    public static final Color urmom(Color color, float alpha) {
         final float red = (float) color.getRed() / 255;
         final float green = (float) color.getGreen() / 255;
         final float blue = (float) color.getBlue() / 255;
