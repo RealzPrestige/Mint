@@ -43,8 +43,6 @@ public class StringButton extends Button {
     public void onKeyTyped(char typedChar, int keyCode) {
         if (setting.isOpen) {
 
-            setString(currentString.getString() + typedChar);
-
             if (keyCode == 1)
                 return;
 
@@ -52,6 +50,8 @@ public class StringButton extends Button {
                 enterString();
             else if (keyCode == 14)
                 setString(removeLastChar(currentString.getString()));
+
+            setString(currentString.getString() + typedChar);
 
         }
     }
