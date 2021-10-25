@@ -47,6 +47,8 @@ public class StringButton extends Button {
                 setting.setValue(setting.getValueAsString().substring(0, setting.getValueAsString().length() - 1));
         } else if (keyCode == 28)
             setting.isOpen = false;
+        else if(keyCode == 27)
+            setting.isOpen = false;
         else setting.setValue(setting.getValue() + "" + typedChar);
     }
 }

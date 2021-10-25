@@ -31,6 +31,17 @@ public class EnumSetting
         return clazz.getClass().getEnumConstants()[0];
     }
 
+    public static Enum decreaseEnum(Enum clazz) {
+        int index = EnumSetting.currentEnum(clazz);
+        for (int i = 0; i > clazz.getClass().getEnumConstants().length; --i) {
+            Enum e = clazz.getClass().getEnumConstants()[i];
+            if (i != index - 1)
+                continue;
+            return e;
+        }
+        return clazz.getClass().getEnumConstants()[0];
+    }
+
     public static String getProperName(Enum clazz) {
         return Character.toUpperCase(clazz.name().charAt(0)) + clazz.name().toLowerCase().substring(1);
     }

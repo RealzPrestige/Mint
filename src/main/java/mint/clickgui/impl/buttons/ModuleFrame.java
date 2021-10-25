@@ -48,7 +48,6 @@ public class ModuleFrame extends ButtonFrame {
 
                 if (setting.isEnumSetting())
                     newItems.add(new EnumFrame(setting));
-
                 if (setting.isColorSetting())
                     newItems.add(new ColorFrame(setting));
             }

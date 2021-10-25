@@ -91,7 +91,6 @@ public class Setting<T> {
     }
 
 
-
     public String getName() {
         return this.name;
     }
@@ -173,6 +172,10 @@ public class Setting<T> {
         } else {
             this.plannedValue = this.value;
         }
+    }
+
+    public void decreaseEnum() {
+        value = (T) EnumSetting.decreaseEnum((Enum) value);
     }
 
     public String getType() {

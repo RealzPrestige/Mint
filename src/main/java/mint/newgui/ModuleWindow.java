@@ -53,7 +53,6 @@ public class ModuleWindow {
             if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName"))
                 buttons.add(new StringButton(setting));
 
-
             if (setting.getValue() instanceof Boolean && setting.isParent())
                 buttons.add(new ParentButton(setting));
 
@@ -62,6 +61,9 @@ public class ModuleWindow {
 
             if (setting.isNumberSetting() && setting.hasRestriction())
                 buttons.add(new NumberButton(setting));
+
+            if (setting.isEnumSetting())
+                buttons.add(new ModeButton(setting));
         }
         buttons.add(new KeybindButton(module.getSettingByName("Keybind")));
         button = buttons;
