@@ -46,7 +46,6 @@ public class ModuleWindow {
             if (!setting.isVisible())
                 continue;
 
-
             if (setting.getValue() instanceof Bind && !setting.getName().equalsIgnoreCase("Keybind"))
                 buttons.add(new KeybindButton(setting));
 
