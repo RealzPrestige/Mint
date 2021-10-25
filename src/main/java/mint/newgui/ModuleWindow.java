@@ -103,6 +103,11 @@ public class ModuleWindow {
         button.forEach(button -> button.mouseClicked(mouseX, mouseY, mouseButton));
     }
 
+    public void initGui() {
+        if(module.isOpened)
+            button.forEach(Button::initGui);
+    }
+
     public void onKeyTyped(char typedChar, int keyCode) {
         button.forEach(button -> button.onKeyTyped(typedChar, keyCode));
     }

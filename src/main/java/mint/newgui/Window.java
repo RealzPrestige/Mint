@@ -107,6 +107,10 @@ public class Window {
         if (releaseButton == 0)
             isDragging = false;
     }
+    public void initGui() {
+        if(isOpened)
+            modules.forEach(ModuleWindow::initGui);
+    }
 
     public boolean isInside(int mouseX, int mouseY) {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);

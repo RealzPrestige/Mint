@@ -25,6 +25,8 @@ public class Button {
 
     public void onKeyTyped(char typedChar, int keyCode) {
     }
+    public void initGui() {
+    }
 
     public void setX(int x){
         this.x = x;

@@ -70,9 +70,6 @@ public class ColorButton extends Button {
             int selectedY = pickerY + pickerHeight + 6;
             int selectedWidth = 10;
             int selectedHeight = 10;
-            Gui.drawRect(pickerX - 2, pickerY - 2, pickerX + pickerWidth + 2, pickerY + pickerHeight + 2, 0xFC000000);
-            Gui.drawRect(hueSliderX - 2, hueSliderY - 2, hueSliderX + hueSliderWidth + 2, hueSliderY + hueSliderHeight + 2, 0xFC000000);
-            Gui.drawRect(alphaSliderX - 2, alphaSliderY - 2, alphaSliderX + alphaSliderWidth + 2, alphaSliderY + alphaSliderHeight + 2, 0xFC000000);
             int selectedColor = Color.HSBtoRGB(color[0], 1.0f, 1.0f);
             float selectedRed = (selectedColor >> 16 & 0xFF) / 255.0f;
             float selectedGreen = (selectedColor >> 8 & 0xFF) / 255.0f;
@@ -81,7 +78,6 @@ public class ColorButton extends Button {
             RenderUtil.drawHueSlider(hueSliderX, hueSliderY, hueSliderWidth, hueSliderHeight, color[0]);
             RenderUtil.drawAlphaSlider(alphaSliderX, alphaSliderY, alphaSliderWidth, alphaSliderHeight, selectedRed, selectedGreen, selectedBlue, color[3]);
             final int selectedColorFinal = alpha(new Color(Color.HSBtoRGB(color[0], color[1], color[2])), color[3]);
-            Gui.drawRect(selectedX - 2, selectedY - 2, selectedX + selectedWidth + 2, selectedY + selectedHeight + 2, 0xFC000000);
             Gui.drawRect(selectedX, selectedY, selectedX + selectedWidth, selectedY + selectedHeight, selectedColorFinal);
             {
                 final int cursorX = (int) (pickerX + color[1] * pickerWidth);
@@ -89,9 +85,9 @@ public class ColorButton extends Button {
                 Gui.drawRect(cursorX - 2, cursorY - 2, cursorX + 2, cursorY + 2, -1);
             }
             setting.setColor(urmom(new Color(Color.HSBtoRGB(color[0], color[1], color[2])), color[3]));
-            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
                 setting.isOpen = false;
-            }
+
         }
         if (isInsideButtonOnly(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
@@ -101,9 +97,9 @@ public class ColorButton extends Button {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        pickingColor = check(pickerX, pickerY, pickerX + pickerWidth, pickerY + pickerHeight, mouseX, mouseY);
-        pickingHue = check(hueSliderX, hueSliderY, hueSliderX + hueSliderWidth, hueSliderY + hueSliderHeight, mouseX, mouseY);
-        pickingAlpha = check(alphaSliderX, alphaSliderY, alphaSliderX + alphaSliderWidth, alphaSliderY + alphaSliderHeight, mouseX, mouseY);
+        pickingColor = true;
+        pickingHue = true;
+        pickingAlpha = true;
         if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1)
             setting.isOpen = !setting.isOpen;
 

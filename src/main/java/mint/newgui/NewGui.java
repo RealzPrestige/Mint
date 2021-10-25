@@ -48,6 +48,12 @@ public class NewGui extends GuiScreen {
         windows.forEach(windows -> windows.onKeyTyped(typedChar, keyCode));
     }
 
+    @Override
+    public void initGui() {
+        super.initGui();
+        windows.forEach(Window::initGui);
+    }
+
     public void load() {
         int x = -130;
         for (Module.Category categories : Mint.moduleManager.getCategories()) {
