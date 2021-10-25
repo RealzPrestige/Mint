@@ -10,22 +10,27 @@ import java.awt.*;
 
 public class ColorButton extends Button {
     Setting setting;
-
+    private final float[] color;
     public ColorButton(Setting setting) {
         super(setting);
+        float[] settingColor = Color.RGBtoHSB(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue(), null);
+        this.color = new float[] {settingColor[0], settingColor[1], settingColor[2], setting.getColor().getAlpha() / 255.0f};
         this.setting = setting;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        if (setting.isOpen)
-            setHeight(height + 100);
+
         RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
         RenderUtil.drawRect(x + width - 12, y + 1, x + width - 3, y + 9, setting.getColor().getRGB());
         if (isInsideButtonOnly(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(setting.getName(), x, y, -1);
+        if (setting.isOpen) {
+            setHeight(height + 100);
+            RenderUtil.drawPickerBase(x, y + 10, 120, 100, 1f, 1f, 1f, color[3]);
+        }
     }
 
     @Override
