@@ -1,7 +1,7 @@
 package mint.managers;
 
 import mint.modules.Feature;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.utils.PlayerUtil;
 import net.minecraft.entity.player.EntityPlayer;
 

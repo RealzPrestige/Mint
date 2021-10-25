@@ -1,7 +1,7 @@
 package mint.modules.player;
 
 import mint.Mint;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
 import net.minecraft.network.play.client.CPacketPlayer;

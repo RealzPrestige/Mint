@@ -1,7 +1,7 @@
 package mint.modules.combat;
 
-import mint.clickgui.setting.Bind;
-import mint.clickgui.setting.Setting;
+import mint.setting.Bind;
+import mint.setting.Setting;
 import mint.events.CrystalAttackEvent;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;

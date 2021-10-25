@@ -2,7 +2,7 @@ package mint.newgui.buttons;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.gui.Gui;

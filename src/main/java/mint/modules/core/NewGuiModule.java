@@ -1,7 +1,7 @@
 package mint.modules.core;
 
 import mint.Mint;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.NewGui;
 

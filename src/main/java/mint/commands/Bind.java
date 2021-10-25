@@ -37,7 +37,7 @@ public class Bind
             MessageManager.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
-        module.bind.setValue(new mint.clickgui.setting.Bind(key));
+        module.bind.setValue(new mint.setting.Bind(key));
         MessageManager.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }

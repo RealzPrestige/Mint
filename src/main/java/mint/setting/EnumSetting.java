@@ -1,4 +1,4 @@
-package mint.clickgui.setting;
+package mint.setting;
 
 import com.google.common.base.Converter;
 import com.google.gson.JsonElement;
@@ -31,7 +31,7 @@ public class EnumSetting
         return clazz.getClass().getEnumConstants()[0];
     }
 
-    public static Enum decreaseEnum(Enum clazz) {
+    public static Enum resetEnum(Enum clazz) {
         int index = EnumSetting.currentEnum(clazz);
         for (int i = 0; i > clazz.getClass().getEnumConstants().length; --i) {
             Enum e = clazz.getClass().getEnumConstants()[i];

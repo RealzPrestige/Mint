@@ -1,7 +1,7 @@
 package mint.events;
 
 import mint.modules.Feature;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 
 @Cancelable

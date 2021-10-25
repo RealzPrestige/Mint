@@ -2,7 +2,7 @@ package mint.newgui.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.core.NewGuiModule;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;

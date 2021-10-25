@@ -1,6 +1,6 @@
 package mint.modules.visual;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.RenderItemEvent;
 import mint.modules.Module;
 import mint.utils.NullUtil;

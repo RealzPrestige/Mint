@@ -2,8 +2,8 @@ package mint.newgui.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.setting.Bind;
-import mint.clickgui.setting.Setting;
+import mint.setting.Bind;
+import mint.setting.Setting;
 import mint.modules.core.NewGuiModule;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;

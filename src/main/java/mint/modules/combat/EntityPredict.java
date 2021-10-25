@@ -1,6 +1,6 @@
 package mint.modules.combat;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;

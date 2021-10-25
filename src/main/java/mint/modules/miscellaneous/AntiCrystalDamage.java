@@ -1,7 +1,7 @@
 package mint.modules.miscellaneous;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;

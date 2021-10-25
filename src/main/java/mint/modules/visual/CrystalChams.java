@@ -1,6 +1,6 @@
 package mint.modules.visual;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.CrystalTextureEvent;
 import mint.events.RenderCrystalEvent;
 import mint.modules.Module;

@@ -2,8 +2,8 @@ package mint.modules.player;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.setting.Bind;
-import mint.clickgui.setting.Setting;
+import mint.setting.Bind;
+import mint.setting.Setting;
 import mint.events.BlockEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;

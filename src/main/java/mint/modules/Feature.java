@@ -2,7 +2,7 @@ package mint.modules;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.managers.TextManager;
 
 import java.util.ArrayList;

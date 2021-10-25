@@ -2,7 +2,7 @@ package mint.modules.miscellaneous;
 
 import com.mojang.authlib.GameProfile;
 import mint.Mint;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
 import mint.modules.core.Notifications;

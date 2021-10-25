@@ -1,6 +1,6 @@
 package mint.modules.movement;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.Module;
 import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;

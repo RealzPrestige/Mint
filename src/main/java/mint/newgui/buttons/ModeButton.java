@@ -2,7 +2,7 @@ package mint.newgui.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.core.NewGuiModule;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -34,7 +34,7 @@ public class ModeButton extends Button {
             if(mouseButton == 0)
             setting.increaseEnum();
             else if(mouseButton == 1)
-                setting.decreaseEnum();
+                setting.resetEnum();
         }
         Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
     }

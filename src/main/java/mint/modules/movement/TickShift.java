@@ -1,7 +1,7 @@
 package mint.modules.movement;
 
 import com.mojang.authlib.GameProfile;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.MoveEvent;
 import mint.events.PacketEvent;
 import mint.modules.Module;

@@ -1,7 +1,7 @@
 package mint.modules.movement;
 
 import com.google.common.collect.Sets;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.Module;
 import mint.utils.EntityUtil;
 import mint.utils.NullUtil;

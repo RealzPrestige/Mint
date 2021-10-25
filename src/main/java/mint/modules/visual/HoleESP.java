@@ -1,7 +1,7 @@
 package mint.modules.visual;
 
 import com.google.common.collect.Sets;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.ColorUtil;

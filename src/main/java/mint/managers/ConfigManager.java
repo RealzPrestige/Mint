@@ -2,9 +2,9 @@ package mint.managers;
 
 import com.google.gson.*;
 import mint.Mint;
-import mint.clickgui.setting.Bind;
-import mint.clickgui.setting.EnumSetting;
-import mint.clickgui.setting.Setting;
+import mint.setting.Bind;
+import mint.setting.EnumSetting;
+import mint.setting.Setting;
 import mint.modules.Feature;
 import mint.modules.Module;
 

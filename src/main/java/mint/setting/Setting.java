@@ -1,4 +1,4 @@
-package mint.clickgui.setting;
+package mint.setting;
 
 import mint.events.ClientEvent;
 import mint.modules.Feature;
@@ -174,8 +174,8 @@ public class Setting<T> {
         }
     }
 
-    public void decreaseEnum() {
-        value = (T) EnumSetting.decreaseEnum((Enum) value);
+    public void resetEnum() {
+        value = (T) EnumSetting.resetEnum((Enum) value);
     }
 
     public String getType() {

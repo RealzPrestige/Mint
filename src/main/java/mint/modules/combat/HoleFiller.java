@@ -2,7 +2,7 @@ package mint.modules.combat;
 
 import com.google.common.collect.Sets;
 import mint.Mint;
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.utils.*;

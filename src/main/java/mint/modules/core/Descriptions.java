@@ -1,6 +1,6 @@
 package mint.modules.core;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.Module;
 
 public class Descriptions extends Module {

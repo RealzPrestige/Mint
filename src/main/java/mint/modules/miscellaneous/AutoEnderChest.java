@@ -1,6 +1,6 @@
 package mint.modules.miscellaneous;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;

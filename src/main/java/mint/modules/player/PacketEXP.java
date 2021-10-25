@@ -1,6 +1,6 @@
 package mint.modules.player;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.Module;
 import mint.utils.InventoryUtil;
 import mint.utils.NullUtil;

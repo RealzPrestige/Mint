@@ -1,6 +1,6 @@
 package mint.modules.combat;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.utils.*;

@@ -1,6 +1,6 @@
 package mint.modules.miscellaneous;
 
-import mint.clickgui.setting.Setting;
+import mint.setting.Setting;
 import mint.modules.Module;
 import mint.utils.NullUtil;
 import mint.utils.Timer;

@@ -1,8 +1,8 @@
 package mint.newgui;
 
 import mint.Mint;
-import mint.clickgui.setting.Bind;
-import mint.clickgui.setting.Setting;
+import mint.setting.Bind;
+import mint.setting.Setting;
 import mint.modules.Module;
 import mint.newgui.buttons.Button;
 import mint.newgui.buttons.*;
