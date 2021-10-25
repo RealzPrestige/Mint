@@ -10,8 +10,7 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 
-import static mint.utils.RenderUtil.drawAlphaSlider;
-import static mint.utils.RenderUtil.drawHueSlider;
+import static org.lwjgl.opengl.GL11.*;
 
 public class ColorButton extends Button {
     Setting setting;
@@ -40,7 +39,7 @@ public class ColorButton extends Button {
         if (setting.isOpen) {
             setHeight(height + 100);
             //change all the shit here ez - for zprestige daddy
-            this.drawPicker(setting, this.x, y + 10, x + 10, y + 10, x, y + 15, mouseX, mouseY);
+            drawPicker(setting, x, y + 10, x + 10, y + 10, x, y + 15, mouseX, mouseY);
             setting.setColor(finalColor);
         }
     }
@@ -68,7 +67,6 @@ public class ColorButton extends Button {
         } catch (Exception ignored) {
 
         }
-
 
         int pickerWidth = 90;
         int pickerHeight = 51;
@@ -111,7 +109,7 @@ public class ColorButton extends Button {
         float selectedGreen = (selectedColor >> 8 & 0xFF) / 255.0f;
         float selectedBlue = (selectedColor & 0xFF) / 255.0f;
 
-        RenderUtil.drawPickerBase(pickerX, pickerY, pickerWidth, pickerHeight, selectedRed, selectedGreen, selectedBlue, 255);
+        drawPickerBase(pickerX, pickerY, pickerWidth, pickerHeight, selectedRed, selectedGreen, selectedBlue, 255);
 
         drawHueSlider(hueSliderX, hueSliderY, hueSliderWidth, hueSliderHeight, color[0]);
 
@@ -128,4 +126,87 @@ public class ColorButton extends Button {
     public static boolean mouseOver(int minX, int minY, int maxX, int maxY, int mX, int mY) {
         return mX >= minX && mY >= minY && mX <= maxX && mY <= maxY;
     }
+
+    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red, float green, float blue, float alpha) {
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glShadeModel(GL_SMOOTH);
+        glBegin(GL_POLYGON);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glVertex2f(pickerX, pickerY);
+        glVertex2f(pickerX, pickerY + pickerHeight);
+        glColor4f(red, green, blue, alpha);
+        glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
+        glVertex2f(pickerX + pickerWidth, pickerY);
+        glEnd();
+        glDisable(GL_ALPHA_TEST);
+        glBegin(GL_POLYGON);
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(pickerX, pickerY);
+        glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+        glVertex2f(pickerX, pickerY + pickerHeight);
+        glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(pickerX + pickerWidth, pickerY);
+        glEnd();
+        glEnable(GL_ALPHA_TEST);
+        glShadeModel(GL_FLAT);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+    }
+
+    public void drawHueSlider(int x, int y, int width, int height, float hue) {
+        int step = 0;
+        if (height > width) {
+            RenderUtil.drawRect(x, y, x + width, y + 4, 0xFFFF0000);
+            y += 4;
+
+            for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
+                int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
+                int nextStep = Color.HSBtoRGB((float) (step + 1) / 6, 1.0f, 1.0f);
+                RenderUtil.drawGradientRect(x, y + step * (height / 6f), x + width, y + (step + 1) * (height / 6f), previousStep, nextStep, false);
+                step++;
+            }
+            int sliderMinY = (int) (y + height*hue) - 4;
+            RenderUtil.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1,-1);
+        } else {
+            for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
+                int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
+                int nextStep = Color.HSBtoRGB((float) (step + 1) / 6, 1.0f, 1.0f);
+                RenderUtil.gradient(x + step * (width / 6), y, x + (step + 1) * (width / 6), y + height, previousStep, nextStep, true);
+                step++;
+            }
+
+            int sliderMinX = (int) (x + (width * hue));
+            RenderUtil.drawRect(sliderMinX - 1, y, sliderMinX + 1, y + height, -1);
+        }
+    }
+
+    public void drawAlphaSlider(int x, int y, int width, int height, float red, float green, float blue, float alpha) {
+        boolean left = true;
+        int checkerBoardSquareSize = height / 2;
+
+        for (int squareIndex = -checkerBoardSquareSize; squareIndex < width; squareIndex += checkerBoardSquareSize) {
+            if (!left) {
+                RenderUtil.drawRect(x + squareIndex, y, x + squareIndex + checkerBoardSquareSize, y + height, 0xFFFFFFFF);
+                RenderUtil.drawRect(x + squareIndex, y + checkerBoardSquareSize, x + squareIndex + checkerBoardSquareSize, y + height, 0xFF909090);
+
+                if (squareIndex < width - checkerBoardSquareSize) {
+                    int minX = x + squareIndex + checkerBoardSquareSize;
+                    int maxX = Math.min(x + width, x + squareIndex + checkerBoardSquareSize * 2);
+                    RenderUtil.drawRect(minX, y, maxX, y + height, 0xFF909090);
+                    RenderUtil.drawRect(minX, y + checkerBoardSquareSize, maxX, y + height,0xFFFFFFFF);
+                }
+            }
+
+            left = !left;
+        }
+
+        RenderUtil.drawLeftGradientRect(x, y, x + width, y + height, new Color(red, green, blue, 1).getRGB(), 0);
+        int sliderMinX = (int) (x + width - (width * alpha));
+        RenderUtil.drawRect(sliderMinX - 1, y, sliderMinX + 1, y + height, -1);
+    }
+
+
 }

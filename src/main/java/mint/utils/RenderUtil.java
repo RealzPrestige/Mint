@@ -39,6 +39,63 @@ public class RenderUtil {
         builder = RenderUtil.tessellator.getBuffer();
     }
 
+    public static int shadeColour(int color, int precent) {
+        int r = (((color & 0xFF0000) >> 16) * (100 + precent) / 100);
+        int g = (((color & 0xFF00) >> 8) * (100 + precent) / 100);
+        int b = ((color & 0xFF) * (100 + precent) / 100);
+        return new Color(r,g,b).hashCode();
+    }
+
+    public static void drawGradientRect(float left, float top, float right, float bottom, int startColor, int endColor, boolean hovered) {
+        if (hovered) {
+            startColor = shadeColour(startColor, -20);
+            endColor = shadeColour(endColor, -20);
+        }
+        float c = (float) (startColor >> 24 & 255) / 255.0F;
+        float c1 = (float) (startColor >> 16 & 255) / 255.0F;
+        float c2 = (float) (startColor >> 8 & 255) / 255.0F;
+        float c3 = (float) (startColor & 255) / 255.0F;
+        float c4 = (float) (endColor >> 24 & 255) / 255.0F;
+        float c5 = (float) (endColor >> 16 & 255) / 255.0F;
+        float c6 = (float) (endColor >> 8 & 255) / 255.0F;
+        float c7 = (float) (endColor & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(7425);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos((double) right, (double) top, (double) 0).color(c1, c2, c3, c).endVertex();
+        bufferbuilder.pos((double) left, (double) top, (double) 0).color(c1, c2, c3, c).endVertex();
+        bufferbuilder.pos((double) left, (double) bottom, (double) 0).color(c5, c6, c7, c4).endVertex();
+        bufferbuilder.pos((double) right, (double) bottom, (double) 0).color(c5, c6, c7, c4).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
+    public static void drawLeftGradientRect(int left, int top, int right, int bottom, int startColor, int endColor) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(GL_SMOOTH);
+        builder.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        builder.pos(right, top, 0).color((float) (endColor >> 24 & 255) / 255.0F, (float) (endColor >> 16 & 255) / 255.0F, (float) (endColor >> 8 & 255) / 255.0F, (float) (endColor >> 24 & 255) / 255.0F).endVertex();
+        builder.pos(left, top, 0).color((float) (startColor >> 16 & 255) / 255.0F, (float) (startColor >> 8 & 255) / 255.0F, (float) (startColor & 255) / 255.0F, (float) (startColor >> 24 & 255) / 255.0F).endVertex();
+        builder.pos(left, bottom, 0).color((float) (startColor >> 16 & 255) / 255.0F, (float) (startColor >> 8 & 255) / 255.0F, (float) (startColor & 255) / 255.0F, (float) (startColor >> 24 & 255) / 255.0F).endVertex();
+        builder.pos(right, bottom, 0).color((float) (endColor >> 24 & 255) / 255.0F, (float) (endColor >> 16 & 255) / 255.0F, (float) (endColor >> 8 & 255) / 255.0F, (float) (endColor >> 24 & 255) / 255.0F).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
     public static void drawHueSlider(int x, int y, int width, int height, float hue) {
         int step = 0;
         if (height > width) {
