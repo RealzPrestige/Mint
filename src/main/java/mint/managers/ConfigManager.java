@@ -32,8 +32,7 @@ public class ConfigManager {
         for (Feature feature : features) {
             try {
                 loadSettings(feature);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             }
         }
         saveCurrentConfig();
@@ -52,8 +51,7 @@ public class ConfigManager {
         for (Feature feature : features) {
             try {
                 saveSettings(feature);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             }
         }
         saveCurrentConfig();
@@ -65,8 +63,7 @@ public class ConfigManager {
         try {
             if (!fragFile.exists())
                 fragFile.createNewFile();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 
@@ -94,8 +91,7 @@ public class ConfigManager {
                 writer.write(tempConfig.replaceAll("mint", ""));
                 writer.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 
@@ -110,8 +106,7 @@ public class ConfigManager {
                 }
                 reader.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return name;
     }
@@ -186,9 +181,8 @@ public class ConfigManager {
     private void loadSettings(Feature feature) throws IOException {
         String featureName = config + getDirectory(feature) + feature.getName() + ".json";
         Path featurePath = Paths.get(featureName);
-        if (!Files.exists(featurePath)) {
+        if (!Files.exists(featurePath))
             return;
-        }
         loadPath(featurePath, feature);
     }
 
@@ -210,16 +204,14 @@ public class ConfigManager {
                 try {
                     assert Mint.friendManager != null;
                     Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
             } else {
                 for (Setting setting : feature.getSettings()) {
                     if (!settingName.equals(setting.getName())) continue;
                     try {
                         ConfigManager.setValueFromJson(setting, element);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (Exception ignored) {
                     }
                 }
             }
@@ -235,7 +227,7 @@ public class ConfigManager {
                 object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
                 continue;
             }
-            if (setting.isStringSetting()) {
+            if (setting.getValue() instanceof String) {
                 String str = (String) setting.getValue();
                 setting.setValue(str.replace(" ", "_"));
                 continue;
@@ -245,8 +237,7 @@ public class ConfigManager {
             }
             try {
                 object.add(setting.getName(), jp.parse(setting.getValueAsString()));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
         return object;

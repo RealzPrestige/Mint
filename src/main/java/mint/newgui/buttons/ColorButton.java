@@ -72,7 +72,7 @@ public class ColorButton extends Button {
             if (readClipboard() != null) {
                 if (Objects.requireNonNull(readClipboard()).startsWith("#")) {
                     setting.setColor(Color.decode(Objects.requireNonNull(readClipboard())));
-                }else {
+                } else {
                     MessageManager.sendMessage("The color your pasting is not a hex-type color.");
                 }
             }
@@ -166,7 +166,7 @@ public class ColorButton extends Button {
 
         Gui.drawRect(cursorX - 2, cursorY - 2, cursorX + 2, cursorY + 2, -1);
 
-        finalColor = ColorPicker.urmom(new Color(Color.HSBtoRGB(color[0], color[1], color[2])), color[3]);
+        finalColor = getColor(new Color(Color.HSBtoRGB(color[0], color[1], color[2])), color[3]);
 
         drawAlphaSlider(alphaSliderX, alphaSliderY, pickerWidth, alphaSliderHeight, finalColor.getRed() / 255f, finalColor.getGreen() / 255f, finalColor.getBlue() / 255f, color[3]);
     }
@@ -175,8 +175,14 @@ public class ColorButton extends Button {
         return mX >= minX && mY >= minY && mX <= maxX && mY <= maxY;
     }
 
-    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red,
-                                      float green, float blue, float alpha) {
+    public static final Color getColor(Color color, float alpha) {
+        final float red = (float) color.getRed() / 255;
+        final float green = (float) color.getGreen() / 255;
+        final float blue = (float) color.getBlue() / 255;
+        return new Color(red, green, blue, alpha);
+    }
+
+    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red, float green, float blue, float alpha) {
         glEnable(GL_BLEND);
         glDisable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

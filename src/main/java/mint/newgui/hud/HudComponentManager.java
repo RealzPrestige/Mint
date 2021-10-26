@@ -63,7 +63,6 @@ public class HudComponentManager {
      */
 
     void loadHuds() {
-
     }
 
     void saveHuds() {

@@ -21,8 +21,8 @@ public class Setting<T> {
     private boolean isColorSetting;
     private Feature feature;
     public boolean isOpen = false;
-    public boolean justClicked = false;
     public boolean selected = false;
+
     public Setting(String name, T defaultValue) {
         this.name = name;
         this.defaultValue = defaultValue;
@@ -47,7 +47,7 @@ public class Setting<T> {
         this.isParent = parent;
     }
 
-    public Setting(String name, T defaultValue, Predicate visibility) {
+    public Setting(String name, T defaultValue, Predicate<T> visibility) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.value = defaultValue;
@@ -90,7 +90,6 @@ public class Setting<T> {
         this.color = color;
         this.hasRestriction = true;
     }
-
 
     public String getName() {
         return this.name;
@@ -161,11 +160,11 @@ public class Setting<T> {
     }
 
     public int currentEnum() {
-        return EnumSetting.currentEnum((Enum) this.value);
+        return EnumSetting.currentEnum((Enum) value);
     }
 
     public void increaseEnum() {
-        this.plannedValue = (T) EnumSetting.increaseEnum((Enum) this.value);
+        this.plannedValue = (T) EnumSetting.increaseEnum((Enum) value);
         ClientEvent event = new ClientEvent(this);
         MinecraftForge.EVENT_BUS.post(event);
         if (!event.isCanceled()) {
@@ -180,15 +179,22 @@ public class Setting<T> {
     }
 
     public String getType() {
-        if (this.isEnumSetting()) {
+        if (isEnumSetting())
             return "Enum";
-        }
-        return this.getClassName(this.defaultValue);
+        if (getValue() instanceof Bind)
+            return "Bind";
+        if (getValue() instanceof Boolean)
+            return "Boolean";
+        if (getValue() instanceof Double)
+            return "Double";
+        if (getValue() instanceof Float)
+            return "Float";
+        if (getValue() instanceof Integer)
+            return "Integer";
+
+        return "String";
     }
 
-    public <t> String getClassName(t value) {
-        return value.getClass().getSimpleName();
-    }
 
     public boolean isNumberSetting() {
         return this.value instanceof Double || this.value instanceof Integer || this.value instanceof Short || this.value instanceof Long || this.value instanceof Float;
@@ -196,10 +202,6 @@ public class Setting<T> {
 
     public boolean isEnumSetting() {
         return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof Bind) && !(this.value instanceof Character) && !(this.value instanceof Boolean) && !isColorSetting;
-    }
-
-    public boolean isStringSetting() {
-        return this.value instanceof String;
     }
 
     public T getDefaultValue() {
@@ -211,7 +213,7 @@ public class Setting<T> {
     }
 
     public String getColorAsString() {
-        return String.valueOf(this.color.getRGB());
+        return String.valueOf(color.getRGB());
     }
 
     public boolean hasRestriction() {

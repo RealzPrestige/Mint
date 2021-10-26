@@ -80,6 +80,7 @@ public class Gui extends Module {
 
     @Override
     public void onDisable() {
+        assert Mint.configManager != null;
         Mint.configManager.saveConfig("Default");
     }
 

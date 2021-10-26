@@ -41,6 +41,7 @@ public class NewGuiModule extends Module {
     public void onEnable() {
         mc.displayGuiScreen(NewGui.getInstance());
     }
+    @Override
     public void onDisable() {
         assert Mint.configManager != null;
         Mint.configManager.saveConfig("Default");
@@ -50,6 +51,5 @@ public class NewGuiModule extends Module {
     public void onUpdate() {
         if (!(mc.currentScreen instanceof NewGui))
             disable();
-
     }
 }
