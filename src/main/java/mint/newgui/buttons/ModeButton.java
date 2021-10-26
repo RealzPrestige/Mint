@@ -4,6 +4,7 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
 import mint.setting.Setting;
+import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -21,6 +22,8 @@ public class ModeButton extends Button {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(x, y, x + width, y + height,NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+        if (isInside(mouseX, mouseY))
+            RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(setting.getName() + " " + ChatFormatting.GRAY + (setting.currentEnumName().equalsIgnoreCase("ABC") ? "ABC" : setting.currentEnumName()), x, y, -1);
     }

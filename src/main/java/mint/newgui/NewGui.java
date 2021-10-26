@@ -56,8 +56,9 @@ public class NewGui extends GuiScreen {
 
     public void load() {
         int x = -130;
+        assert Mint.moduleManager != null;
         for (Module.Category categories : Mint.moduleManager.getCategories()) {
-            windows.add(new Window(categories.getName(), x += 132, 10, 130, 10, categories));
+            windows.add(new Window(categories.getName(), x += 134, 10, 130, 10, categories));
         }
     }
 

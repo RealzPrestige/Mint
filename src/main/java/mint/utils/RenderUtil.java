@@ -21,7 +21,6 @@ import java.awt.*;
 import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glEnd;
 
 public class RenderUtil {
     public static RenderItem itemRender;
@@ -38,35 +37,40 @@ public class RenderUtil {
         tessellator = Tessellator.getInstance();
         builder = RenderUtil.tessellator.getBuffer();
     }
-    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red, float green, float blue, float alpha) {
-        glEnable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glShadeModel(GL_SMOOTH);
-        glBegin(GL_POLYGON);
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        glVertex2f(pickerX, pickerY);
-        glVertex2f(pickerX, pickerY + pickerHeight);
-        glColor4f(red, green, blue, alpha);
-        glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
-        glVertex2f(pickerX + pickerWidth, pickerY);
-        glEnd();
-        glDisable(GL_ALPHA_TEST);
-        glBegin(GL_POLYGON);
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(pickerX, pickerY);
-        glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-        glVertex2f(pickerX, pickerY + pickerHeight);
-        glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(pickerX + pickerWidth, pickerY);
-        glEnd();
-        glEnable(GL_ALPHA_TEST);
-        glShadeModel(GL_FLAT);
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_BLEND);
-    }
 
+    public static void drawOutlineRect(double left, double top, double right, double bottom, Color color, float lineWidth) {
+        if (left < right) {
+            double i = left;
+            left = right;
+            right = i;
+        }
+        if (top < bottom) {
+            double j = top;
+            top = bottom;
+            bottom = j;
+        }
+        float f3 = (float)(color.getRGB() >> 24 & 255) / 255.0F;
+        float f = (float)(color.getRGB() >> 16 & 255) / 255.0F;
+        float f1 = (float)(color.getRGB() >> 8 & 255) / 255.0F;
+        float f2 = (float)(color.getRGB() & 255) / 255.0F;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+        GL11.glLineWidth(lineWidth);
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(f, f1, f2, f3);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(left, bottom, 0.0D).endVertex();
+        bufferbuilder.pos(right, bottom, 0.0D).endVertex();
+        bufferbuilder.pos(right, top, 0.0D).endVertex();
+        bufferbuilder.pos(left, top, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+    }
 
     public static int shadeColour(int color, int precent) {
         int r = (((color & 0xFF0000) >> 16) * (100 + precent) / 100);

@@ -76,7 +76,8 @@ public class ModuleWindow {
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(name, isInside(mouseX, mouseY) ? x + 1 : x, y, -1);
+        Mint.textManager.drawStringWithShadow(name, isInside(mouseX, mouseY) ? x + 1 : x,  y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+        Mint.textManager.drawStringWithShadow(module.isOpened ? "-" : "+", x + width - Mint.textManager.getStringWidth(module.isOpened ? "-" : "+") - 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (module.isOpened) {
             int y = this.y;
             for (Button button : button) {
@@ -91,6 +92,7 @@ public class ModuleWindow {
                         y += 10;
                 }
             }
+            RenderUtil.drawOutlineRect(x, this.y + height, x + width, y + height - 1, new Color(0,0,0), 0.1f);
         }
     }
 

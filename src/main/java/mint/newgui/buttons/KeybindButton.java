@@ -5,6 +5,7 @@ import mint.Mint;
 import mint.modules.core.NewGuiModule;
 import mint.setting.Bind;
 import mint.setting.Setting;
+import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -20,8 +21,11 @@ public class KeybindButton extends Button {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+        if (isInside(mouseX, mouseY))
+            RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
+
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.isOpen ? setting.getName() + " " + Mint.textManager.getIdleSign() :  setting.getName() + " " + ChatFormatting.GRAY + setting.getValue().toString().toUpperCase(), x, y, -1);
+        Mint.textManager.drawStringWithShadow(setting.isOpen ? setting.getName() + " " + Mint.textManager.getIdleSign() : setting.getName() + " " + ChatFormatting.GRAY + setting.getValue().toString().toUpperCase(), x, y, -1);
     }
 
     @Override

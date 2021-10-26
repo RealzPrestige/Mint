@@ -46,7 +46,7 @@ public class Window {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragScreen(mouseX, mouseY);
-        RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().color.getColor().getRGB());
+        RenderUtil.drawRect(x - 1, y, x + width + 1, y + height, NewGuiModule.getInstance().color.getColor().getRGB());
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, x + (width / 2f) - (Mint.textManager.getStringWidth(name) / 2f), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         Mint.textManager.drawStringWithShadow(isOpened ? (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "x" : "x") : (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "+" : "+"), x + width - Mint.textManager.getStringWidth("x"), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
