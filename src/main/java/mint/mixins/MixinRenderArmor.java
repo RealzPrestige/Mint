@@ -16,6 +16,8 @@ public abstract class MixinRenderArmor {
 
     /**
      * @author zPrestige_ (idk for some reason @Overwrite needs an @Author)
+     * @Reason bro idk why it litterally gave a warning: "@Overwrite is missing an @reason tag"
+     *
      **/
 
     @Overwrite

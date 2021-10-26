@@ -1,14 +1,12 @@
 package mint.newgui.buttons;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.modules.core.NewGuiModule;
+import mint.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
-
-import java.awt.*;
 
 public class BooleanButton extends Button {
     Setting setting;
@@ -20,7 +18,7 @@ public class BooleanButton extends Button {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(x, y, x + width, y + height, (boolean) setting.getValue() ? new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB() : new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
+        RenderUtil.drawRect(x, y, x + width, y + height, (boolean) setting.getValue() ? NewGuiModule.getInstance().color.getColor().getRGB() : NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
