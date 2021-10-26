@@ -2,6 +2,7 @@ package mint.newgui.hud;
 
 import mint.Mint;
 import mint.clickgui.MintGui;
+import mint.managers.HudManager;
 import mint.modules.core.Gui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -75,7 +76,7 @@ public class HudWindow extends GuiScreen {
     }
 
     public void load(){
-        hudModules.addAll(HudComponentManager.getInstance().getHudModules());
+        hudModules.addAll(HudManager.getInstance().getHudModules());
     }
 
     @Override

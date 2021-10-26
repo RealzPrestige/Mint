@@ -2,6 +2,7 @@ package mint.newgui.buttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.managers.MessageManager;
 import mint.modules.core.NewGuiModule;
 import mint.setting.Setting;
 import mint.utils.ColorUtil;
@@ -11,10 +12,15 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.*;
 
+@SuppressWarnings("all")
 public class ColorButton extends Button {
     Setting setting;
     private Color finalColor;
@@ -31,7 +37,7 @@ public class ColorButton extends Button {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if (setting.isOpen) {
             setHeight(height + 112);
-            if(setting.selected)
+            if (setting.selected)
                 setHeight(height + 10);
         }
         RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
@@ -45,9 +51,9 @@ public class ColorButton extends Button {
             RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (setting.selected ? 130 : 120), new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
             Mint.textManager.drawStringWithShadow(setting.selected ? ChatFormatting.UNDERLINE + hex : hex, x + 109 / 2f - (Mint.textManager.getStringWidth(hex) / 2f), y + 109 + (11 / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
             RenderUtil.drawBorder(x + 2, y + 108, 107, setting.selected ? 22 : 12, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()));
-            if(setting.selected){
-                Mint.textManager.drawStringWithShadow(isInsideCopy(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Copy" : "Copy", (x + ((107) / 8f) * 2) - (Mint.textManager.getStringWidth("Copy") / 2f) , y + 120, -1);
-                Mint.textManager.drawStringWithShadow(isInsidePaste(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Paste" : "Paste", (x + ((107) / 8f) * 6) - (Mint.textManager.getStringWidth("Paste") / 2f) , y + 120, -1);
+            if (setting.selected) {
+                Mint.textManager.drawStringWithShadow(isInsideCopy(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Copy" : "Copy", (x + ((107) / 8f) * 2) - (Mint.textManager.getStringWidth("Copy") / 2f), y + 120, -1);
+                Mint.textManager.drawStringWithShadow(isInsidePaste(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Paste" : "Paste", (x + ((107) / 8f) * 6) - (Mint.textManager.getStringWidth("Paste") / 2f), y + 120, -1);
             }
             setting.setColor(finalColor);
         }
@@ -55,15 +61,22 @@ public class ColorButton extends Button {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if(setting.selected && isInsideCopy(mouseX, mouseY) && mouseButton == 0) {
+        if (setting.selected && isInsideCopy(mouseX, mouseY) && mouseButton == 0) {
             String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
             StringSelection selection = new StringSelection(hex);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
         }
-        if(setting.selected && isInsidePaste(mouseX, mouseY) && mouseButton == 0) {
+        if (setting.selected && isInsidePaste(mouseX, mouseY) && mouseButton == 0) {
+            if (readClipboard() != null) {
+                if (Objects.requireNonNull(readClipboard()).startsWith("#")) {
+                    setting.setColor(Color.decode(Objects.requireNonNull(readClipboard())));
+                }else {
+                    MessageManager.sendMessage("The color your pasting is not a hex-type color.");
+                }
+            }
         }
-        if(isInsideHex(mouseX, mouseY) && mouseButton == 1)
+        if (isInsideHex(mouseX, mouseY) && mouseButton == 1)
             setting.selected = !setting.selected;
         if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1)
             setting.isOpen = !setting.isOpen;
@@ -72,6 +85,7 @@ public class ColorButton extends Button {
     public boolean isInsideCopy(int mouseX, int mouseY) {
         return (mouseX > x + 1 && mouseX < x + (107 / 2f)) && (mouseY > y + 120 && mouseY < y + 130);
     }
+
     public boolean isInsidePaste(int mouseX, int mouseY) {
         return (mouseX > x + (107 / 2f) && mouseX < x + 109) && (mouseY > y + 120 && mouseY < y + 130);
     }
@@ -84,7 +98,8 @@ public class ColorButton extends Button {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + 10);
     }
 
-    public void drawPicker(Setting subColor, int pickerX, int pickerY, int hueSliderX, int hueSliderY, int alphaSliderX, int alphaSliderY, int mouseX, int mouseY) {
+    public void drawPicker(Setting subColor, int pickerX, int pickerY, int hueSliderX, int hueSliderY,
+                           int alphaSliderX, int alphaSliderY, int mouseX, int mouseY) {
         float[] color = new float[]{
                 0, 0, 0, 0
         };
@@ -159,7 +174,8 @@ public class ColorButton extends Button {
         return mX >= minX && mY >= minY && mX <= maxX && mY <= maxY;
     }
 
-    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red, float green, float blue, float alpha) {
+    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red,
+                                      float green, float blue, float alpha) {
         glEnable(GL_BLEND);
         glDisable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -215,7 +231,8 @@ public class ColorButton extends Button {
         }
     }
 
-    public void drawAlphaSlider(int x, int y, int width, int height, float red, float green, float blue, float alpha) {
+    public void drawAlphaSlider(int x, int y, int width, int height, float red, float green, float blue,
+                                float alpha) {
         boolean left = true;
         int checkerBoardSquareSize = height / 2;
 
@@ -241,4 +258,12 @@ public class ColorButton extends Button {
     }
 
 
+    public static String readClipboard() {
+        try {
+            return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        } catch (IOException | UnsupportedFlavorException exception) {
+            return null;
+        }
+
+    }
 }
