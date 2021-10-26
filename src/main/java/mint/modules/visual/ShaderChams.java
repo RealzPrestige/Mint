@@ -2,17 +2,18 @@
 
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.setting.Setting;
 import mint.utils.MathUtil;
 import mint.utils.shader.FramebufferShader;
 import mint.utils.shader.shaders.*;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Objects;
 
 public class ShaderChams extends Module {
     //TODO: make full alpha?
@@ -108,17 +109,15 @@ public class ShaderChams extends Module {
                 if (entity != mc.player && entity != mc.getRenderViewEntity()) {
                     if (!(entity instanceof EntityPlayer))
                         continue;
-                    final Render getEntityRenderObject = mc.getRenderManager().getEntityRenderObject(entity);
-                    if (getEntityRenderObject == null)
+                    if (mc.getRenderManager().getEntityRenderObject(entity) == null)
                         continue;
                     final Vec3d vector = MathUtil.getInterpolatedRenderPos(entity, event.getPartialTicks());
                     ((EntityPlayer) entity).hurtTime = 0;
-                    getEntityRenderObject.doRender(entity, vector.x, vector.y, vector.z, entity.rotationYaw, event.getPartialTicks());
+                    Objects.requireNonNull(mc.getRenderManager().getEntityRenderObject(entity)).doRender(entity, vector.x, vector.y, vector.z, entity.rotationYaw, event.getPartialTicks());
 
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         final float radius = Float.intBitsToFloat(Float.floatToIntBits(1799.2811f) ^ 0x7BE0E8FF) + Float.intBitsToFloat(Float.floatToIntBits(0.9867451f) ^ 0x7F3C9B54);
         framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), 255.0f, radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
