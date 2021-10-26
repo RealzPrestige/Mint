@@ -85,8 +85,11 @@ public class ModuleWindow {
                 button.setWidth(width);
                 button.setHeight(height);
                 button.drawScreen(mouseX, mouseY, partialTicks);
-                if(button instanceof ColorButton && button.getSetting().isOpen)
-                    y += 100;
+                if (button instanceof ColorButton && button.getSetting().isOpen) {
+                    y += 112;
+                    if (button.getSetting().selected)
+                        y += 10;
+                }
             }
         }
     }
@@ -103,7 +106,7 @@ public class ModuleWindow {
     }
 
     public void initGui() {
-        if(module.isOpened)
+        if (module.isOpened)
             button.forEach(Button::initGui);
     }
 

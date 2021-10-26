@@ -1,5 +1,6 @@
 package mint.newgui.buttons;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
 import mint.setting.Setting;
@@ -9,12 +10,13 @@ import net.minecraft.client.gui.Gui;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class ColorButton extends Button {
     Setting setting;
-    private final float[] color;
     private Color finalColor;
     boolean pickingColor = false;
     boolean pickingHue = false;
@@ -22,33 +24,60 @@ public class ColorButton extends Button {
 
     public ColorButton(Setting setting) {
         super(setting);
-        float[] settingColor = Color.RGBtoHSB(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue(), null);
-        this.color = new float[]{settingColor[0], settingColor[1], settingColor[2], setting.getColor().getAlpha() / 255.0f};
         this.setting = setting;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-
+        if (setting.isOpen) {
+            setHeight(height + 112);
+            if(setting.selected)
+                setHeight(height + 10);
+        }
         RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
-        RenderUtil.drawRect(x + width - 12, y + 1, x + width - 3, y + 9, setting.getColor().getRGB());
         if (isInsideButtonOnly(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(setting.getName(), x, y, -1);
+        String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
         if (setting.isOpen) {
-            setHeight(height + 100);
-            //change all the shit here ez - for zprestige daddy
-            drawPicker(setting, x, y + 10, x + 10, y + 10, x, y + 15, mouseX, mouseY);
+            drawPicker(setting, x + 1, y + 12, x + 115, y + 12, x + 1, y + 94, mouseX, mouseY);
+            RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (setting.selected ? 130 : 120), new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
+            Mint.textManager.drawStringWithShadow(setting.selected ? ChatFormatting.UNDERLINE + hex : hex, x + 109 / 2f - (Mint.textManager.getStringWidth(hex) / 2f), y + 109 + (11 / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+            RenderUtil.drawBorder(x + 2, y + 108, 107, setting.selected ? 22 : 12, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()));
+            if(setting.selected){
+                Mint.textManager.drawStringWithShadow(isInsideCopy(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Copy" : "Copy", (x + ((107) / 8f) * 2) - (Mint.textManager.getStringWidth("Copy") / 2f) , y + 120, -1);
+                Mint.textManager.drawStringWithShadow(isInsidePaste(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Paste" : "Paste", (x + ((107) / 8f) * 6) - (Mint.textManager.getStringWidth("Paste") / 2f) , y + 120, -1);
+            }
             setting.setColor(finalColor);
         }
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1) {
-            setting.isOpen = !setting.isOpen;
+        if(setting.selected && isInsideCopy(mouseX, mouseY) && mouseButton == 0) {
+            String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
+            StringSelection selection = new StringSelection(hex);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(selection, selection);
         }
+        if(setting.selected && isInsidePaste(mouseX, mouseY) && mouseButton == 0) {
+        }
+        if(isInsideHex(mouseX, mouseY) && mouseButton == 1)
+            setting.selected = !setting.selected;
+        if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1)
+            setting.isOpen = !setting.isOpen;
+    }
+
+    public boolean isInsideCopy(int mouseX, int mouseY) {
+        return (mouseX > x + 1 && mouseX < x + (107 / 2f)) && (mouseY > y + 120 && mouseY < y + 130);
+    }
+    public boolean isInsidePaste(int mouseX, int mouseY) {
+        return (mouseX > x + (107 / 2f) && mouseX < x + 109) && (mouseY > y + 120 && mouseY < y + 130);
+    }
+
+    public boolean isInsideHex(int mouseX, int mouseY) {
+        return (mouseX > x + 1 && mouseX < x + 109) && (mouseY > y + 107 && mouseY < y + 120);
     }
 
     public boolean isInsideButtonOnly(int mouseX, int mouseY) {
@@ -68,12 +97,15 @@ public class ColorButton extends Button {
 
         }
 
-        int pickerWidth = 90;
-        int pickerHeight = 51;
-        int hueSliderWidth = 10;
-        int hueSliderHeight = 59;
-        int alphaSliderHeight = 10;
-        int alphaSliderWidth = 90;
+        int pickerWidth = 108;
+        int pickerHeight = 80;
+
+        int hueSliderWidth = 14;
+        int hueSliderHeight = 104;
+
+        int alphaSliderWidth = 108;
+        int alphaSliderHeight = 12;
+
         if (!pickingColor && !pickingHue && !pickingAlpha) {
             if (Mouse.isButtonDown(0) && mouseOver(pickerX, pickerY, pickerX + pickerWidth, pickerY + pickerHeight, mouseX, mouseY)) {
                 pickingColor = true;
@@ -168,8 +200,8 @@ public class ColorButton extends Button {
                 RenderUtil.drawGradientRect(x, y + step * (height / 6f), x + width, y + (step + 1) * (height / 6f), previousStep, nextStep, false);
                 step++;
             }
-            int sliderMinY = (int) (y + height*hue) - 4;
-            RenderUtil.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1,-1);
+            int sliderMinY = (int) (y + height * hue) - 4;
+            RenderUtil.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1, -1);
         } else {
             for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
                 int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
@@ -196,7 +228,7 @@ public class ColorButton extends Button {
                     int minX = x + squareIndex + checkerBoardSquareSize;
                     int maxX = Math.min(x + width, x + squareIndex + checkerBoardSquareSize * 2);
                     RenderUtil.drawRect(minX, y, maxX, y + height, 0xFF909090);
-                    RenderUtil.drawRect(minX, y + checkerBoardSquareSize, maxX, y + height,0xFFFFFFFF);
+                    RenderUtil.drawRect(minX, y + checkerBoardSquareSize, maxX, y + height, 0xFFFFFFFF);
                 }
             }
 

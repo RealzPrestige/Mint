@@ -21,7 +21,8 @@ public class Setting<T> {
     private boolean isColorSetting;
     private Feature feature;
     public boolean isOpen = false;
-
+    public boolean justClicked = false;
+    public boolean selected = false;
     public Setting(String name, T defaultValue) {
         this.name = name;
         this.defaultValue = defaultValue;

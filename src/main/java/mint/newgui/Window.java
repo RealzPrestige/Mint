@@ -62,8 +62,11 @@ public class Window {
                     for (Setting setting : module.getSettings()) {
                         if (setting.isVisible() && !setting.getName().equals("Enabled") && !setting.getName().equals("DisplayName"))
                             openedHeight += 10;
-                        if (setting.isColorSetting() && setting.isOpen)
-                            openedHeight += 100;
+                        if (setting.isColorSetting() && setting.isOpen) {
+                            openedHeight += 112;
+                            if(setting.selected)
+                                openedHeight += 10;
+                        }
                     }
                 }
                 modules.add(new ModuleWindow(module.getName(), x, y += height, width, height, new Color(

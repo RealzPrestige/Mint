@@ -4,7 +4,6 @@ import mint.Mint;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -67,10 +66,10 @@ public class RenderUtil {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double) right, (double) top, (double) 0).color(c1, c2, c3, c).endVertex();
-        bufferbuilder.pos((double) left, (double) top, (double) 0).color(c1, c2, c3, c).endVertex();
-        bufferbuilder.pos((double) left, (double) bottom, (double) 0).color(c5, c6, c7, c4).endVertex();
-        bufferbuilder.pos((double) right, (double) bottom, (double) 0).color(c5, c6, c7, c4).endVertex();
+        bufferbuilder.pos(right, top, 0).color(c1, c2, c3, c).endVertex();
+        bufferbuilder.pos(left, top, 0).color(c1, c2, c3, c).endVertex();
+        bufferbuilder.pos(left, bottom, 0).color(c5, c6, c7, c4).endVertex();
+        bufferbuilder.pos(right, bottom, 0).color(c5, c6, c7, c4).endVertex();
         tessellator.draw();
         GlStateManager.shadeModel(7424);
         GlStateManager.disableBlend();
@@ -94,85 +93,6 @@ public class RenderUtil {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
-    }
-
-    public static void drawHueSlider(int x, int y, int width, int height, float hue) {
-        int step = 0;
-        if (height > width) {
-            Gui.drawRect(x, y, x + width, y + 4, 0xFFFF0000);
-            y += 4;
-            for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
-                int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
-                int nextStep = Color.HSBtoRGB((float) (step + 1) / 6, 1.0f, 1.0f);
-                drawGradientRect(x, y + step * (height / 6f), x + width, y + (step + 1) * (height / 6f), previousStep, nextStep);
-                step++;
-            }
-            final int sliderMinY = (int) (y + (height * hue)) - 4;
-            Gui.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1, -1);
-        } else {
-            for (int colorIndex = 0; colorIndex < 6; colorIndex++) {
-                int previousStep = Color.HSBtoRGB((float) step / 6, 1.0f, 1.0f);
-                int nextStep = Color.HSBtoRGB((float) (step + 1) / 6, 1.0f, 1.0f);
-                gradient(x + step * (width / 6), y, x + (step + 1) * (width / 6), y + height, previousStep, nextStep, true);
-                step++;
-            }
-            final int sliderMinX = (int) (x + (width * hue));
-            Gui.drawRect(sliderMinX - 1, y, sliderMinX + 1, y + height, -1);
-        }
-    }
-
-    public static void drawAlphaSlider(int x, int y, int width, int height, float red, float green, float blue, float alpha) {
-        boolean left = true;
-        int checkerBoardSquareSize = width / 2;
-        for (int squareIndex = -checkerBoardSquareSize; squareIndex < height; squareIndex += checkerBoardSquareSize) {
-            if (!left) {
-                Gui.drawRect(x, y + squareIndex, x + width, y + squareIndex + checkerBoardSquareSize, 0xFFFFFFFF);
-                Gui.drawRect(x + checkerBoardSquareSize, y + squareIndex, x + width, y + squareIndex + checkerBoardSquareSize, 0xFF909090);
-                if (squareIndex < height - checkerBoardSquareSize) {
-                    int minY = y + squareIndex + checkerBoardSquareSize;
-                    int maxY = Math.min(y + height, y + squareIndex + checkerBoardSquareSize * 2);
-                    Gui.drawRect(x, minY, x + width, maxY, 0xFF909090);
-                    Gui.drawRect(x + checkerBoardSquareSize, minY, x + width, maxY, 0xFFFFFFFF);
-                }
-            }
-            left = !left;
-        }
-        gradient(x, y, x + width, y + height, new Color(red, green, blue, alpha).getRGB(), 0, false);
-        final int sliderMinY = (int) (y + height - (height * alpha));
-        Gui.drawRect(x, sliderMinY - 1, x + width, sliderMinY + 1, -1);
-    }
-
-    public static void drawPickerBase(int pickerX, int pickerY, int pickerWidth, int pickerHeight, float red, float green, float blue, float alpha) {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glBegin(GL11.GL_POLYGON);
-        {
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            GL11.glVertex2f(pickerX, pickerY);
-            GL11.glVertex2f(pickerX, pickerY + pickerHeight);
-            GL11.glColor4f(red, green, blue, alpha);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY);
-        }
-        GL11.glEnd();
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glBegin(GL11.GL_POLYGON);
-        {
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-            GL11.glVertex2f(pickerX, pickerY);
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-            GL11.glVertex2f(pickerX, pickerY + pickerHeight);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY + pickerHeight);
-            GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-            GL11.glVertex2f(pickerX + pickerWidth, pickerY);
-        }
-        GL11.glEnd();
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glShadeModel(GL11.GL_FLAT);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     public static void gradient(int minX, int minY, int maxX, int maxY, int startColor, int endColor, boolean left) {
