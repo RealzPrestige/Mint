@@ -69,7 +69,7 @@ class Mint {
                 moduleManager!!.onUnload()
                 configManager!!.saveConfig(configManager!!.config.replaceFirst("mint/".toRegex(), ""))
                 moduleManager!!.onUnloadPost()
-                hudComponentManager!!.Unload()
+                hudComponentManager!!.unload()
                 unloaded = true
             }
         }

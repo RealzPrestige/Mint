@@ -64,4 +64,8 @@ public class HudModule {
     public boolean getValue(){
         return value;
     }
+
+    public String getPos(){
+        return  x + ", " + y;
+    }
 }
