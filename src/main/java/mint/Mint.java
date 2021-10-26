@@ -5,6 +5,7 @@ import kotlin.text.Regex;
 import mint.commands.CommandManager;
 import mint.managers.*;
 import mint.newgui.hud.HudComponentManager;
+import mint.settingsrewrite.SettingsRewrite;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -22,31 +23,18 @@ public final class Mint {
     private final Logger LOGGER = LogManager.getLogger("Mint ExceptionCatcher: ");
 
 
-    public static EventManager eventManager;
-
     @NotNull
     public static Mint INSTANCE = new Mint();
 
-
+    public static EventManager eventManager;
     public static CommandManager commandManager;
-
-
     public static FriendManager friendManager;
-
-
     public static ModuleManager moduleManager;
-
-
     public static ConfigManager configManager;
-
-
     public static TextManager textManager;
-
-
     public static ServerManager serverManager;
-
-
     public static HudComponentManager hudComponentManager;
+    public static SettingsRewrite settingsRewrite;
     private static boolean unloaded = false;
 
     public final Logger getLOGGER() {
@@ -63,16 +51,17 @@ public final class Mint {
         load();
     }
 
-    public static final void load() {
-        Mint.unloaded = false;
-        Mint.textManager = new TextManager();
-        Mint.serverManager = new ServerManager();
-        Mint.commandManager = new CommandManager();
-        Mint.friendManager = new FriendManager();
-        Mint.moduleManager = new ModuleManager();
-        Mint.eventManager = new EventManager();
-        Mint.configManager = new ConfigManager();
-        Mint.hudComponentManager = new HudComponentManager();
+    public static void load() {
+        unloaded = false;
+        textManager = new TextManager();
+        serverManager = new ServerManager();
+        commandManager = new CommandManager();
+        friendManager = new FriendManager();
+        moduleManager = new ModuleManager();
+        eventManager = new EventManager();
+        configManager = new ConfigManager();
+        hudComponentManager = new HudComponentManager();
+        settingsRewrite = new SettingsRewrite();
         ModuleManager var10000 = Mint.moduleManager;
         if (var10000 == null) {
             Intrinsics.throwNpe();
@@ -112,7 +101,7 @@ public final class Mint {
     }
 
 
-    public void onUnload() {
+    public static void onUnload() {
         if (!Mint.unloaded) {
             EventManager var10000 = Mint.eventManager;
             if (var10000 == null) {
@@ -132,18 +121,14 @@ public final class Mint {
             }
 
             ConfigManager var10001 = Mint.configManager;
-            if (var10001 == null) {
-                Intrinsics.throwNpe();
-            }
+            Intrinsics.throwNpe();
 
             String var9 = var10001.config;
             Intrinsics.checkExpressionValueIsNotNull(var9, "configManager!!.config");
-            CharSequence var1 = (CharSequence) var9;
+            CharSequence var1 = var9;
             String var2 = "mint/";
-            boolean var3 = false;
             Regex var5 = new Regex(var2);
             String var6 = "";
-            boolean var4 = false;
             var8.saveConfig(var5.replaceFirst(var1, var6));
             var7 = Mint.moduleManager;
             if (var7 == null) {

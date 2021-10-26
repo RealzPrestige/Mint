@@ -25,12 +25,12 @@ public class NumberButton extends Button{
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragSlider(mouseX, mouseY);
-        RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+        RenderUtil.drawRect(x - 2, y, x + width + 2, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         RenderUtil.drawRect(x, y, ((Number) setting.getValue()).floatValue() <= min.floatValue() ? x : x + ((float) width + 2f) * ((((Number) setting.getValue()).floatValue() - min.floatValue()) / (max.floatValue() - min.floatValue())) - 2, y + (float) height, NewGuiModule.getInstance().color.getColor().getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.getName() + " " + (setting.getValue() instanceof Float ? setting.getValue() : Double.valueOf(((Number) setting.getValue()).doubleValue())), x, y, - 1);
+        Mint.textManager.drawStringWithShadow(setting.getName() + " " + (setting.getValue() instanceof Float ? setting.getValue() : Double.valueOf(((Number) setting.getValue()).doubleValue())), x + 2, y, - 1);
     }
 
     void dragSlider(int mouseX, int mouseY) {

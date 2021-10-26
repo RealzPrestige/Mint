@@ -2,12 +2,12 @@ package mint.modules;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.setting.Bind;
-import mint.setting.Setting;
 import mint.events.ClientEvent;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.core.Notifications;
+import mint.setting.Bind;
+import mint.setting.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,6 +31,7 @@ public class Module extends Feature {
         this.category = category;
         isOpened = false;
     }
+
 
     public Minecraft getMc() {
         return Minecraft.getMinecraft();

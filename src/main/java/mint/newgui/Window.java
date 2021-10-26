@@ -1,6 +1,5 @@
 package mint.newgui;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
@@ -49,7 +48,6 @@ public class Window {
         RenderUtil.drawRect(x - 1, y, x + width + 1, y + height, NewGuiModule.getInstance().color.getColor().getRGB());
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, x + (width / 2f) - (Mint.textManager.getStringWidth(name) / 2f), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
-        Mint.textManager.drawStringWithShadow(isOpened ? (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "x" : "x") : (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "+" : "+"), x + width - Mint.textManager.getStringWidth("x"), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (isOpened) {
             modules.clear();
             int y = this.y;
@@ -70,18 +68,20 @@ public class Window {
                 modules.add(new ModuleWindow(module.getName(), x, y += height, width, height, NewGuiModule.getInstance().backgroundColor.getColor(), NewGuiModule.getInstance().color.getColor(), module));
                 y += openedHeight;
             }
+            RenderUtil.drawOutlineRect(x, this.y + height, x + width, y + height, NewGuiModule.getInstance().color.getColor(), 1.5f);
         }
+        RenderUtil.drawOutlineRect(x, this.y, x + width, this.y + height, NewGuiModule.getInstance().color.getColor(), 1.5f);
         if (isOpened)
             modules.forEach(modules -> modules.drawScreen(mouseX, mouseY, partialTicks));
     }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && isInside(mouseX, mouseY) && !isInsideCloseButton(mouseX, mouseY)) {
+        if (mouseButton == 0 && isInside(mouseX, mouseY)) {
             dragX = x - mouseX;
             dragY = y - mouseY;
             isDragging = true;
         }
-        if (mouseButton == 0 && isInsideCloseButton(mouseX, mouseY)) {
+        if (mouseButton == 1 && isInside(mouseX, mouseY)) {
             isOpened = !isOpened;
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
@@ -105,9 +105,5 @@ public class Window {
 
     public boolean isInside(int mouseX, int mouseY) {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
-    }
-
-    public boolean isInsideCloseButton(int mouseX, int mouseY) {
-        return (mouseX > x + width - Mint.textManager.getStringWidth("x") && mouseX < x + width) && (mouseY > y && mouseY < y + height);
     }
 }

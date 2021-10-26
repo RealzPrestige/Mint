@@ -40,14 +40,14 @@ public class ColorButton extends Button {
             if (setting.selected)
                 setHeight(height + 10);
         }
-        RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+        RenderUtil.drawRect(x - 2, y, x + width + 2, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         if (isInsideButtonOnly(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.getName(), x, y, -1);
+        Mint.textManager.drawStringWithShadow(setting.getName(), x + 2, y, -1);
         String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
         if (setting.isOpen) {
-            drawPicker(setting, x + 1, y + 12, x + 115, y + 12, x + 1, y + 94, mouseX, mouseY);
+            drawPicker(setting, x + 1, y + 12, x + 111, y + 12, x + 1, y + 94, mouseX, mouseY);
             RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (setting.selected ? 130 : 120), NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
             Mint.textManager.drawStringWithShadow(setting.selected ? ChatFormatting.UNDERLINE + hex : hex, x + 109 / 2f - (Mint.textManager.getStringWidth(hex) / 2f), y + 109 + (11 / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
             RenderUtil.drawBorder(x + 2, y + 108, 107, setting.selected ? 22 : 12, NewGuiModule.getInstance().color.getColor());
@@ -117,7 +117,7 @@ public class ColorButton extends Button {
         int pickerHeight = 80;
 
         int hueSliderWidth = 14;
-        int hueSliderHeight = 104;
+        int hueSliderHeight = 105;
 
         int alphaSliderWidth = 108;
         int alphaSliderHeight = 12;

@@ -21,11 +21,11 @@ public class ModeButton extends Button {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(x, y, x + width, y + height,NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+        RenderUtil.drawRect(x - 2, y, x + width + 2, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.getName() + " " + ChatFormatting.GRAY + (setting.currentEnumName().equalsIgnoreCase("ABC") ? "ABC" : setting.currentEnumName()), x, y, -1);
+        Mint.textManager.drawStringWithShadow(setting.getName() + " " + ChatFormatting.GRAY + (setting.currentEnumName().equalsIgnoreCase("ABC") ? "ABC" : setting.currentEnumName()), x + 2, y, -1);
     }
 
 

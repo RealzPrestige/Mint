@@ -1,17 +1,17 @@
-package mint.newgui.buttons;
+package mint.newgui.buttons.a;
 
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
-import mint.setting.Setting;
+import mint.settingsrewrite.SettingRewrite;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
-public class BooleanButton extends Button {
-    Setting setting;
+public class BoolSnutton extends NewButton {
+    SettingRewrite setting;
 
-    public BooleanButton(Setting setting) {
+    public BoolSnutton(SettingRewrite setting) {
         super(setting);
         this.setting = setting;
     }

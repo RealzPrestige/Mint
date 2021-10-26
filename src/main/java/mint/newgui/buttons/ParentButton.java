@@ -18,13 +18,14 @@ public class ParentButton extends Button {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        RenderUtil.drawRect(x - 2, y, x + width + 2, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().color.getColor().getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(getValue() ?  ">" : "v", x + width - Mint.textManager.getStringWidth(getValue() ?  ">" : "v") - 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+        Mint.textManager.drawStringWithShadow(getValue() ? "-" : "+", x + width - Mint.textManager.getStringWidth(getValue() ? "-" : "+") - 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.getName(), x, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+        Mint.textManager.drawStringWithShadow(setting.getName(), x + 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
     }
 
     @Override
