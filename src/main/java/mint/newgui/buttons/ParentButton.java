@@ -1,14 +1,12 @@
 package mint.newgui.buttons;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.modules.core.NewGuiModule;
+import mint.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
-
-import java.awt.*;
 
 public class ParentButton extends Button {
     Setting setting;
@@ -20,7 +18,7 @@ public class ParentButton extends Button {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB());
+        RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().color.getColor().getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;

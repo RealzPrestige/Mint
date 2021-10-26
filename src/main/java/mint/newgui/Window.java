@@ -5,12 +5,10 @@ import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
 import mint.setting.Setting;
-import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Window {
@@ -48,7 +46,7 @@ public class Window {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragScreen(mouseX, mouseY);
-        RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(NewGuiModule.getInstance().topRed.getValue(), NewGuiModule.getInstance().topGreen.getValue(), NewGuiModule.getInstance().topBlue.getValue(), NewGuiModule.getInstance().topAlpha.getValue()));
+        RenderUtil.drawRect(x - 1, y, x + width + 1, y + height, NewGuiModule.getInstance().color.getColor().getRGB());
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, x + (width / 2f) - (Mint.textManager.getStringWidth(name) / 2f), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         Mint.textManager.drawStringWithShadow(isOpened ? (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "x" : "x") : (isInsideCloseButton(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "+" : "+"), x + width - Mint.textManager.getStringWidth("x"), y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
@@ -69,17 +67,7 @@ public class Window {
                         }
                     }
                 }
-                modules.add(new ModuleWindow(module.getName(), x, y += height, width, height, new Color(
-                        NewGuiModule.getInstance().moduleRed.getValue(),
-                        NewGuiModule.getInstance().moduleGreen.getValue(),
-                        NewGuiModule.getInstance().moduleBlue.getValue(),
-                        NewGuiModule.getInstance().moduleAlpha.getValue()
-                ), new Color(
-                        NewGuiModule.getInstance().enabledRed.getValue(),
-                        NewGuiModule.getInstance().enabledGreen.getValue(),
-                        NewGuiModule.getInstance().enabledBlue.getValue(),
-                        NewGuiModule.getInstance().enabledAlpha.getValue()
-                ), module));
+                modules.add(new ModuleWindow(module.getName(), x, y += height, width, height, NewGuiModule.getInstance().backgroundColor.getColor(), NewGuiModule.getInstance().color.getColor(), module));
                 y += openedHeight;
             }
         }

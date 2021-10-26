@@ -40,7 +40,7 @@ public class ColorButton extends Button {
             if (setting.selected)
                 setHeight(height + 10);
         }
-        RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
+        RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         if (isInsideButtonOnly(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
@@ -48,9 +48,9 @@ public class ColorButton extends Button {
         String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
         if (setting.isOpen) {
             drawPicker(setting, x + 1, y + 12, x + 115, y + 12, x + 1, y + 94, mouseX, mouseY);
-            RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (setting.selected ? 130 : 120), new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
+            RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (setting.selected ? 130 : 120), NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
             Mint.textManager.drawStringWithShadow(setting.selected ? ChatFormatting.UNDERLINE + hex : hex, x + 109 / 2f - (Mint.textManager.getStringWidth(hex) / 2f), y + 109 + (11 / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
-            RenderUtil.drawBorder(x + 2, y + 108, 107, setting.selected ? 22 : 12, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()));
+            RenderUtil.drawBorder(x + 2, y + 108, 107, setting.selected ? 22 : 12, NewGuiModule.getInstance().color.getColor());
             if (setting.selected) {
                 Mint.textManager.drawStringWithShadow(isInsideCopy(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Copy" : "Copy", (x + ((107) / 8f) * 2) - (Mint.textManager.getStringWidth("Copy") / 2f), y + 120, -1);
                 Mint.textManager.drawStringWithShadow(isInsidePaste(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Paste" : "Paste", (x + ((107) / 8f) * 6) - (Mint.textManager.getStringWidth("Paste") / 2f), y + 120, -1);

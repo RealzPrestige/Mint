@@ -1,13 +1,11 @@
 package mint.newgui.buttons;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.modules.core.NewGuiModule;
+import mint.setting.Setting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import org.lwjgl.input.Mouse;
-
-import java.awt.*;
 
 public class NumberButton extends Button{
 
@@ -27,8 +25,8 @@ public class NumberButton extends Button{
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragSlider(mouseX, mouseY);
-        RenderUtil.drawRect(x, y, x + width, y + height, new Color(NewGuiModule.getInstance().moduleRed.getValue(), NewGuiModule.getInstance().moduleGreen.getValue(), NewGuiModule.getInstance().moduleBlue.getValue(), NewGuiModule.getInstance().moduleAlpha.getValue()).getRGB());
-        RenderUtil.drawRect(x, y, ((Number) setting.getValue()).floatValue() <= min.floatValue() ? x : x + ((float) width + 2f) * ((((Number) setting.getValue()).floatValue() - min.floatValue()) / (max.floatValue() - min.floatValue())) - 2, y + (float) height, new Color(NewGuiModule.getInstance().enabledRed.getValue(), NewGuiModule.getInstance().enabledGreen.getValue(), NewGuiModule.getInstance().enabledBlue.getValue(), NewGuiModule.getInstance().enabledAlpha.getValue()).getRGB());
+        RenderUtil.drawRect(x, y, x + width, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+        RenderUtil.drawRect(x, y, ((Number) setting.getValue()).floatValue() <= min.floatValue() ? x : x + ((float) width + 2f) * ((((Number) setting.getValue()).floatValue() - min.floatValue()) / (max.floatValue() - min.floatValue())) - 2, y + (float) height, NewGuiModule.getInstance().color.getColor().getRGB());
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;

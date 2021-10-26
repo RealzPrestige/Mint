@@ -14,7 +14,7 @@ import java.util.List;
 
 @Mixin(value = {GuiPlayerTabOverlay.class})
 public class MixinTabOverlay extends Gui {
-
+//@TODO: refactor to MixinGuiPlayerTabOverlay
     @Redirect(method = {"renderPlayerlist"}, at = @At(value = "INVOKE", target = "Ljava/util/List;subList(II)Ljava/util/List;", remap = false))
     public List<NetworkPlayerInfo> subListHook(List<NetworkPlayerInfo> list, int fromIndex, int toIndex) {
         return list.subList(fromIndex, TabTweaks.getInstance().isEnabled() ? Math.min(TabTweaks.getInstance().size.getValue(), list.size()) : toIndex);
