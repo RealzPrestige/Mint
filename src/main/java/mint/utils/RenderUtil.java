@@ -37,7 +37,6 @@ public class RenderUtil {
         tessellator = Tessellator.getInstance();
         builder = RenderUtil.tessellator.getBuffer();
     }
-
     public static int shadeColour(int color, int precent) {
         int r = (((color & 0xFF0000) >> 16) * (100 + precent) / 100);
         int g = (((color & 0xFF00) >> 8) * (100 + precent) / 100);

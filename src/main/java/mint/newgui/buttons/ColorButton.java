@@ -66,6 +66,7 @@ public class ColorButton extends Button {
             StringSelection selection = new StringSelection(hex);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
+            MessageManager.sendMessage("Color has been successfully copied to clipboard!");
         }
         if (setting.selected && isInsidePaste(mouseX, mouseY) && mouseButton == 0) {
             if (readClipboard() != null) {

@@ -1,10 +1,9 @@
-package mint.managers;
+package mint.newgui.hud;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import mint.newgui.hud.HudModule;
 import mint.newgui.hud.hudcomponents.HudWatermarkComponent;
 
 import java.io.FileNotFoundException;
@@ -16,19 +15,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class HudManager {
-    static HudManager INSTANCE = new HudManager();
+public class HudComponentManager {
+    static HudComponentManager INSTANCE = new HudComponentManager();
     JsonObject hudObject;
     OutputStreamWriter stream;
     ArrayList<HudModule> hudModules = new ArrayList<>();
 
-    public HudManager() {
+    public HudComponentManager() {
         setInstance();
     }
 
-    public static HudManager getInstance() {
+    public static HudComponentManager getInstance() {
         if (INSTANCE == null)
-            INSTANCE = new HudManager();
+            INSTANCE = new HudComponentManager();
         return INSTANCE;
     }
 

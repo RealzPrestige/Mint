@@ -2,6 +2,7 @@ package mint
 
 import mint.commands.CommandManager
 import mint.managers.*
+import mint.newgui.hud.HudComponentManager
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -41,7 +42,7 @@ class Mint {
         var serverManager: ServerManager? = null
 
         @JvmField
-        var hudComponentManager: HudManager? = null
+        var hudComponentManager: HudComponentManager? = null
         private var unloaded = false
         fun load() {
             unloaded = false
@@ -52,7 +53,7 @@ class Mint {
             moduleManager = ModuleManager()
             eventManager = EventManager()
             configManager = ConfigManager()
-            hudComponentManager = HudManager()
+            hudComponentManager = HudComponentManager()
             moduleManager!!.init()
             eventManager!!.init()
             textManager!!.init()
