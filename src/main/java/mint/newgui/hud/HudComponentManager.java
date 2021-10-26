@@ -1,15 +1,9 @@
 package mint.newgui.hud;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import mint.newgui.hud.hudcomponents.HudWatermarkComponent;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -40,10 +34,13 @@ public class HudComponentManager {
     }
 
     public void init() {
+        loadHuds();
         hudModules.add(new HudWatermarkComponent());
     }
 
-    public void Unload() {
+    public void unload() {
+        saveHudsActive();
+        saveHudsPos();
         hudModules.clear();
     }
 
@@ -63,9 +60,20 @@ public class HudComponentManager {
      */
 
     void loadHuds() {
+        InputStream stream = null;
+        try {
+            stream = Files.newInputStream(Paths.get("mint/Default/Huds" + ".json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert stream != null;
+        JsonObject hudObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+        for (HudModule hud : hudModules) {
+
+        }
     }
 
-    void saveHuds() {
+    void saveHudsActive() {
         if (!(Files.exists(Paths.get("mint/Default/Huds" + ".json"))))
             try {
                 Files.createFile(Paths.get("mint/Default/Huds" + ".json"));
@@ -74,11 +82,32 @@ public class HudComponentManager {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             stream = new OutputStreamWriter(new FileOutputStream("mint/Default/Huds" + ".json"), StandardCharsets.UTF_8);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
         }
         hudObject = new JsonObject();
         for (HudModule hud : hudModules) {
             hudObject.add(hud.getName(), new JsonPrimitive(hud.getValue()));
+        }
+        try {
+            stream.write(gson.toJson(hudObject));
+            stream.close();
+        } catch (IOException ignored) {
+        }
+    }
+    void saveHudsPos() {
+        if (!(Files.exists(Paths.get("mint/Default/HudsPos" + ".json"))))
+            try {
+                Files.createFile(Paths.get("mint/Default/HudsPos" + ".json"));
+            } catch (IOException ignored) {
+            }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            stream = new OutputStreamWriter(new FileOutputStream("mint/Default/HudsPos" + ".json"), StandardCharsets.UTF_8);
+        } catch (FileNotFoundException ignored) {
+        }
+        hudObject = new JsonObject();
+        for (HudModule hud : hudModules) {
+            hudObject.add(hud.getName(), new JsonPrimitive(hud.getPos()));
         }
         try {
             stream.write(gson.toJson(hudObject));
