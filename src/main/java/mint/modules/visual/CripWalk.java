@@ -1,15 +1,16 @@
 package mint.modules.visual;
 
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.utils.NullUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mint.events.RenderWorldEvent;
-
+@ModuleInfo(name = "Crip Walk", description = "Gang shit" , category = Module.Category.Visual)
 public class CripWalk extends Module {
 
     public CripWalk(){
-        super("Crip Walk",Category.Visual,"Cancels movement animations.");
+        super();
     }
 
     @SubscribeEvent
