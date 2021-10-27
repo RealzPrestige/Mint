@@ -1,9 +1,9 @@
 package mint.modules.miscellaneous;
 
-import mint.clickgui.MintGui;
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.newgui.NewGui;
+import mint.setting.Setting;
 import mint.utils.NullUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -44,7 +44,7 @@ public class Backpack extends Module {
         if (!isEnabled() || NullUtil.fullNullCheck())
             return;
         if (mc.currentScreen instanceof GuiContainer && open.getValue()) {
-            if (mc.currentScreen instanceof MintGui ||
+            if (mc.currentScreen instanceof NewGui ||
                     //chest
                     mc.currentScreen instanceof GuiChest && !chest.getValue() ||
                     //furnace

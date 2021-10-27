@@ -1,21 +1,11 @@
 package mint.modules.core;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.clickgui.MintGui;
-import mint.setting.Setting;
-import mint.events.ClientEvent;
-import mint.events.RenderOverlayEvent;
-import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.modules.combat.KotlinAura;
 import mint.modules.miscellaneous.SignExploit;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import mint.setting.Setting;
 import org.lwjgl.input.Keyboard;
-
-import java.awt.*;
 
 public class Gui extends Module {
     private static Gui INSTANCE = new Gui();
@@ -84,33 +74,6 @@ public class Gui extends Module {
         Mint.configManager.saveConfig("Default");
     }
 
-    @SubscribeEvent
-    public void onSettingChange(ClientEvent event) {
-        if (event.getStage() == 2 && event.getSetting().getFeature().equals(this)) {
-            if (event.getSetting().equals(this.prefix)) {
-                Mint.commandManager.setPrefix(this.prefix.getPlannedValue());
-                MessageManager.sendMessage("Prefix set to " + ChatFormatting.DARK_GRAY + Mint.commandManager.getPrefix());
-            }
-        }
-    }
-
-    @Override
-    public void renderOverlayEvent(RenderOverlayEvent event) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        ScaledResolution resolution = new ScaledResolution(mc);
-        if (gradient.getValue()) {
-            if (gradientType.getValue() == GradientMode.FromBottom) {
-                if (mc.currentScreen instanceof MintGui) {
-                    MintGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(0, 0, 0, 0).getRGB(), new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB());
-                }
-            }
-            if (gradientType.getValue() == GradientMode.FromTop) {
-                if (mc.currentScreen instanceof MintGui) {
-                    MintGui.getInstance().drawGradient(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), new Color(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), gradientAlpha.getValue()).getRGB(), new Color(0, 0, 0, 0).getRGB());
-                }
-            }
-        }
-    }
 
     @Override
     public void onEnable() {
@@ -119,19 +82,11 @@ public class Gui extends Module {
             KotlinAura.INSTANCE.antiNiggers();
             gradientPrepare = false;
         }
-        Mint.INSTANCE.mc.displayGuiScreen(MintGui.getClickGui());
     }
 
     @Override
     public void onLoad() {
         Mint.commandManager.setPrefix(this.prefix.getValue());
-    }
-
-    @Override
-    public void onTick() {
-        if (isEnabled())
-            if (!(Mint.INSTANCE.mc.currentScreen instanceof MintGui))
-                disable();
     }
 
 }

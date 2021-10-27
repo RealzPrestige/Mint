@@ -1,7 +1,6 @@
 package mint.managers;
 
 import mint.Mint;
-import mint.clickgui.MintGui;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
@@ -11,6 +10,7 @@ import mint.modules.miscellaneous.*;
 import mint.modules.movement.*;
 import mint.modules.player.*;
 import mint.modules.visual.*;
+import mint.newgui.NewGui;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import org.lwjgl.input.Keyboard;
@@ -206,7 +206,7 @@ public class ModuleManager {
     }
 
     public void onKeyPressed(int eventKey) {
-        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof MintGui)
+        if (eventKey == 0 || !Keyboard.getEventKeyState() || Mint.INSTANCE.mc.currentScreen instanceof NewGui)
             return;
 
         moduleList.forEach(module -> {
