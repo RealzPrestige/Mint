@@ -19,7 +19,13 @@ public class Hud extends Module {
     public DoubleSetting doubleTest = new DoubleSetting("Double Test", 10.0, 0.0, 20.0, this);
     public KeySetting keyTest = new KeySetting("Key Test", Keyboard.KEY_NONE, this);
     public EnumSetting enumTest = new EnumSetting("Enum Test", EnumTest.One, this);
-    public enum EnumTest{One, Two, Three, Four, Five, Six, Seven}
+
+    public enum EnumTest {One, Two, Three, Four, Five, Six, Seven}
+
+    public StringSetting stringTest = new StringSetting("String Test", "ITestIt", this);
+    public ColorSetting colorTest = new ColorSetting("Color Test", new Color(255, 255, 255), this);
+    public ParentSetting parentSetting = new ParentSetting("Parent Test", false, this);
+
     public Hud() {
         super("Hud", Category.CORE, "Draws hud stuff");
         setInstance();

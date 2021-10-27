@@ -25,9 +25,4 @@ public class KeySetting extends SettingRewrite<Integer> {
         value = bind;
     }
 
-    public boolean isShown() {
-        if (shown == null)
-            return true;
-        return shown.test(getValue());
-    }
 }

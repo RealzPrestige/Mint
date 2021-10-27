@@ -49,9 +49,4 @@ public final class EnumSetting extends SettingRewrite<Enum> {
                 return i;
         return -1;
     }
-    public boolean isShown() {
-        if (shown == null)
-            return true;
-        return shown.test(getValue());
-    }
 }

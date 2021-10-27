@@ -208,7 +208,8 @@ public class ConfigManager {
                 }
             } else {
                 for (Setting setting : feature.getSettings()) {
-                    if (!settingName.equals(setting.getName())) continue;
+                    if (!settingName.equals(setting.getName()))
+                        continue;
                     try {
                         ConfigManager.setValueFromJson(setting, element);
                     } catch (Exception ignored) {

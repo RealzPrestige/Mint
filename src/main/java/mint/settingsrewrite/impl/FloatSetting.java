@@ -33,10 +33,4 @@ public class FloatSetting extends SettingRewrite<Float> {
     public float getMinimum() {
         return minimum;
     }
-
-    public boolean isShown() {
-        if (shown == null)
-            return true;
-        return shown.test(getValue());
-    }
 }

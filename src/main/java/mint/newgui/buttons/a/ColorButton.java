@@ -1,10 +1,11 @@
-package mint.newgui.buttons;
+package mint.newgui.buttons.a;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.managers.MessageManager;
 import mint.modules.core.NewGuiModule;
-import mint.setting.Setting;
+import mint.settingsrewrite.SettingRewrite;
+import mint.settingsrewrite.impl.ColorSetting;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.gui.Gui;
@@ -20,69 +21,70 @@ import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.*;
 
-@SuppressWarnings("all")
-public class ColorButton extends Button {
-    Setting setting;
+public class ColorButton extends NewButton {
+    SettingRewrite setting;
+    ColorSetting colorSetting;
     private Color finalColor;
     boolean pickingColor = false;
     boolean pickingHue = false;
     boolean pickingAlpha = false;
 
-    public ColorButton(Setting setting) {
+    public ColorButton(SettingRewrite setting, ColorSetting colorSetting) {
         super(setting);
         this.setting = setting;
+        this.colorSetting = colorSetting;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-            RenderUtil.drawRect(x + width - 12, y + 1, x + width - 3, y + height - 1, setting.getColor().getRGB());
-        RenderUtil.drawOutlineRect(x + width - 12, y + 1, x + width - 3, y + height - 1, new Color(0,0,0), 0.1f);
-        if (setting.isOpen) {
+        RenderUtil.drawRect(x + width - 12, y + 1, x + width - 3, y + height - 1, colorSetting.getColor().getRGB());
+        RenderUtil.drawOutlineRect(x + width - 12, y + 1, x + width - 3, y + height - 1, new Color(0, 0, 0), 0.1f);
+        if (colorSetting.isOpen()) {
             setHeight(height + 112);
-            if (setting.selected)
+            if (colorSetting.isSelected())
                 setHeight(height + 10);
         }
         RenderUtil.drawRect(x - 2, y, x + width + 2, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         if (isInsideButtonOnly(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + 10, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(setting.getName(), x + 2, y, -1);
-        String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
-        if (setting.isOpen) {
-            drawPicker(setting, x + 1, y + 12, x + 111, y + 12, x + 1, y + 94, mouseX, mouseY);
-            RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (setting.selected ? 130 : 120), NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
-            Mint.textManager.drawStringWithShadow(setting.selected ? ChatFormatting.UNDERLINE + hex : hex, x + 109 / 2f - (Mint.textManager.getStringWidth(hex) / 2f), y + 109 + (11 / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
-            RenderUtil.drawBorder(x + 2, y + 108, 107, setting.selected ? 22 : 12, NewGuiModule.getInstance().color.getColor());
-            if (setting.selected) {
+        Mint.textManager.drawStringWithShadow(colorSetting.getName(), x + 2, y, -1);
+        String hex = String.format("#%06x", colorSetting.getColor().getRGB() & 0xFFFFFF);
+        if (colorSetting.isOpen()) {
+            drawPicker(colorSetting, x + 1, y + 12, x + 111, y + 12, x + 1, y + 94, mouseX, mouseY);
+            RenderUtil.drawRect(x + 1, y + 107, x + 109, y + (colorSetting.isSelected() ? 130 : 120), NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
+            Mint.textManager.drawStringWithShadow(colorSetting.isSelected() ? ChatFormatting.UNDERLINE + hex : hex, x + 109 / 2f - (Mint.textManager.getStringWidth(hex) / 2f), y + 109 + (11 / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+            RenderUtil.drawBorder(x + 2, y + 108, 107, colorSetting.isSelected() ? 22 : 12, NewGuiModule.getInstance().color.getColor());
+            if (colorSetting.isSelected()) {
                 Mint.textManager.drawStringWithShadow(isInsideCopy(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Copy" : "Copy", (x + ((107) / 8f) * 2) - (Mint.textManager.getStringWidth("Copy") / 2f), y + 120, -1);
                 Mint.textManager.drawStringWithShadow(isInsidePaste(mouseX, mouseY) ? ChatFormatting.UNDERLINE + "Paste" : "Paste", (x + ((107) / 8f) * 6) - (Mint.textManager.getStringWidth("Paste") / 2f), y + 120, -1);
             }
-            setting.setColor(finalColor);
+            colorSetting.setColor(finalColor);
         }
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (setting.selected && isInsideCopy(mouseX, mouseY) && mouseButton == 0) {
-            String hex = String.format("#%06x", setting.getColor().getRGB() & 0xFFFFFF);
+        if (colorSetting.isSelected() && isInsideCopy(mouseX, mouseY) && mouseButton == 0) {
+            String hex = String.format("#%06x", colorSetting.getColor().getRGB() & 0xFFFFFF);
             StringSelection selection = new StringSelection(hex);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
             MessageManager.sendMessage("Color has been successfully copied to clipboard!");
         }
-        if (setting.selected && isInsidePaste(mouseX, mouseY) && mouseButton == 0) {
+        if (colorSetting.isSelected() && isInsidePaste(mouseX, mouseY) && mouseButton == 0) {
             if (readClipboard() != null) {
                 if (Objects.requireNonNull(readClipboard()).startsWith("#")) {
-                    setting.setColor(Color.decode(Objects.requireNonNull(readClipboard())));
+                    colorSetting.setColor(Color.decode(Objects.requireNonNull(readClipboard())));
                 } else {
                     MessageManager.sendMessage("The color your pasting is not a hex-type color.");
                 }
             }
         }
         if (isInsideHex(mouseX, mouseY) && mouseButton == 1)
-            setting.selected = !setting.selected;
+            colorSetting.setSelected(!colorSetting.isSelected());
         if (isInsideButtonOnly(mouseX, mouseY) && mouseButton == 1)
-            setting.isOpen = !setting.isOpen;
+            colorSetting.setOpen(!colorSetting.isOpen());
     }
 
     public boolean isInsideCopy(int mouseX, int mouseY) {
@@ -101,7 +103,11 @@ public class ColorButton extends Button {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + 10);
     }
 
-    public void drawPicker(Setting subColor, int pickerX, int pickerY, int hueSliderX, int hueSliderY,
+    public ColorSetting getColorSetting(){
+        return colorSetting;
+    }
+
+    public void drawPicker(ColorSetting setting, int pickerX, int pickerY, int hueSliderX, int hueSliderY,
                            int alphaSliderX, int alphaSliderY, int mouseX, int mouseY) {
         float[] color = new float[]{
                 0, 0, 0, 0
@@ -109,7 +115,7 @@ public class ColorButton extends Button {
 
         try {
             color = new float[]{
-                    Color.RGBtoHSB(subColor.getColor().getRed(), subColor.getColor().getGreen(), subColor.getColor().getBlue(), null)[0], Color.RGBtoHSB(subColor.getColor().getRed(), subColor.getColor().getGreen(), subColor.getColor().getBlue(), null)[1], Color.RGBtoHSB(subColor.getColor().getRed(), subColor.getColor().getGreen(), subColor.getColor().getBlue(), null)[2], subColor.getColor().getAlpha() / 255f
+                    Color.RGBtoHSB(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue(), null)[0], Color.RGBtoHSB(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue(), null)[1], Color.RGBtoHSB(setting.getColor().getRed(), setting.getColor().getGreen(), setting.getColor().getBlue(), null)[2], setting.getColor().getAlpha() / 255f
             };
         } catch (Exception ignored) {
 
@@ -177,7 +183,7 @@ public class ColorButton extends Button {
         return mX >= minX && mY >= minY && mX <= maxX && mY <= maxY;
     }
 
-    public static final Color getColor(Color color, float alpha) {
+    public static Color getColor(Color color, float alpha) {
         final float red = (float) color.getRed() / 255;
         final float green = (float) color.getGreen() / 255;
         final float blue = (float) color.getBlue() / 255;

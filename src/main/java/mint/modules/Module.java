@@ -23,7 +23,6 @@ public class Module extends Feature {
     public boolean hidden;
     public boolean sliding;
     public boolean isOpened;
-
     public Module(String name, Category category, String description) {
         super(name);
         this.displayName = register(new Setting<>("DisplayName", name));

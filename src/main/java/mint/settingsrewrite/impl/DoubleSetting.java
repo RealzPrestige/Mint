@@ -34,9 +34,4 @@ public class DoubleSetting extends SettingRewrite<Double> {
         return minimum;
     }
 
-    public boolean isShown() {
-        if (shown == null)
-            return true;
-        return shown.test(getValue());
-    }
 }

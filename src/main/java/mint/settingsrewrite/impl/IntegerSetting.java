@@ -33,10 +33,4 @@ public class IntegerSetting extends SettingRewrite<Integer> {
     public int getMinimum() {
         return minimum;
     }
-
-    public boolean isShown() {
-        if (shown == null)
-            return true;
-        return shown.test(getValue());
-    }
 }

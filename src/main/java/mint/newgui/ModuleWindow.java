@@ -4,8 +4,9 @@ import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
 import mint.newgui.buttons.Button;
-import mint.newgui.buttons.*;
-import mint.newgui.buttons.a.BooleanButton;
+import mint.newgui.buttons.KeybindButton;
+import mint.newgui.buttons.ModeButton;
+import mint.newgui.buttons.NumberButton;
 import mint.newgui.buttons.a.*;
 import mint.setting.Bind;
 import mint.setting.Setting;
@@ -57,10 +58,10 @@ public class ModuleWindow {
                 buttons.add(new KeybindButton(setting));
 
             if ((setting.getValue() instanceof String || setting.getValue() instanceof Character) && !setting.getName().equalsIgnoreCase("displayName"))
-                buttons.add(new StringButton(setting));
+                buttons.add(new mint.newgui.buttons.StringButton(setting));
 
             if (setting.getValue() instanceof Boolean && setting.isParent())
-                buttons.add(new ParentButton(setting));
+                buttons.add(new mint.newgui.buttons.ParentButton(setting));
 
             if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled") && !setting.isParent())
                 buttons.add(new mint.newgui.buttons.BooleanButton(setting));
@@ -72,29 +73,41 @@ public class ModuleWindow {
                 buttons.add(new ModeButton(setting));
 
             if (setting.isColorSetting())
-                buttons.add(new ColorButton(setting));
+                buttons.add(new mint.newgui.buttons.ColorButton(setting));
         }
         buttons.add(new KeybindButton(module.getSettingByName("Keybind")));
 
         assert Mint.settingsRewrite != null;
         for (SettingRewrite settingsRewrite : Mint.settingsRewrite.doesModuleContainSetting(module)) {
-            if (settingsRewrite instanceof BooleanSetting && ((BooleanSetting) settingsRewrite).isShown())
+            if (!settingsRewrite.isVisible())
+                continue;
+
+            if (settingsRewrite instanceof BooleanSetting)
                 penius.add(new BooleanButton(settingsRewrite));
 
-            if (settingsRewrite instanceof IntegerSetting && ((IntegerSetting) settingsRewrite).isShown())
+            if (settingsRewrite instanceof IntegerSetting)
                 penius.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
 
-            if (settingsRewrite instanceof FloatSetting && ((FloatSetting) settingsRewrite).isShown())
+            if (settingsRewrite instanceof FloatSetting)
                 penius.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
 
-            if (settingsRewrite instanceof DoubleSetting && ((DoubleSetting) settingsRewrite).isShown())
+            if (settingsRewrite instanceof DoubleSetting)
                 penius.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
 
-            if (settingsRewrite instanceof KeySetting && ((KeySetting) settingsRewrite).isShown())
+            if (settingsRewrite instanceof KeySetting)
                 penius.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
 
-            if(settingsRewrite instanceof EnumSetting && ((EnumSetting) settingsRewrite).isShown())
+            if (settingsRewrite instanceof EnumSetting)
                 penius.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
+
+            if (settingsRewrite instanceof StringSetting)
+                penius.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
+
+            if (settingsRewrite instanceof ColorSetting)
+                penius.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
+
+            if (settingsRewrite instanceof ParentSetting)
+                penius.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
         }
 
         button = buttons;
@@ -117,7 +130,7 @@ public class ModuleWindow {
                 button.setWidth(width - 4);
                 button.setHeight(height);
                 button.drawScreen(mouseX, mouseY, partialTicks);
-                if (button instanceof ColorButton && button.getSetting().isOpen) {
+                if (button instanceof mint.newgui.buttons.ColorButton && button.getSetting().isOpen) {
                     y += 112;
                     if (button.getSetting().selected)
                         y += 10;
@@ -129,8 +142,13 @@ public class ModuleWindow {
                 button.setWidth(width - 4);
                 button.setHeight(button instanceof EnumButton ? height + 4 : height);
                 button.drawScreen(mouseX, mouseY, partialTicks);
-                if(button instanceof EnumButton)
+                if (button instanceof EnumButton)
                     y += 4;
+                if (button instanceof ColorButton && ((ColorButton) button).getColorSetting().isOpen()) {
+                    y += 112;
+                    if (((ColorButton) button).getColorSetting().isSelected())
+                        y += 10;
+                }
             }
             RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height - 1, NewGuiModule.getInstance().color.getColor(), 1f);
         }
