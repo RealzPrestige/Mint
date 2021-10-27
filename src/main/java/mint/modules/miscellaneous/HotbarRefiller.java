@@ -1,7 +1,8 @@
 package mint.modules.miscellaneous;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.NullUtil;
 import mint.utils.Timer;
 import net.minecraft.init.Items;
@@ -11,16 +12,13 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
+@ModuleInfo(name = "Hotbar Refiller", category = Module.Category.Miscellaneous, description = "Automatically completes stacks in ur fat hotbar.")
 public class HotbarRefiller extends Module {
 
-    public Setting<Integer> delay = register(new Setting<>("Delay", 100, 0, 1000));
-    public Setting<Integer> fillPoint = register(new Setting<>("Fill Point", 50, 0, 64));
+    public IntegerSetting delay = new IntegerSetting("Delay", 100, 0, 1000, this);
+    public IntegerSetting fillPoint = new IntegerSetting("Fill Point", 50, 0, 64, this);
     public Timer timer = new Timer();
     public ArrayList<Item> hotbarItems = new ArrayList<>();
-
-    public HotbarRefiller() {
-        super("Hotbar Refiller", Category.Miscellaneous, "Automatically completes stacks in ur fat hotbar.");
-    }
 
     public void onUpdate() {
         if (NullUtil.fullNullCheck() || mc.currentScreen != null)

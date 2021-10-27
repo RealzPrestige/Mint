@@ -2,8 +2,10 @@ package mint.modules.miscellaneous;
 
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.newgui.NewGui;
-import mint.setting.Setting;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.NullUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -13,21 +15,17 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Backpack", category = Module.Category.Miscellaneous, description = "Manipulates container packets.")
 public class Backpack extends Module {
 
-    public Backpack() {
-        super("Backpack", Module.Category.Miscellaneous, "Manipulates container packets.");
-    }
+    public ParentSetting containerParent = new ParentSetting("Containers", true, this);
+    public BooleanSetting chest = new BooleanSetting("Chest", false, this, z -> containerParent.getValue());
+    public BooleanSetting furnace = new BooleanSetting("Furnace", false, this, z -> containerParent.getValue());
+    public BooleanSetting inventory = new BooleanSetting("Inventory", false, this, z -> containerParent.getValue());
 
-    public Setting<Boolean> containerParent = register(new Setting("Containers", true, false));
-    //todo add other containers like echest, anvil etc
-    public Setting<Boolean> chest = register(new Setting("Chest", false, z -> containerParent.getValue()));
-    public Setting<Boolean> furnace = register(new Setting("Furnace", false, z -> containerParent.getValue()));
-    public Setting<Boolean> inventory = register(new Setting("Inventory", false, z -> containerParent.getValue()));
-
-    public Setting<Boolean> miscParent = register(new Setting("Misc", true, false));
-    public Setting<Boolean> open = register(new Setting("Open", false, z -> miscParent.getValue()));
-    public Setting<Boolean> close = register(new Setting("Close", false, z -> miscParent.getValue()));
+    public ParentSetting miscParent =new ParentSetting("Misc", true, this);
+    public BooleanSetting open = new BooleanSetting("Open", false, this, z -> miscParent.getValue());
+    public BooleanSetting close = new BooleanSetting("Close", false, this, z -> miscParent.getValue());
     private GuiScreen cancelledGui = null;
 
     @SubscribeEvent

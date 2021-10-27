@@ -1,20 +1,21 @@
 package mint.modules.miscellaneous;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
-
+@ModuleInfo(name = "Tab Tweaks", category = Module.Category.Miscellaneous, description = "Tweaks le tabbe.")
 public class TabTweaks extends Module {
     static TabTweaks INSTANCE = new TabTweaks();
-    public Setting<Boolean> pingDisplay = register(new Setting<>("Ping", false));
-    public Setting<Boolean> coloredPing = register(new Setting<>("Colored", false));
-    public Setting<Integer> size = register(new Setting<>("Size", 250, 1, 1000));
+    public BooleanSetting pingDisplay = new BooleanSetting("Ping", false, this);
+    public BooleanSetting coloredPing = new BooleanSetting("Colored", false, this);
+    public IntegerSetting size = new IntegerSetting("Size", 250, 1, 1000, this);
 
     public TabTweaks() {
-        super("TabTweaks", Category.Miscellaneous, "Tweaks le tabbe.");
         this.setInstance();
     }
 

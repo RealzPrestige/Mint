@@ -1,9 +1,10 @@
 package mint.modules.miscellaneous;
 
-import mint.setting.Setting;
 import mint.events.ChorusEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
 import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
@@ -14,35 +15,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 
+@ModuleInfo(name = "Chorus Predict", category = Module.Category.Miscellaneous, description = "Renders where a player's chorus will go to.")
 public class ChorusPredict extends Module {
 
-    public Setting<Integer> time = register(new Setting<>("Duration", 500, 50, 3000));
-    public Setting<Boolean> boxParent = register(new Setting<>("Box", true, false));
-    public Setting<Boolean> box = register(new Setting("BoxSetting", true, z -> boxParent.getValue()));
-    public Setting<Integer> boxRed = register(new Setting<>("BoxRed", 255, 0, 255, z -> box.getValue() && boxParent.getValue()));
-    public Setting<Integer> boxGreen = register(new Setting<>("BoxGreen", 255, 0, 255, z -> box.getValue() && boxParent.getValue()));
-    public Setting<Integer> boxBlue = register(new Setting<>("BoxBlue", 255, 0, 255, z -> box.getValue() && boxParent.getValue()));
-    public Setting<Integer> boxAlpha = register(new Setting<>("BoxAlpha", 120, 0, 255, z -> box.getValue() && boxParent.getValue()));
-    public Setting<Boolean> outlineParent = register(new Setting<>("Outline", true, false));
-    public Setting<Boolean> outline = register(new Setting<>("OutlineSetting", true, false, z -> outlineParent.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>("OutlineRed", 255, 0, 255, z -> outline.getValue() && outlineParent.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("OutlineGreen", 255, 0, 255, z -> outline.getValue() && outlineParent.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("OutlineBlue", 255, 0, 255, z -> outline.getValue() && outlineParent.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("OutlineAlpha", 255, 0, 255, z -> outline.getValue() && outlineParent.getValue()));
-    public Setting<Float> lineWidth = register(new Setting<>("LineWidth", 1.0f, 0.1f, 5.0f, z -> outline.getValue() && outlineParent.getValue()));
+    public IntegerSetting time = new IntegerSetting("Duration", 500, 50, 3000, this);
+    public ParentSetting boxParent = new ParentSetting("Box", false, this);
+    public BooleanSetting box = new BooleanSetting("Box Setting", false, this, z -> boxParent.getValue());
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> box.getValue() && boxParent.getValue());
+
+    public ParentSetting outlineParent = new ParentSetting("Outline", false, this);
+    public BooleanSetting outline = new BooleanSetting("OutlineSetting", true, this, z -> outlineParent.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> outline.getValue() && outlineParent.getValue());
+    public FloatSetting lineWidth = new FloatSetting("LineWidth", 1.0f, 0.1f, 5.0f, this, z -> outline.getValue() && outlineParent.getValue());
+
     public Timer timer = new Timer();
     public double x;
     public double y;
     public double z;
     long startTime;
-    int alpha = boxAlpha.getValue();
-    int alphaOutline = outlineAlpha.getValue();
+    int alpha = boxColor.getColor().getAlpha();
+    int alphaOutline = outlineColor.getColor().getAlpha();
     long urMom;
     double normal;
-
-    public ChorusPredict() {
-        super("Chorus Predict", Category.Miscellaneous, "Renders where a player's chorus will go to.");
-    }
 
     public void onLogin() {
         if (isEnabled()) {
@@ -61,6 +55,7 @@ public class ChorusPredict extends Module {
         timer.reset();
         startTime = System.currentTimeMillis();
     }
+
     @Override
     public void renderWorldLastEvent(RenderWorldEvent render3DEvent) {
         if (timer.passedMs(time.getValue())) return;
@@ -73,13 +68,10 @@ public class ChorusPredict extends Module {
             alphaOutline = (int) (normal * (double) alpha);
         }
         AxisAlignedBB pos = RenderUtil.interpolateAxis(new AxisAlignedBB(x - 0.3, y, z - 0.3, x + 0.3, y + 1.8, z + 0.3));
-        if (outline.getValue()) {
-            RenderUtil.drawBlockOutline(pos, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), alphaOutline), lineWidth.getValue());
-        }
-        if (box.getValue()) {
-            RenderUtil.drawFilledBox(pos, ColorUtil.toRGBA(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), alpha));
-
-        }
+        if (outline.getValue())
+            RenderUtil.drawBlockOutline(pos, new Color(outlineColor.getColor().getRed(), outlineColor.getColor().getGreen(), outlineColor.getColor().getBlue(), alphaOutline), lineWidth.getValue());
+        if (box.getValue())
+            RenderUtil.drawFilledBox(pos, ColorUtil.toRGBA(boxColor.getColor().getRed(), boxColor.getColor().getGreen(), boxColor.getColor().getBlue(), alpha));
     }
 
     public static double normalize(double value, double min, double max) {

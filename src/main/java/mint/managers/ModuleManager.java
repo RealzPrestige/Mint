@@ -63,7 +63,6 @@ public class ModuleManager {
         //moduleList.add(new PacketManipulator());
         moduleList.add(new SelfAnvil());
         moduleList.add(new TabTweaks());
-        moduleList.add(new AntiCrystalDamage());
         moduleList.add(new HotbarRefiller());
 
         /** Movement **/

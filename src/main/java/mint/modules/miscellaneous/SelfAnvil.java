@@ -1,8 +1,11 @@
 package mint.modules.miscellaneous;
 
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -12,20 +15,21 @@ import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 
+@ModuleInfo(name = "Self Anvil", category = Module.Category.Miscellaneous, description = "Lets an anvil fall on top of you to compensate for burrow patch...")
 public class SelfAnvil extends Module {
 
-    public Setting<BaseBlock> baseBlock = register(new Setting("Base Block", BaseBlock.Obsidian));
+    public EnumSetting baseBlock = new EnumSetting("Base Block", BaseBlock.Obsidian, this);
 
     public enum BaseBlock {Obsidian, Anvils}
 
-    public Setting<Integer> startDelay = register(new Setting("Start Delay", 50, 0, 200));
-    public Setting<Integer> placeDelay = register(new Setting("Place Delay", 20, 0, 200));
-    public Setting<Boolean> smart = register(new Setting<>("Smart", false));
-    public Setting<Integer> smartRange = register(new Setting("Smart Range", 10, 0, 15, z -> smart.getValue()));
-    public Setting<Boolean> packet = register(new Setting<>("Packet", false));
-    public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
-    public Setting<Boolean> swing = register(new Setting<>("Swing", false));
-    public Setting<EnumHand> swingMode = register(new Setting<>("Swing Mode", EnumHand.MAIN_HAND, z -> swing.getValue()));
+    public IntegerSetting startDelay = new IntegerSetting("Start Delay", 50, 0, 200, this);
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 20, 0, 200, this);
+    public BooleanSetting smart = new BooleanSetting("Smart", false, this);
+    public IntegerSetting smartRange = new IntegerSetting("Smart Range", 10, 0, 15, this, z -> smart.getValue());
+    public BooleanSetting packet = new BooleanSetting("Packet", false, this);
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
+    public BooleanSetting swing = new BooleanSetting("Swing", false, this);
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", EnumHand.MAIN_HAND, this, z -> swing.getValue());
 
     int blockSlot;
     BlockPos pos;
@@ -35,10 +39,6 @@ public class SelfAnvil extends Module {
     BlockPos upperBlockPos = null;
     BlockPos baseBlockPos = null;
     BlockPos anvilBlockPos = null;
-
-    public SelfAnvil() {
-        super("Self Anvil", Category.Miscellaneous, "Lets an anvil fall on top of you to compensate for burrow patch..."); //kys
-    }
 
     public void onEnable() {
         startTimer.reset();
@@ -76,31 +76,25 @@ public class SelfAnvil extends Module {
 
         if (!mc.player.onGround) return;
 
-        if (anvilSlot == -1) return;
-
-        switch (baseBlock.getValue()) {
-            case Obsidian: {
-                blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
-                break;
-            }
-            case Anvils: {
-                blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ANVIL));
-                break;
-            }
-        }
+        if (anvilSlot == -1)
+            return;
+        if (baseBlock.getValue().equals(BaseBlock.Obsidian))
+            blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
+        else if (baseBlock.getValue().equals(BaseBlock.Anvils))
+            blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ANVIL));
 
         if (blockSlot == -1) return;
 
         if (timer.passedMs(placeDelay.getValue()) && !hasBaseBlocks()) {
-            placeBaseBlocks(blockSlot, rotate.getValue(), packet.getValue(), swing.getValue(), swingMode.getValue());
+            placeBaseBlocks(blockSlot, rotate.getValue(), packet.getValue(), swing.getValue(), (EnumHand) swingMode.getValue());
             timer.reset();
         }
         if (timer.passedMs(placeDelay.getValue())) {
-            placeUpperBaseBlocks(blockSlot, rotate.getValue(), packet.getValue(), swing.getValue(), swingMode.getValue());
+            placeUpperBaseBlocks(blockSlot, rotate.getValue(), packet.getValue(), swing.getValue(), (EnumHand) swingMode.getValue());
             timer.reset();
         }
         if (!mc.world.getBlockState(pos.north().up().up()).getBlock().equals(Blocks.AIR) || !mc.world.getBlockState(pos.east().up().up()).getBlock().equals(Blocks.AIR) || !mc.world.getBlockState(pos.south().up().up()).getBlock().equals(Blocks.AIR) || !mc.world.getBlockState(pos.west().up().up()).getBlock().equals(Blocks.AIR)) {
-            placeAnvil(anvilSlot, rotate.getValue(), packet.getValue(), swing.getValue(), swingMode.getValue());
+            placeAnvil(anvilSlot, rotate.getValue(), packet.getValue(), swing.getValue(), (EnumHand) swingMode.getValue());
             disable();
         }
     }

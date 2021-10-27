@@ -1,9 +1,13 @@
 package mint.modules.miscellaneous;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.setting.Setting;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -17,16 +21,17 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.Objects;
 
+@ModuleInfo(name = "Entity Crammer", category = Module.Category.Miscellaneous, description = "Crams entities to fuck ur opp")
 public class EntityCrammer extends Module {
     public static EntityCrammer INSTANCE = new EntityCrammer();
-    public Setting<Float> targetRange = register(new Setting("Target Range", 10.0f, 0.0f, 15.0f));
-    public Setting<Float> placeRange = register(new Setting("Place Range", 5.0f, 0.0f, 6.0f));
-    public Setting<Integer> startDelay = register(new Setting("Start Rail Delay", 100, 0, 1000));
-    public Setting<Integer> cartPlaceDelay = register(new Setting("Cart Place Delay", 100, 0, 1000));
-    public Setting<Boolean> packet = register(new Setting<>("Packet", false));
-    public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
-    public Setting<Boolean> swing = register(new Setting<>("Swing", false));
-    public Setting<SwingHand> swingMode = register(new Setting<>("Swing Mode", SwingHand.MAINHAND, z -> swing.getValue()));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 10.0f, 0.0f, 15.0f, this);
+    public FloatSetting placeRange = new FloatSetting("Place Range", 5.0f, 0.0f, 6.0f, this);
+    public IntegerSetting startDelay = new IntegerSetting("Start Rail Delay", 100, 0, 1000, this);
+    public IntegerSetting cartPlaceDelay = new IntegerSetting("Cart Place Delay", 100, 0, 1000, this);
+    public BooleanSetting packet = new BooleanSetting("Packet", false, this);
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
+    public BooleanSetting swing = new BooleanSetting("Swing", false, this);
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", SwingHand.MAINHAND, this, z -> swing.getValue());
 
     public enum SwingHand {MAINHAND, OFFHAND, PACKET}
 
@@ -36,7 +41,6 @@ public class EntityCrammer extends Module {
     public BlockPos targetPos;
 
     public EntityCrammer() {
-        super("Entity Crammer", Category.Miscellaneous, "Crams entities to fuck ur opp");
         setInstance();
     }
 
@@ -58,18 +62,18 @@ public class EntityCrammer extends Module {
     }
 
     public void onUpdate() {
-        if(NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         target = EntityUtil.getTarget(targetRange.getValue());
-        if(target == null)
+        if (target == null)
             return;
         targetPos = PlayerUtil.getPlayerPos(target);
 
         if (!startTimer.passedMs(startDelay.getValue()))
             return;
 
-        if(mc.player.getDistanceSq(targetPos) > placeRange.getValue())
+        if (mc.player.getDistanceSq(targetPos) > placeRange.getValue())
             return;
 
         if (mc.world.getBlockState(targetPos).getBlock().equals(Blocks.AIR)) {
@@ -79,12 +83,12 @@ public class EntityCrammer extends Module {
             }
         }
 
-        if(!mc.player.getHeldItemOffhand().getItem().equals(Items.MINECART) && timer.passedMs(cartPlaceDelay.getValue())) {
+        if (!mc.player.getHeldItemOffhand().getItem().equals(Items.MINECART) && timer.passedMs(cartPlaceDelay.getValue())) {
             MessageManager.sendMessage(ChatFormatting.BOLD + "Entity Crammer: " + ChatFormatting.RESET + "No minecart found in your Offhand, make sure to use " + ChatFormatting.AQUA + "Mint" + ChatFormatting.RESET + " Offhand, toggling!");
             disable();
         }
 
-        if(timer.passedMs(cartPlaceDelay.getValue()) && mc.world.getBlockState(targetPos).getBlock().equals(Blocks.RAIL)) {
+        if (timer.passedMs(cartPlaceDelay.getValue()) && mc.world.getBlockState(targetPos).getBlock().equals(Blocks.RAIL)) {
             Objects.requireNonNull(mc.getConnection()).sendPacket(new CPacketPlayerTryUseItemOnBlock(targetPos, EnumFacing.UP, EnumHand.OFF_HAND, 0.5f, 0.5f, 0.5f));
             timer.reset();
         }
@@ -106,16 +110,12 @@ public class EntityCrammer extends Module {
 
 
     public void swingArm() {
-        switch (swingMode.getValue()) {
-            case MAINHAND:
-                mc.player.swingArm(EnumHand.MAIN_HAND);
-                break;
-            case OFFHAND:
-                mc.player.swingArm(EnumHand.OFF_HAND);
-                break;
-            case PACKET:
-                mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                break;
-        }
+        if (swingMode.getValue().equals(SwingHand.MAINHAND))
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+        else if (swingMode.getValue().equals(SwingHand.OFFHAND))
+            mc.player.swingArm(EnumHand.OFF_HAND);
+        else if (swingMode.getValue().equals(SwingHand.PACKET))
+            mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+
     }
 }

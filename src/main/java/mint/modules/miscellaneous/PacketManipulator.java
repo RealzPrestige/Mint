@@ -1,30 +1,30 @@
 package mint.modules.miscellaneous;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Packet Manipulator", category = Module.Category.Miscellaneous, description = "Manipulates packets.")
 public class PacketManipulator extends Module {
-
-    public PacketManipulator() {
-        super("PacketManipulator", Module.Category.Miscellaneous, "Manipulates packets.");
-    }
 
     /*
     a test thingy dont mind it for now
      */
 
-    public Setting<Boolean> cancel = register(new Setting("Cancel", true, false));
-    public Setting<Boolean> s = register(new Setting("Server", true, false, z -> cancel.getValue()));
+    public ParentSetting cancel = new ParentSetting("Cancel", false, this);
+    public BooleanSetting s = new BooleanSetting("Server", false, this, z -> cancel.getValue());
 
-    public Setting<Boolean> c = register(new Setting("Client", true, false, z -> cancel.getValue()));
-    public Setting<Boolean> cplayer = register(new Setting("Player", true));
+    public ParentSetting c = new ParentSetting("Client", false, this, z -> cancel.getValue());
+    public BooleanSetting cplayer = new BooleanSetting("Player", true, this);
 
-    public Setting<Boolean> send = register(new Setting("Send", true, false));
-    public Setting<Integer> packet1 = register(new Setting("Packet1", 1, 1, 10, z -> send.getValue()));
+    public ParentSetting send = new ParentSetting("Send", false, this);
+    public IntegerSetting packet1 = new IntegerSetting("Packet1", 1, 1, 10, this, z -> send.getValue());
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {

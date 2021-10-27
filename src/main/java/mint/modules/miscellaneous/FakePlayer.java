@@ -2,11 +2,13 @@ package mint.modules.miscellaneous;
 
 import com.mojang.authlib.GameProfile;
 import mint.Mint;
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.modules.core.Notifications;
 import mint.modules.visual.PopESP;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.StringSetting;
 import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -30,16 +32,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Random;
 import java.util.UUID;
 
+@ModuleInfo(name = "Fake Player", category = Module.Category.Miscellaneous, description = "Spawns a fake entity to test modules on.")
 public class FakePlayer extends Module {
-    public Setting<Boolean> inv = register(new Setting<>("Inv", false));
-    public Setting<Boolean> pop = register(new Setting<>("Pop", false));
-    public Setting<Boolean> moving = register(new Setting<>("Moving", false));
-    public Setting<String> name = register(new Setting<>("Name", "MintClient"));
+    public BooleanSetting inv = new BooleanSetting("Inv", false, this);
+    public BooleanSetting pop = new BooleanSetting("Pop", false, this);
+    public BooleanSetting moving = new BooleanSetting("Moving", false, this);
+    public StringSetting name = new StringSetting("Name", "MintClient", this);
     private EntityOtherPlayerMP fake_player;
-
-    public FakePlayer() {
-        super("Fake Player", Category.Miscellaneous, "Spawns a fake entity to test modules on.");
-    }
 
     @Override
     public void onEnable() {

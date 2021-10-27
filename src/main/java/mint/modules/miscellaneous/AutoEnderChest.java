@@ -1,9 +1,11 @@
 package mint.modules.miscellaneous;
 
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
 import mint.utils.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,23 +17,20 @@ import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 
+@ModuleInfo(name = "Auto Ender Chest", category = Module.Category.Miscellaneous, description = "Farms Ender Chests automatically for you.")
 public class AutoEnderChest extends Module {
 
-    public Setting<Boolean> rotate = register(new Setting("Rotate", false));
-    public Setting<Boolean> packet = register(new Setting("PacketPlace", false));
-    public Setting<Boolean> swing = register(new Setting("Swing", false));
-    public Setting<Hand> enumHand = register(new Setting("Hand", Hand.Mainhand, z -> swing.getValue()));
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
+    public BooleanSetting packet = new BooleanSetting("PacketPlace", false, this);
+    public BooleanSetting swing = new BooleanSetting("Swing", false, this);
+    public EnumSetting enumHand = new EnumSetting("Hand", Hand.Mainhand, this, z -> swing.getValue());
 
     public enum Hand {Mainhand, Offhand}
 
-    public Setting<Boolean> autoSwitch = register(new Setting("Auto Switch", false));
-    public Setting<Boolean> safeOnly = register(new Setting("Only Safe", false));
+    public BooleanSetting autoSwitch = new BooleanSetting("Auto Switch", false, this);
+    public BooleanSetting safeOnly = new BooleanSetting("Only Safe", false, this);
     Timer timer = new Timer();
     Timer startTimer = new Timer();
-
-    public AutoEnderChest() {
-        super("Auto Ender Chest", Category.Miscellaneous, "Farms Ender Chests automatically for you.");
-    }
 
     public void onUpdate() {
         if (NullUtil.fullNullCheck())

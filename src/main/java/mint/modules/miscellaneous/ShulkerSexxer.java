@@ -1,9 +1,13 @@
 package mint.modules.miscellaneous;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.setting.Setting;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,23 +19,20 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.Objects;
 
+@ModuleInfo(name = "Shulker Sexxer", category = Module.Category.Miscellaneous, description = "Sexxes Shulkers")
 public class ShulkerSexxer extends Module {
 
-    Setting<SexType> sexType = register(new Setting("Sex Type", SexType.BREAK));
+    public EnumSetting sexType = new EnumSetting("Sex Type", SexType.BREAK, this);
 
     enum SexType {BREAK, OPEN}
 
-    Setting<Float> range = register(new Setting("Range", 5.0f, 0.0f, 6.0f));
-    Setting<Integer> delay = register(new Setting("Delay", 100, 0, 1000));
-    Setting<Boolean> safeOnly = register(new Setting("Safe Only", false));
-    Setting<Boolean> debug = register(new Setting("Debug", false));
+    public FloatSetting range = new FloatSetting("Range", 5.0f, 0.0f, 6.0f, this);
+    public IntegerSetting delay = new IntegerSetting("Delay", 100, 0, 1000, this);
+    public BooleanSetting safeOnly = new BooleanSetting("Safe Only", false, this);
+    public BooleanSetting debug = new BooleanSetting("Debug", false, this);
 
     Timer breakTimer = new Timer();
     Timer openTimer = new Timer();
-
-    public ShulkerSexxer() {
-        super("Shulker Sexxer", Category.Miscellaneous, "Sexxes shulkers");
-    }
 
     public void onUpdate() {
         if (NullUtil.fullNullCheck())
@@ -67,7 +68,7 @@ public class ShulkerSexxer extends Module {
                     if (pickSlot != -1)
                         InventoryUtil.switchToSlot(pickSlot);
                     else {
-                        MessageManager.sendMessage(ChatFormatting.BOLD + " Shulker Sexxer: "  + ChatFormatting.RESET + "No " + ChatFormatting.RED + "Pickaxe" + ChatFormatting.RESET + " found, toggling!");
+                        MessageManager.sendMessage(ChatFormatting.BOLD + " Shulker Sexxer: " + ChatFormatting.RESET + "No " + ChatFormatting.RED + "Pickaxe" + ChatFormatting.RESET + " found, toggling!");
                         disable();
                     }
                 }
@@ -76,7 +77,7 @@ public class ShulkerSexxer extends Module {
                         mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, EnumFacing.UP));
                         mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, EnumFacing.UP));
                         if (debug.getValue())
-                            MessageManager.sendMessage(ChatFormatting.BOLD + " Shulker Sexxer: " + ChatFormatting.RESET + "Position found at:" + ChatFormatting.AQUA + " X: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getX(), 0) + ChatFormatting.RESET + "," + ChatFormatting.AQUA + " Y: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getY(), 0) + ChatFormatting.RESET + "," + ChatFormatting.AQUA + " Z: " +  ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getZ(), 0) + ChatFormatting.RESET + "!");
+                            MessageManager.sendMessage(ChatFormatting.BOLD + " Shulker Sexxer: " + ChatFormatting.RESET + "Position found at:" + ChatFormatting.AQUA + " X: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getX(), 0) + ChatFormatting.RESET + "," + ChatFormatting.AQUA + " Y: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getY(), 0) + ChatFormatting.RESET + "," + ChatFormatting.AQUA + " Z: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getZ(), 0) + ChatFormatting.RESET + "!");
                         breakTimer.reset();
                     } else if (sexType.getValue().equals(SexType.OPEN) && openTimer.passedMs(delay.getValue())) {
                         if (mc.currentScreen == null)
