@@ -1,27 +1,27 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.EntityUtil;
 import mint.utils.MathUtil;
 import mint.utils.NullUtil;
 import net.minecraft.entity.item.EntityBoat;
 
+@ModuleInfo(name = "Boat Fly", category = Module.Category.Movement, description = "Fly using boats.")
 public class BoatFly extends Module {
 
-    public BoatFly() {
-        super("BoatFly", Module.Category.Movement, "Fly using boats.");
-    }
+    public ParentSetting spoofParent = new ParentSetting("Spoof", false, this);
+    public BooleanSetting noClip = new BooleanSetting("NoClip", true, this, z -> spoofParent.getValue());
+    public BooleanSetting onGround = new BooleanSetting("OnGround", false, this, z -> spoofParent.getValue());
+    public BooleanSetting cancelGravity = new BooleanSetting("CancelGravity", true, this, z -> spoofParent.getValue());
 
-    public Setting<Boolean> spoofParent = register(new Setting("Spoof", true, false));
-    public Setting<Boolean> noClip = register(new Setting("NoClip", true, z -> spoofParent.getValue()));
-    public Setting<Boolean> onGround = register(new Setting("OnGround", false, z -> spoofParent.getValue()));
-    public Setting<Boolean> cancelGravity = register(new Setting("CancelGravity", true, z -> spoofParent.getValue()));
-
-    public Setting<Boolean> flightParent = register(new Setting("Flight", true, false));
-    public Setting<Boolean> stopUnloaded = register(new Setting("Pause In Unloaded", true));
-    public Setting<Float> hSpeed = register(new Setting("Horizontal speed", 2.0f, 0.1f, 2.5f, z -> flightParent.getValue()));
-    public Setting<Float> vSpeed = register(new Setting("Vertical speed", 2.0f, 0.1f, 2.5f, z -> flightParent.getValue()));
+    public ParentSetting flightParent = new ParentSetting("Flight", false, this);
+    public BooleanSetting stopUnloaded = new BooleanSetting("Pause In Unloaded", true, this);
+    public FloatSetting hSpeed = new FloatSetting("Horizontal speed", 2.0f, 0.1f, 2.5f, this, z -> flightParent.getValue());
+    public FloatSetting vSpeed = new FloatSetting("Vertical speed", 2.0f, 0.1f, 2.5f, this, z -> flightParent.getValue());
 
     @Override
     public void onUpdate() {

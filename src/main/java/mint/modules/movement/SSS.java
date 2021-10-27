@@ -1,9 +1,10 @@
 package mint.modules.movement;
 
 import com.mojang.authlib.GameProfile;
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.EntityUtil;
 import mint.utils.MathUtil;
 import mint.utils.NullUtil;
@@ -16,32 +17,29 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * some shit is pasted
  */
 
+@ModuleInfo(name = "SSS", category = Module.Category.Movement, description = "idk man i didnt make this im just writing the descriptions")
 public class SSS extends Module {
 
-    public SSS() {
-        super("SSS", Module.Category.Movement, "Just doing funny shit");
-    }
+    public BooleanSetting movementParent = new BooleanSetting("Movement", false, this);
 
-    public Setting<Boolean> movementParent = register(new Setting("Movement", true, false));
+    public EnumSetting moveType = new EnumSetting("MoveType", MoveType.YPort, this, z -> movementParent.getValue());
 
-    public Setting<MoveType> moveType = register(new Setting("MoveType", MoveType.YPort, z -> movementParent.getValue()));
-
-    public Setting<Boolean> step = register(new Setting("Step", true, z -> movementParent.getValue()));
-    public Setting<Double> yPortSpeed = register(new Setting("YPortSpeed", 0.1d, 0.0d, 1.0d, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort));
-    public Setting<Float> fallSpeed = register(new Setting("FallSpeed", 0.8f, 0.1f, 9.0f, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort));
-    public Setting<Integer> yMotion = register(new Setting("YMotion", 390, 350, 420, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort));
+    public BooleanSetting step = new BooleanSetting("Step", true, this, z -> movementParent.getValue());
+    public DoubleSetting yPortSpeed = new DoubleSetting("YPortSpeed", 0.1d, 0.0d, 1.0d, this, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
+    public FloatSetting fallSpeed = new FloatSetting("FallSpeed", 0.8f, 0.1f, 9.0f, this, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
+    public IntegerSetting yMotion = new IntegerSetting("YMotion", 390, 350, 420, this, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
 
 
-    public Setting<Boolean> playerParent = register(new Setting("Player", true, false));
+    public BooleanSetting playerParent = new BooleanSetting("Player", true, this);
 
-    public Setting<PlayerType> playerType = register(new Setting("Type", PlayerType.Blink, z -> playerParent.getValue()));
+    public EnumSetting playerType = new EnumSetting("Type", PlayerType.Blink, this, z -> playerParent.getValue());
 
     //blink
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.Both, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink));
-    public Setting<Boolean> renderPlayer = register(new Setting("Visualize", false, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink));
-    public Setting<DisableMode> disableMode = register(new Setting("Disable", DisableMode.Distance, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink));
-    public Setting<Integer> ticksVal = register(new Setting("Ticks", 20, 1, 100, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Ticks));
-    public Setting<Double> distanceVal = register(new Setting("Distance", 3.2d, 0.1d, 15.0d, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Distance));
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Both, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
+    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
+    public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
+    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 20, 1, 100, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Ticks);
+    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Distance);
 
 
     //something else
@@ -114,7 +112,7 @@ public class SSS extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
-        if(!isEnabled())
+        if (!isEnabled())
             return;
         if (isEnabled() && playerType.getValue() == PlayerType.Blink && mode.getValue() != Mode.Server) {
             event.setCanceled(true); // or add == client || == both
@@ -123,7 +121,7 @@ public class SSS extends Module {
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
-        if(!isEnabled())
+        if (!isEnabled())
             return;
         if (isEnabled() && playerType.getValue() == PlayerType.Blink && mode.getValue() != Mode.Client) {
             event.setCanceled(true);

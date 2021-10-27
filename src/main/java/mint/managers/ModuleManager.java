@@ -25,6 +25,7 @@ public class ModuleManager {
     public ArrayList<Module> moduleList = new ArrayList<>();
     public List<Module> sortedModules = new ArrayList<>();
     public static Boolean doneLoad = true;
+
     public void init() {
         if (doneLoad) {
             SignExploit.nullCheck();
@@ -197,7 +198,7 @@ public class ModuleManager {
 
     public void onUnloadPost() {
         for (Module module : moduleList) {
-            module.enabled.setValue(false);
+            module.setEnabled(false);
         }
     }
 
@@ -206,7 +207,7 @@ public class ModuleManager {
             return;
 
         moduleList.forEach(module -> {
-            if (module.getBind().getKey() == eventKey) {
+            if (module.bind.getKey() == eventKey) {
                 module.toggle();
             }
         });

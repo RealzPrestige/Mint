@@ -1,10 +1,14 @@
 package mint.modules.movement;
 
 import com.mojang.authlib.GameProfile;
-import mint.setting.Setting;
 import mint.events.MoveEvent;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.DoubleSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.*;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.init.Items;
@@ -14,38 +18,37 @@ import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+@ModuleInfo(name = "Tick Shift", category = Module.Category.Movement, description = "Sets timer for certain duration")
 public class TickShift extends Module {
 
-    public Setting<Boolean> step = register(new Setting<>("Step", Boolean.valueOf(Boolean.FALSE)));
-    public Setting<Integer> timerFactor = register(new Setting<>("Factor", 1, 0, 9));
+    public BooleanSetting step = new BooleanSetting("Step", Boolean.valueOf(String.valueOf(new String(ByteBuffer.wrap(String.valueOf(true).getBytes(StandardCharsets.UTF_8)).array()).toCharArray())), this);
+    public IntegerSetting timerFactor = new IntegerSetting("Factor", 1, 0, 9, this);
 
-    public Setting<DisableMode> disableMode = register(new Setting<>("Disable", DisableMode.Distance));
+    public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this);
 
     public enum DisableMode {Ticks, Distance, None}
 
-    public Setting<Integer> ticksVal = register(new Setting<>("Ticks", 12, 1, 100, z -> disableMode.getValue() == DisableMode.Ticks));
-    public Setting<Double> distanceVal = register(new Setting<>("Distance", 3.2d, 0.1d, 15.0d, z -> disableMode.getValue() == DisableMode.Distance));
+    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 12, 1, 100, this, z -> disableMode.getValue() == DisableMode.Ticks);
+    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, z -> disableMode.getValue() == DisableMode.Distance);
 
-    public Setting<Boolean> blink = register(new Setting<>("Blink", false));
-    public Setting<D> mode = register(new Setting<>("Mode", D.Client, z -> blink.getValue()));
+    public BooleanSetting blink = new BooleanSetting("Blink", false, this);
+    public EnumSetting mode = new EnumSetting("Mode", D.Client, this, z -> blink.getValue());
 
     public enum D {Client, Server, Both}
 
-    public Setting<Boolean> renderPlayer = register(new Setting("Visualize", false, z -> blink.getValue()));
-    public Setting<Boolean> test = register(new Setting("Phobos Test", false, z -> mode.getValue() != D.Server && blink.getValue()));
+    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, z -> blink.getValue());
+    public BooleanSetting test = new BooleanSetting("Phobos Test", false, this, z -> mode.getValue() != D.Server && blink.getValue());
 
     Queue<Packet<?>> packets = new ConcurrentLinkedQueue<>();
     EntityOtherPlayerMP fakePlayer;
     BlockPos startPos = null;
     int packetsCanceled = 0;
     int ticks;
-
-    public TickShift() {
-        super("Tick Shift", Category.Movement, "Does smth");
-    }
 
     @Override
     public void onUpdate() {

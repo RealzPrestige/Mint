@@ -1,7 +1,10 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
 import mint.utils.EntityUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -11,18 +14,19 @@ import net.minecraft.network.play.client.CPacketPlayer;
  * @author kambing
  * catalyst for ncp
  */
+
+@ModuleInfo(name = "Step", category = Module.Category.Movement, description = "Allows you to step up blocks.")
 public class Step extends Module {
     public int ticks;
     public static Step INSTANCE = new Step();
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Vanilla, this);
 
-    public enum Mode {Vanilla, Normal, Timer, NCP}
+    public enum Mode {Vanilla, Timer, NCP}
 
-    public Setting<Boolean> cancelLiquids = register(new Setting("Pause In Liquids", true));
-    public Setting<Float> height = register(new Setting("Height", 2.0f, 1.0f, 4.0f));
+    public BooleanSetting cancelLiquids = new BooleanSetting("Pause In Liquids", true, this);
+    public FloatSetting height = new FloatSetting("Height", 2.0f, 1.0f, 4.0f, this);
 
     public Step() {
-        super("Step", Category.Movement, "Allows you to step up blocks.");
         this.setInstance();
     }
 

@@ -1,7 +1,11 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.DoubleSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
 import mint.utils.EntityUtil;
 import mint.utils.NullUtil;
 import mint.utils.PlayerUtil;
@@ -10,24 +14,21 @@ import net.minecraft.network.play.client.CPacketEntityAction;
 
 import java.util.Objects;
 
+@ModuleInfo(name = "Water Speed", category = Module.Category.Movement, description = "Makes swim fast vroom vroom in le water")
 public class WaterSpeed extends Module {
 
-    public Setting<Boolean> packetSneak = register(new Setting<>("Packet Sneak", false));
-    public Setting<Double> upFactor = register(new Setting<>("Up Factor", 1.0, 0.0, 20.0));
-    public Setting<Double> downFactor = register(new Setting<>("Down Factor", 1.0, 0.0, 20.0));
-    public Setting<Double> horizontalFactor = register(new Setting<>("Horizontal Factor", 1.0, 0.0, 20.0));
-    public Setting<Boolean> consistent = register(new Setting<>("Consistent", false));
-    public Setting<OnGround> onGround = register(new Setting<>("On Ground", OnGround.Cancel));
-    public Setting<Boolean> useTimer = register(new Setting<>("Use Timer", false));
-    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.1f, 1.0f, 2.0f, z -> useTimer.getValue()));
+    public BooleanSetting packetSneak = new BooleanSetting("Packet Sneak", false, this);
+    public DoubleSetting upFactor = new DoubleSetting("Up Factor", 1.0, 0.0, 20.0, this);
+    public DoubleSetting downFactor = new DoubleSetting("Down Factor", 1.0, 0.0, 20.0, this);
+    public DoubleSetting horizontalFactor = new DoubleSetting("Horizontal Factor", 1.0, 0.0, 20.0, this);
+    public BooleanSetting consistent = new BooleanSetting("Consistent", false, this);
+    public EnumSetting onGround = new EnumSetting("On Ground", OnGround.Cancel, this);
+    public BooleanSetting useTimer = new BooleanSetting("Use Timer", false, this);
+    public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.1f, 1.0f, 2.0f, this, z -> useTimer.getValue());
 
     public enum OnGround {Cancel, Offground}
 
     boolean isPacketSneaking;
-
-    public WaterSpeed() {
-        super("Water Speed", Category.Movement, "Makes swim fast vroom vroom in le water");
-    }
 
     public void onToggle() {
         mc.timer.tickLength = 50.0f / 1.0f;

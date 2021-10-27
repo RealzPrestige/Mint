@@ -1,8 +1,11 @@
 package mint.modules.movement;
 
 import com.google.common.collect.Sets;
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.EntityUtil;
 import mint.utils.NullUtil;
 import mint.utils.Timer;
@@ -12,22 +15,19 @@ import net.minecraft.util.math.Vec3i;
 
 import java.util.HashSet;
 
+@ModuleInfo(name = "Anchor", category = Module.Category.Movement, description = "Slows down when ur close to a hole.")
 public class Anchor extends Module {
 
-    public Setting<Float> holeDistance = register(new Setting("Hole Distance", 1.0f, 0.0f, 3.0f));
-    public Setting<Float> speed = register(new Setting("Speed", 1.0f, 0.0f, 10.0f));
-    public Setting<Boolean> onGround = register(new Setting("On Ground Only", false));
-    public Setting<Integer> exitHoleDelay = register(new Setting("Exit Hole Delay", 1000, 0, 2000));
+    public FloatSetting holeDistance =new FloatSetting("Hole Distance", 1.0f, 0.0f, 3.0f, this);
+    public FloatSetting speed = new FloatSetting("Speed", 1.0f, 0.0f, 10.0f, this);
+    public BooleanSetting onGround = new BooleanSetting("On Ground Only", false, this);
+    public IntegerSetting exitHoleDelay = new IntegerSetting("Exit Hole Delay", 1000, 0, 2000, this);
 
     public int updates;
 
     HashSet<BlockPos> bedrockholes = Sets.newHashSet();
     HashSet<BlockPos> obsidianholes = Sets.newHashSet();
     Timer timer = new Timer();
-
-    public Anchor() {
-        super("Anchor", Module.Category.Movement, "Slows down when ur close to a hole.");
-    }
 
     public void onUpdate() {
         if (NullUtil.fullNullCheck())

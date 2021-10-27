@@ -1,19 +1,19 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.DoubleSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.EntityUtil;
 import mint.utils.NullUtil;
 
+@ModuleInfo(name = "YPort", category = Module.Category.Movement, description = "idk")
 public class YPort extends Module {
 
-    public YPort() {
-        super("YPort", Module.Category.Movement,"idk");
-    }
-
-    public Setting<Double> speed = register(new Setting("YPortSpeed", 0.1d, 0.0d, 1.0d));
-    public Setting<Float> fallSpeed = register(new Setting("FallSpeed", 0.8f, 0.1f, 9.0f));
-    public Setting<Integer> yMotion = register(new Setting("YMotion", 390, 350, 420));
+    public DoubleSetting speed = new DoubleSetting("YPortSpeed", 0.1d, 0.0d, 1.0d, this);
+    public FloatSetting fallSpeed = new FloatSetting("FallSpeed", 0.8f, 0.1f, 9.0f, this);
+    public IntegerSetting yMotion = new IntegerSetting("YMotion", 390, 350, 420, this);
 
     @Override
     public void onToggle() {

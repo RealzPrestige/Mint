@@ -1,19 +1,18 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.FloatSetting;
 import mint.utils.EntityUtil;
 import mint.utils.NullUtil;
 import net.minecraft.network.play.client.CPacketPlayer;
 
+@ModuleInfo(name = "Clip", category = Module.Category.Movement, description = "VClip bypass for crystalpvp cc.")
 public class Clip extends Module {
 
-    public Clip() {
-        super("Clip", Module.Category.Movement, "VClip bypass for crystalpvp cc.");
-    }
-
-    public Setting<Float> offset = register(new Setting("Y Offset", 1.4f, 1.1f, 2.0f));
-    public Setting<Boolean> offground = register(new Setting("Offground", false));
+    public FloatSetting offset = new FloatSetting("Y Offset", 1.4f, 1.1f, 2.0f, this);
+    public BooleanSetting offground = new BooleanSetting("Off ground", false, this);
 
     @Override
     public void onUpdate() {

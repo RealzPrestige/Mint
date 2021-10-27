@@ -1,28 +1,27 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.events.EntityCollisionEvent;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
 import mint.utils.NullUtil;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Velocity", category = Module.Category.Movement, description = "Changes Velocity of stuff")
 public class Velocity extends Module {
-    public Setting<Boolean> entityVelocity = register(new Setting<>("Entity Velocity", false));
-    public Setting<Boolean> entityCollisionPush = register(new Setting<>("Entity Push Collision", false));
-    public Setting<Boolean> entityCollisionBlock = register(new Setting<>("Entity Block Collision", false));
-    public Setting<Boolean> webCollision = register(new Setting<>("Entity Web Collision", false));
-    public Setting<WebCollisionMode> webCollisionMode = register(new Setting<>("Entity Web Collision Mode", WebCollisionMode.Speed, z -> webCollision.getValue()));
+    public BooleanSetting entityVelocity = new BooleanSetting("Entity Velocity", false, this);
+    public BooleanSetting entityCollisionPush = new BooleanSetting("Entity Push Collision", false, this);
+    public BooleanSetting entityCollisionBlock = new BooleanSetting("Entity Block Collision", false, this);
+    public BooleanSetting webCollision = new BooleanSetting("Entity Web Collision", false, this);
+    public EnumSetting webCollisionMode = new EnumSetting("Entity Web Collision Mode", WebCollisionMode.Speed, this, z -> webCollision.getValue());
 
     public enum WebCollisionMode {Speed, Cancel}
 
-    public Setting<Float> webCollisionSpeed = register(new Setting<>("Web Speed", 1.0f, 0.1f, 50.0f, z -> webCollisionMode.getValue().equals(WebCollisionMode.Speed)));
-
-    public Velocity() {
-        super("Velocity", Category.Movement, "Changes Velocity of stuff");
-    }
-
+    public FloatSetting webCollisionSpeed = new FloatSetting("Web Speed", 1.0f, 0.1f, 50.0f, this, z -> webCollisionMode.getValue().equals(WebCollisionMode.Speed));
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {

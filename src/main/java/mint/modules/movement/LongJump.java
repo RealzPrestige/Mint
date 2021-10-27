@@ -1,26 +1,27 @@
 package mint.modules.movement;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.EntityUtil;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "LongJump", category = Module.Category.Movement, description = "Jump farther lad.")
 public class LongJump extends Module {
 
-    public LongJump() {
-        super("LongJump", Module.Category.Movement, "Jump farther.");
-    }
-
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.Factor));
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Factor, this);
 
     public enum Mode {Factor}
 
-    public Setting<Float> acceleration = register(new Setting("Acceleration", 30.0f, 0.0f, 100.0f, z -> mode.getValue() == Mode.Factor));
-    public Setting<Boolean> autoJump = register(new Setting("Auto Jump", true));
-    public Setting<Integer> jumpHeight = register(new Setting("Jump Height", 390, 350, 420));
-    public Setting<Boolean> disableOnLag = register(new Setting("Disable On Lag", true));
+    public FloatSetting acceleration = new FloatSetting("Acceleration", 30.0f, 0.0f, 100.0f, this, z -> mode.getValue() == Mode.Factor);
+    public BooleanSetting autoJump = new BooleanSetting("Auto Jump", true, this);
+    public IntegerSetting jumpHeight = new IntegerSetting("Jump Height", 390, 350, 420, this);
+    public BooleanSetting disableOnLag = new BooleanSetting("Disable On Lag", true, this);
     double playerSpeed;
     float jumpFactor;
 

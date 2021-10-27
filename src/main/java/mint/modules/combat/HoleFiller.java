@@ -187,7 +187,7 @@ public class HoleFiller extends Module {
                 }
                 int lastSlot = mc.player.inventory.currentItem;
                 blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
-                if (getPlayerTarget(targetRange.getValue()) != null && Objects.requireNonNull(getPlayerTarget(targetRange.getValue())).getDistanceSq(pos) < smartRange.getValue()) {
+                if (getPlayerTarget(targetRange.getValue()) != null && Objects.requireNonNull(getPlayerTarget(targetRange.getValue())).getDistanceSq(pos) < MathUtil.square(smartRange.getValue())) {
                     if (targetUnSafe.getValue()) {
                         if (getPlayerTarget(targetRange.getValue()) != null && !EntityUtil.isSafe(getPlayerTarget(targetRange.getValue()))) {
                             if (throughWalls.getValue()) {

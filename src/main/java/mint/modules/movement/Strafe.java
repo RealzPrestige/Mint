@@ -2,11 +2,14 @@ package mint.modules.movement;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.setting.Bind;
-import mint.setting.Setting;
 import mint.events.MoveEvent;
 import mint.events.UpdateWalkingPlayerEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.KeySetting;
 import mint.utils.EntityUtil;
 import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -21,23 +24,24 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
+@ModuleInfo(name = "Strafe", category = Module.Category.Movement, description = "Tweaks and speeds up movement.")
 public class Strafe extends Module {
     private static Strafe INSTANCE = new Strafe();
-    public Setting<SpeedMode> speedMode = register(new Setting<>("Speed Mode", SpeedMode.Normal));
+    public EnumSetting speedMode = new EnumSetting("Speed Mode", SpeedMode.Normal, this);
 
     public enum SpeedMode {SwitchBind, Normal}
 
-    public Setting<StrafeMode> strafeMode = register(new Setting<>("Strafe Mode", StrafeMode.Strafe, z -> speedMode.getValue().equals(SpeedMode.Normal)));
+    public EnumSetting strafeMode = new EnumSetting("Strafe Mode", StrafeMode.Strafe, this, z -> speedMode.getValue().equals(SpeedMode.Normal));
 
     public enum StrafeMode {Strafe, Instant, StrafeTest}
 
-    public Setting<KeyBindStrafe> keyBindStrafe = register(new Setting<>("Key Bind Strafe", KeyBindStrafe.Strafe, z -> speedMode.getValue().equals(SpeedMode.SwitchBind)));
+    public EnumSetting keyBindStrafe = new EnumSetting("Key Bind Strafe", KeyBindStrafe.Strafe, this, z -> speedMode.getValue().equals(SpeedMode.SwitchBind));
 
     public enum KeyBindStrafe {Strafe, StrafeTest}
 
-    public Setting<Boolean> useTimer = register(new Setting("Use Timer", false));
-    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.3f, 1.0f, 2.0f, z -> useTimer.getValue()));
-    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1), z -> speedMode.getValue().equals(SpeedMode.SwitchBind)));
+    public BooleanSetting useTimer = new BooleanSetting("Use Timer", false, this);
+    public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.3f, 1.0f, 2.0f, this, z -> useTimer.getValue());
+    public KeySetting switchBind = new KeySetting("SwitchBind", Keyboard.KEY_NONE, this, z -> speedMode.getValue().equals(SpeedMode.SwitchBind));
 
     private int level;
     private double moveSpeed;
@@ -51,7 +55,6 @@ public class Strafe extends Module {
     int delay;
 
     public Strafe() {
-        super("Strafe", Category.Movement, "Tweaks and speeds up movement.");
         setInstance();
     }
 
@@ -91,19 +94,13 @@ public class Strafe extends Module {
             ++ticks;
         }
         if (ticks > 10) {
-            if (switchBind.getValue().getKey() > -1) {
-                if (Keyboard.isKeyDown(switchBind.getValue().getKey()) && speedMode.getValue().equals(SpeedMode.SwitchBind)) {
+            if (switchBind.getKey() > -1) {
+                if (Keyboard.isKeyDown(switchBind.getKey()) && speedMode.getValue().equals(SpeedMode.SwitchBind)) {
                     if (strafeMode.getValue().equals(StrafeMode.Instant)) {
-                        switch (keyBindStrafe.getValue()) {
-                            case Strafe: {
-                                strafeMode.setValue(StrafeMode.Strafe);
-                                break;
-                            }
-                            case StrafeTest: {
-                                strafeMode.setValue(StrafeMode.StrafeTest);
-                                break;
-                            }
-                        }
+                        if (keyBindStrafe.getValue().equals(KeyBindStrafe.Strafe))
+                            strafeMode.setValue(StrafeMode.Strafe);
+                        else strafeMode.setValue(StrafeMode.StrafeTest);
+
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + strafeMode.getValue().toString()), 1);
                         ticks = 0;
                     } else if (strafeMode.getValue().equals(StrafeMode.Strafe) || strafeMode.getValue().equals(StrafeMode.StrafeTest)) {
