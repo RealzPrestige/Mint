@@ -2,33 +2,28 @@ package mint.modules;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
-import mint.events.ClientEvent;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.core.Notifications;
-import mint.setting.Bind;
-import mint.setting.Setting;
+import mint.settingsrewrite.impl.KeySetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.input.Keyboard;
 
-public class Module extends Feature {
+public class Module {
     public static Minecraft mc = Minecraft.getMinecraft();
 
     public String name = getModuleInfo().name();
     public String description = getModuleInfo().description();
     public Category category = getModuleInfo().category();
 
-    public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));
-    public Setting<Bind> bind = register(new Setting<>("Keybind", new Bind(-1)));
+    public KeySetting bind = new KeySetting("Keybind", Keyboard.KEY_NONE, this);
 
     public boolean sliding;
     public boolean isOpened = false;
     public boolean drawn = false;
-
-    public Module(String name) {
-        super(name);
-    }
+    public boolean enabled = false;
 
     public Minecraft getMc() {
         return Minecraft.getMinecraft();
@@ -76,19 +71,12 @@ public class Module extends Feature {
     }
 
     public boolean isOn() {
-        return enabled.getValue();
+        return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        if (enabled) {
-            this.enable();
-        } else {
-            this.disable();
-        }
-    }
 
     public void enable() {
-        enabled.setValue(Boolean.TRUE);
+        setEnabled(true);
         onToggle();
         onEnable();
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
@@ -108,7 +96,7 @@ public class Module extends Feature {
 
     public void disable() {
         MinecraftForge.EVENT_BUS.unregister(this);
-        enabled.setValue(false);
+        setEnabled(false);
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
         if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
@@ -126,11 +114,7 @@ public class Module extends Feature {
     }
 
     public void toggle() {
-        ClientEvent event = new ClientEvent(!this.isEnabled() ? 1 : 0, this);
-        MinecraftForge.EVENT_BUS.post(event);
-        if (!event.isCanceled()) {
-            this.setEnabled(!this.isEnabled());
-        }
+        setEnabled(!isEnabled());
     }
 
     public String getName() {
@@ -151,13 +135,20 @@ public class Module extends Feature {
         return this.category;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-    public Bind getBind() {
-        return this.bind.getValue();
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public int getBind() {
+        return this.bind.getKey();
     }
 
     public void setBind(int key) {
-        this.bind.setValue(new Bind(key));
+        this.bind.setValue(key);
     }
 
     public boolean listening() {
