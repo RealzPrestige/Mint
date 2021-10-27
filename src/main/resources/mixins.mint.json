@@ -10,7 +10,6 @@
     "MixinEntityPlayerSP",
     "MixinEntityRenderer",
     "MixinFontRenderer",
-    "MixinGuiIngame",
     "MixinRenderItem",
     "MixinMinecraft",
     "MixinNetworkManager",

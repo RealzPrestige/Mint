@@ -1,20 +1,21 @@
 package mint.modules.core;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.newgui.NewGui;
+import mint.settingsrewrite.impl.ColorSetting;
 
 import java.awt.*;
 
+@ModuleInfo(name = "New Gui", category = Module.Category.Core, description = "Displays new Gui")
 public class NewGuiModule extends Module {
     static NewGuiModule INSTANCE = new NewGuiModule();
-    public Setting color = register(new Setting<>("Color", new Color(0, 255, 255, 255)));
-    public Setting backgroundColor = register(new Setting<>("Background Color", new Color(0, 0, 0, 50)));
+    public ColorSetting color = new ColorSetting("Color", new Color(0, 255, 255, 255), this);
+    public ColorSetting backgroundColor = new ColorSetting("Background Color", new Color(0, 0, 0, 50), this);
 
 
     public NewGuiModule() {
-        super("New Gui", Category.Core, "");
         this.setInstance();
     }
 

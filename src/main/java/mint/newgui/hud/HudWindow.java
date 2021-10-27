@@ -1,7 +1,7 @@
 package mint.newgui.hud;
 
 import mint.Mint;
-import mint.modules.core.Gui;
+import mint.modules.core.NewGuiModule;
 import mint.newgui.NewGui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -51,7 +51,7 @@ public class HudWindow extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         dragScreen(mouseX, mouseY);
-        RenderUtil.drawRect(x, y, x + w, y + h, ColorUtil.toRGBA(Gui.getInstance().red.getValue(), Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()));
+        RenderUtil.drawRect(x, y, x + w, y + h, NewGuiModule.getInstance().color.getColor().getRGB());
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow("Hud Editor", x + (w / 2f) - (Mint.textManager.getStringWidth("Hud Editor") / 2f), y + (h / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (isInsideCloseButton(mouseX, mouseY))

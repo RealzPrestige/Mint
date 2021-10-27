@@ -31,12 +31,10 @@ public class ModuleManager {
             doneLoad = false;
         }
         /** Core **/
-        moduleList.add(new Gui());
         moduleList.add(new FontChanger());
         moduleList.add(new Descriptions());
         moduleList.add(new Notifications());
         moduleList.add(new RubberbandNotify());
-        moduleList.add(new NoPotionHud());
         moduleList.add(new NewGuiModule());
         moduleList.add(new HudEditor());
         moduleList.add(new Hud());
@@ -49,7 +47,6 @@ public class ModuleManager {
         moduleList.add(new Crits());
         moduleList.add(new HoleFiller());
         moduleList.add(new KillAura());
-        moduleList.add(KotlinAura.INSTANCE);
         moduleList.add(new Offhand());
         moduleList.add(new SelfFill());
         moduleList.add(new Surround());

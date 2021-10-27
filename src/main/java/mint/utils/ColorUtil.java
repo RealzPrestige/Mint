@@ -1,7 +1,5 @@
 package mint.utils;
 
-import mint.modules.core.Gui;
-
 import java.awt.*;
 
 public class ColorUtil {
@@ -44,11 +42,6 @@ public class ColorUtil {
 
     public static int toRGBA(Color color) {
         return ColorUtil.toRGBA(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-    }
-
-    public static Color rainbow(int delay) {
-        double rainbowState = Math.ceil((double) (System.currentTimeMillis() + (long) delay) / 20.0);
-        return Color.getHSBColor((float) (rainbowState % 360.0 / 360.0), Gui.getInstance().rainbowSaturation.getValue() / 255.0f, Gui.getInstance().rainbowBrightness.getValue() / 255.0f);
     }
 
     public static Color interpolate(final float value, final Color start, final Color end) {

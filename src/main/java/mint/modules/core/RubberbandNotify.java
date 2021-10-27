@@ -1,9 +1,11 @@
 package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import mint.Mint;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.utils.ColorUtil;
 import mint.utils.Timer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,10 +19,9 @@ import java.util.Map;
  * @author kambing
  * 30.9.2021
  */
+
+@ModuleInfo(name = "Rubber Band Notify", category = Module.Category.Core, description = "Notify rubberbands.")
 public class RubberbandNotify extends Module {
-    public RubberbandNotify() {
-        super("Rubber Band Notify", Category.Core, "Notify rubberbands.");
-    }
     HashMap<String, Integer> rubberbandString = new HashMap<>();
     private final Timer timer = new Timer();
     float seconds;
@@ -43,7 +44,7 @@ public class RubberbandNotify extends Module {
                 rubberbandString.remove(entry.getKey());
                 return;
             }
-            renderer.drawStringWithShadow(ChatFormatting.RED + entry.getKey() + ChatFormatting.WHITE + "(" + seconds + ")", (screenWidth / 2f) - (renderer.getStringWidth(entry.getKey() + seconds + ")") / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
+            Mint.textManager.drawStringWithShadow(ChatFormatting.RED + entry.getKey() + ChatFormatting.WHITE + "(" + seconds + ")", (screenWidth / 2f) - (Mint.textManager.getStringWidth(entry.getKey() + seconds + ")") / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
         }
     }
 }

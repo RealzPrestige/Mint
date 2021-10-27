@@ -1,16 +1,21 @@
 package mint.modules.core;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
 
+@ModuleInfo(name = "Descriptions", category = Module.Category.Core, description = "Shows descriptions when you hover over a Module.")
 public class Descriptions extends Module {
     private static Descriptions INSTANCE = new Descriptions();
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.HOVER));
-    public enum Mode{BOTTOMLEFT, HOVER}
-    public Setting<Boolean> rect = register(new Setting("Rectangle", false));
-    public Setting<Boolean> outline = register(new Setting("Outline", false));
-    public Descriptions(){
-        super("Descriptions", Category.Core, "Shows descriptions when you hover over a Module.");
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Hover, this);
+
+    public enum Mode {Bottomleft, Hover}
+
+    public BooleanSetting rect = new BooleanSetting("Rectangle", false, this);
+    public BooleanSetting outline = new BooleanSetting("Outline", false, this);
+
+    public Descriptions() {
         this.setInstance();
     }
 

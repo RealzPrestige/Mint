@@ -4,35 +4,17 @@ import mint.Mint;
 import mint.events.RenderOverlayEvent;
 import mint.modules.Module;
 import mint.modules.ModuleInfo;
-import mint.setting.Setting;
-import mint.settingsrewrite.impl.*;
-import org.lwjgl.input.Keyboard;
+import mint.settingsrewrite.impl.ColorSetting;
 
 import java.awt.*;
 
-@ModuleInfo(name = "", description = "", category = Module.Category.Core)
+@ModuleInfo(name = "Hud", category = Module.Category.Core, description = "Draws hud stuff")
 public class Hud extends Module {
 
-    final ModuleInfo annotation = this.getClass().getAnnotation(ModuleInfo.class);
-
-
     static Hud INSTANCE = new Hud();
-    public Setting color = register(new Setting<>("Color", new Color(199, 45, 45)));
-    public BooleanSetting test = new BooleanSetting("Test", false, this);
-    public IntegerSetting intTest = new IntegerSetting("Int Test", 10, -20, 20, this);
-    public FloatSetting floatTest = new FloatSetting("Float Test", 10.0f, 0.0f, 20.0f, this);
-    public DoubleSetting doubleTest = new DoubleSetting("Double Test", 10.0, 0.0, 20.0, this);
-    public KeySetting keyTest = new KeySetting("Key Test", Keyboard.KEY_NONE, this);
-    public EnumSetting enumTest = new EnumSetting("Enum Test", EnumTest.One, this);
-
-    public enum EnumTest {One, Two, Three, Four, Five, Six, Seven}
-
-    public StringSetting stringTest = new StringSetting("String Test", "ITestIt", this);
-    public ColorSetting colorTest = new ColorSetting("Color Test", new Color(255, 255, 255), this);
-    public ParentSetting parentSetting = new ParentSetting("Parent Test", false, this);
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this);
 
     public Hud() {
-        super("Hud", Category.Core, "Draws hud stuff");
         setInstance();
     }
 
