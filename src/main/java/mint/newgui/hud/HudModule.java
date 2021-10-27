@@ -1,8 +1,7 @@
 package mint.newgui.hud;
 
 import mint.Mint;
-import mint.modules.core.Gui;
-import mint.utils.ColorUtil;
+import mint.modules.core.NewGuiModule;
 import mint.utils.RenderUtil;
 
 public class HudModule {
@@ -19,7 +18,7 @@ public class HudModule {
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.drawRect(x, y, x + w, y + h,value ? ColorUtil.toRGBA(Gui.getInstance().red.getValue(),Gui.getInstance().green.getValue(), Gui.getInstance().blue.getValue(), Gui.getInstance().alpha.getValue()) : ColorUtil.toRGBA(Gui.getInstance().disabledRed.getValue(), Gui.getInstance().disabledGreen.getValue(), Gui.getInstance().disabledBlue.getValue(), Gui.getInstance().disabledAlpha.getValue()));
+        RenderUtil.drawRect(x, y, x + w, y + h,value ? NewGuiModule.getInstance().color.getColor().getRGB() : NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, x, y, -1);
     }

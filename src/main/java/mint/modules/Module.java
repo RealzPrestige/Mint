@@ -14,22 +14,21 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class Module extends Feature {
     public static Minecraft mc = Minecraft.getMinecraft();
-    private final String description = getModuleInfo().description();
-    private final Category category;
-    public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));
-    public boolean drawn = false;
-    public Setting<Bind> bind = register(new Setting<>("Keybind", new Bind(-1)));
-    public Setting<String> displayName;
-    public boolean hidden;
-    public boolean sliding;
-    public boolean isOpened;
-    public Module() {
-        super();
-        this.displayName = register(new Setting<>(this.getModuleInfo().name(), this.getModuleInfo().name()));
-        this.category = getModuleInfo().category();
-        isOpened = false;
-    }
 
+    public String name = getModuleInfo().name();
+    public String description = getModuleInfo().description();
+    public Category category = getModuleInfo().category();
+
+    public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));
+    public Setting<Bind> bind = register(new Setting<>("Keybind", new Bind(-1)));
+
+    public boolean sliding;
+    public boolean isOpened = false;
+    public boolean drawn = false;
+
+    public Module(String name) {
+        super(name);
+    }
 
     public Minecraft getMc() {
         return Minecraft.getMinecraft();
@@ -92,7 +91,7 @@ public class Module extends Feature {
         enabled.setValue(Boolean.TRUE);
         onToggle();
         onEnable();
-        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
         if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
@@ -110,7 +109,7 @@ public class Module extends Feature {
     public void disable() {
         MinecraftForge.EVENT_BUS.unregister(this);
         enabled.setValue(false);
-        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getDisplayName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
         if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
@@ -134,26 +133,19 @@ public class Module extends Feature {
         }
     }
 
-    public String getDisplayName() {
-        return this.displayName.getValue();
+    public String getName() {
+        return name;
     }
 
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public boolean isDrawn() {
         return this.drawn;
     }
 
-    public void setDrawn() {
-        this.drawn = true;
-    }
-
-    public void setUndrawn() {
-        this.drawn = false;
-    }
 
     public Category getCategory() {
         return this.category;
@@ -173,10 +165,10 @@ public class Module extends Feature {
     }
 
     public String getFullArrayString() {
-        return this.getDisplayName() + ChatFormatting.GRAY + (this.getDisplayInfo() != null ? " [" + ChatFormatting.WHITE + this.getDisplayInfo() + ChatFormatting.GRAY + "]" : "");
+        return this.getName() + ChatFormatting.GRAY + (this.getDisplayInfo() != null ? " [" + ChatFormatting.WHITE + this.getDisplayInfo() + ChatFormatting.GRAY + "]" : "");
     }
 
-    private ModuleInfo getModuleInfo(){
+    public ModuleInfo getModuleInfo() {
         return getClass().getAnnotation(ModuleInfo.class);
     }
 

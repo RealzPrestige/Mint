@@ -1,9 +1,8 @@
 package mint.modules;
 
 import mint.Mint;
-import mint.clickgui.MintGui;
-import mint.setting.Setting;
 import mint.managers.TextManager;
+import mint.setting.Setting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +11,6 @@ public class Feature {
     public List<Setting> settings = new ArrayList<>();
     public TextManager renderer = Mint.textManager;
     private String name;
-
-    public Feature() {
-    }
 
     public Feature(String name) {
         this.name = name;
@@ -42,9 +38,6 @@ public class Feature {
     public Setting register(Setting setting) {
         setting.setFeature(this);
         this.settings.add(setting);
-        if (this instanceof Module && Mint.INSTANCE.mc.currentScreen instanceof MintGui) {
-            MintGui.getInstance().updateModule((Module) this);
-        }
         return setting;
     }
 

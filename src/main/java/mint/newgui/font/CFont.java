@@ -1,4 +1,4 @@
-package mint.clickgui.impl.font;
+package mint.newgui.font;
 
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;

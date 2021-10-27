@@ -1,8 +1,8 @@
 package mint.newgui.hud;
 
 import mint.Mint;
-import mint.clickgui.MintGui;
 import mint.modules.core.Gui;
+import mint.newgui.NewGui;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -89,7 +89,7 @@ public class HudWindow extends GuiScreen {
             mc.displayGuiScreen(null);
 
         if (mouseButton == 1 && isInsideCloseButton(mouseX, mouseY))
-            mc.displayGuiScreen(MintGui.getClickGui());
+            mc.displayGuiScreen(NewGui.getInstance());
 
         hudModules.forEach(hudModules -> hudModules.mouseClicked(mouseX, mouseY, mouseButton));
     }

@@ -1,7 +1,7 @@
 package mint.managers;
 
 import mint.Mint;
-import mint.clickgui.impl.font.CustomFont;
+import mint.newgui.font.CustomFont;
 import mint.modules.core.FontChanger;
 import mint.modules.miscellaneous.SignExploit;
 import mint.utils.Timer;
