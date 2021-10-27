@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class LongJump extends Module {
 
     public LongJump() {
-        super("LongJump", Module.Category.MOVEMENT, "Jump farther.");
+        super("LongJump", Module.Category.Movement, "Jump farther.");
     }
 
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Factor));

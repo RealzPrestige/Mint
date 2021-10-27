@@ -26,7 +26,7 @@ public class Anchor extends Module {
     Timer timer = new Timer();
 
     public Anchor() {
-        super("Anchor", Module.Category.MOVEMENT, "Slows down when ur close to a hole.");
+        super("Anchor", Module.Category.Movement, "Slows down when ur close to a hole.");
     }
 
     public void onUpdate() {

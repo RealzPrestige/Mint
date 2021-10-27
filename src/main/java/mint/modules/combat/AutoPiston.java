@@ -60,7 +60,7 @@ public class AutoPiston extends Module {
     int i;
 
     public AutoPiston() {
-        super("Auto Piston", Category.COMBAT, "Pushes crystals into holes using pistons.");
+        super("Auto Piston", Category.Combat, "Pushes crystals into holes using pistons.");
     }
 
     public void onLogin() {

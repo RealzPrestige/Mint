@@ -10,7 +10,7 @@ public class Descriptions extends Module {
     public Setting<Boolean> rect = register(new Setting("Rectangle", false));
     public Setting<Boolean> outline = register(new Setting("Outline", false));
     public Descriptions(){
-        super("Descriptions", Category.CORE, "Shows descriptions when you hover over a Module.");
+        super("Descriptions", Category.Core, "Shows descriptions when you hover over a Module.");
         this.setInstance();
     }
 

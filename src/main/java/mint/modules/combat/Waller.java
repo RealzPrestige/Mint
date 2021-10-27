@@ -42,7 +42,7 @@ public class Waller extends Module {
     EntityPlayer target;
 
     public Waller() {
-        super("Waller", Category.COMBAT, "");
+        super("Waller", Category.Combat, "");
     }
 
     public void onUpdate() {

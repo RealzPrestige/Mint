@@ -44,7 +44,7 @@ public class TickShift extends Module {
     int ticks;
 
     public TickShift() {
-        super("Tick Shift", Category.MOVEMENT, "Does smth");
+        super("Tick Shift", Category.Movement, "Does smth");
     }
 
     @Override

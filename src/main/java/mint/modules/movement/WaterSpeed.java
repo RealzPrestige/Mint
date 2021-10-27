@@ -26,7 +26,7 @@ public class WaterSpeed extends Module {
     boolean isPacketSneaking;
 
     public WaterSpeed() {
-        super("Water Speed", Category.MOVEMENT, "Makes swim fast vroom vroom in le water");
+        super("Water Speed", Category.Movement, "Makes swim fast vroom vroom in le water");
     }
 
     public void onToggle() {

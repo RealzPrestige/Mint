@@ -67,7 +67,7 @@ public class Notifications extends Module {
     public boolean lefinalewidth;
 
     public Notifications() {
-        super("Notifications", Category.CORE, "Notifies you when stuff happens."); //ongh
+        super("Notifications", Category.Core, "Notifies you when stuff happens."); //ongh
         this.setInstance();
     }
 

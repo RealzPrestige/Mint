@@ -30,7 +30,7 @@ public class CrystalChams extends Module {
     }
 
     public CrystalChams() {
-        super("Crystal Chams", Category.VISUAL, "");
+        super("Crystal Chams", Category.Visual, "");
     }
 
     @SubscribeEvent

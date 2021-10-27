@@ -30,7 +30,7 @@ public class AutoEnderChest extends Module {
     Timer startTimer = new Timer();
 
     public AutoEnderChest() {
-        super("Auto Ender Chest", Category.MISCELLANEOUS, "Farms Ender Chests automatically for you.");
+        super("Auto Ender Chest", Category.Miscellaneous, "Farms Ender Chests automatically for you.");
     }
 
     public void onUpdate() {

@@ -22,7 +22,7 @@ public class Step extends Module {
     public Setting<Float> height = register(new Setting("Height", 2.0f, 1.0f, 4.0f));
 
     public Step() {
-        super("Step", Category.MOVEMENT, "Allows you to step up blocks.");
+        super("Step", Category.Movement, "Allows you to step up blocks.");
         this.setInstance();
     }
 

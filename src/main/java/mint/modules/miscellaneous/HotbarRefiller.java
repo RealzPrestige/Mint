@@ -19,7 +19,7 @@ public class HotbarRefiller extends Module {
     public ArrayList<Item> hotbarItems = new ArrayList<>();
 
     public HotbarRefiller() {
-        super("Hotbar Refiller", Category.MISCELLANEOUS, "Automatically completes stacks in ur fat hotbar.");
+        super("Hotbar Refiller", Category.Miscellaneous, "Automatically completes stacks in ur fat hotbar.");
     }
 
     public void onUpdate() {

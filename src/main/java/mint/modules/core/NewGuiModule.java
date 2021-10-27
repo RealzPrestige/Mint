@@ -14,7 +14,7 @@ public class NewGuiModule extends Module {
 
 
     public NewGuiModule() {
-        super("New Gui", Category.CORE, "");
+        super("New Gui", Category.Core, "");
         this.setInstance();
     }
 

@@ -14,7 +14,7 @@ public class TabTweaks extends Module {
     public Setting<Integer> size = register(new Setting<>("Size", 250, 1, 1000));
 
     public TabTweaks() {
-        super("TabTweaks", Category.MISCELLANEOUS, "Tweaks le tabbe.");
+        super("TabTweaks", Category.Miscellaneous, "Tweaks le tabbe.");
         this.setInstance();
     }
 

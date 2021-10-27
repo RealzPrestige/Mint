@@ -44,7 +44,7 @@ public class ViewTweaks extends Module {
 
 
     public ViewTweaks() {
-        super("View Tweaks", Category.VISUAL, "Tweak how your game looks.");
+        super("View Tweaks", Category.Visual, "Tweak how your game looks.");
         setInstance();
     }
 

@@ -27,7 +27,7 @@ public class CancelRubberband extends Module {
     public enum FirstY {Positive, Negative}
 
     public CancelRubberband() {
-        super("Cancel Rubberband", Category.PLAYER, "Cancels Rubberbamds (Hopefully)");
+        super("Cancel Rubberband", Category.Player, "Cancels Rubberbamds (Hopefully)");
     }
 
 

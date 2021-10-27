@@ -6,7 +6,7 @@ import mint.newgui.hud.HudWindow;
 public class HudEditor extends Module {
 
     public HudEditor(){
-        super("Hud Editor", Category.CORE, "Edits the hud ye");
+        super("Hud Editor", Category.Core, "Edits the hud ye");
     }
 
     public void onEnable(){

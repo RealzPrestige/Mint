@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class SSS extends Module {
 
     public SSS() {
-        super("SSS", Module.Category.MOVEMENT, "Just doing funny shit");
+        super("SSS", Module.Category.Movement, "Just doing funny shit");
     }
 
     public Setting<Boolean> movementParent = register(new Setting("Movement", true, false));

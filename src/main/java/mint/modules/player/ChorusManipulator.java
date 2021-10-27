@@ -62,7 +62,7 @@ public class ChorusManipulator extends Module {
     public HashMap<EntityPlayer, Integer> playerCham = new HashMap<>();
 
     public ChorusManipulator() {
-        super("Chorus Manipulator", Category.PLAYER, "Manipulates your Chorus Fruits.");
+        super("Chorus Manipulator", Category.Player, "Manipulates your Chorus Fruits.");
         packets = new LinkedList<>();
         tpPackets = new LinkedList<>();
     }

@@ -15,7 +15,7 @@ public class SelfFill extends Module {
 
 
     public SelfFill() {
-        super("Self Fill", Category.COMBAT, "Rubberbands you in a block.");
+        super("Self Fill", Category.Combat, "Rubberbands you in a block.");
     }
 
     public Setting<Block> prefer = register(new Setting("Prefer", Block.EChest));

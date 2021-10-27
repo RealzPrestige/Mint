@@ -27,7 +27,7 @@ public class AntiCrystalDamage extends Module {
     Timer timer = new Timer();
 
     public AntiCrystalDamage() {
-        super("Anti Crystal Damage", Category.MISCELLANEOUS, "Places strings inside crystals to avoid damage.");
+        super("Anti Crystal Damage", Category.Miscellaneous, "Places strings inside crystals to avoid damage.");
     }
 
     public void onUpdate() {

@@ -17,7 +17,7 @@ public class Blink extends Module {
     EntityOtherPlayerMP fake_player;
 
     public Blink() {
-        super("Blink", Category.PLAYER, "Lets you teleport yes.");
+        super("Blink", Category.Player, "Lets you teleport yes.");
     }
 
     public void onEnable() {

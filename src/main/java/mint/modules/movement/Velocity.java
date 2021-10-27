@@ -20,7 +20,7 @@ public class Velocity extends Module {
     public Setting<Float> webCollisionSpeed = register(new Setting<>("Web Speed", 1.0f, 0.1f, 50.0f, v -> webCollisionMode.getValue().equals(WebCollisionMode.Speed)));
 
     public Velocity() {
-        super("Velocity", Category.MOVEMENT, "Changes Velocity of stuff");
+        super("Velocity", Category.Movement, "Changes Velocity of stuff");
     }
 
 

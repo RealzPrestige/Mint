@@ -9,7 +9,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 public class Clip extends Module {
 
     public Clip() {
-        super("Clip", Module.Category.MOVEMENT, "VClip bypass for crystalpvp cc.");
+        super("Clip", Module.Category.Movement, "VClip bypass for crystalpvp cc.");
     }
 
     public Setting<Float> offset = register(new Setting("Y Offset", 1.4f, 1.1f, 2.0f));

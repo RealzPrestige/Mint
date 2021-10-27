@@ -60,7 +60,7 @@ public class PopESP extends Module {
     public HashMap<EntityPlayer, Integer> poppedPlayers = new HashMap<>();
 
     public PopESP(){
-        super("Pop ESP", Category.VISUAL, "Renders an Entity where a player pops/dies.");
+        super("Pop ESP", Category.Visual, "Renders an Entity where a player pops/dies.");
         this.setInstance();
     }
 

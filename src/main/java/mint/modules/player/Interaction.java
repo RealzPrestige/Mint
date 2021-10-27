@@ -16,7 +16,7 @@ public class Interaction extends Module {
 
 
     public Interaction(){
-        super("Interaction", Module.Category.PLAYER, "Tweaks player's interactions.");
+        super("Interaction", Module.Category.Player, "Tweaks player's interactions.");
     }
 
     //todo add shit like echest canceller(when trying to open an echest it just doesnt open it)

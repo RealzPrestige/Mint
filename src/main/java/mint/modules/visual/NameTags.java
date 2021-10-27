@@ -34,7 +34,7 @@ public class NameTags extends Module {
     private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));
 
     public NameTags() {
-        super("Name Tags", Category.VISUAL, "Draws info about an entity above their head.");
+        super("Name Tags", Category.Visual, "Draws info about an entity above their head.");
         setInstance();
     }
 

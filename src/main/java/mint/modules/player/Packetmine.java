@@ -85,7 +85,7 @@ public class Packetmine extends Module {
     int blue0 = blue.getValue();
 
     public Packetmine() {
-        super("Packetmine", Category.PLAYER, "Mines with packet.");
+        super("Packetmine", Category.Player, "Mines with packet.");
         setInstance();
     }
 

@@ -51,7 +51,7 @@ public class Strafe extends Module {
     int delay;
 
     public Strafe() {
-        super("Strafe", Category.MOVEMENT, "Tweaks and speeds up movement.");
+        super("Strafe", Category.Movement, "Tweaks and speeds up movement.");
         setInstance();
     }
 

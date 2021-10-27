@@ -8,7 +8,7 @@ import mint.utils.NullUtil;
 public class YPort extends Module {
 
     public YPort() {
-        super("YPort", Module.Category.MOVEMENT,"idk");
+        super("YPort", Module.Category.Movement,"idk");
     }
 
     public Setting<Double> speed = register(new Setting("YPortSpeed", 0.1d, 0.0d, 1.0d));

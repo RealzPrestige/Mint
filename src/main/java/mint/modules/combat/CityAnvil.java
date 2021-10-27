@@ -40,7 +40,7 @@ public class CityAnvil extends Module {
     BlockPos currentPos;
     BlockPos currentPos2;
     public CityAnvil() {
-        super("City Anvil", Category.COMBAT, "no idea how to describe it");
+        super("City Anvil", Category.Combat, "no idea how to describe it");
     }
 
     public void onUpdate() {

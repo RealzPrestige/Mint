@@ -36,7 +36,7 @@ public class EntityCrammer extends Module {
     public BlockPos targetPos;
 
     public EntityCrammer() {
-        super("Entity Crammer", Category.MISCELLANEOUS, "Crams entities to fuck ur opp");
+        super("Entity Crammer", Category.Miscellaneous, "Crams entities to fuck ur opp");
         setInstance();
     }
 

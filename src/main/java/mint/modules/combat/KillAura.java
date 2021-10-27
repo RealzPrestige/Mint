@@ -22,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class KillAura extends Module {
     public KillAura() {
-        super("Kill Aura", Category.COMBAT, "Automatically attacks entities.");
+        super("Kill Aura", Category.Combat, "Automatically attacks entities.");
     }
 
     //delay

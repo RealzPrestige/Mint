@@ -9,7 +9,7 @@ import mint.events.RenderWorldEvent;
 public class CripWalk extends Module {
 
     public CripWalk(){
-        super("Crip Walk",Category.VISUAL,"Cancels movement animations.");
+        super("Crip Walk",Category.Visual,"Cancels movement animations.");
     }
 
     @SubscribeEvent

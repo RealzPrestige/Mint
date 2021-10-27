@@ -57,7 +57,7 @@ public class Gui extends Module {
     public Setting<Integer> gradientAlpha = register(new Setting<>("GradientAlpha", 150, 0, 255, v -> gradient.getValue() && gradientParent.getValue()));
 
     public Gui() {
-        super("Gui", Category.CORE, "Opens the client's click GUI.");
+        super("Gui", Category.Core, "Opens the client's click GUI.");
         setBind(Keyboard.KEY_O);
         this.setInstance();
     }

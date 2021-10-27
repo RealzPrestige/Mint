@@ -41,7 +41,7 @@ public class ChorusPredict extends Module {
     double normal;
 
     public ChorusPredict() {
-        super("Chorus Predict", Category.MISCELLANEOUS, "Renders where a player's chorus will go to.");
+        super("Chorus Predict", Category.Miscellaneous, "Renders where a player's chorus will go to.");
     }
 
     public void onLogin() {

@@ -179,12 +179,12 @@ public class Module extends Feature {
 
 
     public enum Category {
-        COMBAT("Combat"),
-        MISCELLANEOUS("Miscellaneous"),
-        MOVEMENT("Movement"),
-        PLAYER("Player"),
-        VISUAL("Visual"),
-        CORE("Core");
+        Combat("Combat"),
+        Miscellaneous("Miscellaneous"),
+        Movement("Movement"),
+        Player("Player"),
+        Visual("Visual"),
+        Core("Core");
 
         private final String name;
 

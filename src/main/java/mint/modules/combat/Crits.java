@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Crits extends Module {
 
     public Crits() {
-        super("Crits", Module.Category.COMBAT, "Scores criticals for you.");
+        super("Crits", Module.Category.Combat, "Scores criticals for you.");
     }
 
     public Setting<Boolean> targetParent = register(new Setting("Target", true, false));

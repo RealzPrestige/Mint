@@ -30,7 +30,7 @@ public class ShulkerSexxer extends Module {
     Timer openTimer = new Timer();
 
     public ShulkerSexxer() {
-        super("Shulker Sexxer", Category.MISCELLANEOUS, "Sexxes shulkers");
+        super("Shulker Sexxer", Category.Miscellaneous, "Sexxes shulkers");
     }
 
     public void onUpdate() {

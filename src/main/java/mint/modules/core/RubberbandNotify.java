@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class RubberbandNotify extends Module {
     public RubberbandNotify() {
-        super("Rubber Band Notify", Category.CORE, "Notify rubberbands.");
+        super("Rubber Band Notify", Category.Core, "Notify rubberbands.");
     }
     HashMap<String, Integer> rubberbandString = new HashMap<>();
     private final Timer timer = new Timer();

@@ -49,7 +49,7 @@ public class Hand extends Module {
 
 
     public Hand() {
-        super("Hand", Category.VISUAL, "");
+        super("Hand", Category.Visual, "");
         this.setInstance();
     }
 

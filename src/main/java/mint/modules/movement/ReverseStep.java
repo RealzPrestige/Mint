@@ -7,7 +7,7 @@ import mint.utils.EntityUtil;
 public class ReverseStep extends Module {
 
     public ReverseStep() {
-        super("Reverse Step", Module.Category.MOVEMENT, "Fall down faster.");
+        super("Reverse Step", Module.Category.Movement, "Fall down faster.");
     }
 
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Vanilla));

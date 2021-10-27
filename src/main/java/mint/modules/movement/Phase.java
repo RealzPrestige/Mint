@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 public class Phase extends Module {
     private static final Phase INSTANCE = new Phase();
     public Phase() {
-        super("Phase", Module.Category.MOVEMENT, "Lets you phase through blocks.");
+        super("Phase", Module.Category.Movement, "Lets you phase through blocks.");
     }
 
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Clip));

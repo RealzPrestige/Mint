@@ -10,7 +10,7 @@ import net.minecraft.entity.item.EntityBoat;
 public class BoatFly extends Module {
 
     public BoatFly() {
-        super("BoatFly", Module.Category.MOVEMENT, "Fly using boats.");
+        super("BoatFly", Module.Category.Movement, "Fly using boats.");
     }
 
     public Setting<Boolean> spoofParent = register(new Setting("Spoof", true, false));

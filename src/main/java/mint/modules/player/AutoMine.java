@@ -39,7 +39,7 @@ public class AutoMine extends Module {
     Timer timer = new Timer();
 
     public AutoMine() {
-        super("Auto Mine", Category.PLAYER, "Automatically mines stuff.");
+        super("Auto Mine", Category.Player, "Automatically mines stuff.");
     }
 
     public void onDisable() {

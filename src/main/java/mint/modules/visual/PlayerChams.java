@@ -30,7 +30,7 @@ public class PlayerChams extends Module {
     public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 0, 0, 255, v-> outlineParent.getValue()));
 
     public PlayerChams() {
-        super("Player Chams", Category.VISUAL, "");
+        super("Player Chams", Category.Visual, "");
     }
 
     @SubscribeEvent

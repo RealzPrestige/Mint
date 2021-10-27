@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class PacketManipulator extends Module {
 
     public PacketManipulator() {
-        super("PacketManipulator", Module.Category.MISCELLANEOUS, "Manipulates packets.");
+        super("PacketManipulator", Module.Category.Miscellaneous, "Manipulates packets.");
     }
 
     /*

@@ -21,7 +21,7 @@ public class ShaderChams extends Module {
     public Setting<modes> mode = register(new Setting<>("Mode", modes.Aqua));
 
     public ShaderChams() {
-        super("Shader Chams", Category.VISUAL, "Makes shader on cham");
+        super("Shader Chams", Category.Visual, "Makes shader on cham");
         setInstance();
     }
 

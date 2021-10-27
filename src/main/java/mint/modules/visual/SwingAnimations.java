@@ -18,7 +18,7 @@ public class SwingAnimations extends Module {
     public final Setting<Integer> amplifier = register(new Setting<>("SpeedVal", 1, 1, 1000));
 
     public SwingAnimations() {
-        super("Swing", Category.VISUAL, "Tweaks the way your swing looks.");
+        super("Swing", Category.Visual, "Tweaks the way your swing looks.");
     }
     @Override
     public void onUpdate() {

@@ -21,7 +21,7 @@ public class FontChanger
     private boolean reloadFont = false;
 
     public FontChanger() {
-        super("Font", Category.CORE, "Changes the font.");
+        super("Font", Category.Core, "Changes the font.");
         setInstance();
     }
 

@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BowAmplifier extends Module {
 
     public BowAmplifier() {
-        super("BowAmplifier", Category.PLAYER, "9b9t: Become hitman");
+        super("BowAmplifier", Category.Player, "9b9t: Become hitman");
     }
 
     public Setting<Integer> spoofs = register(new Setting<>( "Spoofs", 300, 1, 300));

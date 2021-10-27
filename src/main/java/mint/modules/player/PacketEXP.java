@@ -15,7 +15,7 @@ public class PacketEXP extends Module {
     public Setting<Boolean> rightClickOnly = register(new Setting("Right Click Only", false));
 
     public PacketEXP() {
-        super("Packet EXP", Category.PLAYER, "Uses packets to throw Exp.");
+        super("Packet EXP", Category.Player, "Uses packets to throw Exp.");
     }
 
     public void onUpdate() {

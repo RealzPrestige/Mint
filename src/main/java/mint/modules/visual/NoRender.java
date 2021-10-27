@@ -18,7 +18,7 @@ public class NoRender extends Module {
     public Setting<Boolean> armorRemover = register(new Setting<>("Armor Remover", false));
 
     public NoRender() {
-        super("No Render", Category.VISUAL, "Renders No");
+        super("No Render", Category.Visual, "Renders No");
         setInstance();
     }
 

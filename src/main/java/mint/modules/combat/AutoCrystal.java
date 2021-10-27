@@ -145,7 +145,7 @@ public class AutoCrystal extends Module {
     int mainOldSlot;
 
     public AutoCrystal() {
-        super("Auto Crystal", Category.COMBAT, "Obliterates kids with end crystals ezz");
+        super("Auto Crystal", Category.Combat, "Obliterates kids with end crystals ezz");
         this.setInstance();
     }
 

@@ -23,7 +23,7 @@ import java.awt.Color
  * @since 26/9/21
  */
 @Suppress("UNCHECKED_CAST")
-object KotlinAura : Module("Kotlin Aura", Category.COMBAT, "ur mom") {
+object KotlinAura : Module("Kotlin Aura", Category.Combat, "ur mom") {
     @JvmField
     var targetRange: Setting<Float> = register(Setting<Any?>("Target Range", 10f, 0f, 15f)) as Setting<Float>
 

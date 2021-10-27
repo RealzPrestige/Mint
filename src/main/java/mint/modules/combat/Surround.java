@@ -37,7 +37,7 @@ public class Surround extends Module {
     Timer timer = new Timer();
 
     public Surround() {
-        super("Surround", Category.COMBAT, "Surrounds you with Obsidian yuh.");
+        super("Surround", Category.Combat, "Surrounds you with Obsidian yuh.");
     }
 
     public void onLogin() {

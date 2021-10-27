@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AntiAim extends Module {
 
     public AntiAim() {
-        super("Anti Aim", Module.Category.PLAYER, "Spoofs your yaw and pitch.");
+        super("Anti Aim", Module.Category.Player, "Spoofs your yaw and pitch.");
     }
 
     public Setting<Mode> mode = register(new Setting("Mode", Mode.Custom));

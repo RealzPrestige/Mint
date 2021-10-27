@@ -38,7 +38,7 @@ public class FakePlayer extends Module {
     private EntityOtherPlayerMP fake_player;
 
     public FakePlayer() {
-        super("Fake Player", Category.MISCELLANEOUS, "Spawns a fake entity to test modules on.");
+        super("Fake Player", Category.Miscellaneous, "Spawns a fake entity to test modules on.");
     }
 
     @Override

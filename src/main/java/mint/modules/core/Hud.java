@@ -27,7 +27,7 @@ public class Hud extends Module {
     public ParentSetting parentSetting = new ParentSetting("Parent Test", false, this);
 
     public Hud() {
-        super("Hud", Category.CORE, "Draws hud stuff");
+        super("Hud", Category.Core, "Draws hud stuff");
         setInstance();
     }
 

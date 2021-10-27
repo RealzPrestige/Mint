@@ -53,7 +53,7 @@ public class Offhand extends Module {
     HashMap<String, Integer> renderString = new HashMap();
 
     public Offhand() {
-        super("Offhand", Category.COMBAT, "Changes the item in your offhand.");
+        super("Offhand", Category.Combat, "Changes the item in your offhand.");
     }
 
     @Override

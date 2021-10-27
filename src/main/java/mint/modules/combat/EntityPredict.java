@@ -25,7 +25,7 @@ public class EntityPredict extends Module {
     Entity entity;
 
     public EntityPredict() {
-        super("Entity Predict", Category.COMBAT, "Predict crystal ids and attack m");
+        super("Entity Predict", Category.Combat, "Predict crystal ids and attack m");
     }
 
     @SubscribeEvent
