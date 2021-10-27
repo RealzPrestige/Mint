@@ -1,27 +1,26 @@
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.events.CrystalTextureEvent;
 import mint.events.RenderCrystalEvent;
 import mint.modules.Module;
+import mint.settingsrewrite.impl.*;
 import mint.utils.NullUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class CrystalChams extends Module {
-    public Setting<Boolean> crystalBlend = register(new Setting<>("Crystal Blend", false));
-    public Setting<Boolean> glintBlend = register(new Setting<>("Glint Blend", false));
-    public Setting<Integer> rotations = register(new Setting<>("Rotations", 30, 0, 200));
-    public Setting<Double> scale = register(new Setting<>("Scale", 1.0, 0.0, 2.0));
-    public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1.0f, 0.1f, 3.0f));
-    public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255));
-    public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 0, 0, 255));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 0, 0, 255));
+    public BooleanSetting crystalBlend = new BooleanSetting("Crystal Blend", false, this);
+    public BooleanSetting glintBlend = new BooleanSetting("Glint Blend", false, this);
+    public IntegerSetting rotations = new IntegerSetting("Rotations", 30, 0, 200, this);
+    public DoubleSetting scale = new DoubleSetting("Scale", 1.0, 0.0, 2.0, this);
+    public FloatSetting lineWidth = new FloatSetting("Line Width", 1.0f, 0.1f, 3.0f, this);
+    public ColorSetting color = new ColorSetting("Color", new Color(0xBC672AC6, true), this);
     static final ResourceLocation RES_ITEM_GLINT;
 
 
@@ -30,7 +29,7 @@ public class CrystalChams extends Module {
     }
 
     public CrystalChams() {
-        super("Crystal Chams", Category.Visual, "");
+        super();
     }
 
     @SubscribeEvent
@@ -73,7 +72,7 @@ public class CrystalChams extends Module {
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         glLineWidth((float) ((double) lineWidth.getValue()));
-        GL11.glColor4f(red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, alpha.getValue() / 255f);
+        GL11.glColor4f(color.getColor().getRed() / 255f, color.getColor().getGreen() / 255f, color.getColor().getBlue() / 255f, color.getColor().getAlpha() / 255f);
         glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON_MODE);
         event.getModelNoBase().render(event.getEntityEnderCrystal(), 0, rotation * (rotations.getValue() / 10), rotationMoved * 0.2F, 0, 0, 0.0625F);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

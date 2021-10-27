@@ -1,8 +1,9 @@
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.events.RenderItemEvent;
 import mint.modules.Module;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.NullUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -11,45 +12,44 @@ import org.lwjgl.opengl.GL11;
 public class Hand extends Module {
     static Hand INSTANCE = new Hand();
 
-    public Setting<Boolean> mainhandParent = register(new Setting<>("Mainhand", true, false));
+    public ParentSetting mainhandParent = new ParentSetting("Mainhand", true, this);
 
-    public Setting<Boolean> mainhandTranslation = register(new Setting<>("Mainhand Translation", false, true, z -> mainhandParent.getValue()));
-    public Setting<Float> mainhandX = register(new Setting<>("Mainhand X", 0.0f, -10.0f, 10.0f, z -> mainhandParent.getValue() && mainhandTranslation.getValue()));
-    public Setting<Float> mainhandY = register(new Setting<>("Mainhand Y", 0.0f, -10.0f, 10.0f, z -> mainhandParent.getValue() && mainhandTranslation.getValue()));
-    public Setting<Float> mainhandZ = register(new Setting<>("Mainhand Z", 0.0f, -10.0f, 10.0f, z -> mainhandParent.getValue() && mainhandTranslation.getValue()));
+    public ParentSetting mainhandTranslation = new ParentSetting("Mainhand Translate", true, this);
+    public FloatSetting mainhandX = new FloatSetting("Mainhand X", 0.0f, -10.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandTranslation.getValue());
+    public FloatSetting mainhandY = new FloatSetting("Mainhand Y", 0.0f, -10.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandTranslation.getValue());
+    public FloatSetting mainhandZ = new FloatSetting("Mainhand Z", 0.0f, -10.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandTranslation.getValue());
 
-    public Setting<Boolean> mainhandScaling = register(new Setting<>("Mainhand Scaling", false, true, z -> mainhandParent.getValue()));
-    public Setting<Float> mainhandScaleX = register(new Setting<>("Mainhand Scale X", 0.0f, -10.0f, 10.0f, z -> mainhandParent.getValue() && mainhandScaling.getValue()));
-    public Setting<Float> mainhandScaleY = register(new Setting<>("Mainhand Scale Y", 0.0f, -10.0f, 10.0f, z -> mainhandParent.getValue() && mainhandScaling.getValue()));
-    public Setting<Float> mainhandScaleZ = register(new Setting<>("Mainhand Scale Z", 0.0f, -10.0f, 10.0f, z -> mainhandParent.getValue() && mainhandScaling.getValue()));
+    public ParentSetting mainhandScaling = new ParentSetting("Mainhand Scaling", false, this, v -> mainhandParent.getValue());
+    public FloatSetting mainhandScaleX = new FloatSetting("Mainhand Scale X", 0.0f, -10.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandScaling.getValue());
+    public FloatSetting mainhandScaleY = new FloatSetting("Mainhand Scale Y", 0.0f, -10.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandScaling.getValue());
+    public FloatSetting mainhandScaleZ = new FloatSetting("Mainhand Scale Z", 0.0f, -10.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandScaling.getValue());
 
-    public Setting<Boolean> mainhandRotation = register(new Setting<>("Mainhand Rotation", false, true, z -> mainhandParent.getValue()));
-    public Setting<Float> mainhandRotationX = register(new Setting<>("Mainhand Rotation X", 0.0f, 0.0f, 10.0f, z -> mainhandParent.getValue() && mainhandRotation.getValue()));
-    public Setting<Float> mainhandRotationY = register(new Setting<>("Mainhand Rotation Y", 0.0f, 0.0f, 10.0f, z -> mainhandParent.getValue() && mainhandRotation.getValue()));
-    public Setting<Float> mainhandRotationZ = register(new Setting<>("Mainhand Rotation Z", 0.0f, 0.0f, 10.0f, z -> mainhandParent.getValue() && mainhandRotation.getValue()));
+    public ParentSetting mainhandRotation =  new ParentSetting("Mainhand Rotation", false, this, v -> mainhandParent.getValue());
+    public FloatSetting mainhandRotationX = new FloatSetting("Mainhand Rotation X", 0.0f, 0.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandRotation.getValue());
+    public FloatSetting mainhandRotationY = new FloatSetting("Mainhand Rotation Y", 0.0f, 0.0f, 10.0f, this,v -> mainhandParent.getValue() && mainhandRotation.getValue());
+    public FloatSetting mainhandRotationZ = new FloatSetting("Mainhand Rotation Z", 0.0f, 0.0f, 10.0f, this, v -> mainhandParent.getValue() && mainhandRotation.getValue());
 
-    public Setting<Boolean> offhandParent = register(new Setting<>("Offhand", true, false));
+    public ParentSetting offhandParent = new ParentSetting("Offhand", true, this);
 
-    public Setting<Boolean> offhandTranslation = register(new Setting<>("Offhand Translation", false, true, z -> offhandParent.getValue()));
-    public Setting<Float> offhandX = register(new Setting<>("Offhand X", 0.0f, -10.0f, 10.0f, z -> offhandParent.getValue() && offhandTranslation.getValue()));
-    public Setting<Float> offhandY = register(new Setting<>("Offhand Y", 0.0f, -10.0f, 10.0f, z -> offhandParent.getValue() && offhandTranslation.getValue()));
-    public Setting<Float> offhandZ = register(new Setting<>("Offhand Z", 0.0f, -10.0f, 10.0f, z -> offhandParent.getValue() && offhandTranslation.getValue()));
+    public ParentSetting offhandTranslation = new ParentSetting("Offhand Translation", false, this, v -> offhandParent.getValue());
+    public FloatSetting offhandX = new FloatSetting("Offhand X", 0.0f, -10.0f, 10.0f, this,v -> offhandParent.getValue() && offhandTranslation.getValue());
+    public FloatSetting offhandY = new FloatSetting("Offhand Y", 0.0f, -10.0f, 10.0f, this,v -> offhandParent.getValue() && offhandTranslation.getValue());
+    public FloatSetting offhandZ = new FloatSetting("Offhand Z", 0.0f, -10.0f, 10.0f, this, v -> offhandParent.getValue() && offhandTranslation.getValue());
 
-    public Setting<Boolean> offhandScaling = register(new Setting<>("Offhand Scaling", false, true, z -> offhandParent.getValue()));
-    public Setting<Float> offhandScaleX = register(new Setting<>("Offhand Scale X", 0.0f, -10.0f, 10.0f, z -> offhandParent.getValue() && offhandScaling.getValue()));
-    public Setting<Float> offhandScaleY = register(new Setting<>("Offhand Scale Y", 0.0f, -10.0f, 10.0f, z -> offhandParent.getValue() && offhandScaling.getValue()));
-    public Setting<Float> offhandScaleZ = register(new Setting<>("Offhand Scale Z", 0.0f, -10.0f, 10.0f, z -> offhandParent.getValue() && offhandScaling.getValue()));
+    public ParentSetting offhandScaling = new ParentSetting("Offhand Scaling", false, this, v -> offhandParent.getValue());
+    public FloatSetting offhandScaleX = new FloatSetting("Offhand Scale X", 0.0f, -10.0f, 10.0f, this, v -> offhandParent.getValue() && offhandScaling.getValue());
+    public FloatSetting offhandScaleY = new FloatSetting("Offhand Scale Y", 0.0f, -10.0f, 10.0f, this,v -> offhandParent.getValue() && offhandScaling.getValue());
+    public FloatSetting offhandScaleZ = new FloatSetting("Offhand Scale Z", 0.0f, -10.0f, 10.0f, this, v -> offhandParent.getValue() && offhandScaling.getValue());
 
-    public Setting<Boolean> offhandRotation = register(new Setting<>("Offhand Rotation", false, true, z -> offhandParent.getValue()));
-    public Setting<Float> offhandRotationX = register(new Setting<>("Offhand Rotation X", 0.0f, 0.0f, 10.0f, z -> offhandParent.getValue() && offhandRotation.getValue()));
-    public Setting<Float> offhandRotationY = register(new Setting<>("Offhand Rotation Y", 0.0f, 0.0f, 10.0f, z -> offhandParent.getValue() && offhandRotation.getValue()));
-    public Setting<Float> offhandRotationZ = register(new Setting<>("Offhand Rotation Z", 0.0f, 0.0f, 10.0f, z -> offhandParent.getValue() && offhandRotation.getValue()));
+    public ParentSetting offhandRotation = new ParentSetting("Offhand Rotation", false, this, v -> offhandParent.getValue());
+    public FloatSetting offhandRotationX = new FloatSetting("Offhand Rotation X", 0.0f, 0.0f, 10.0f,this,v -> offhandParent.getValue() && offhandRotation.getValue());
+    public FloatSetting offhandRotationY = new FloatSetting("Offhand Rotation Y", 0.0f, 0.0f, 10.0f,this,v -> offhandParent.getValue() && offhandRotation.getValue());
+    public FloatSetting offhandRotationZ = new FloatSetting("Offhand Rotation Z", 0.0f, 0.0f, 10.0f,this,v -> offhandParent.getValue() && offhandRotation.getValue());
 
-    public Setting<Float> alpha = register(new Setting("Item Opacity", 255.0f, 0.0f, 255.0f));
+    public FloatSetting alpha = new FloatSetting("Item Opacity", 255.0f, 0.0f, 255.0f,this);
 
 
     public Hand() {
-        super("Hand", Category.Visual, "");
         this.setInstance();
     }
 
