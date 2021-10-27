@@ -47,12 +47,12 @@ public class Packetmine extends Module {
 
     public enum SilentSwitchMode {AUTO, KEYBIND}
 
-    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1), v -> silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND));
+    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1), z -> silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND));
     public Setting<Boolean> render = register(new Setting<>("Render", true, false));
 
-    public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.EXPAND, v -> render.getValue()));
-    public Setting<BoxMode> boxMode = register(new Setting("BoxMode", BoxMode.BOTH, v -> render.getValue()));
-    public Setting<ColorMode> colorMode = register(new Setting("ColorMode", ColorMode.READYFADE, v -> render.getValue()));
+    public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.EXPAND, z -> render.getValue()));
+    public Setting<BoxMode> boxMode = register(new Setting("BoxMode", BoxMode.BOTH, z -> render.getValue()));
+    public Setting<ColorMode> colorMode = register(new Setting("ColorMode", ColorMode.READYFADE, z -> render.getValue()));
 
     public enum ColorMode {READYFADE, STATUS, STATIC}
 
@@ -60,15 +60,15 @@ public class Packetmine extends Module {
 
     public enum BoxMode {FILL, OUTLINE, BOTH}
 
-    public Setting<Integer> red = register(new Setting<>("Red", 254, 0, 254, v -> render.getValue()));
-    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 254, v -> render.getValue()));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 0, 0, 254, v -> render.getValue()));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 254, v -> render.getValue()));
+    public Setting<Integer> red = register(new Setting<>("Red", 254, 0, 254, z -> render.getValue()));
+    public Setting<Integer> green = register(new Setting<>("Green", 0, 0, 254, z -> render.getValue()));
+    public Setting<Integer> blue = register(new Setting<>("Blue", 0, 0, 254, z -> render.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 120, 0, 254, z -> render.getValue()));
 
-    public Setting<Integer> readyRed = register(new Setting<>("ReadyRed", 0, 0, 254, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
-    public Setting<Integer> readyGreen = register(new Setting<>("ReadyGreen", 254, 0, 254, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
-    public Setting<Integer> readyBlue = register(new Setting<>("ReadyBlue", 0, 0, 254, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
-    public Setting<Integer> speed = register(new Setting<>("ReadySpeed", 2, 1, 5, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> readyRed = register(new Setting<>("ReadyRed", 0, 0, 254, z -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> readyGreen = register(new Setting<>("ReadyGreen", 254, 0, 254, z -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> readyBlue = register(new Setting<>("ReadyBlue", 0, 0, 254, z -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
+    public Setting<Integer> speed = register(new Setting<>("ReadySpeed", 2, 1, 5, z -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE))));
 
     int currentAlpha;
     int count;

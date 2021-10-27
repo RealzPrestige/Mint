@@ -16,7 +16,7 @@ public class Phase extends Module {
     public enum Mode {Clip, Test}
 
     public Setting<Boolean> packet = register(new Setting("Packet Move", true));
-    public Setting<Integer> speed = register(new Setting("Speed", 1, 1, 10, v -> mode.getValue() == Mode.Test));
+    public Setting<Integer> speed = register(new Setting("Speed", 1, 1, 10, z -> mode.getValue() == Mode.Test));
 
     public Setting<Boolean> spoofonGround = register(new Setting("Spoof onGround", true));
     public Setting<Boolean> offground = register(new Setting("Off ground", false));

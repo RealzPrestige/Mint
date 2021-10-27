@@ -13,11 +13,11 @@ public class Velocity extends Module {
     public Setting<Boolean> entityCollisionPush = register(new Setting<>("Entity Push Collision", false));
     public Setting<Boolean> entityCollisionBlock = register(new Setting<>("Entity Block Collision", false));
     public Setting<Boolean> webCollision = register(new Setting<>("Entity Web Collision", false));
-    public Setting<WebCollisionMode> webCollisionMode = register(new Setting<>("Entity Web Collision Mode", WebCollisionMode.Speed, v -> webCollision.getValue()));
+    public Setting<WebCollisionMode> webCollisionMode = register(new Setting<>("Entity Web Collision Mode", WebCollisionMode.Speed, z -> webCollision.getValue()));
 
     public enum WebCollisionMode {Speed, Cancel}
 
-    public Setting<Float> webCollisionSpeed = register(new Setting<>("Web Speed", 1.0f, 0.1f, 50.0f, v -> webCollisionMode.getValue().equals(WebCollisionMode.Speed)));
+    public Setting<Float> webCollisionSpeed = register(new Setting<>("Web Speed", 1.0f, 0.1f, 50.0f, z -> webCollisionMode.getValue().equals(WebCollisionMode.Speed)));
 
     public Velocity() {
         super("Velocity", Category.Movement, "Changes Velocity of stuff");

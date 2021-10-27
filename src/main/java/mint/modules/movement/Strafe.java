@@ -27,17 +27,17 @@ public class Strafe extends Module {
 
     public enum SpeedMode {SwitchBind, Normal}
 
-    public Setting<StrafeMode> strafeMode = register(new Setting<>("Strafe Mode", StrafeMode.Strafe, v -> speedMode.getValue().equals(SpeedMode.Normal)));
+    public Setting<StrafeMode> strafeMode = register(new Setting<>("Strafe Mode", StrafeMode.Strafe, z -> speedMode.getValue().equals(SpeedMode.Normal)));
 
     public enum StrafeMode {Strafe, Instant, StrafeTest}
 
-    public Setting<KeyBindStrafe> keyBindStrafe = register(new Setting<>("Key Bind Strafe", KeyBindStrafe.Strafe, v -> speedMode.getValue().equals(SpeedMode.SwitchBind)));
+    public Setting<KeyBindStrafe> keyBindStrafe = register(new Setting<>("Key Bind Strafe", KeyBindStrafe.Strafe, z -> speedMode.getValue().equals(SpeedMode.SwitchBind)));
 
     public enum KeyBindStrafe {Strafe, StrafeTest}
 
     public Setting<Boolean> useTimer = register(new Setting("Use Timer", false));
-    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.3f, 1.0f, 2.0f, v -> useTimer.getValue()));
-    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1), v -> speedMode.getValue().equals(SpeedMode.SwitchBind)));
+    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.3f, 1.0f, 2.0f, z -> useTimer.getValue()));
+    public Setting<Bind> switchBind = register(new Setting<>("SwitchBind", new Bind(-1), z -> speedMode.getValue().equals(SpeedMode.SwitchBind)));
 
     private int level;
     private double moveSpeed;

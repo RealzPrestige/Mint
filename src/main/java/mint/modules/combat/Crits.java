@@ -1,28 +1,25 @@
 package mint.modules.combat;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Crits", category = Module.Category.Combat, description = "Automatically makes your hits turn into critical hits.")
 public class Crits extends Module {
 
-    public Crits() {
-        super("Crits", Module.Category.Combat, "Scores criticals for you.");
-    }
-
-    public Setting<Boolean> targetParent = register(new Setting("Target", true, false));
-    public Setting<Boolean> crystal = register(new Setting("End Crystals", false, v -> targetParent.getValue()));
-
-    public Setting<Boolean> pauseInLiquids = register(new Setting("Pause In Liquids", true));
-    public Setting<Boolean> confirmPos = register(new Setting("Confirm Position", true));
+    public BooleanSetting targetParent = new BooleanSetting("Target", true, this);
+    public BooleanSetting crystal = new BooleanSetting("End Crystals", false, this, z -> targetParent.getValue());
+    public BooleanSetting pauseInLiquids = new BooleanSetting("Pause In Liquids", true, this);
+    public BooleanSetting confirmPos = new BooleanSetting("Confirm Position", true, this);
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {
-        if (e.getPacket() instanceof CPacketUseEntity && ((CPacketUseEntity)e.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK) {
+        if (e.getPacket() instanceof CPacketUseEntity && ((CPacketUseEntity) e.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK) {
             if (!(e.getPacket() instanceof EntityEnderCrystal && crystal.getValue()) || ((mc.player.isInLava() || mc.player.isInWater()) && pauseInLiquids.getValue()) && !mc.player.onGround) {
                 return;
             }

@@ -1,8 +1,12 @@
 package mint.modules.combat;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.modules.movement.Step;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.*;
 import net.minecraft.block.BlockEnderChest;
 import net.minecraft.block.BlockObsidian;
@@ -10,35 +14,29 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
+@ModuleInfo(name = "Surround", category = Module.Category.Combat, description = "Surrounds you with Obsidian yuh.")
 public class Surround extends Module {
     public int maxBlocks;
     public int itemSlot;
-    public Setting<Boolean> modesParent = register(new Setting<>("Modes", true, false));
-    public Setting<PlaceMode> placeMode = register(new Setting<>("Place Mode", PlaceMode.Vanilla, v -> modesParent.getValue()));
-    public Setting<SwingMode> swingMode = register(new Setting<>("Swing Mode", SwingMode.Mainhand, v -> modesParent.getValue()));
-    public Setting<DisableMode> disableMode = register(new Setting<>("Disable Mode", DisableMode.Smart, v -> modesParent.getValue()));
-    public Setting<BlockSelection> blocks = register(new Setting<>("Blocks", BlockSelection.Obsidian, v -> modesParent.getValue()));
-    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
-    public Setting<Integer> placeDelay = register(new Setting<>("Place Delay", 50, 0, 500, v -> miscParent.getValue()));
-    public Setting<Boolean> rotate = register(new Setting("Rotate", false, v -> miscParent.getValue()));
-    public Setting<Boolean> bottomBlocks = register(new Setting("Bottom Blocks", false, v -> miscParent.getValue()));
-    public Setting<Boolean> bottomBlocksExtend = register(new Setting("Bottom Blocks Extend", false, v -> bottomBlocks.getValue() && miscParent.getValue()));
-    public Setting<Boolean> maxBlock = register(new Setting("Max Blocks", false, v -> miscParent.getValue()));
-    public Setting<Integer> maxBlocksAmount = register(new Setting<>("Max Blocks Amount", 10, 0, 20, v -> maxBlock.getValue() && miscParent.getValue()));
+    public ParentSetting modesParent = new ParentSetting("Modes", true, this);
+    public EnumSetting placeMode = new EnumSetting("Place Mode", PlaceMode.Vanilla, this, z -> modesParent.getValue());
+    public EnumSetting disableMode = new EnumSetting("Disable Mode", DisableMode.Smart, this, z -> modesParent.getValue());
+    public EnumSetting blocks = new EnumSetting("Blocks", BlockSelection.Obsidian, this, z -> modesParent.getValue());
+    public ParentSetting miscParent = new ParentSetting("Misc", true, this);
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 50, 0, 500, this, z -> miscParent.getValue());
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, z -> miscParent.getValue());
+    public BooleanSetting bottomBlocks = new BooleanSetting("Bottom Blocks", false, this, z -> miscParent.getValue());
+    public BooleanSetting bottomBlocksExtend = new BooleanSetting("Bottom Blocks Extend", false, this, z -> bottomBlocks.getValue() && miscParent.getValue());
+    public BooleanSetting maxBlock = new BooleanSetting("Max Blocks", false, this, z -> miscParent.getValue());
+    public IntegerSetting maxBlocksAmount = new IntegerSetting("Max Blocks Amount", 10, 0, 20, this, z -> maxBlock.getValue() && miscParent.getValue());
 
     public enum PlaceMode {Vanilla, Packet}
-
-    public enum SwingMode {Mainhand, Offhand}
 
     public enum DisableMode {OnComplete, Motion, Onground, Smart, StepHeight}
 
     public enum BlockSelection {Obsidian, Echest, Auto}
 
     Timer timer = new Timer();
-
-    public Surround() {
-        super("Surround", Category.Combat, "Surrounds you with Obsidian yuh.");
-    }
 
     public void onLogin() {
         if (isEnabled())
@@ -52,49 +50,37 @@ public class Surround extends Module {
         BlockPos pos = PlayerUtil.getPlayerPos(mc.player);
         BlockPos center = PlayerUtil.getCenterPos(pos.getX(), pos.getY(), pos.getZ());
 
-        switch (blocks.getValue()) {
-            case Obsidian:
+        if (blocks.getValue().equals(BlockSelection.Obsidian))
+            itemSlot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
+        else if (blocks.getValue().equals(BlockSelection.Echest))
+            itemSlot = InventoryUtil.findHotbarBlock(BlockEnderChest.class);
+        else if (blocks.getValue().equals(BlockSelection.Auto))
+            if (InventoryUtil.findHotbarBlock(BlockObsidian.class) != -1)
                 itemSlot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
-                break;
-            case Echest:
+            else if (InventoryUtil.findHotbarBlock(BlockEnderChest.class) != -1)
                 itemSlot = InventoryUtil.findHotbarBlock(BlockEnderChest.class);
-                break;
-            case Auto:
-                if (InventoryUtil.findHotbarBlock(BlockObsidian.class) != -1)
-                    itemSlot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
-                else if (InventoryUtil.findHotbarBlock(BlockEnderChest.class) != -1)
-                    itemSlot = InventoryUtil.findHotbarBlock(BlockEnderChest.class);
-                else disable();
-                break;
-        }
+            else disable();
 
         if (itemSlot == -1)
             disable();
 
-        switch (disableMode.getValue()) {
-            case Smart:
-                if (mc.player.motionY > 0.2 && !mc.player.onGround && mc.player.stepHeight > 0.6 || Step.getInstance().isEnabled())
-                    disable();
-                break;
-            case Motion:
+        if (disableMode.getValue().equals(DisableMode.Smart))
+            if (mc.player.motionY > 0.2 && !mc.player.onGround && mc.player.stepHeight > 0.6 || Step.getInstance().isEnabled())
+                disable();
+            else if (disableMode.getValue().equals(DisableMode.Motion))
                 if (mc.player.motionY > 0.2)
                     disable();
-                break;
-            case Onground:
-                if (!mc.player.onGround)
-                    disable();
-                break;
-            case OnComplete:
-                if (mc.world.getBlockState(center.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.south()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.west()).getBlock().equals(Blocks.OBSIDIAN))
-                    disable();
-                break;
-            case StepHeight:
-                if (mc.player.stepHeight > 1)
-                    disable();
-                break;
-        }
+                else if (disableMode.getValue().equals(DisableMode.Onground))
+                    if (!mc.player.onGround)
+                        disable();
+                    else if (disableMode.getValue().equals(DisableMode.OnComplete))
+                        if (mc.world.getBlockState(center.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.south()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.west()).getBlock().equals(Blocks.OBSIDIAN))
+                            disable();
+                        else if (disableMode.getValue().equals(DisableMode.StepHeight))
+                            if (mc.player.stepHeight > 1)
+                                disable();
 
-        if(!timer.passedMs(placeDelay.getValue()))
+        if (!timer.passedMs(placeDelay.getValue()))
             return;
 
         if (bottomBlocksExtend.getValue() && !(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.down().north()).getBlock().equals(Blocks.AIR)) {

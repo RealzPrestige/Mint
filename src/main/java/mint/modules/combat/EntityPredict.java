@@ -1,9 +1,11 @@
 package mint.modules.combat;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.RenderUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -14,19 +16,16 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Entity Predict", category = Module.Category.Combat, description = "Predicts entityids and attacks them.")
 public class EntityPredict extends Module {
-    public Setting<Integer> attackAmount = register(new Setting<>("Attack Amount", 1, 1, 5));
-    public Setting<Boolean> holdingCrystalOnly = register(new Setting<>("Holding Crystal Only", false));
-    public Setting<Boolean> render = register(new Setting<>("Render", false));
-    public Setting<Boolean> down = register(new Setting("Down", false, v -> render.getValue()));
+    public IntegerSetting attackAmount = new IntegerSetting("Attack Amount", 1, 1, 5, this);
+    public BooleanSetting holdingCrystalOnly = new BooleanSetting("Holding Crystal Only", false, this);
+    public BooleanSetting render = new BooleanSetting("Render", false, this);
+    public BooleanSetting down = new BooleanSetting("Down", false, this, z -> render.getValue());
 
     int currentId;
     BlockPos currentPos;
     Entity entity;
-
-    public EntityPredict() {
-        super("Entity Predict", Category.Combat, "Predict crystal ids and attack m");
-    }
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event) {
@@ -52,7 +51,7 @@ public class EntityPredict extends Module {
                 }
             }
             currentPos = packet.getPos();
-            if(entity != null) {
+            if (entity != null) {
                 switch (attackAmount.getValue()) {
                     case 1:
                         attackEntity(entityId + 1);

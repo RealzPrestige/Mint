@@ -18,13 +18,13 @@ public class PacketManipulator extends Module {
      */
 
     public Setting<Boolean> cancel = register(new Setting("Cancel", true, false));
-    public Setting<Boolean> s = register(new Setting("Server", true, false, v -> cancel.getValue()));
+    public Setting<Boolean> s = register(new Setting("Server", true, false, z -> cancel.getValue()));
 
-    public Setting<Boolean> c = register(new Setting("Client", true, false, v -> cancel.getValue()));
+    public Setting<Boolean> c = register(new Setting("Client", true, false, z -> cancel.getValue()));
     public Setting<Boolean> cplayer = register(new Setting("Player", true));
 
     public Setting<Boolean> send = register(new Setting("Send", true, false));
-    public Setting<Integer> packet1 = register(new Setting("Packet1", 1, 1, 10, v -> send.getValue()));
+    public Setting<Integer> packet1 = register(new Setting("Packet1", 1, 1, 10, z -> send.getValue()));
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {

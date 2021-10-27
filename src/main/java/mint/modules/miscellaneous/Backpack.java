@@ -21,13 +21,13 @@ public class Backpack extends Module {
 
     public Setting<Boolean> containerParent = register(new Setting("Containers", true, false));
     //todo add other containers like echest, anvil etc
-    public Setting<Boolean> chest = register(new Setting("Chest", false, v -> containerParent.getValue()));
-    public Setting<Boolean> furnace = register(new Setting("Furnace", false, v -> containerParent.getValue()));
-    public Setting<Boolean> inventory = register(new Setting("Inventory", false, v -> containerParent.getValue()));
+    public Setting<Boolean> chest = register(new Setting("Chest", false, z -> containerParent.getValue()));
+    public Setting<Boolean> furnace = register(new Setting("Furnace", false, z -> containerParent.getValue()));
+    public Setting<Boolean> inventory = register(new Setting("Inventory", false, z -> containerParent.getValue()));
 
     public Setting<Boolean> miscParent = register(new Setting("Misc", true, false));
-    public Setting<Boolean> open = register(new Setting("Open", false, v -> miscParent.getValue()));
-    public Setting<Boolean> close = register(new Setting("Close", false, v -> miscParent.getValue()));
+    public Setting<Boolean> open = register(new Setting("Open", false, z -> miscParent.getValue()));
+    public Setting<Boolean> close = register(new Setting("Close", false, z -> miscParent.getValue()));
     private GuiScreen cancelledGui = null;
 
     @SubscribeEvent

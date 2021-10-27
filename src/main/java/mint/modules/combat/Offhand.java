@@ -1,10 +1,12 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.setting.Setting;
+import mint.Mint;
 import mint.events.RenderOverlayEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.modules.miscellaneous.EntityCrammer;
+import mint.settingsrewrite.impl.*;
 import mint.utils.*;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.Blocks;
@@ -19,42 +21,39 @@ import java.util.Map;
  * @author zPrestige
  */
 
+@ModuleInfo(name = "Offhand", category = Module.Category.Combat, description = "Changes the item in your offhand.")
 public class Offhand extends Module {
 
-    public Setting<Boolean> itemParent = register(new Setting<>("Item", true, false));
-    public Setting<Boolean> crystal = register(new Setting("Crystal", false, v -> itemParent.getValue()));
-    public Setting<Boolean> crystalOnSword = register(new Setting("Sword Crystal", false, v -> !crystal.getValue() && itemParent.getValue()));
-    public Setting<Boolean> crystalOnPickaxe = register(new Setting("Pickaxe Crystal", false, v -> !crystal.getValue() && itemParent.getValue()));
+    public ParentSetting itemParent = new ParentSetting("Items", true, this);
+    public BooleanSetting crystal = new BooleanSetting("Crystal", false, this, z -> itemParent.getValue());
+    public BooleanSetting crystalOnSword = new BooleanSetting("Sword Crystal", false, this, z -> !crystal.getValue() && itemParent.getValue());
+    public BooleanSetting crystalOnPickaxe = new BooleanSetting("Pickaxe Crystal", false, this, z -> !crystal.getValue() && itemParent.getValue());
 
-    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
-    public Setting<Integer> switchDelay = register(new Setting<>("Switch Delay", 50, 0, 200, v -> miscParent.getValue()));
-    public Setting<Boolean> fallBack = register(new Setting("FallBack", false, v -> miscParent.getValue()));
+    public ParentSetting miscParent = new ParentSetting("Misc", true, this);
+    public IntegerSetting switchDelay = new IntegerSetting("Switch Delay", 50, 0, 200, this, z -> miscParent.getValue());
+    public BooleanSetting fallBack = new BooleanSetting("FallBack", false, this, z -> miscParent.getValue());
 
-    public Setting<Boolean> healthParent = register(new Setting<>("Health", true, false));
-    public Setting<Float> totemHealth = register(new Setting<>("Totem Health", 10f, 0f, 20f, v -> healthParent.getValue()));
-    public Setting<Boolean> hole = register(new Setting("Hole Check", false, v -> healthParent.getValue()));
-    public Setting<Float> holeHealth = register(new Setting<>("Totem Hole Health", 10f, 0f, 20f, v -> healthParent.getValue() && hole.getValue()));
+    public ParentSetting healthParent = new ParentSetting("Health", true, this);
+    public FloatSetting totemHealth = new FloatSetting("Totem Health", 10f, 0f, 20f, this, z -> healthParent.getValue());
+    public BooleanSetting hole = new BooleanSetting("Hole Check", false, this, z -> healthParent.getValue());
+    public FloatSetting holeHealth = new FloatSetting("Totem Hole Health", 10f, 0f, 20f, this, z -> healthParent.getValue() && hole.getValue());
 
-    public Setting<Boolean> fallDistanceParent = register(new Setting<>("Fall Distance", true, false));
-    public Setting<Boolean> fallDistance = register(new Setting("Fall Distance Check", false, v -> fallDistanceParent.getValue()));
-    public Setting<Float> minDistance = register(new Setting<>("Min Distance", 10f, 1f, 100f, v -> fallDistance.getValue() && fallDistanceParent.getValue()));
+    public ParentSetting fallDistanceParent = new ParentSetting("Fall Distance", true, this);
+    public BooleanSetting fallDistance = new BooleanSetting("Fall Distance Check", false, this, z -> fallDistanceParent.getValue());
+    public FloatSetting minDistance = new FloatSetting("Min Distance", 10f, 1f, 100f, this, z -> fallDistance.getValue() && fallDistanceParent.getValue());
 
-    public Setting<Boolean> gappleParent = register(new Setting<>("Gapple", true, false));
-    public Setting<Boolean> gapple = register(new Setting("Gapple Switch", false, v -> gappleParent.getValue()));
-    public Setting<Boolean> rightClick = register(new Setting("Right Click Only", false, v -> gapple.getValue() && gappleParent.getValue()));
+    public ParentSetting gappleParent = new ParentSetting("Gapple", true, this);
+    public BooleanSetting gapple = new BooleanSetting("Gapple Switch", false, this, z -> gappleParent.getValue());
+    public BooleanSetting rightClick = new BooleanSetting("Right Click Only", false, this, z -> gapple.getValue() && gappleParent.getValue());
 
-    public Setting<Boolean> visualParent = register(new Setting<>("Visual", true, false));
-    public Setting<RenderMode> render = register(new Setting<>("RenderMode", RenderMode.ALWAYS, v -> visualParent.getValue()));
+    public ParentSetting visualParent = new ParentSetting("Visual", true, this);
+    public EnumSetting render = new EnumSetting("RenderMode", RenderMode.ALWAYS, this, z -> visualParent.getValue());
 
     public enum RenderMode {ALWAYS, ONSWITCH, NEVER}
 
 
     Timer switchTimer = new Timer();
     HashMap<String, Integer> renderString = new HashMap();
-
-    public Offhand() {
-        super("Offhand", Category.Combat, "Changes the item in your offhand.");
-    }
 
     @Override
     public void onUpdate() {
@@ -83,14 +82,14 @@ public class Offhand extends Module {
         int screenWidth = new ScaledResolution(mc).getScaledWidth();
         for (Map.Entry<String, Integer> entry : renderString.entrySet()) {
             if (render.getValue() == RenderMode.ALWAYS) {
-                renderer.drawStringWithShadow("Current Item: " + ChatFormatting.BOLD + entry.getKey(), (screenWidth / 2f) - (renderer.getStringWidth("Current Item: " + entry.getKey()) / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
+                Mint.textManager.drawStringWithShadow("Current Item: " + ChatFormatting.BOLD + entry.getKey(), (screenWidth / 2f) - (Mint.textManager.getStringWidth("Current Item: " + entry.getKey()) / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
             } else if (render.getValue() == RenderMode.ONSWITCH) {
                 renderString.put(entry.getKey(), entry.getValue() - 1);
                 if (entry.getValue() <= 0) {
                     renderString.remove(entry.getKey());
                     return;
                 }
-                renderer.drawStringWithShadow("Offhand switched to Item: " + ChatFormatting.BOLD + entry.getKey(), (screenWidth / 2f) - (renderer.getStringWidth("Offhand switched to Item: " + entry.getKey()) / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
+                Mint.textManager.drawStringWithShadow("Offhand switched to Item: " + ChatFormatting.BOLD + entry.getKey(), (screenWidth / 2f) - (Mint.textManager.getStringWidth("Offhand switched to Item: " + entry.getKey()) / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
             }
         }
     }

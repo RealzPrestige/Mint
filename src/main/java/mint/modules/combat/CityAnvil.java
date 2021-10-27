@@ -1,9 +1,10 @@
 package mint.modules.combat;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -21,27 +22,22 @@ import net.minecraft.util.math.BlockPos;
 import java.awt.*;
 import java.util.Objects;
 
+@ModuleInfo(name = "City Anvil", category = Module.Category.Combat, description = "Breaks ppl surround using anvil")
 public class CityAnvil extends Module {
 
-    public Setting<Float> targetRange = register(new Setting<>("Target Range", 5.0f, 0.0f, 6.0f));
-    public Setting<Boolean> silentSwitch = register(new Setting<>("Silent Switch", false));
-    public Setting<Boolean> packet = register(new Setting<>("Packet", false));
-    public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
-    public Setting<Boolean> swing = register(new Setting<>("Swing", false));
-    public Setting<EnumHand> swingMode = register(new Setting<>("Swing Mode", EnumHand.MAIN_HAND, v -> swing.getValue()));
-    public Setting<Boolean> autoMine = register(new Setting<>("Auto Mine", false));
-    public Setting<Integer> mineDelay  = register(new Setting<>( "Mine Delay", 700, 0, 1000));
-    public Setting<Boolean> render = register(new Setting<>("Render", false));
-    public Setting<Integer> outlineRed = register(new Setting<>( "Red", 255, 0, 255, v-> render.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("Green", 255, 0, 255, v-> render.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("Blue", 255, 0, 255, v-> render.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("Alpha", 120, 0, 255, v-> render.getValue()));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 5.0f, 0.0f, 6.0f, this);
+    public BooleanSetting silentSwitch = new BooleanSetting("Silent Switch", false, this);
+    public BooleanSetting packet = new BooleanSetting("Packet", false, this);
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
+    public BooleanSetting swing = new BooleanSetting("Swing", false, this);
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", EnumHand.MAIN_HAND, this, z -> swing.getValue());
+    public BooleanSetting autoMine = new BooleanSetting("Auto Mine", false, this);
+    public IntegerSetting mineDelay = new IntegerSetting("Mine Delay", 700, 0, 1000, this);
+    public BooleanSetting render = new BooleanSetting("Render", false, this);
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> render.getValue());
     Timer timer = new Timer();
     BlockPos currentPos;
     BlockPos currentPos2;
-    public CityAnvil() {
-        super("City Anvil", Category.Combat, "no idea how to describe it");
-    }
 
     public void onUpdate() {
         EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
@@ -63,7 +59,7 @@ public class CityAnvil extends Module {
                     if (silentSwitch.getValue()) {
                         InventoryUtil.SilentSwitchToSlot(anvilSlot);
                     }
-                    BlockUtil.placeBlock(pos.north(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), swingMode.getValue());
+                    BlockUtil.placeBlock(pos.north(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), (EnumHand) swingMode.getValue());
                     currentPos = pos.north();
                     currentPos2 = pos.north().north();
                     if (silentSwitch.getValue()) {
@@ -103,7 +99,7 @@ public class CityAnvil extends Module {
                     if (silentSwitch.getValue()) {
                         InventoryUtil.SilentSwitchToSlot(anvilSlot);
                     }
-                    BlockUtil.placeBlock(pos.east(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), swingMode.getValue());
+                    BlockUtil.placeBlock(pos.east(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), (EnumHand) swingMode.getValue());
                     currentPos = pos.east();
                     currentPos2 = pos.east().east();
                     if (silentSwitch.getValue()) {
@@ -144,7 +140,7 @@ public class CityAnvil extends Module {
                     if (silentSwitch.getValue()) {
                         InventoryUtil.SilentSwitchToSlot(anvilSlot);
                     }
-                    BlockUtil.placeBlock(pos.south(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), swingMode.getValue());
+                    BlockUtil.placeBlock(pos.south(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), (EnumHand) swingMode.getValue());
                     currentPos = pos.south();
                     currentPos2 = pos.south().south();
                     if (silentSwitch.getValue()) {
@@ -188,7 +184,7 @@ public class CityAnvil extends Module {
                     if (silentSwitch.getValue()) {
                         InventoryUtil.SilentSwitchToSlot(anvilSlot);
                     }
-                    BlockUtil.placeBlock(pos.west(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), swingMode.getValue());
+                    BlockUtil.placeBlock(pos.west(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), (EnumHand) swingMode.getValue());
                     currentPos = pos.west();
                     currentPos2 = pos.west().west();
                     if (silentSwitch.getValue()) {
@@ -218,8 +214,8 @@ public class CityAnvil extends Module {
                 }
             }
         }
-        if(currentPos != null && mc.world.getBlockState(currentPos).getBlock() == Blocks.ANVIL){
-            if(autoMine.getValue()) {
+        if (currentPos != null && mc.world.getBlockState(currentPos).getBlock() == Blocks.ANVIL) {
+            if (autoMine.getValue()) {
                 if (timer.passedMs(mineDelay.getValue())) {
                     mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, currentPos, EnumFacing.UP));
                     mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, currentPos, EnumFacing.UP));
@@ -231,11 +227,10 @@ public class CityAnvil extends Module {
     }
 
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (currentPos != null && render.getValue()) {
-            RenderUtil.drawBlockOutline(currentPos, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 1, true);
-        }
-        if(currentPos2 != null && render.getValue()){
-            RenderUtil.drawBlockOutline(currentPos2, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 1, true);
-        }
+        if (currentPos != null && render.getValue())
+            RenderUtil.drawBlockOutline(currentPos, color.getColor(), 1, true);
+        if (currentPos2 != null && render.getValue())
+            RenderUtil.drawBlockOutline(currentPos2, color.getColor(), 1, true);
+
     }
 }

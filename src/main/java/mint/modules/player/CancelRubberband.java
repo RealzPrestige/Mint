@@ -15,10 +15,10 @@ import java.util.Objects;
 public class CancelRubberband extends Module {
     public Setting<Mode> mode = register(new Setting<>("Mode", Mode.Cancel));
     public Setting<Boolean> onGroundOnly = register(new Setting("On Ground Only", false));
-    public Setting<Division> posYDivision = register(new Setting<>("Pos Y Division", Division.Ten, v -> mode.getValue().equals(Mode.PacketTeleport) || mode.getValue().equals(Mode.VanillaTeleport)));
-    public Setting<FirstY> firstY = register(new Setting<>("First Y", FirstY.Positive, v -> mode.getValue().equals(Mode.PacketTeleport) || mode.getValue().equals(Mode.VanillaTeleport)));
-    public Setting<Boolean> resetY = register(new Setting("Reset Y", false, v -> mode.getValue().equals(Mode.PacketTeleport) || mode.getValue().equals(Mode.VanillaTeleport)));
-    public Setting<Boolean> onGroundIn = register(new Setting("On Ground In", false, v -> mode.getValue().equals(Mode.PacketTeleport)));
+    public Setting<Division> posYDivision = register(new Setting<>("Pos Y Division", Division.Ten, z -> mode.getValue().equals(Mode.PacketTeleport) || mode.getValue().equals(Mode.VanillaTeleport)));
+    public Setting<FirstY> firstY = register(new Setting<>("First Y", FirstY.Positive, z -> mode.getValue().equals(Mode.PacketTeleport) || mode.getValue().equals(Mode.VanillaTeleport)));
+    public Setting<Boolean> resetY = register(new Setting("Reset Y", false, z -> mode.getValue().equals(Mode.PacketTeleport) || mode.getValue().equals(Mode.VanillaTeleport)));
+    public Setting<Boolean> onGroundIn = register(new Setting("On Ground In", false, z -> mode.getValue().equals(Mode.PacketTeleport)));
 
     public enum Division {Ten, Hundred, Thousand, TenThousand, HundredThousand, Million, TenMillion, HundredMillion, Billion}
 

@@ -26,16 +26,16 @@ public class TickShift extends Module {
 
     public enum DisableMode {Ticks, Distance, None}
 
-    public Setting<Integer> ticksVal = register(new Setting<>("Ticks", 12, 1, 100, v -> disableMode.getValue() == DisableMode.Ticks));
-    public Setting<Double> distanceVal = register(new Setting<>("Distance", 3.2d, 0.1d, 15.0d, v -> disableMode.getValue() == DisableMode.Distance));
+    public Setting<Integer> ticksVal = register(new Setting<>("Ticks", 12, 1, 100, z -> disableMode.getValue() == DisableMode.Ticks));
+    public Setting<Double> distanceVal = register(new Setting<>("Distance", 3.2d, 0.1d, 15.0d, z -> disableMode.getValue() == DisableMode.Distance));
 
     public Setting<Boolean> blink = register(new Setting<>("Blink", false));
-    public Setting<D> mode = register(new Setting<>("Mode", D.Client, v -> blink.getValue()));
+    public Setting<D> mode = register(new Setting<>("Mode", D.Client, z -> blink.getValue()));
 
     public enum D {Client, Server, Both}
 
-    public Setting<Boolean> renderPlayer = register(new Setting("Visualize", false, v -> blink.getValue()));
-    public Setting<Boolean> test = register(new Setting("Phobos Test", false, v -> mode.getValue() != D.Server && blink.getValue()));
+    public Setting<Boolean> renderPlayer = register(new Setting("Visualize", false, z -> blink.getValue()));
+    public Setting<Boolean> test = register(new Setting("Phobos Test", false, z -> mode.getValue() != D.Server && blink.getValue()));
 
     Queue<Packet<?>> packets = new ConcurrentLinkedQueue<>();
     EntityOtherPlayerMP fakePlayer;

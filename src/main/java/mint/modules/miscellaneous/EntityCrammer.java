@@ -26,7 +26,7 @@ public class EntityCrammer extends Module {
     public Setting<Boolean> packet = register(new Setting<>("Packet", false));
     public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
     public Setting<Boolean> swing = register(new Setting<>("Swing", false));
-    public Setting<SwingHand> swingMode = register(new Setting<>("Swing Mode", SwingHand.MAINHAND, v -> swing.getValue()));
+    public Setting<SwingHand> swingMode = register(new Setting<>("Swing Mode", SwingHand.MAINHAND, z -> swing.getValue()));
 
     public enum SwingHand {MAINHAND, OFFHAND, PACKET}
 

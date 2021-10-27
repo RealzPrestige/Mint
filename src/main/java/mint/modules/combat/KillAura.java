@@ -1,9 +1,9 @@
 package mint.modules.combat;
 
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
-import mint.utils.ColorUtil;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.InventoryUtil;
 import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
@@ -20,45 +20,42 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import java.awt.*;
+
+@ModuleInfo(name = "Kill Aura", category = Module.Category.Combat, description = "Automatically attacks entities.")
 public class KillAura extends Module {
-    public KillAura() {
-        super("Kill Aura", Category.Combat, "Automatically attacks entities.");
-    }
 
     //delay
-    public Setting<Boolean> delayParent = register(new Setting<>("Delay", true, false));
-    public Setting<Boolean> attackDelay = register(new Setting("AttackDelay", true, v -> delayParent.getValue()));
-    public Setting<Integer> attackSpeed = register(new Setting("AttackSpeed", 10, 2, 18, v -> delayParent.getValue()));
+    public BooleanSetting delayParent = new BooleanSetting("Delay", true, this);
+    public BooleanSetting attackDelay =new BooleanSetting("AttackDelay", true, this, z -> delayParent.getValue());
+    public IntegerSetting attackSpeed = new IntegerSetting("AttackSpeed", 10, 2, 18, this, z -> delayParent.getValue());
 
     //target
-    public Setting<Boolean> targetParent = register(new Setting("Targets", true, false));
-    public Setting<Boolean> players = register(new Setting("Players", true, v -> targetParent.getValue()));
-    public Setting<Boolean> mobs = register(new Setting("Mobs", true, v -> targetParent.getValue()));
-    public Setting<Boolean> animals = register(new Setting("Animals", true, v -> targetParent.getValue()));
+    public ParentSetting targetParent = new ParentSetting("Targets", true, this);
+    public BooleanSetting players = new BooleanSetting("Players", true,this, z -> targetParent.getValue());
+    public BooleanSetting mobs = new BooleanSetting("Mobs", true,this, z -> targetParent.getValue());
+    public BooleanSetting animals = new BooleanSetting("Animals", true,this, z -> targetParent.getValue());
 
     //render
-    public Setting<Boolean> renderParent = register(new Setting<>("Render", true, false));
-    public Setting<Boolean> render = register(new Setting("Render", true, v -> renderParent.getValue()));
-    public Setting<RenderMode> renderMode = register(new Setting("RenderMode", RenderMode.BOTH, v-> renderParent.getValue() && render.getValue()));
-    public enum RenderMode{BOTH, OUTLINE, FILL}
-    public Setting<Integer> r = register(new Setting("R", 255, 0, 255, v -> renderParent.getValue() && render.getValue()));
-    public Setting<Integer> g = register(new Setting("G", 255, 0, 255, v -> renderParent.getValue() && render.getValue()));
-    public Setting<Integer> b = register(new Setting("B", 255, 0, 255, v -> renderParent.getValue() && render.getValue()));
-    public Setting<Integer> a = register(new Setting("A", 125, 0, 255, v -> renderParent.getValue() && render.getValue()));
-    public Setting<Integer> lineWidth = register(new Setting("LineWidth", 1, 0, 3, v -> renderParent.getValue() && render.getValue()));
-    public Setting<Boolean> rainbow = register(new Setting("Rainbow", true, v -> renderParent.getValue() && render.getValue()));
+    public BooleanSetting renderParent = new BooleanSetting("Render", true, this);
+    public BooleanSetting render = new BooleanSetting("Render", true, this, z -> renderParent.getValue());
+    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.BOTH, this, v -> renderParent.getValue() && render.getValue());
 
+    public enum RenderMode {BOTH, OUTLINE, FILL}
+
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> renderParent.getValue() && render.getValue());
+    public IntegerSetting lineWidth = new IntegerSetting("LineWidth", 1, 0, 3, this, z -> renderParent.getValue() && render.getValue());
     //misc
-    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
-    public Setting<Boolean> onlySword = register(new Setting("OnlySword", false, v -> miscParent.getValue()));
-    public Setting<Integer> range = register(new Setting("Range", 4, 1, 6, v -> miscParent.getValue()));
-    public Setting<Boolean> rotate = register(new Setting("Rotate", false, v -> miscParent.getValue()));
-    public Setting<Boolean> switchToSword = register(new Setting("SwitchToSword", true, v -> miscParent.getValue()));
+    public BooleanSetting miscParent = new BooleanSetting("Misc", true, this);
+    public BooleanSetting onlySword = new BooleanSetting("OnlySword", false, this, z -> miscParent.getValue());
+    public IntegerSetting range = new IntegerSetting("Range", 4, 1, 6, this, z -> miscParent.getValue());
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, z -> miscParent.getValue());
+    public BooleanSetting switchToSword = new BooleanSetting("SwitchToSword", true, this, z -> miscParent.getValue());
     public Entity target = null;
 
     @Override
     public void onUpdate() {
-        if(NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         for (Entity e : mc.world.loadedEntityList) {
@@ -90,13 +87,13 @@ public class KillAura extends Module {
     public void renderWorldLastEvent(RenderWorldEvent event) {
         boolean fill = false;
         boolean outline = false;
-        if(renderMode.getValue().equals(RenderMode.BOTH)) {
+        if (renderMode.getValue().equals(RenderMode.BOTH)) {
             fill = true;
             outline = true;
-        }else if(renderMode.getValue().equals(RenderMode.FILL)) {
+        } else if (renderMode.getValue().equals(RenderMode.FILL)) {
             fill = true;
             outline = false;
-        }else if(renderMode.getValue().equals(RenderMode.OUTLINE)) {
+        } else if (renderMode.getValue().equals(RenderMode.OUTLINE)) {
             fill = false;
             outline = true;
         }
@@ -104,10 +101,10 @@ public class KillAura extends Module {
             AxisAlignedBB bb = target.getEntityBoundingBox().offset(-mc.getRenderManager().renderPosX, -mc.getRenderManager().renderPosY, -mc.getRenderManager().renderPosZ);
             RenderUtil.prepare();
             if (fill)
-                RenderGlobal.renderFilledBox(bb, (rainbow.getValue() ? ColorUtil.rainbow(6).getRed() : r.getValue()) / 255f, (rainbow.getValue() ? ColorUtil.rainbow(6).getGreen() : g.getValue()) / 255f, (rainbow.getValue() ? ColorUtil.rainbow(6).getBlue() : b.getValue()) / 255f, a.getValue() / 255f);
+                RenderGlobal.renderFilledBox(bb, color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), color.getColor().getAlpha());
             if (outline) {
                 GlStateManager.glLineWidth(lineWidth.getValue());
-                RenderGlobal.drawSelectionBoundingBox(bb, (rainbow.getValue() ? ColorUtil.rainbow(6).getRed() : r.getValue()) / 255f, (rainbow.getValue() ? ColorUtil.rainbow(6).getGreen() : g.getValue()) / 255f, (rainbow.getValue() ? ColorUtil.rainbow(6).getBlue() : b.getValue()) / 255f, a.getValue() / 255f);
+                RenderGlobal.drawSelectionBoundingBox(bb, color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue(), color.getColor().getAlpha());
             }
             RenderUtil.release();
         }

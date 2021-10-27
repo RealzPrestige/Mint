@@ -1,11 +1,11 @@
 package mint.modules.combat;
 
-import mint.setting.Bind;
-import mint.setting.Setting;
 import mint.events.CrystalAttackEvent;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -38,95 +38,88 @@ import java.util.TreeMap;
 
 /**
  * @author zPrestige_
- * @author kambing
  * @since 05/10/21
  */
 @SuppressWarnings("unchecked")
+@ModuleInfo(name = "Auto Crystal", category = Module.Category.Combat, description = "Places and breaks crystals")
 public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
-    public Setting<Boolean> rangesParent = register(new Setting<>("Ranges", true, false));
-    public Setting<Float> placeRange = register(new Setting<>("Place Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
-    public Setting<Float> breakRange = register(new Setting<>("Break Range", 5f, 0f, 6f, v -> rangesParent.getValue()));
-    public Setting<Float> targetRange = register(new Setting<>("Target Range", 10f, 0f, 15f, v -> rangesParent.getValue()));
+    public ParentSetting rangesParent = new ParentSetting("Ranges", false, this);
+    public FloatSetting placeRange = new FloatSetting("Place Range", 5f, 0f, 6f, this, z -> rangesParent.getValue());
+    public FloatSetting breakRange = new FloatSetting("Break Range", 5f, 0f, 6f, this, z -> rangesParent.getValue());
+    public FloatSetting targetRange = new FloatSetting("Target Range", 10f, 0f, 15f, this, z -> rangesParent.getValue());
 
-    public Setting<Boolean> damagesParent = register(new Setting<>("Damages", true, false));
-    public Setting<Float> minimumDamage = register(new Setting<>("Minimum Damage", 6f, 0f, 16f, v -> damagesParent.getValue()));
-    public Setting<Float> maximumSelfDamage = register(new Setting<>("Maximum Self Damage", 8f, 0f, 16f, v -> damagesParent.getValue()));
-    public Setting<Boolean> antiSuicide = register(new Setting<>("Anti Suicide", false, false, v -> damagesParent.getValue()));
+    public ParentSetting damagesParent = new ParentSetting("Damages", false, this);
+    public FloatSetting minimumDamage = new FloatSetting("Minimum Damage", 6f, 0f, 16f, this, z -> rangesParent.getValue());
+    public FloatSetting maximumSelfDamage = new FloatSetting("Maximum Self Damage", 6f, 0f, 16f, this, z -> rangesParent.getValue());
+    public BooleanSetting antiSuicide = new BooleanSetting("Anti Suicide", false, this, z -> rangesParent.getValue());
 
-    public Setting<Boolean> predictParent = register(new Setting<>("Predicts", true, false));
-    public Setting<Boolean> soundPredict = register(new Setting<>("Sound Predict", false, false, v -> predictParent.getValue()));
-    public Setting<Boolean> breakPredict = register(new Setting<>("Break Predict", false, false, v -> predictParent.getValue()));
-    public Setting<Boolean> breakPredictCalc = register(new Setting<>("Break Predict Calc", false, false, v -> predictParent.getValue() && breakPredict.getValue()));
+    public ParentSetting predictParent = new ParentSetting("Predicts", false, this);
+    public BooleanSetting soundPredict = new BooleanSetting("Sound Predict", false, this, z -> rangesParent.getValue());
+    public BooleanSetting breakPredict = new BooleanSetting("Break Predict", false, this, z -> rangesParent.getValue());
+    public BooleanSetting breakPredictCalc = new BooleanSetting("Break Predict Calc", false, this, z -> predictParent.getValue() && breakPredict.getValue());
 
-    public Setting<Boolean> delayParent = register(new Setting<>("Delays", true, false));
-    public Setting<Integer> placeDelay = register(new Setting<>("Place Delay", 100, 0, 500, v -> delayParent.getValue()));
-    public Setting<Integer> breakDelay = register(new Setting<>("Break Delay", 100, 0, 500, v -> delayParent.getValue()));
+    public ParentSetting delayParent = new ParentSetting("Delays", false, this);
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 100, 0, 500, this, z -> delayParent.getValue());
+    public IntegerSetting breakDelay = new IntegerSetting("Break Delay", 100, 0, 500, this, z -> delayParent.getValue());
 
-    public Setting<Boolean> raytraceParent = register(new Setting<>("Raytrace", true, false));
-    public Setting<Boolean> placeRaytrace = register(new Setting<>("Place Raytrace", false, false, v -> raytraceParent.getValue()));
-    public Setting<Float> placeRaytraceRange = register(new Setting<>("Place Raytrace Range", 5f, 0f, 6f, v -> raytraceParent.getValue() && placeRaytrace.getValue()));
-    public Setting<Boolean> breakRaytrace = register(new Setting<>("Break Raytrace", false, false, v -> raytraceParent.getValue()));
-    public Setting<Float> breakRaytraceRange = register(new Setting<>("Break Raytrace Range", 5f, 0f, 6f, v -> raytraceParent.getValue() && breakRaytrace.getValue()));
+    public ParentSetting raytraceParent = new ParentSetting("Raytrace", false, this);
+    public BooleanSetting placeRaytrace = new BooleanSetting("Place Raytrace", false, this, z -> raytraceParent.getValue());
+    public FloatSetting placeRaytraceRange = new FloatSetting("Place Raytrace Range", 5f, 0f, 6f, this, z -> raytraceParent.getValue() && placeRaytrace.getValue());
+    public BooleanSetting breakRaytrace = new BooleanSetting("Break Raytrace", false, this, z -> raytraceParent.getValue());
+    public FloatSetting breakRaytraceRange = new FloatSetting("Break Raytrace Range", 5f, 0f, 6f, this, z -> raytraceParent.getValue() && breakRaytrace.getValue());
 
-    public Setting<Boolean> miscParent = register(new Setting<>("Misc", true, false));
-    public Setting<Boolean> preparePlace = register(new Setting<>("Prepare Place", true, false, v -> miscParent.getValue()));
-    public Setting<Boolean> updatedPlacements = register(new Setting<>("1.13+ Placements", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> limitAttack = register(new Setting<>("Limit Attack", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> packetBreak = register(new Setting<>("Packet Break", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> allowCollision = register(new Setting<>("Allow Collision", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> cancelVelocity = register(new Setting<>("Cancel Velocity", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> cancelExplosion = register(new Setting<>("Cancel Explosion", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> silentSwitch = register(new Setting<>("Silent Switch", false, false, v -> miscParent.getValue()));
-    public Setting<Boolean> antiWeakness = register(new Setting<>("Anti Weakness", false, false, v -> silentSwitch.getValue() && miscParent.getValue()));
+    public ParentSetting miscParent = new ParentSetting("Misc", false, this);
+    public BooleanSetting preparePlace = new BooleanSetting("Prepare Place", true, this, z -> miscParent.getValue());
+    public BooleanSetting updatedPlacements = new BooleanSetting("1.13+ Placements", false, this, z -> miscParent.getValue());
+    public BooleanSetting limitAttack = new BooleanSetting("Limit Attack", false, this, z -> miscParent.getValue());
+    public BooleanSetting packetBreak = new BooleanSetting("Packet Break", false, this, z -> miscParent.getValue());
+    public BooleanSetting allowCollision = new BooleanSetting("Allow Collision", false, this, z -> miscParent.getValue());
+    public BooleanSetting cancelVelocity = new BooleanSetting("Cancel Velocity", false, this, z -> miscParent.getValue());
+    public BooleanSetting cancelExplosion = new BooleanSetting("Cancel Explosion", false, this, z -> miscParent.getValue());
+    public BooleanSetting silentSwitch = new BooleanSetting("Silent Switch", false, this, z -> miscParent.getValue());
+    public BooleanSetting antiWeakness = new BooleanSetting("Anti Weakness", false, this, z -> silentSwitch.getValue() && miscParent.getValue());
 
-    public Setting<Boolean> swingParent = register(new Setting<>("Swings", true, false));
-    public Setting<Boolean> placeSwing = register(new Setting<>("Place Swing", false, false, v -> swingParent.getValue()));
-    public Setting<PlaceSwingHand> placeSwingHand = register(new Setting<>("PlaceSwingHand", PlaceSwingHand.MAINHAND, v -> placeSwing.getValue() && swingParent.getValue()));
+    public ParentSetting swingParent = new ParentSetting("Swings", false, this);
+    public BooleanSetting placeSwing = new BooleanSetting("Place Swing", false, this, z -> swingParent.getValue());
+    public EnumSetting placeSwingHand = new EnumSetting("PlaceSwingHand", PlaceSwingHand.MAINHAND, this, z -> placeSwing.getValue() && swingParent.getValue());
 
     public enum PlaceSwingHand {MAINHAND, OFFHAND, PACKET}
 
-    public Setting<Boolean> breakSwing = register(new Setting<>("Break Swing", false, false, v -> swingParent.getValue()));
-    public Setting<BreakSwingHand> breakSwingHand = register(new Setting<>("BreakSwingHand", BreakSwingHand.MAINHAND, v -> breakSwing.getValue() && swingParent.getValue()));
+    public BooleanSetting breakSwing = new BooleanSetting("Break Swing", false, this, z -> swingParent.getValue());
+    public EnumSetting breakSwingHand = new EnumSetting("BreakSwingHand", BreakSwingHand.MAINHAND, this, z -> breakSwing.getValue() && swingParent.getValue());
 
     public enum BreakSwingHand {MAINHAND, OFFHAND, PACKET}
 
-    public Setting<Boolean> facePlaceParent = register(new Setting<>("Face Placing", true, false));
-    public Setting<FacePlaceMode> facePlaceMode = register(new Setting<>("FacePlaceMode", FacePlaceMode.Never, v -> facePlaceParent.getValue()));
+    public ParentSetting facePlaceParent = new ParentSetting("Face Placing", false, this);
+    public EnumSetting facePlaceMode = new EnumSetting("FacePlaceMode", FacePlaceMode.Never, this, z -> facePlaceParent.getValue());
 
     public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    public Setting<Float> facePlaceHp = register(new Setting<>("Face Place Health", 15f, 0f, 36f, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue()));
-    public Setting<Bind> facePlaceBind = register(new Setting<>("Face Place Bind", new Bind(-1), v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue()));
+    public FloatSetting facePlaceHp = new FloatSetting("Face Place Health", 15f, 0f, 36f, this, z -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue());
+    public KeySetting facePlaceBind = new KeySetting("Face Place Bind", Keyboard.KEY_NONE, this, z -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue());
 
-    public Setting<Boolean> pauseParent = register(new Setting<>("Pauses", true, false));
-    public Setting<Boolean> pauseOnGapple = register(new Setting("Gapple", false, v -> pauseParent.getValue()));
-    public Setting<Boolean> pauseOnSword = register(new Setting("Pause On Sword", false, v -> pauseParent.getValue()));
-    public Setting<Boolean> pauseOnHealth = register(new Setting("Pause On Health", false, v -> pauseParent.getValue()));
-    public Setting<Float> pauseHealth = register(new Setting<>("Pause Health", 15f, 0f, 36f, v -> pauseParent.getValue() && pauseOnHealth.getValue()));
-    public Setting<Boolean> pauseOnExp = register(new Setting("Pause On Exp", false, v -> pauseParent.getValue()));
+    public ParentSetting pauseParent = new ParentSetting("Pause Parent", false, this);
+    public BooleanSetting pauseOnGapple = new BooleanSetting("Gapple", false, this, z -> pauseParent.getValue());
+    public BooleanSetting pauseOnSword = new BooleanSetting("Pause On Sword", false, this, z -> pauseParent.getValue());
+    public BooleanSetting pauseOnHealth = new BooleanSetting("Pause On Health", false, this, z -> pauseParent.getValue());
+    public FloatSetting pauseHealth = new FloatSetting("Pause Health", 15f, 0f, 36f, this, z -> pauseParent.getValue() && pauseOnHealth.getValue());
+    public BooleanSetting pauseOnExp = new BooleanSetting("Pause On Exp", false, this, z -> pauseParent.getValue());
 
-    public Setting<Boolean> renderParent = register(new Setting<>("Renders", true, false));
-    public Setting<Boolean> render = register(new Setting<>("Render", false, false, v -> renderParent.getValue()));
-    public Setting<Boolean> fade = register(new Setting<>("Fade", false, false, v -> render.getValue() && renderParent.getValue()));
-    public Setting<Integer> startAlpha = register(new Setting<>("Start Alpha", 255, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
-    public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 0, 0, 255, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
-    public Setting<Integer> fadeSpeed = register(new Setting<>("Fade Speed", 20, 0, 100, v -> render.getValue() && fade.getValue() && renderParent.getValue()));
+    public ParentSetting renderParent = new ParentSetting("Renders", false, this);
+    public BooleanSetting render = new BooleanSetting("Render", false, this, z -> renderParent.getValue());
+    public BooleanSetting fade = new BooleanSetting("Fade", false, this, z -> render.getValue() && renderParent.getValue());
+    public IntegerSetting startAlpha = new IntegerSetting("Start Alpha", 255, 0, 255, this, z -> render.getValue() && fade.getValue() && renderParent.getValue());
+    public IntegerSetting endAlpha = new IntegerSetting("End Alpha", 0, 0, 255, this, z -> render.getValue() && fade.getValue() && renderParent.getValue());
+    public IntegerSetting fadeSpeed = new IntegerSetting("Fade Speed", 20, 0, 100, this, z -> render.getValue() && fade.getValue() && renderParent.getValue());
 
-    public Setting<Boolean> box = register(new Setting<>("Box", false, false, v -> render.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxRed = register(new Setting<>("Box Red", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxGreen = register(new Setting<>("Box Green", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxBlue = register(new Setting<>("Box Blue", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
-    public Setting<Integer> boxAlpha = register(new Setting<>("Box Alpha", 255, 0, 255, v -> render.getValue() && box.getValue() && renderParent.getValue()));
+    public BooleanSetting box = new BooleanSetting("Box", false, this, z -> render.getValue() && renderParent.getValue());
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> render.getValue() && box.getValue() && renderParent.getValue());
 
-    public Setting<Boolean> outline = register(new Setting<>("Outline", false, false, v -> render.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 255, 0, 255, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-    public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1f, 0f, 5f, v -> render.getValue() && outline.getValue() && renderParent.getValue()));
-
+    public BooleanSetting outline = new BooleanSetting("Outline", false, this, z -> render.getValue() && renderParent.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> render.getValue() && outline.getValue() && renderParent.getValue());
+    public FloatSetting lineWidth = new FloatSetting("Line Width", 1f, 0f, 5f, this, z -> render.getValue() && outline.getValue() && renderParent.getValue());
 
     EntityPlayer targetPlayer;
     BlockPos finalPos;
@@ -145,7 +138,6 @@ public class AutoCrystal extends Module {
     int mainOldSlot;
 
     public AutoCrystal() {
-        super();
         this.setInstance();
     }
 
@@ -260,7 +252,7 @@ public class AutoCrystal extends Module {
                     if (mc.player.getDistanceSq(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRange.getValue()))
                         continue;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
                         minimumDamageValue = 2;
 
                     if (antiSuicide.getValue() && selfDamage > selfHealth)
@@ -317,7 +309,7 @@ public class AutoCrystal extends Module {
                     if (!allowCollision.getValue() && !mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty())
                         continue;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
                         minimumDamageValue = 2;
 
                     if (targetDamage < minimumDamageValue)
@@ -363,7 +355,7 @@ public class AutoCrystal extends Module {
                     if (mc.player.getDistanceSq(packet.getX(), packet.getY(), packet.getZ()) > MathUtil.square(breakRange.getValue()))
                         return;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getValue().getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getValue().getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
                         mainMinimumDamageValue = 2;
 
                     if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
@@ -408,29 +400,19 @@ public class AutoCrystal extends Module {
 
     public void swingArm(boolean place) {
         if (place) {
-            switch (placeSwingHand.getValue()) {
-                case MAINHAND:
-                    mc.player.swingArm(EnumHand.MAIN_HAND);
-                    break;
-                case OFFHAND:
-                    mc.player.swingArm(EnumHand.OFF_HAND);
-                    break;
-                case PACKET:
-                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                    break;
-            }
+            if (placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND))
+                mc.player.swingArm(EnumHand.MAIN_HAND);
+            if (placeSwingHand.getValue().equals(PlaceSwingHand.OFFHAND))
+                mc.player.swingArm(EnumHand.OFF_HAND);
+            if (placeSwingHand.getValue().equals(PlaceSwingHand.PACKET))
+                mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
         } else {
-            switch (breakSwingHand.getValue()) {
-                case MAINHAND:
-                    mc.player.swingArm(EnumHand.MAIN_HAND);
-                    break;
-                case OFFHAND:
-                    mc.player.swingArm(EnumHand.OFF_HAND);
-                    break;
-                case PACKET:
-                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                    break;
-            }
+            if (breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND))
+                mc.player.swingArm(EnumHand.MAIN_HAND);
+            if (breakSwingHand.getValue().equals(BreakSwingHand.OFFHAND))
+                mc.player.swingArm(EnumHand.OFF_HAND);
+            if (breakSwingHand.getValue().equals(BreakSwingHand.PACKET))
+                mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
         }
     }
 
@@ -459,10 +441,10 @@ public class AutoCrystal extends Module {
                         possesToFade.remove(entry.getKey());
                         return;
                     }
-                    RenderUtil.drawBoxESP(entry.getKey(), new Color(boxRed.getValue() / 255f, boxGreen.getValue() / 255f, boxBlue.getValue() / 255f, entry.getValue() / 255f), true, new Color(outlineRed.getValue() / 255f, outlineGreen.getValue() / 255f, outlineBlue.getValue() / 255f, entry.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), entry.getValue(), true);
+                    RenderUtil.drawBoxESP(entry.getKey(), new Color(boxColor.getColor().getRed() / 255f, boxColor.getColor().getGreen() / 255f, boxColor.getColor().getBlue() / 255f, entry.getValue() / 255f), true, new Color(outlineColor.getColor().getRed() / 255f, outlineColor.getColor().getGreen() / 255f, outlineColor.getColor().getBlue() / 255f, entry.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), entry.getValue(), true);
                 }
             } else if (finalPos != null) {
-                RenderUtil.drawBoxESP(finalPos, new Color(boxRed.getValue() / 255f, boxGreen.getValue() / 255f, boxBlue.getValue() / 255f, boxAlpha.getValue() / 255f), true, new Color(outlineRed.getValue() / 255f, outlineGreen.getValue() / 255f, outlineBlue.getValue() / 255f, outlineAlpha.getValue() / 255f), lineWidth.getValue(), outline.getValue(), box.getValue(), boxAlpha.getValue(), true);
+                RenderUtil.drawBoxESP(finalPos, boxColor.getColor(), true, outlineColor.getColor(), lineWidth.getValue(), outline.getValue(), box.getValue(), boxColor.getColor().getAlpha(), true);
             }
         }
     }

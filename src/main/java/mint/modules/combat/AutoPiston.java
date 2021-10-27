@@ -1,10 +1,14 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -21,33 +25,33 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
-
+@ModuleInfo(name = "Auto Piston", category = Module.Category.Combat, description = "Kill opponent with pistons, redstone and crystals")
 public class AutoPiston extends Module {
-    public Setting<Float> targetRange = register(new Setting("Target Range", 5.0f, 0, 10.0f));
-    public Setting<Float> placeRange = register(new Setting("Place Range", 5.0f, 0, 6.0f));
-    public Setting<Float> breakRange = register(new Setting("Break Range", 5.0f, 0.0f, 6.0f));
-    public Setting<Integer> startDelay = register(new Setting("Start Delay", 100, 0, 1000));
-    public Setting<Integer> placeDelay = register(new Setting("Place Delay", 100, 10, 1000));
-    public Setting<Integer> redstoneDelay = register(new Setting("Redstone Delay", 150, 10, 1000));
-    public Setting<Integer> breakDelay = register(new Setting("Break Delay", 100, 10, 1000));
-    public Setting<Integer> trapDelay = register(new Setting("Trap Delay", 100, 10, 1000));
-    public Setting<Boolean> completeOnDisable = register(new Setting<>("Complete On Disable", false));
-    public Setting<Boolean> autoTrap = register(new Setting<>("Trap", false));
-    public Setting<Boolean> packet = register(new Setting<>("Packet", false));
-    public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
-    public Setting<Boolean> blockSwing = register(new Setting<>("Block Swing", false));
-    public Setting<BlockSwingHand> blockSwingMode = register(new Setting<>("Block Swing Mode", BlockSwingHand.MAINHAND, v -> blockSwing.getValue()));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 5.0f, 0, 10.0f, this);
+    public FloatSetting placeRange = new FloatSetting("Place Range", 5.0f, 0, 6.0f, this);
+    public FloatSetting breakRange = new FloatSetting("Break Range", 5.0f, 0.0f, 6.0f, this);
+    public IntegerSetting startDelay = new IntegerSetting("Start Delay", 100, 0, 1000, this);
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 100, 10, 1000, this);
+    public IntegerSetting redstoneDelay = new IntegerSetting("Redstone Delay", 150, 10, 1000, this);
+    public IntegerSetting breakDelay = new IntegerSetting("Break Delay", 100, 10, 1000, this);
+    public IntegerSetting trapDelay = new IntegerSetting("Trap Delay", 100, 10, 1000, this);
+    public BooleanSetting completeOnDisable = new BooleanSetting("Complete On Disable", false, this);
+    public BooleanSetting autoTrap = new BooleanSetting("Trap", false, this);
+    public BooleanSetting packet = new BooleanSetting("Packet", false, this);
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
+    public BooleanSetting blockSwing = new BooleanSetting("Block Swing", false, this);
+    public EnumSetting blockSwingMode = new EnumSetting("Block Swing Mode", BlockSwingHand.MAINHAND, this, z -> blockSwing.getValue());
 
     public enum BlockSwingHand {MAINHAND, OFFHAND, PACKET}
 
-    public Setting<Boolean> packetBreak = register(new Setting<>("Packet Break", false, false));
-    public Setting<Boolean> crystalPlaceSwing = register(new Setting<>("Crystal Place Swing", false));
-    public Setting<PlaceSwingHand> placeSwingHand = register(new Setting<>("Place Swing Hand", PlaceSwingHand.MAINHAND, v -> crystalPlaceSwing.getValue()));
+    public BooleanSetting packetBreak = new BooleanSetting("Packet Break", false, this);
+    public BooleanSetting crystalPlaceSwing = new BooleanSetting("Crystal Place Swing", false, this);
+    public EnumSetting placeSwingHand = new EnumSetting("Place Swing Hand", PlaceSwingHand.MAINHAND, this, z -> crystalPlaceSwing.getValue());
 
     public enum PlaceSwingHand {MAINHAND, OFFHAND, PACKET}
 
-    public Setting<Boolean> crystalBreakSwing = register(new Setting<>("Crystal Break Swing", false));
-    public Setting<BreakSwingHand> breakSwingHand = register(new Setting<>("Break Swing Hand", BreakSwingHand.MAINHAND, v -> crystalBreakSwing.getValue()));
+    public BooleanSetting crystalBreakSwing = new BooleanSetting("Crystal Break Swing", false, this);
+    public EnumSetting breakSwingHand = new EnumSetting("Break Swing Hand", BreakSwingHand.MAINHAND, this, z -> crystalBreakSwing.getValue());
 
     public enum BreakSwingHand {MAINHAND, OFFHAND, PACKET}
 
@@ -58,10 +62,6 @@ public class AutoPiston extends Module {
     Timer breakTimer = new Timer();
     Timer trapTimer = new Timer();
     int i;
-
-    public AutoPiston() {
-        super("Auto Piston", Category.Combat, "Pushes crystals into holes using pistons.");
-    }
 
     public void onLogin() {
         disable();
@@ -556,42 +556,28 @@ public class AutoPiston extends Module {
     public void swingArm(boolean place, boolean blockSwing) {
         if (place) {
             if (blockSwing) {
-                switch (blockSwingMode.getValue()) {
-                    case MAINHAND:
-                        mc.player.swingArm(EnumHand.MAIN_HAND);
-                        break;
-                    case OFFHAND:
-                        mc.player.swingArm(EnumHand.OFF_HAND);
-                        break;
-                    case PACKET:
-                        mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                        break;
-                }
+                if (blockSwingMode.getValue().equals(BlockSwingHand.MAINHAND))
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                if (blockSwingMode.getValue().equals(BlockSwingHand.OFFHAND))
+                    mc.player.swingArm(EnumHand.OFF_HAND);
+                if (blockSwingMode.getValue().equals(BlockSwingHand.PACKET))
+                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+
             } else {
-                switch (placeSwingHand.getValue()) {
-                    case MAINHAND:
-                        mc.player.swingArm(EnumHand.MAIN_HAND);
-                        break;
-                    case OFFHAND:
-                        mc.player.swingArm(EnumHand.OFF_HAND);
-                        break;
-                    case PACKET:
-                        mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                        break;
-                }
+                if (placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND))
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
+                if (placeSwingHand.getValue().equals(PlaceSwingHand.OFFHAND))
+                    mc.player.swingArm(EnumHand.OFF_HAND);
+                if (placeSwingHand.getValue().equals(PlaceSwingHand.PACKET))
+                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
             }
         } else {
-            switch (breakSwingHand.getValue()) {
-                case MAINHAND:
-                    mc.player.swingArm(EnumHand.MAIN_HAND);
-                    break;
-                case OFFHAND:
-                    mc.player.swingArm(EnumHand.OFF_HAND);
-                    break;
-                case PACKET:
-                    mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                    break;
-            }
+            if(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND))
+                mc.player.swingArm(EnumHand.MAIN_HAND);
+            if(breakSwingHand.getValue().equals(BreakSwingHand.OFFHAND))
+                mc.player.swingArm(EnumHand.OFF_HAND);
+            if(breakSwingHand.getValue().equals(BreakSwingHand.PACKET))
+                mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
         }
     }
 

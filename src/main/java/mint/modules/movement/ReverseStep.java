@@ -15,8 +15,8 @@ public class ReverseStep extends Module {
     public enum Mode {Vanilla, Strict}
 
     public Setting<Integer> height = register(new Setting("Height", 10, 1, 25));
-    public Setting<Float> vanillaSpeed = register(new Setting("VanillaSpeed", 9.0f, 0.1f, 9.0f, v -> mode.getValue() == Mode.Vanilla));
-    public Setting<Float> strictSpeed = register(new Setting("StrictSpeed", 17.5f, 10.0f, 30.0f, v -> mode.getValue() == Mode.Strict));
+    public Setting<Float> vanillaSpeed = register(new Setting("VanillaSpeed", 9.0f, 0.1f, 9.0f, z -> mode.getValue() == Mode.Vanilla));
+    public Setting<Float> strictSpeed = register(new Setting("StrictSpeed", 17.5f, 10.0f, 30.0f, z -> mode.getValue() == Mode.Strict));
 
     //todo if someone is verie smart then rewrite this cuz i just pasted for() and collisionboxes
     @Override

@@ -1,10 +1,11 @@
 package mint.modules.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -16,34 +17,28 @@ import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 
+@ModuleInfo(name = "Waller", category = Module.Category.Combat, description = "Walls people ye")
 public class Waller extends Module {
-    public Setting<Float> targetRange = register(new Setting<>("Target Range", 10.0f, 0.0f, 15.0f));
-    public Setting<Float> posDistance = register(new Setting<>("Pos Distance", 1.0f, 0.0f, 10.0f));
-    public Setting<Float> placeRange = register(new Setting<>("Place Range", 5.0f, 0.0f, 6.0f));
-    public Setting<Integer> placeDelay = register(new Setting<>("Place Delay", 100, 0, 1000));
-    public Setting<Boolean> packet = register(new Setting<>("Packet", false));
-    public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
-    public Setting<Boolean> swing = register(new Setting<>("Swing", false));
-    public Setting<SwingHand> swingMode = register(new Setting<>("Swing Mode", SwingHand.MAINHAND, v -> swing.getValue()));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 10.0f, 0.0f, 15.0f, this);
+    public FloatSetting posDistance = new FloatSetting("Pos Distance", 1.0f, 0.0f, 10.0f, this);
+    public FloatSetting placeRange = new FloatSetting("Place Range", 5.0f, 0.0f, 6.0f, this);
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 100, 0, 1000, this);
+    public BooleanSetting packet = new BooleanSetting("Packet", false, this);
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
+    public BooleanSetting swing = new BooleanSetting("Swing", false, this);
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", SwingHand.MAINHAND, this, z -> swing.getValue());
 
     public enum SwingHand {MAINHAND, OFFHAND, PACKET}
 
-    public Setting<Boolean> render = register(new Setting<>("Render", false));
-    public Setting<Boolean> text = register(new Setting("Text", false, v -> render.getValue()));
-    public Setting<Integer> red = register(new Setting<>("Red", 255, 0, 255, v -> render.getValue()));
-    public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255, v -> render.getValue()));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 255, 0, 255, v -> render.getValue()));
-    public Setting<Integer> alpha = register(new Setting<>("Alpha", 255, 0, 255, v -> render.getValue()));
-    public Setting<Integer> duration = register(new Setting<>("Duration", 2000, 0, 5000, v -> render.getValue()));
+    public BooleanSetting render = new BooleanSetting("Render", false, this);
+    public BooleanSetting text = new BooleanSetting("Text", false, this, z -> render.getValue());
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> render.getValue());
+    public IntegerSetting duration = new IntegerSetting("Duration", 2000, 0, 5000, this, z -> render.getValue());
 
     Timer timer = new Timer();
     Timer renderRemove = new Timer();
     BlockPos renderPos;
     EntityPlayer target;
-
-    public Waller() {
-        super("Waller", Category.Combat, "");
-    }
 
     public void onUpdate() {
         if (NullUtil.fullNullCheck())
@@ -95,17 +90,13 @@ public class Waller extends Module {
     }
 
     public void swingArm() {
-        switch (swingMode.getValue()) {
-            case MAINHAND:
-                mc.player.swingArm(EnumHand.MAIN_HAND);
-                break;
-            case OFFHAND:
-                mc.player.swingArm(EnumHand.OFF_HAND);
-                break;
-            case PACKET:
-                mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-                break;
-        }
+        if (swingMode.getValue().equals(SwingHand.MAINHAND))
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+        else if (swingMode.getValue().equals(SwingHand.OFFHAND))
+            mc.player.swingArm(EnumHand.OFF_HAND);
+        else if (swingMode.getValue().equals(SwingHand.PACKET))
+            mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+
     }
 
     void disableModule() {
@@ -123,7 +114,7 @@ public class Waller extends Module {
         if (!renderRemove.passedMs(duration.getValue()))
             return;
 
-        RenderUtil.drawBox(renderPos, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()));
+        RenderUtil.drawBox(renderPos, color.getColor());
 
         if (text.getValue())
             RenderUtil.drawText(renderPos, "Waller", -1);

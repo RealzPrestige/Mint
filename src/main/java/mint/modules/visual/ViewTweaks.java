@@ -22,23 +22,23 @@ public class ViewTweaks extends Module {
     public Setting<Boolean> fullBright = register(new Setting("Full Bright", false));
 
     private final Setting<Boolean> fovParent = register(new Setting<>("FOV", true, false));
-    public Setting<Boolean> fov = register(new Setting("FOV Changer", true, v -> fovParent.getValue()));
-    private final Setting<Boolean> fovStay = register(new Setting("FOV Stay", false, v -> fovParent.getValue()));
-    public Setting<Float> fovValue = register(new Setting("Fov Value", 140.0f, 0.0f, 180.0f, v -> fovParent.getValue()));
+    public Setting<Boolean> fov = register(new Setting("FOV Changer", true, z -> fovParent.getValue()));
+    private final Setting<Boolean> fovStay = register(new Setting("FOV Stay", false, z -> fovParent.getValue()));
+    public Setting<Float> fovValue = register(new Setting("Fov Value", 140.0f, 0.0f, 180.0f, z -> fovParent.getValue()));
 
     public Setting<Boolean> antiFog = register(new Setting("Anti Fog", false));
     public Setting<Boolean> noWeather = register(new Setting("No Weather", false));
 
     public Setting<Boolean> timeParent = register(new Setting("Time", true, false));
     public Setting<Boolean> timeChange = register(new Setting("Time Changer", true, timeParent.getDefaultValue()));
-    public Setting<Integer> time = register(new Setting<>("Time", 0, 0, 23000, v -> timeParent.getValue()));
+    public Setting<Integer> time = register(new Setting<>("Time", 0, 0, 23000, z -> timeParent.getValue()));
 
     public Setting<Boolean> skyParent = register(new Setting("Sky", true, false));
-    public Setting<Boolean> skyColorChange = register(new Setting("Sky Color Changer", true, v -> skyParent.getValue()));
-    public Setting<Boolean> rainbow = register(new Setting("Rainbow", false, v -> skyParent.getValue()));
-    public Setting<Float> red = register(new Setting<>("Sky Red", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue() && !rainbow.getValue()));
-    public Setting<Float> green = register(new Setting<>("Sky Green", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue() && !rainbow.getValue()));
-    public Setting<Float> blue = register(new Setting<>("Sky Blue", 255.0f, 0.0f, 255.0f, v -> skyParent.getValue() && !rainbow.getValue()));
+    public Setting<Boolean> skyColorChange = register(new Setting("Sky Color Changer", true, z -> skyParent.getValue()));
+    public Setting<Boolean> rainbow = register(new Setting("Rainbow", false, z -> skyParent.getValue()));
+    public Setting<Float> red = register(new Setting<>("Sky Red", 255.0f, 0.0f, 255.0f, z -> skyParent.getValue() && !rainbow.getValue()));
+    public Setting<Float> green = register(new Setting<>("Sky Green", 255.0f, 0.0f, 255.0f, z -> skyParent.getValue() && !rainbow.getValue()));
+    public Setting<Float> blue = register(new Setting<>("Sky Blue", 255.0f, 0.0f, 255.0f, z -> skyParent.getValue() && !rainbow.getValue()));
 
     public Setting<Bind> bind = register(new Setting<Object>("Third Person Hold Bind", new Bind(-1)));
 

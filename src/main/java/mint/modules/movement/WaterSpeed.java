@@ -19,7 +19,7 @@ public class WaterSpeed extends Module {
     public Setting<Boolean> consistent = register(new Setting<>("Consistent", false));
     public Setting<OnGround> onGround = register(new Setting<>("On Ground", OnGround.Cancel));
     public Setting<Boolean> useTimer = register(new Setting<>("Use Timer", false));
-    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.1f, 1.0f, 2.0f, v -> useTimer.getValue()));
+    public Setting<Float> timerAmount = register(new Setting<>("Timer Amount", 1.1f, 1.0f, 2.0f, z -> useTimer.getValue()));
 
     public enum OnGround {Cancel, Offground}
 

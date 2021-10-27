@@ -24,11 +24,11 @@ import java.util.Objects;
 public class NameTags extends Module {
     private static NameTags INSTANCE = new NameTags();
     private final Setting<Boolean> boxParent = register(new Setting<>("Rect", true, false));
-    private final Setting<Boolean> rect = register(new Setting("RectSetting", true, v -> boxParent.getValue()));
-    private final Setting<Integer> rectRed = register(new Setting<>("RectRed", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Integer> rectGreen = register(new Setting<>("RectGreen", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Integer> rectBlue = register(new Setting<>("RectBlue", 0, 0, 255, v -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Integer> rectAlpha = register(new Setting<>("RectAlpha", 50, 0, 255, v -> rect.getValue() && boxParent.getValue()));
+    private final Setting<Boolean> rect = register(new Setting("RectSetting", true, z -> boxParent.getValue()));
+    private final Setting<Integer> rectRed = register(new Setting<>("RectRed", 0, 0, 255, z -> rect.getValue() && boxParent.getValue()));
+    private final Setting<Integer> rectGreen = register(new Setting<>("RectGreen", 0, 0, 255, z -> rect.getValue() && boxParent.getValue()));
+    private final Setting<Integer> rectBlue = register(new Setting<>("RectBlue", 0, 0, 255, z -> rect.getValue() && boxParent.getValue()));
+    private final Setting<Integer> rectAlpha = register(new Setting<>("RectAlpha", 50, 0, 255, z -> rect.getValue() && boxParent.getValue()));
     private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
     private final Setting<Boolean> fullHealthLine = register(new Setting("FullHealthLine", true));
     private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));

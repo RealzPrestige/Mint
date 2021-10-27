@@ -37,17 +37,17 @@ public class ChorusManipulator extends Module {
     public Setting<Boolean> cancel = register(new Setting<>("Cancel", false));
     public Setting<Boolean> tpOnSwitch = register(new Setting<>("Tp on Switch", true));
     public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
-    public Setting<Boolean> solidSetting = register(new Setting("Render Solid", true, v -> solidParent.getValue()));
-    public Setting<Float> red = register(new Setting<>("Solid Red", 140.0f, 0.0f, 255.0f, v -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Float> green = register(new Setting<>("Solid Green", 100.0f, 0.0f, 255.0f, v -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Float> blue = register(new Setting<>("Solid Blue", 140.0f, 0.0f, 255.0f, v -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Float> alpha = register(new Setting<>("Solid Alpha", 50.0f, 0.0f, 255.0f, v -> solidParent.getValue() && solidSetting.getValue()));
+    public Setting<Boolean> solidSetting = register(new Setting("Render Solid", true, z -> solidParent.getValue()));
+    public Setting<Float> red = register(new Setting<>("Solid Red", 140.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
+    public Setting<Float> green = register(new Setting<>("Solid Green", 100.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
+    public Setting<Float> blue = register(new Setting<>("Solid Blue", 140.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
+    public Setting<Float> alpha = register(new Setting<>("Solid Alpha", 50.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
     public Setting<Boolean> wireFrameParent = register(new Setting<>("Wire Frame", true, false));
-    public Setting<Boolean> wireFrameSetting = register(new Setting("Render Wire", true, v -> wireFrameParent.getValue()));
-    public Setting<Float> wireRed = register(new Setting<>("Wire Red", 140.0f, 0.0f, 255.0f, v -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
-    public Setting<Float> wireGreen = register(new Setting<>("Wire Green", 100.0f, 0.0f, 255.0f, v -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
-    public Setting<Float> wireBlue = register(new Setting<>("WireBlue", 140.0f, 0.0f, 255.0f, v -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
-    public Setting<Float> wireAlpha = register(new Setting<>("WireBlue", 255.0f, 0.0f, 255.0f, v -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
+    public Setting<Boolean> wireFrameSetting = register(new Setting("Render Wire", true, z -> wireFrameParent.getValue()));
+    public Setting<Float> wireRed = register(new Setting<>("Wire Red", 140.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
+    public Setting<Float> wireGreen = register(new Setting<>("Wire Green", 100.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
+    public Setting<Float> wireBlue = register(new Setting<>("WireBlue", 140.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
+    public Setting<Float> wireAlpha = register(new Setting<>("WireBlue", 255.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
 
     Queue<CPacketPlayer> packets;
     Queue<CPacketConfirmTeleport> tpPackets;

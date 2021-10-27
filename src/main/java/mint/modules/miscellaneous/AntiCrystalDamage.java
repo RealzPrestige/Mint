@@ -20,7 +20,7 @@ public class AntiCrystalDamage extends Module {
     public Setting<Boolean> rotate = register(new Setting<>("Rotate", false));
     public Setting<Boolean> packet = register(new Setting<>("PacketPlace", false));
     public Setting<Boolean> swing = register(new Setting<>("Swing", false));
-    public Setting<Hand> enumHand = register(new Setting<>("Hand", Hand.Mainhand, v -> swing.getValue()));
+    public Setting<Hand> enumHand = register(new Setting<>("Hand", Hand.Mainhand, z -> swing.getValue()));
 
     public enum Hand {Mainhand, Offhand}
 
