@@ -17,11 +17,8 @@ public class SettingsRewrite {
         settingRewriteList.add(setting);
     }
 
-    public List<SettingRewrite> getSettings() {
-        return settingRewriteList;
-    }
 
-    public List<SettingRewrite> getSettingFromModule(Module module) {
+    public List<SettingRewrite> doesModuleContainSetting(Module module) {
         List<SettingRewrite> settings = new ArrayList<>();
         for (SettingRewrite setting : settingRewriteList)
             if (setting.getModule() == module)

@@ -5,12 +5,12 @@ import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
 import mint.newgui.buttons.Button;
 import mint.newgui.buttons.*;
-import mint.newgui.buttons.a.BoolSnutton;
-import mint.newgui.buttons.a.NewButton;
+import mint.newgui.buttons.a.BooleanButton;
+import mint.newgui.buttons.a.*;
 import mint.setting.Bind;
 import mint.setting.Setting;
 import mint.settingsrewrite.SettingRewrite;
-import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -30,6 +30,7 @@ public class ModuleWindow {
     public Module module;
     ArrayList<Button> button = new ArrayList<>();
     ArrayList<NewButton> newButton = new ArrayList<>();
+
     public ModuleWindow(String name, int x, int y, int width, int height, Color disabledColor, Color enabledColor, Module module) {
         this.name = name;
         this.x = x;
@@ -62,7 +63,7 @@ public class ModuleWindow {
                 buttons.add(new ParentButton(setting));
 
             if (setting.getValue() instanceof Boolean && !setting.getName().equals("Enabled") && !setting.isParent())
-                buttons.add(new BooleanButton(setting));
+                buttons.add(new mint.newgui.buttons.BooleanButton(setting));
 
             if (setting.isNumberSetting() && setting.hasRestriction())
                 buttons.add(new NumberButton(setting));
@@ -73,14 +74,29 @@ public class ModuleWindow {
             if (setting.isColorSetting())
                 buttons.add(new ColorButton(setting));
         }
-        assert Mint.settingsRewrite != null;
-        for(SettingRewrite settingsRewrite : Mint.settingsRewrite.getSettingFromModule(module)){
-            if(settingsRewrite instanceof BooleanSetting){
-                penius.add(new BoolSnutton(settingsRewrite));
-            }
-
-        }
         buttons.add(new KeybindButton(module.getSettingByName("Keybind")));
+
+        assert Mint.settingsRewrite != null;
+        for (SettingRewrite settingsRewrite : Mint.settingsRewrite.doesModuleContainSetting(module)) {
+            if (settingsRewrite instanceof BooleanSetting && ((BooleanSetting) settingsRewrite).isShown())
+                penius.add(new BooleanButton(settingsRewrite));
+
+            if (settingsRewrite instanceof IntegerSetting && ((IntegerSetting) settingsRewrite).isShown())
+                penius.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
+
+            if (settingsRewrite instanceof FloatSetting && ((FloatSetting) settingsRewrite).isShown())
+                penius.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
+
+            if (settingsRewrite instanceof DoubleSetting && ((DoubleSetting) settingsRewrite).isShown())
+                penius.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
+
+            if (settingsRewrite instanceof KeySetting && ((KeySetting) settingsRewrite).isShown())
+                penius.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
+
+            if(settingsRewrite instanceof EnumSetting && ((EnumSetting) settingsRewrite).isShown())
+                penius.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
+        }
+
         button = buttons;
         newButton = penius;
     }
@@ -107,14 +123,16 @@ public class ModuleWindow {
                         y += 10;
                 }
             }
-            for(NewButton button : newButton){
+            for (NewButton button : newButton) {
                 button.setX(x + 2);
                 button.setY(y += height);
                 button.setWidth(width - 4);
-                button.setHeight(height);
+                button.setHeight(button instanceof EnumButton ? height + 4 : height);
                 button.drawScreen(mouseX, mouseY, partialTicks);
+                if(button instanceof EnumButton)
+                    y += 4;
             }
-            RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height, NewGuiModule.getInstance().color.getColor(), 1f);
+            RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height - 1, NewGuiModule.getInstance().color.getColor(), 1f);
         }
     }
 

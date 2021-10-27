@@ -4,6 +4,8 @@ import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
 import mint.setting.Setting;
+import mint.settingsrewrite.SettingRewrite;
+import mint.settingsrewrite.impl.EnumSetting;
 import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -60,9 +62,16 @@ public class Window {
                             openedHeight += 10;
                         if (setting.isColorSetting() && setting.isOpen) {
                             openedHeight += 112;
-                            if(setting.selected)
+                            if (setting.selected)
                                 openedHeight += 10;
                         }
+                    }
+                    assert Mint.settingsRewrite != null;
+                    for (SettingRewrite settingsRewrite : Mint.settingsRewrite.doesModuleContainSetting(module)) {
+                        if (settingsRewrite.isVisible())
+                            openedHeight += 10;
+                        if (settingsRewrite instanceof EnumSetting)
+                            openedHeight += 4;
                     }
                 }
                 modules.add(new ModuleWindow(module.getName(), x, y += height, width, height, NewGuiModule.getInstance().backgroundColor.getColor(), NewGuiModule.getInstance().color.getColor(), module));
@@ -98,8 +107,9 @@ public class Window {
         if (releaseButton == 0)
             isDragging = false;
     }
+
     public void initGui() {
-        if(isOpened)
+        if (isOpened)
             modules.forEach(ModuleWindow::initGui);
     }
 

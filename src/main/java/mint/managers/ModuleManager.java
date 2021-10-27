@@ -25,7 +25,6 @@ public class ModuleManager {
     public ArrayList<Module> moduleList = new ArrayList<>();
     public List<Module> sortedModules = new ArrayList<>();
     public static Boolean doneLoad = true;
-
     public void init() {
         if (doneLoad) {
             SignExploit.nullCheck();

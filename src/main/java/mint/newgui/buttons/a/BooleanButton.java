@@ -8,10 +8,12 @@ import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
-public class BoolSnutton extends NewButton {
+import java.awt.*;
+
+public class BooleanButton extends NewButton {
     SettingRewrite setting;
 
-    public BoolSnutton(SettingRewrite setting) {
+    public BooleanButton(SettingRewrite setting) {
         super(setting);
         this.setting = setting;
     }
@@ -19,8 +21,11 @@ public class BoolSnutton extends NewButton {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         RenderUtil.drawRect(x - 2, y, x + width + 2, y + height, NewGuiModule.getInstance().backgroundColor.getColor().getRGB());
-        if ((boolean) setting.getValue())
-            RenderUtil.drawRect(x, y, x + width, y + height,NewGuiModule.getInstance().color.getColor().getRGB());
+        if ((boolean) setting.getValue()) {
+            RenderUtil.drawRect(x + width - 12, y + 1, x + width - 3, y + height - 1, NewGuiModule.getInstance().color.getColor().getRGB());
+            RenderUtil.drawCheckmark(x + width - 11, y + 4, new Color(255, 255, 255));
+        }
+        RenderUtil.drawOutlineRect(x + width - 12, y + 1, x + width - 3, y + height - 1, new Color(0,0,0), 0.1f);
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;

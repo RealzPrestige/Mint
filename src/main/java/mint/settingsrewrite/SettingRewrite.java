@@ -26,7 +26,6 @@ public class SettingRewrite<T> {
         this.shown = shown;
         assert Mint.settingsRewrite != null;
         Mint.settingsRewrite.addSetting(this);
-
     }
 
     public void setValue(T value) {
@@ -45,7 +44,9 @@ public class SettingRewrite<T> {
         return module;
     }
 
-    public Predicate<T> getShown() {
-        return shown;
+    public boolean isVisible() {
+        if (shown == null)
+            return true;
+        return shown.test(getValue());
     }
 }
