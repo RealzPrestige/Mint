@@ -28,8 +28,8 @@ import java.util.Objects;
 public class NameTags extends Module {
     private static NameTags INSTANCE = new NameTags();
     public BooleanSetting boxParent = new BooleanSetting("Rect", false, this);
-    public BooleanSetting rect = new BooleanSetting("Rectangle Setting", true, this, z -> boxParent.getValue());
-    public ColorSetting rectColor = new ColorSetting("Rectangle Color", new Color(-1), this, z -> rect.getValue() && boxParent.getValue());
+    public BooleanSetting rect = new BooleanSetting("Rectangle Setting", true, this, v -> boxParent.getValue());
+    public ColorSetting rectColor = new ColorSetting("Rectangle Color", new Color(-1), this, v -> rect.getValue() && boxParent.getValue());
     public BooleanSetting healthLine = new BooleanSetting("HealthLine", true, this);
     public BooleanSetting fullHealthLine = new BooleanSetting("FullHealthLine", true, this);
     public BooleanSetting enchant = new BooleanSetting("Enchantment", true, this);

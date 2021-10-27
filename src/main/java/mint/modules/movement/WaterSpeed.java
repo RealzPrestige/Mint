@@ -24,7 +24,7 @@ public class WaterSpeed extends Module {
     public BooleanSetting consistent = new BooleanSetting("Consistent", false, this);
     public EnumSetting onGround = new EnumSetting("On Ground", OnGround.Cancel, this);
     public BooleanSetting useTimer = new BooleanSetting("Use Timer", false, this);
-    public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.1f, 1.0f, 2.0f, this, z -> useTimer.getValue());
+    public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.1f, 1.0f, 2.0f, this, v -> useTimer.getValue());
 
     public enum OnGround {Cancel, Offground}
 

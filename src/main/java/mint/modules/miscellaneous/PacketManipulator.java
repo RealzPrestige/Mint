@@ -18,13 +18,13 @@ public class PacketManipulator extends Module {
      */
 
     public ParentSetting cancel = new ParentSetting("Cancel", false, this);
-    public BooleanSetting s = new BooleanSetting("Server", false, this, z -> cancel.getValue());
+    public BooleanSetting s = new BooleanSetting("Server", false, this, v -> cancel.getValue());
 
-    public ParentSetting c = new ParentSetting("Client", false, this, z -> cancel.getValue());
+    public ParentSetting c = new ParentSetting("Client", false, this, v -> cancel.getValue());
     public BooleanSetting cplayer = new BooleanSetting("Player", true, this);
 
     public ParentSetting send = new ParentSetting("Send", false, this);
-    public IntegerSetting packet1 = new IntegerSetting("Packet1", 1, 1, 10, this, z -> send.getValue());
+    public IntegerSetting packet1 = new IntegerSetting("Packet1", 1, 1, 10, this, v -> send.getValue());
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send e) {

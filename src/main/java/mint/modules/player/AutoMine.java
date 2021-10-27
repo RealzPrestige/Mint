@@ -19,16 +19,16 @@ public class AutoMine extends Module {
     public EnumSetting mineMode = new EnumSetting("Mine Mode", MineMode.Normal, this);
     public enum MineMode {Normal, Combat}
 
-    public EnumSetting minePriority = new  EnumSetting("Mine Priority", Priority.Surrounds, this, z -> mineMode.getValue().equals(MineMode.Combat));
+    public EnumSetting minePriority = new  EnumSetting("Mine Priority", Priority.Surrounds, this, v -> mineMode.getValue().equals(MineMode.Combat));
     public enum Priority {Surrounds, City, Dynamic}
 
-    public FloatSetting targetRange = new FloatSetting("Target Range", 9.0f, 0.0f, 15.0f, this, z -> mineMode.getValue().equals(MineMode.Combat));
-    public ParentSetting boxParent = new ParentSetting("Box", false, this, z -> mineMode.getValue().equals(MineMode.Combat));
-    public BooleanSetting boxSetting = new BooleanSetting("Box Setting", false, this, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
-    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
-    public ParentSetting outlineParent = new ParentSetting("Outline", false, this, z -> mineMode.getValue().equals(MineMode.Combat));
-    public BooleanSetting outlineSetting = new BooleanSetting("Outline Setting", false, this, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> outlineParent.getValue() && outlineSetting.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 9.0f, 0.0f, 15.0f, this, v -> mineMode.getValue().equals(MineMode.Combat));
+    public ParentSetting boxParent = new ParentSetting("Box", false, this, v -> mineMode.getValue().equals(MineMode.Combat));
+    public BooleanSetting boxSetting = new BooleanSetting("Box Setting", false, this, v -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, v -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public ParentSetting outlineParent = new ParentSetting("Outline", false, this, v -> mineMode.getValue().equals(MineMode.Combat));
+    public BooleanSetting outlineSetting = new BooleanSetting("Outline Setting", false, this, v -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> outlineParent.getValue() && outlineSetting.getValue() && mineMode.getValue().equals(MineMode.Combat));
 
     BlockPos targetBlock = null;
     Timer timer = new Timer();

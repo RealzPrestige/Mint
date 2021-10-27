@@ -23,7 +23,7 @@ public class AutoEnderChest extends Module {
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting packet = new BooleanSetting("PacketPlace", false, this);
     public BooleanSetting swing = new BooleanSetting("Swing", false, this);
-    public EnumSetting enumHand = new EnumSetting("Hand", Hand.Mainhand, this, z -> swing.getValue());
+    public EnumSetting enumHand = new EnumSetting("Hand", Hand.Mainhand, this, v -> swing.getValue());
 
     public enum Hand {Mainhand, Offhand}
 

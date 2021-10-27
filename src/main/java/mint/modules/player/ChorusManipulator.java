@@ -40,11 +40,11 @@ public class ChorusManipulator extends Module {
     public BooleanSetting cancel = new BooleanSetting("Cancel", false, this);
     public BooleanSetting tpOnSwitch = new BooleanSetting("Tp on Switch", true, this);
     public ParentSetting solidParent = new ParentSetting("Solid", false, this);
-    public BooleanSetting solidSetting = new BooleanSetting("Render Solid", true, this, z -> solidParent.getValue());
-    public ColorSetting solidColor = new ColorSetting("Solid Red", new Color(-1), this, z -> solidParent.getValue() && solidSetting.getValue());
+    public BooleanSetting solidSetting = new BooleanSetting("Render Solid", true, this, v -> solidParent.getValue());
+    public ColorSetting solidColor = new ColorSetting("Solid Red", new Color(-1), this, v -> solidParent.getValue() && solidSetting.getValue());
     public ParentSetting wireFrameParent = new ParentSetting("Wire Frame", false, this);
-    public BooleanSetting wireFrameSetting = new BooleanSetting("Render Wire", true, this, z -> wireFrameParent.getValue());
-    public ColorSetting wireColor = new ColorSetting("Wire Color", new Color(-1), this, z -> wireFrameParent.getValue() && wireFrameSetting.getValue());
+    public BooleanSetting wireFrameSetting = new BooleanSetting("Render Wire", true, this, v -> wireFrameParent.getValue());
+    public ColorSetting wireColor = new ColorSetting("Wire Color", new Color(-1), this, v -> wireFrameParent.getValue() && wireFrameSetting.getValue());
 
     Queue<CPacketPlayer> packets;
     Queue<CPacketConfirmTeleport> tpPackets;

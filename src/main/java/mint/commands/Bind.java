@@ -26,7 +26,7 @@ public class Bind
             return;
         }
         if (rkey == null) {
-            MessageManager.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind().toString());
+            MessageManager.sendMessage(module.getName() + " is bound to " + ChatFormatting.GRAY + module.getBind());
             return;
         }
         int key = Keyboard.getKeyIndex(rkey.toUpperCase());
@@ -37,7 +37,7 @@ public class Bind
             MessageManager.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
-        module.bind.setValue(new mint.setting.Bind(key));
+        module.bind.setValue(key);
         MessageManager.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }

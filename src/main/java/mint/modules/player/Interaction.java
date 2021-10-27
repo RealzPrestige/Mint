@@ -18,8 +18,8 @@ public class Interaction extends Module {
 
     //todo add shit like echest canceller(when trying to open an echest it just doesnt open it)
     public BooleanSetting placementParent = new BooleanSetting("Placement", true, this);
-    public BooleanSetting boatPlace = new BooleanSetting("Boat", true, this, z -> placementParent.getValue());
-    public BooleanSetting blockPlace = new BooleanSetting("Illegal Blocks", false, this, z -> placementParent.getValue());
+    public BooleanSetting boatPlace = new BooleanSetting("Boat", true, this, v -> placementParent.getValue());
+    public BooleanSetting blockPlace = new BooleanSetting("Illegal Blocks", false, this, v -> placementParent.getValue());
     boolean cancelled;
 
     @Override

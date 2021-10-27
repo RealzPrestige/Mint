@@ -207,7 +207,10 @@ public class ModuleManager {
 
         moduleList.forEach(module -> {
             if (module.bind.getKey() == eventKey) {
-                module.toggle();
+                if(module.isEnabled())
+                    module.disable();
+                else if(!module.isEnabled())
+                    module.enable();
             }
         });
     }

@@ -1,9 +1,9 @@
 package mint.managers;
 
 import mint.Mint;
-import mint.newgui.font.CustomFont;
 import mint.modules.core.FontChanger;
 import mint.modules.miscellaneous.SignExploit;
+import mint.newgui.font.CustomFont;
 import mint.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
@@ -37,21 +37,16 @@ public class TextManager {
         }
     }
 
-    public int getStyle(){
-        switch(FontChanger.getInstance().style.getValue()) {
-            case NORMAL: {
-                return 0;
-            }
-            case ITALIC: {
-                return 2;
-            }
-            case BOLD: {
-                return 1;
-            }
-            case ITALICBOLD: {
-                return 3;
-            }
-        }
+    public int getStyle() {
+        if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.NORMAL))
+            return 0;
+        else if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.ITALIC))
+            return 2;
+        else if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.BOLD))
+            return 1;
+        else if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.ITALICBOLD))
+            return 3;
+
         return 0;
     }
 
@@ -71,6 +66,7 @@ public class TextManager {
         }
         Mint.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, shadow);
     }
+
     public float drawStringFull(String text, float x, float y, int color, boolean shadow) {
         assert Mint.moduleManager != null;
         if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {

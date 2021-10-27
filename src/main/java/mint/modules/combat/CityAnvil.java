@@ -30,11 +30,11 @@ public class CityAnvil extends Module {
     public BooleanSetting packet = new BooleanSetting("Packet", false, this);
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting swing = new BooleanSetting("Swing", false, this);
-    public EnumSetting swingMode = new EnumSetting("Swing Mode", EnumHand.MAIN_HAND, this, z -> swing.getValue());
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", EnumHand.MAIN_HAND, this, v -> swing.getValue());
     public BooleanSetting autoMine = new BooleanSetting("Auto Mine", false, this);
     public IntegerSetting mineDelay = new IntegerSetting("Mine Delay", 700, 0, 1000, this);
     public BooleanSetting render = new BooleanSetting("Render", false, this);
-    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> render.getValue());
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, v -> render.getValue());
     Timer timer = new Timer();
     BlockPos currentPos;
     BlockPos currentPos2;

@@ -40,18 +40,18 @@ public class AutoPiston extends Module {
     public BooleanSetting packet = new BooleanSetting("Packet", false, this);
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting blockSwing = new BooleanSetting("Block Swing", false, this);
-    public EnumSetting blockSwingMode = new EnumSetting("Block Swing Mode", BlockSwingHand.MAINHAND, this, z -> blockSwing.getValue());
+    public EnumSetting blockSwingMode = new EnumSetting("Block Swing Mode", BlockSwingHand.MAINHAND, this, v -> blockSwing.getValue());
 
     public enum BlockSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public BooleanSetting packetBreak = new BooleanSetting("Packet Break", false, this);
     public BooleanSetting crystalPlaceSwing = new BooleanSetting("Crystal Place Swing", false, this);
-    public EnumSetting placeSwingHand = new EnumSetting("Place Swing Hand", PlaceSwingHand.MAINHAND, this, z -> crystalPlaceSwing.getValue());
+    public EnumSetting placeSwingHand = new EnumSetting("Place Swing Hand", PlaceSwingHand.MAINHAND, this, v -> crystalPlaceSwing.getValue());
 
     public enum PlaceSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public BooleanSetting crystalBreakSwing = new BooleanSetting("Crystal Break Swing", false, this);
-    public EnumSetting breakSwingHand = new EnumSetting("Break Swing Hand", BreakSwingHand.MAINHAND, this, z -> crystalBreakSwing.getValue());
+    public EnumSetting breakSwingHand = new EnumSetting("Break Swing Hand", BreakSwingHand.MAINHAND, this, v -> crystalBreakSwing.getValue());
 
     public enum BreakSwingHand {MAINHAND, OFFHAND, PACKET}
 

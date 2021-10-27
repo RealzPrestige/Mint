@@ -26,27 +26,27 @@ public class HoleESP extends Module {
     HashSet<BlockPos> bedrockholes = Sets.newHashSet();
     HashSet<BlockPos> obsidianholes = Sets.newHashSet();
     public ParentSetting rangesParent = new ParentSetting("Ranges", false, this);
-    public IntegerSetting range = new IntegerSetting("X Range", 8, 1, 20, this, z -> rangesParent.getValue());
-    public IntegerSetting rangeY = new IntegerSetting("Y Range", 6, 1, 20, this, z -> rangesParent.getValue());
+    public IntegerSetting range = new IntegerSetting("X Range", 8, 1, 20, this, v -> rangesParent.getValue());
+    public IntegerSetting rangeY = new IntegerSetting("Y Range", 6, 1, 20, this, v -> rangesParent.getValue());
     public ParentSetting othersParent = new ParentSetting("Others", false, this);
-    public IntegerSetting updateDelay = new IntegerSetting("Update Delay", 1, 0, 30, this, z -> othersParent.getValue());
-    public BooleanSetting gradient = new BooleanSetting("Gradient", false, this, z -> othersParent.getValue());
-    public BooleanSetting dynamicHeights = new BooleanSetting("Dynamic Height", false, this, z -> gradient.getValue() && othersParent.getValue());
-    public DoubleSetting height = new DoubleSetting("Height", 1.0, 0.0, 3.0, this, z -> gradient.getValue() && othersParent.getValue());
-    public DoubleSetting value = new DoubleSetting("height Value", 10.0, 0.1, 30.0, this, z -> gradient.getValue() && othersParent.getValue());
-    public BooleanSetting antiInverse = new BooleanSetting("Anti Inverse", false, this, z -> gradient.getValue() && othersParent.getValue());
+    public IntegerSetting updateDelay = new IntegerSetting("Update Delay", 1, 0, 30, this, v -> othersParent.getValue());
+    public BooleanSetting gradient = new BooleanSetting("Gradient", false, this, v -> othersParent.getValue());
+    public BooleanSetting dynamicHeights = new BooleanSetting("Dynamic Height", false, this, v -> gradient.getValue() && othersParent.getValue());
+    public DoubleSetting height = new DoubleSetting("Height", 1.0, 0.0, 3.0, this, v -> gradient.getValue() && othersParent.getValue());
+    public DoubleSetting value = new DoubleSetting("height Value", 10.0, 0.1, 30.0, this, v -> gradient.getValue() && othersParent.getValue());
+    public BooleanSetting antiInverse = new BooleanSetting("Anti Inverse", false, this, v -> gradient.getValue() && othersParent.getValue());
     public ParentSetting bedrockParent = new ParentSetting("Bedrock", false, this);
-    public BooleanSetting bedrockBox = new BooleanSetting("Bedrock Box", true, this, z -> bedrockParent.getValue());
-    public ColorSetting bedrockBoxColor = new ColorSetting("Bedrock Box Color", new Color(-1), this, z -> bedrockBox.getValue() && bedrockParent.getValue());
-    public BooleanSetting bedrockOutline = new BooleanSetting("Bedrock Outline", true, this, z -> bedrockParent.getValue());
-    public ColorSetting bedrockOutlineColor = new ColorSetting("Bedrock Outline Color", new Color(-1), this, z -> bedrockOutline.getValue() && bedrockParent.getValue());
-    public FloatSetting bedrockOutlineLineWidth = new FloatSetting("Bedrock Outline Line Width", 1f, 0f, 5f, this, z -> bedrockOutline.getValue() && bedrockParent.getValue());
+    public BooleanSetting bedrockBox = new BooleanSetting("Bedrock Box", true, this, v -> bedrockParent.getValue());
+    public ColorSetting bedrockBoxColor = new ColorSetting("Bedrock Box Color", new Color(-1), this, v -> bedrockBox.getValue() && bedrockParent.getValue());
+    public BooleanSetting bedrockOutline = new BooleanSetting("Bedrock Outline", true, this, v -> bedrockParent.getValue());
+    public ColorSetting bedrockOutlineColor = new ColorSetting("Bedrock Outline Color", new Color(-1), this, v -> bedrockOutline.getValue() && bedrockParent.getValue());
+    public FloatSetting bedrockOutlineLineWidth = new FloatSetting("Bedrock Outline Line Width", 1f, 0f, 5f, this, v -> bedrockOutline.getValue() && bedrockParent.getValue());
     public ParentSetting obsidianParent = new ParentSetting("Obsidian", false, this);
-    public BooleanSetting obsidianBox = new BooleanSetting("Obsidian Box", true, this, z -> obsidianParent.getValue());
-    public ColorSetting obsidianBoxColor = new ColorSetting("Obsidian Box Color", new Color(-1), this, z -> obsidianBox.getValue() && obsidianParent.getValue());
-    public BooleanSetting obsidianOutline = new BooleanSetting("Obsidian Outline", true, this, z -> obsidianParent.getValue());
-    public ColorSetting obsidianOutlineColor = new ColorSetting("Obsidian Outline Color", new Color(-1), this, z -> obsidianOutline.getValue() && obsidianParent.getValue());
-    public FloatSetting obsidianOutlineLineWidth = new FloatSetting("Obsidian Outline Line Width", 1f, 0f, 5f, this, z -> obsidianOutline.getValue() && obsidianParent.getValue());
+    public BooleanSetting obsidianBox = new BooleanSetting("Obsidian Box", true, this, v -> obsidianParent.getValue());
+    public ColorSetting obsidianBoxColor = new ColorSetting("Obsidian Box Color", new Color(-1), this, v -> obsidianBox.getValue() && obsidianParent.getValue());
+    public BooleanSetting obsidianOutline = new BooleanSetting("Obsidian Outline", true, this, v -> obsidianParent.getValue());
+    public ColorSetting obsidianOutlineColor = new ColorSetting("Obsidian Outline Color", new Color(-1), this, v -> obsidianOutline.getValue() && obsidianParent.getValue());
+    public FloatSetting obsidianOutlineLineWidth = new FloatSetting("Obsidian Outline Line Width", 1f, 0f, 5f, this, v -> obsidianOutline.getValue() && obsidianParent.getValue());
 
     public void onTick() {
         if (updates > updateDelay.getValue()) {

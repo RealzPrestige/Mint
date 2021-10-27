@@ -8,12 +8,11 @@ import mint.settingsrewrite.impl.ColorSetting;
 
 import java.awt.*;
 
-@ModuleInfo(name = "New Gui", category = Module.Category.Core, description = "Displays new Gui")
+@ModuleInfo(name = "NewGui", category = Module.Category.Core, description = "Displays new Gui")
 public class NewGuiModule extends Module {
     static NewGuiModule INSTANCE = new NewGuiModule();
     public ColorSetting color = new ColorSetting("Color", new Color(0, 255, 255, 255), this);
     public ColorSetting backgroundColor = new ColorSetting("Background Color", new Color(0, 0, 0, 50), this);
-
 
     public NewGuiModule() {
         this.setInstance();
@@ -33,6 +32,7 @@ public class NewGuiModule extends Module {
     public void onEnable() {
         mc.displayGuiScreen(NewGui.getInstance());
     }
+
     @Override
     public void onDisable() {
         assert Mint.configManager != null;

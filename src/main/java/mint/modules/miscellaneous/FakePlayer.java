@@ -67,11 +67,6 @@ public class FakePlayer extends Module {
     }
 
     @Override
-    public String getDisplayInfo() {
-        return name.getValue();
-    }
-
-    @Override
     public void onUpdate() {
         if (NullUtil.fullNullCheck()) {
             setEnabled(false);

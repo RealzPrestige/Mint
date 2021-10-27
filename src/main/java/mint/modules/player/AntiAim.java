@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AntiAim extends Module {
 
     public EnumSetting mode = new EnumSetting("Mode", Mode.Custom, this);
-    public IntegerSetting yaw = new IntegerSetting("Yaw", 90, -90, 90, this, z -> mode.getValue() == Mode.Custom);
-    public IntegerSetting pitch = new IntegerSetting("Pitch", 90, -90, 90, this, z -> mode.getValue() == Mode.Custom);
-    public IntegerSetting spinSpeed = new IntegerSetting("SpinSpeed", 10, 0, 50, this, z -> mode.getValue() == Mode.Spin);
+    public IntegerSetting yaw = new IntegerSetting("Yaw", 90, -90, 90, this, v -> mode.getValue() == Mode.Custom);
+    public IntegerSetting pitch = new IntegerSetting("Pitch", 90, -90, 90, this, v -> mode.getValue() == Mode.Custom);
+    public IntegerSetting spinSpeed = new IntegerSetting("SpinSpeed", 10, 0, 50, this, v -> mode.getValue() == Mode.Spin);
     int nextValue;
 
     @Override

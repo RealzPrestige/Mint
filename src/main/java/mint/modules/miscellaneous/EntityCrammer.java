@@ -31,7 +31,7 @@ public class EntityCrammer extends Module {
     public BooleanSetting packet = new BooleanSetting("Packet", false, this);
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting swing = new BooleanSetting("Swing", false, this);
-    public EnumSetting swingMode = new EnumSetting("Swing Mode", SwingHand.MAINHAND, this, z -> swing.getValue());
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", SwingHand.MAINHAND, this, v -> swing.getValue());
 
     public enum SwingHand {MAINHAND, OFFHAND, PACKET}
 

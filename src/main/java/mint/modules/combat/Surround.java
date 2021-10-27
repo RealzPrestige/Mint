@@ -19,16 +19,16 @@ public class Surround extends Module {
     public int maxBlocks;
     public int itemSlot;
     public ParentSetting modesParent = new ParentSetting("Modes", true, this);
-    public EnumSetting placeMode = new EnumSetting("Place Mode", PlaceMode.Vanilla, this, z -> modesParent.getValue());
-    public EnumSetting disableMode = new EnumSetting("Disable Mode", DisableMode.Smart, this, z -> modesParent.getValue());
-    public EnumSetting blocks = new EnumSetting("Blocks", BlockSelection.Obsidian, this, z -> modesParent.getValue());
+    public EnumSetting placeMode = new EnumSetting("Place Mode", PlaceMode.Vanilla, this, v -> modesParent.getValue());
+    public EnumSetting disableMode = new EnumSetting("Disable Mode", DisableMode.Smart, this, v -> modesParent.getValue());
+    public EnumSetting blocks = new EnumSetting("Blocks", BlockSelection.Obsidian, this, v -> modesParent.getValue());
     public ParentSetting miscParent = new ParentSetting("Misc", true, this);
-    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 50, 0, 500, this, z -> miscParent.getValue());
-    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, z -> miscParent.getValue());
-    public BooleanSetting bottomBlocks = new BooleanSetting("Bottom Blocks", false, this, z -> miscParent.getValue());
-    public BooleanSetting bottomBlocksExtend = new BooleanSetting("Bottom Blocks Extend", false, this, z -> bottomBlocks.getValue() && miscParent.getValue());
-    public BooleanSetting maxBlock = new BooleanSetting("Max Blocks", false, this, z -> miscParent.getValue());
-    public IntegerSetting maxBlocksAmount = new IntegerSetting("Max Blocks Amount", 10, 0, 20, this, z -> maxBlock.getValue() && miscParent.getValue());
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 50, 0, 500, this, v -> miscParent.getValue());
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, v -> miscParent.getValue());
+    public BooleanSetting bottomBlocks = new BooleanSetting("Bottom Blocks", false, this, v -> miscParent.getValue());
+    public BooleanSetting bottomBlocksExtend = new BooleanSetting("Bottom Blocks Extend", false, this, v -> bottomBlocks.getValue() && miscParent.getValue());
+    public BooleanSetting maxBlock = new BooleanSetting("Max Blocks", false, this, v -> miscParent.getValue());
+    public IntegerSetting maxBlocksAmount = new IntegerSetting("Max Blocks Amount", 10, 0, 20, this, v -> maxBlock.getValue() && miscParent.getValue());
 
     public enum PlaceMode {Vanilla, Packet}
 

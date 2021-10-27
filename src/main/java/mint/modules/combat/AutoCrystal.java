@@ -46,80 +46,80 @@ public class AutoCrystal extends Module {
 
     public static AutoCrystal INSTANCE = new AutoCrystal();
     public ParentSetting rangesParent = new ParentSetting("Ranges", false, this);
-    public FloatSetting placeRange = new FloatSetting("Place Range", 5f, 0f, 6f, this, z -> rangesParent.getValue());
-    public FloatSetting breakRange = new FloatSetting("Break Range", 5f, 0f, 6f, this, z -> rangesParent.getValue());
-    public FloatSetting targetRange = new FloatSetting("Target Range", 10f, 0f, 15f, this, z -> rangesParent.getValue());
+    public FloatSetting placeRange = new FloatSetting("Place Range", 5f, 0f, 6f, this, v -> rangesParent.getValue());
+    public FloatSetting breakRange = new FloatSetting("Break Range", 5f, 0f, 6f, this, v -> rangesParent.getValue());
+    public FloatSetting targetRange = new FloatSetting("Target Range", 10f, 0f, 15f, this, v -> rangesParent.getValue());
 
     public ParentSetting damagesParent = new ParentSetting("Damages", false, this);
-    public FloatSetting minimumDamage = new FloatSetting("Minimum Damage", 6f, 0f, 16f, this, z -> rangesParent.getValue());
-    public FloatSetting maximumSelfDamage = new FloatSetting("Maximum Self Damage", 6f, 0f, 16f, this, z -> rangesParent.getValue());
-    public BooleanSetting antiSuicide = new BooleanSetting("Anti Suicide", false, this, z -> rangesParent.getValue());
+    public FloatSetting minimumDamage = new FloatSetting("Minimum Damage", 6f, 0f, 16f, this, v -> damagesParent.getValue());
+    public FloatSetting maximumSelfDamage = new FloatSetting("Maximum Self Damage", 6f, 0f, 16f, this, v -> damagesParent.getValue());
+    public BooleanSetting antiSuicide = new BooleanSetting("Anti Suicide", false, this, v -> damagesParent.getValue());
 
     public ParentSetting predictParent = new ParentSetting("Predicts", false, this);
-    public BooleanSetting soundPredict = new BooleanSetting("Sound Predict", false, this, z -> rangesParent.getValue());
-    public BooleanSetting breakPredict = new BooleanSetting("Break Predict", false, this, z -> rangesParent.getValue());
-    public BooleanSetting breakPredictCalc = new BooleanSetting("Break Predict Calc", false, this, z -> predictParent.getValue() && breakPredict.getValue());
+    public BooleanSetting soundPredict = new BooleanSetting("Sound Predict", false, this, v -> predictParent.getValue());
+    public BooleanSetting breakPredict = new BooleanSetting("Break Predict", false, this, v -> predictParent.getValue());
+    public BooleanSetting breakPredictCalc = new BooleanSetting("Break Predict Calc", false, this, v -> predictParent.getValue() && breakPredict.getValue());
 
     public ParentSetting delayParent = new ParentSetting("Delays", false, this);
-    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 100, 0, 500, this, z -> delayParent.getValue());
-    public IntegerSetting breakDelay = new IntegerSetting("Break Delay", 100, 0, 500, this, z -> delayParent.getValue());
+    public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 100, 0, 500, this, v -> delayParent.getValue());
+    public IntegerSetting breakDelay = new IntegerSetting("Break Delay", 100, 0, 500, this, v -> delayParent.getValue());
 
     public ParentSetting raytraceParent = new ParentSetting("Raytrace", false, this);
-    public BooleanSetting placeRaytrace = new BooleanSetting("Place Raytrace", false, this, z -> raytraceParent.getValue());
-    public FloatSetting placeRaytraceRange = new FloatSetting("Place Raytrace Range", 5f, 0f, 6f, this, z -> raytraceParent.getValue() && placeRaytrace.getValue());
-    public BooleanSetting breakRaytrace = new BooleanSetting("Break Raytrace", false, this, z -> raytraceParent.getValue());
-    public FloatSetting breakRaytraceRange = new FloatSetting("Break Raytrace Range", 5f, 0f, 6f, this, z -> raytraceParent.getValue() && breakRaytrace.getValue());
+    public BooleanSetting placeRaytrace = new BooleanSetting("Place Raytrace", false, this, v -> raytraceParent.getValue());
+    public FloatSetting placeRaytraceRange = new FloatSetting("Place Raytrace Range", 5f, 0f, 6f, this, v -> raytraceParent.getValue() && placeRaytrace.getValue());
+    public BooleanSetting breakRaytrace = new BooleanSetting("Break Raytrace", false, this, v -> raytraceParent.getValue());
+    public FloatSetting breakRaytraceRange = new FloatSetting("Break Raytrace Range", 5f, 0f, 6f, this, v -> raytraceParent.getValue() && breakRaytrace.getValue());
 
     public ParentSetting miscParent = new ParentSetting("Misc", false, this);
-    public BooleanSetting preparePlace = new BooleanSetting("Prepare Place", true, this, z -> miscParent.getValue());
-    public BooleanSetting updatedPlacements = new BooleanSetting("1.13+ Placements", false, this, z -> miscParent.getValue());
-    public BooleanSetting limitAttack = new BooleanSetting("Limit Attack", false, this, z -> miscParent.getValue());
-    public BooleanSetting packetBreak = new BooleanSetting("Packet Break", false, this, z -> miscParent.getValue());
-    public BooleanSetting allowCollision = new BooleanSetting("Allow Collision", false, this, z -> miscParent.getValue());
-    public BooleanSetting cancelVelocity = new BooleanSetting("Cancel Velocity", false, this, z -> miscParent.getValue());
-    public BooleanSetting cancelExplosion = new BooleanSetting("Cancel Explosion", false, this, z -> miscParent.getValue());
-    public BooleanSetting silentSwitch = new BooleanSetting("Silent Switch", false, this, z -> miscParent.getValue());
-    public BooleanSetting antiWeakness = new BooleanSetting("Anti Weakness", false, this, z -> silentSwitch.getValue() && miscParent.getValue());
+    public BooleanSetting preparePlace = new BooleanSetting("Prepare Place", true, this, v -> miscParent.getValue());
+    public BooleanSetting updatedPlacements = new BooleanSetting("1.13+ Placements", false, this, v -> miscParent.getValue());
+    public BooleanSetting limitAttack = new BooleanSetting("Limit Attack", false, this, v -> miscParent.getValue());
+    public BooleanSetting packetBreak = new BooleanSetting("Packet Break", false, this, v -> miscParent.getValue());
+    public BooleanSetting allowCollision = new BooleanSetting("Allow Collision", false, this, v -> miscParent.getValue());
+    public BooleanSetting cancelVelocity = new BooleanSetting("Cancel Velocity", false, this, v -> miscParent.getValue());
+    public BooleanSetting cancelExplosion = new BooleanSetting("Cancel Explosion", false, this, v -> miscParent.getValue());
+    public BooleanSetting silentSwitch = new BooleanSetting("Silent Switch", false, this, v -> miscParent.getValue());
+    public BooleanSetting antiWeakness = new BooleanSetting("Anti Weakness", false, this, v -> silentSwitch.getValue() && miscParent.getValue());
 
     public ParentSetting swingParent = new ParentSetting("Swings", false, this);
-    public BooleanSetting placeSwing = new BooleanSetting("Place Swing", false, this, z -> swingParent.getValue());
-    public EnumSetting placeSwingHand = new EnumSetting("PlaceSwingHand", PlaceSwingHand.MAINHAND, this, z -> placeSwing.getValue() && swingParent.getValue());
+    public BooleanSetting placeSwing = new BooleanSetting("Place Swing", false, this, v -> swingParent.getValue());
+    public EnumSetting placeSwingHand = new EnumSetting("PlaceSwingHand", PlaceSwingHand.MAINHAND, this, v -> placeSwing.getValue() && swingParent.getValue());
 
     public enum PlaceSwingHand {MAINHAND, OFFHAND, PACKET}
 
-    public BooleanSetting breakSwing = new BooleanSetting("Break Swing", false, this, z -> swingParent.getValue());
-    public EnumSetting breakSwingHand = new EnumSetting("BreakSwingHand", BreakSwingHand.MAINHAND, this, z -> breakSwing.getValue() && swingParent.getValue());
+    public BooleanSetting breakSwing = new BooleanSetting("Break Swing", false, this, v -> swingParent.getValue());
+    public EnumSetting breakSwingHand = new EnumSetting("BreakSwingHand", BreakSwingHand.MAINHAND, this, v -> breakSwing.getValue() && swingParent.getValue());
 
     public enum BreakSwingHand {MAINHAND, OFFHAND, PACKET}
 
     public ParentSetting facePlaceParent = new ParentSetting("Face Placing", false, this);
-    public EnumSetting facePlaceMode = new EnumSetting("FacePlaceMode", FacePlaceMode.Never, this, z -> facePlaceParent.getValue());
+    public EnumSetting facePlaceMode = new EnumSetting("FacePlaceMode", FacePlaceMode.Never, this, v -> facePlaceParent.getValue());
 
     public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    public FloatSetting facePlaceHp = new FloatSetting("Face Place Health", 15f, 0f, 36f, this, z -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue());
-    public KeySetting facePlaceBind = new KeySetting("Face Place Bind", Keyboard.KEY_NONE, this, z -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue());
+    public FloatSetting facePlaceHp = new FloatSetting("Face Place Health", 15f, 0f, 36f, this, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue());
+    public KeySetting facePlaceBind = new KeySetting("Face Place Bind", Keyboard.KEY_NONE, this, v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue());
 
     public ParentSetting pauseParent = new ParentSetting("Pause Parent", false, this);
-    public BooleanSetting pauseOnGapple = new BooleanSetting("Gapple", false, this, z -> pauseParent.getValue());
-    public BooleanSetting pauseOnSword = new BooleanSetting("Pause On Sword", false, this, z -> pauseParent.getValue());
-    public BooleanSetting pauseOnHealth = new BooleanSetting("Pause On Health", false, this, z -> pauseParent.getValue());
-    public FloatSetting pauseHealth = new FloatSetting("Pause Health", 15f, 0f, 36f, this, z -> pauseParent.getValue() && pauseOnHealth.getValue());
-    public BooleanSetting pauseOnExp = new BooleanSetting("Pause On Exp", false, this, z -> pauseParent.getValue());
+    public BooleanSetting pauseOnGapple = new BooleanSetting("Gapple", false, this, v -> pauseParent.getValue());
+    public BooleanSetting pauseOnSword = new BooleanSetting("Pause On Sword", false, this, v -> pauseParent.getValue());
+    public BooleanSetting pauseOnHealth = new BooleanSetting("Pause On Health", false, this, v -> pauseParent.getValue());
+    public FloatSetting pauseHealth = new FloatSetting("Pause Health", 15f, 0f, 36f, this, v -> pauseParent.getValue() && pauseOnHealth.getValue());
+    public BooleanSetting pauseOnExp = new BooleanSetting("Pause On Exp", false, this, v -> pauseParent.getValue());
 
     public ParentSetting renderParent = new ParentSetting("Renders", false, this);
-    public BooleanSetting render = new BooleanSetting("Render", false, this, z -> renderParent.getValue());
-    public BooleanSetting fade = new BooleanSetting("Fade", false, this, z -> render.getValue() && renderParent.getValue());
-    public IntegerSetting startAlpha = new IntegerSetting("Start Alpha", 255, 0, 255, this, z -> render.getValue() && fade.getValue() && renderParent.getValue());
-    public IntegerSetting endAlpha = new IntegerSetting("End Alpha", 0, 0, 255, this, z -> render.getValue() && fade.getValue() && renderParent.getValue());
-    public IntegerSetting fadeSpeed = new IntegerSetting("Fade Speed", 20, 0, 100, this, z -> render.getValue() && fade.getValue() && renderParent.getValue());
+    public BooleanSetting render = new BooleanSetting("Render", false, this, v -> renderParent.getValue());
+    public BooleanSetting fade = new BooleanSetting("Fade", false, this, v -> render.getValue() && renderParent.getValue());
+    public IntegerSetting startAlpha = new IntegerSetting("Start Alpha", 255, 0, 255, this, v -> render.getValue() && fade.getValue() && renderParent.getValue());
+    public IntegerSetting endAlpha = new IntegerSetting("End Alpha", 0, 0, 255, this, v -> render.getValue() && fade.getValue() && renderParent.getValue());
+    public IntegerSetting fadeSpeed = new IntegerSetting("Fade Speed", 20, 0, 100, this, v -> render.getValue() && fade.getValue() && renderParent.getValue());
 
-    public BooleanSetting box = new BooleanSetting("Box", false, this, z -> render.getValue() && renderParent.getValue());
-    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> render.getValue() && box.getValue() && renderParent.getValue());
+    public BooleanSetting box = new BooleanSetting("Box", false, this, v -> render.getValue() && renderParent.getValue());
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, v -> render.getValue() && box.getValue() && renderParent.getValue());
 
-    public BooleanSetting outline = new BooleanSetting("Outline", false, this, z -> render.getValue() && renderParent.getValue());
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> render.getValue() && outline.getValue() && renderParent.getValue());
-    public FloatSetting lineWidth = new FloatSetting("Line Width", 1f, 0f, 5f, this, z -> render.getValue() && outline.getValue() && renderParent.getValue());
+    public BooleanSetting outline = new BooleanSetting("Outline", false, this, v -> render.getValue() && renderParent.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> render.getValue() && outline.getValue() && renderParent.getValue());
+    public FloatSetting lineWidth = new FloatSetting("Line Width", 1f, 0f, 5f, this, v -> render.getValue() && outline.getValue() && renderParent.getValue());
 
     EntityPlayer targetPlayer;
     BlockPos finalPos;

@@ -20,13 +20,13 @@ public class ChorusPredict extends Module {
 
     public IntegerSetting time = new IntegerSetting("Duration", 500, 50, 3000, this);
     public ParentSetting boxParent = new ParentSetting("Box", false, this);
-    public BooleanSetting box = new BooleanSetting("Box Setting", false, this, z -> boxParent.getValue());
-    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> box.getValue() && boxParent.getValue());
+    public BooleanSetting box = new BooleanSetting("Box Setting", false, this, v -> boxParent.getValue());
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, v -> box.getValue() && boxParent.getValue());
 
     public ParentSetting outlineParent = new ParentSetting("Outline", false, this);
-    public BooleanSetting outline = new BooleanSetting("OutlineSetting", true, this, z -> outlineParent.getValue());
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> outline.getValue() && outlineParent.getValue());
-    public FloatSetting lineWidth = new FloatSetting("LineWidth", 1.0f, 0.1f, 5.0f, this, z -> outline.getValue() && outlineParent.getValue());
+    public BooleanSetting outline = new BooleanSetting("OutlineSetting", true, this, v -> outlineParent.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> outline.getValue() && outlineParent.getValue());
+    public FloatSetting lineWidth = new FloatSetting("LineWidth", 1.0f, 0.1f, 5.0f, this, v -> outline.getValue() && outlineParent.getValue());
 
     public Timer timer = new Timer();
     public double x;

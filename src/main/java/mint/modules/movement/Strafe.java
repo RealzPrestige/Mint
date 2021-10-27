@@ -31,17 +31,17 @@ public class Strafe extends Module {
 
     public enum SpeedMode {SwitchBind, Normal}
 
-    public EnumSetting strafeMode = new EnumSetting("Strafe Mode", StrafeMode.Strafe, this, z -> speedMode.getValue().equals(SpeedMode.Normal));
+    public EnumSetting strafeMode = new EnumSetting("Strafe Mode", StrafeMode.Strafe, this, v -> speedMode.getValue().equals(SpeedMode.Normal));
 
     public enum StrafeMode {Strafe, Instant, StrafeTest}
 
-    public EnumSetting keyBindStrafe = new EnumSetting("Key Bind Strafe", KeyBindStrafe.Strafe, this, z -> speedMode.getValue().equals(SpeedMode.SwitchBind));
+    public EnumSetting keyBindStrafe = new EnumSetting("Key Bind Strafe", KeyBindStrafe.Strafe, this, v -> speedMode.getValue().equals(SpeedMode.SwitchBind));
 
     public enum KeyBindStrafe {Strafe, StrafeTest}
 
     public BooleanSetting useTimer = new BooleanSetting("Use Timer", false, this);
-    public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.3f, 1.0f, 2.0f, this, z -> useTimer.getValue());
-    public KeySetting switchBind = new KeySetting("SwitchBind", Keyboard.KEY_NONE, this, z -> speedMode.getValue().equals(SpeedMode.SwitchBind));
+    public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.3f, 1.0f, 2.0f, this, v -> useTimer.getValue());
+    public KeySetting switchBind = new KeySetting("SwitchBind", Keyboard.KEY_NONE, this, v -> speedMode.getValue().equals(SpeedMode.SwitchBind));
 
     private int level;
     private double moveSpeed;

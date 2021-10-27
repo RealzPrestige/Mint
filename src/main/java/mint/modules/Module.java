@@ -4,6 +4,7 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
+import mint.managers.MessageManager;
 import mint.modules.core.Notifications;
 import mint.settingsrewrite.impl.KeySetting;
 import net.minecraft.client.Minecraft;
@@ -66,19 +67,15 @@ public class Module {
     public void onUnload() {
     }
 
-    public String getDisplayInfo() {
-        return null;
-    }
-
     public boolean isOn() {
         return enabled;
     }
 
-
     public void enable() {
-        setEnabled(true);
+        enabled = true;
         onToggle();
         onEnable();
+        MessageManager.sendMessage(name + " enabled");
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
         if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
@@ -95,14 +92,14 @@ public class Module {
     }
 
     public void disable() {
-        MinecraftForge.EVENT_BUS.unregister(this);
-        setEnabled(false);
+        enabled = false;
+        onToggle();
+        onDisable();
+        MessageManager.sendMessage(name + " disabled");
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
         if (Notifications.getInstance().isEnabled() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.CHAT || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
-        onToggle();
-        onDisable();
         if (Notifications.getInstance().isEnabled() && Notifications.getInstance().modules.getValue() && (Notifications.getInstance().mode.getValue() == Notifications.Mode.HUD || Notifications.getInstance().mode.getValue() == Notifications.Mode.BOTH)) {
             Notifications.getInstance().notification.clear();
             Notifications.getInstance().hasReachedEndState = false;
@@ -111,10 +108,7 @@ public class Module {
             Notifications.getInstance().lefinalewidth = false;
             Notifications.getInstance().notification.put(this.getName().replace("_", " ") + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!", 1000);
         }
-    }
-
-    public void toggle() {
-        setEnabled(!isEnabled());
+        MinecraftForge.EVENT_BUS.unregister(this);
     }
 
     public String getName() {
@@ -156,13 +150,12 @@ public class Module {
     }
 
     public String getFullArrayString() {
-        return this.getName() + ChatFormatting.GRAY + (this.getDisplayInfo() != null ? " [" + ChatFormatting.WHITE + this.getDisplayInfo() + ChatFormatting.GRAY + "]" : "");
+        return getName();
     }
 
     public ModuleInfo getModuleInfo() {
         return getClass().getAnnotation(ModuleInfo.class);
     }
-
 
     public enum Category {
         Combat("Combat"),

@@ -20,11 +20,11 @@ import java.awt.*;
 @ModuleInfo(name = "Break ESP",description = "Renders block that is being severly hit until it breaks.",category = Module.Category.Visual)
 public class BreakESP extends Module {
     public ParentSetting miscParent = new ParentSetting("Misc",true, this);
-    public IntegerSetting range = new IntegerSetting("Range",50,0,200,this, z -> miscParent.getValue());
+    public IntegerSetting range = new IntegerSetting("Range",50,0,200,this, v -> miscParent.getValue());
 
     public ParentSetting visual = new ParentSetting("Visuals", true, this);
-    public BooleanSetting playerName = new BooleanSetting("Player Name" , true , this, z -> visual.getValue());
-    public BooleanSetting breakPercentage = new BooleanSetting("Break Percentage" , true , this, z -> visual.getValue());
+    public BooleanSetting playerName = new BooleanSetting("Player Name" , true , this, v -> visual.getValue());
+    public BooleanSetting breakPercentage = new BooleanSetting("Break Percentage" , true , this, v -> visual.getValue());
 
     public ColorSetting box = new ColorSetting("Box",new Color(-1),this);
     public ColorSetting out = new ColorSetting("Outline", new Color(-1),this);

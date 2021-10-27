@@ -21,7 +21,7 @@ public class EntityPredict extends Module {
     public IntegerSetting attackAmount = new IntegerSetting("Attack Amount", 1, 1, 5, this);
     public BooleanSetting holdingCrystalOnly = new BooleanSetting("Holding Crystal Only", false, this);
     public BooleanSetting render = new BooleanSetting("Render", false, this);
-    public BooleanSetting down = new BooleanSetting("Down", false, this, z -> render.getValue());
+    public BooleanSetting down = new BooleanSetting("Down", false, this, v -> render.getValue());
 
     int currentId;
     BlockPos currentPos;

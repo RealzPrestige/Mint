@@ -26,7 +26,7 @@ public class SelfFill extends Module {
 
     public enum LagMode {Packet, YMotion, Teleport, LagFall, DoubleJump}
 
-    public BooleanSetting packetJump = new BooleanSetting("PacketJump", true, this, z -> lagBack.getValue() == LagMode.DoubleJump);
+    public BooleanSetting packetJump = new BooleanSetting("PacketJump", true, this, v -> lagBack.getValue() == LagMode.DoubleJump);
     public BlockPos startPos = null;
     Timer timer = new Timer();
 

@@ -18,7 +18,7 @@ public class LongJump extends Module {
 
     public enum Mode {Factor}
 
-    public FloatSetting acceleration = new FloatSetting("Acceleration", 30.0f, 0.0f, 100.0f, this, z -> mode.getValue() == Mode.Factor);
+    public FloatSetting acceleration = new FloatSetting("Acceleration", 30.0f, 0.0f, 100.0f, this, v -> mode.getValue() == Mode.Factor);
     public BooleanSetting autoJump = new BooleanSetting("Auto Jump", true, this);
     public IntegerSetting jumpHeight = new IntegerSetting("Jump Height", 390, 350, 420, this);
     public BooleanSetting disableOnLag = new BooleanSetting("Disable On Lag", true, this);

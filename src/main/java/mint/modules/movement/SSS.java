@@ -22,24 +22,24 @@ public class SSS extends Module {
 
     public BooleanSetting movementParent = new BooleanSetting("Movement", false, this);
 
-    public EnumSetting moveType = new EnumSetting("MoveType", MoveType.YPort, this, z -> movementParent.getValue());
+    public EnumSetting moveType = new EnumSetting("MoveType", MoveType.YPort, this, v -> movementParent.getValue());
 
-    public BooleanSetting step = new BooleanSetting("Step", true, this, z -> movementParent.getValue());
-    public DoubleSetting yPortSpeed = new DoubleSetting("YPortSpeed", 0.1d, 0.0d, 1.0d, this, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
-    public FloatSetting fallSpeed = new FloatSetting("FallSpeed", 0.8f, 0.1f, 9.0f, this, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
-    public IntegerSetting yMotion = new IntegerSetting("YMotion", 390, 350, 420, this, z -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
+    public BooleanSetting step = new BooleanSetting("Step", true, this, v -> movementParent.getValue());
+    public DoubleSetting yPortSpeed = new DoubleSetting("YPortSpeed", 0.1d, 0.0d, 1.0d, this, v -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
+    public FloatSetting fallSpeed = new FloatSetting("FallSpeed", 0.8f, 0.1f, 9.0f, this, v -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
+    public IntegerSetting yMotion = new IntegerSetting("YMotion", 390, 350, 420, this, v -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
 
 
     public BooleanSetting playerParent = new BooleanSetting("Player", true, this);
 
-    public EnumSetting playerType = new EnumSetting("Type", PlayerType.Blink, this, z -> playerParent.getValue());
+    public EnumSetting playerType = new EnumSetting("Type", PlayerType.Blink, this, v -> playerParent.getValue());
 
     //blink
-    public EnumSetting mode = new EnumSetting("Mode", Mode.Both, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
-    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
-    public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
-    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 20, 1, 100, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Ticks);
-    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, z -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Distance);
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Both, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
+    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
+    public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
+    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 20, 1, 100, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Ticks);
+    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Distance);
 
 
     //something else

@@ -28,23 +28,23 @@ public class Notifications extends Module {
     public enum Mode {CHAT, HUD, BOTH}
 
     public ParentSetting targetsParent = new ParentSetting("Targets", true, this);
-    public BooleanSetting pops = new BooleanSetting("Pops", false, this, z -> targetsParent.getValue());
-    public BooleanSetting modules = new BooleanSetting("Modules", false, this, z -> targetsParent.getValue());
+    public BooleanSetting pops = new BooleanSetting("Pops", false, this, v -> targetsParent.getValue());
+    public BooleanSetting modules = new BooleanSetting("Modules", false, this, v -> targetsParent.getValue());
 
-    public ParentSetting othersParent = new ParentSetting("Others", false, this, z -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)));
-    public IntegerSetting y = new IntegerSetting("y", 255, 0, 1000, this, z -> othersParent.getValue());
-    public BooleanSetting newMode = new BooleanSetting("New Mode", false, this, z -> othersParent.getValue() && (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)));
-    public IntegerSetting staticTime = new IntegerSetting("Static Time", 30, 0, 100, this, z -> othersParent.getValue());
+    public ParentSetting othersParent = new ParentSetting("Others", false, this);
+    public IntegerSetting y = new IntegerSetting("y", 255, 0, 1000, this, v -> othersParent.getValue());
+    public BooleanSetting newMode = new BooleanSetting("New Mode", false, this, v -> othersParent.getValue());
+    public IntegerSetting staticTime = new IntegerSetting("Static Time", 30, 0, 100, this, v -> othersParent.getValue());
 
-    public ColorSetting startColor = new ColorSetting("Start Color", new Color(-1), this, z -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue());
+    public ColorSetting startColor = new ColorSetting("Start Color", new Color(-1), this, v -> !newMode.getValue());
 
-    public ColorSetting endColor = new ColorSetting("End Color", new Color(-1), this, z -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue());
+    public ColorSetting endColor = new ColorSetting("End Color", new Color(-1), this, v -> !newMode.getValue());
 
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && !newMode.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v ->  !newMode.getValue());
 
-    public ColorSetting backgroundColor = new ColorSetting("Background Color", new Color(-1), this, z -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)));
+    public ColorSetting backgroundColor = new ColorSetting("Background Color", new Color(-1), this);
 
-    public ColorSetting newColor = new ColorSetting("New Color", new Color(-1), this, z -> (mode.getValue() == Mode.HUD || mode.getValue().equals(Mode.BOTH)) && newMode.getValue());
+    public ColorSetting newColor = new ColorSetting("New Color", new Color(-1), this, v -> newMode.getValue());
     public boolean lefinalewidth;
 
     public Notifications() {
@@ -106,7 +106,7 @@ public class Notifications extends Module {
                     lefinalewidth = false;
                     MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
                 }
-                if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                     width = 0;
                     lefinalewidth = false;
                     Notifications.getInstance().notification.clear();
@@ -125,7 +125,7 @@ public class Notifications extends Module {
                     lefinalewidth = false;
                     MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
                 }
-                if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                     width = 0;
                     lefinalewidth = false;
                     Notifications.getInstance().notification.clear();
@@ -162,7 +162,7 @@ public class Notifications extends Module {
                 lefinalewidth = false;
                 MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
             }
-            if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+            if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                 width = 0;
                 lefinalewidth = false;
                 Notifications.getInstance().notification.clear();
@@ -181,7 +181,7 @@ public class Notifications extends Module {
                 lefinalewidth = false;
                 MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
             }
-            if (pops.getValue() && (mode.getValue() == Mode.HUD || mode.getValue() == Mode.BOTH)) {
+            if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                 width = 0;
                 lefinalewidth = false;
                 Notifications.getInstance().notification.clear();

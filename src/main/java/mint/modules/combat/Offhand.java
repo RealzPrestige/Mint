@@ -25,29 +25,29 @@ import java.util.Map;
 public class Offhand extends Module {
 
     public ParentSetting itemParent = new ParentSetting("Items", true, this);
-    public BooleanSetting crystal = new BooleanSetting("Crystal", false, this, z -> itemParent.getValue());
-    public BooleanSetting crystalOnSword = new BooleanSetting("Sword Crystal", false, this, z -> !crystal.getValue() && itemParent.getValue());
-    public BooleanSetting crystalOnPickaxe = new BooleanSetting("Pickaxe Crystal", false, this, z -> !crystal.getValue() && itemParent.getValue());
+    public BooleanSetting crystal = new BooleanSetting("Crystal", false, this, v -> itemParent.getValue());
+    public BooleanSetting crystalOnSword = new BooleanSetting("Sword Crystal", false, this, v -> !crystal.getValue() && itemParent.getValue());
+    public BooleanSetting crystalOnPickaxe = new BooleanSetting("Pickaxe Crystal", false, this, v -> !crystal.getValue() && itemParent.getValue());
 
     public ParentSetting miscParent = new ParentSetting("Misc", true, this);
-    public IntegerSetting switchDelay = new IntegerSetting("Switch Delay", 50, 0, 200, this, z -> miscParent.getValue());
-    public BooleanSetting fallBack = new BooleanSetting("FallBack", false, this, z -> miscParent.getValue());
+    public IntegerSetting switchDelay = new IntegerSetting("Switch Delay", 50, 0, 200, this, v -> miscParent.getValue());
+    public BooleanSetting fallBack = new BooleanSetting("FallBack", false, this, v -> miscParent.getValue());
 
     public ParentSetting healthParent = new ParentSetting("Health", true, this);
-    public FloatSetting totemHealth = new FloatSetting("Totem Health", 10f, 0f, 20f, this, z -> healthParent.getValue());
-    public BooleanSetting hole = new BooleanSetting("Hole Check", false, this, z -> healthParent.getValue());
-    public FloatSetting holeHealth = new FloatSetting("Totem Hole Health", 10f, 0f, 20f, this, z -> healthParent.getValue() && hole.getValue());
+    public FloatSetting totemHealth = new FloatSetting("Totem Health", 10f, 0f, 20f, this, v -> healthParent.getValue());
+    public BooleanSetting hole = new BooleanSetting("Hole Check", false, this, v -> healthParent.getValue());
+    public FloatSetting holeHealth = new FloatSetting("Totem Hole Health", 10f, 0f, 20f, this, v -> healthParent.getValue() && hole.getValue());
 
     public ParentSetting fallDistanceParent = new ParentSetting("Fall Distance", true, this);
-    public BooleanSetting fallDistance = new BooleanSetting("Fall Distance Check", false, this, z -> fallDistanceParent.getValue());
-    public FloatSetting minDistance = new FloatSetting("Min Distance", 10f, 1f, 100f, this, z -> fallDistance.getValue() && fallDistanceParent.getValue());
+    public BooleanSetting fallDistance = new BooleanSetting("Fall Distance Check", false, this, v -> fallDistanceParent.getValue());
+    public FloatSetting minDistance = new FloatSetting("Min Distance", 10f, 1f, 100f, this, v -> fallDistance.getValue() && fallDistanceParent.getValue());
 
     public ParentSetting gappleParent = new ParentSetting("Gapple", true, this);
-    public BooleanSetting gapple = new BooleanSetting("Gapple Switch", false, this, z -> gappleParent.getValue());
-    public BooleanSetting rightClick = new BooleanSetting("Right Click Only", false, this, z -> gapple.getValue() && gappleParent.getValue());
+    public BooleanSetting gapple = new BooleanSetting("Gapple Switch", false, this, v -> gappleParent.getValue());
+    public BooleanSetting rightClick = new BooleanSetting("Right Click Only", false, this, v -> gapple.getValue() && gappleParent.getValue());
 
     public ParentSetting visualParent = new ParentSetting("Visual", true, this);
-    public EnumSetting render = new EnumSetting("RenderMode", RenderMode.ALWAYS, this, z -> visualParent.getValue());
+    public EnumSetting render = new EnumSetting("RenderMode", RenderMode.ALWAYS, this, v -> visualParent.getValue());
 
     public enum RenderMode {ALWAYS, ONSWITCH, NEVER}
 

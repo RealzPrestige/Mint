@@ -24,10 +24,10 @@ import static org.lwjgl.opengl.GL11.*;
 public class PlayerChams extends Module {
 
     public ParentSetting solidParent = new ParentSetting("Solid", false, this);
-    public ColorSetting solidColor = new ColorSetting("Solid Color", new Color(-1), this, z -> solidParent.getValue());
+    public ColorSetting solidColor = new ColorSetting("Solid Color", new Color(-1), this, v -> solidParent.getValue());
     public ParentSetting outlineParent = new ParentSetting("Outline", false, this);
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> outlineParent.getValue());
-    public FloatSetting lineWidth = new FloatSetting("Line Width", 1.0f, 0.0f, 5.0f, this, z -> outlineParent.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> outlineParent.getValue());
+    public FloatSetting lineWidth = new FloatSetting("Line Width", 1.0f, 0.0f, 5.0f, this, v -> outlineParent.getValue());
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {

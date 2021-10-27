@@ -27,30 +27,30 @@ public class KillAura extends Module {
 
     //delay
     public BooleanSetting delayParent = new BooleanSetting("Delay", true, this);
-    public BooleanSetting attackDelay =new BooleanSetting("AttackDelay", true, this, z -> delayParent.getValue());
-    public IntegerSetting attackSpeed = new IntegerSetting("AttackSpeed", 10, 2, 18, this, z -> delayParent.getValue());
+    public BooleanSetting attackDelay =new BooleanSetting("AttackDelay", true, this, v -> delayParent.getValue());
+    public IntegerSetting attackSpeed = new IntegerSetting("AttackSpeed", 10, 2, 18, this, v -> delayParent.getValue());
 
     //target
     public ParentSetting targetParent = new ParentSetting("Targets", true, this);
-    public BooleanSetting players = new BooleanSetting("Players", true,this, z -> targetParent.getValue());
-    public BooleanSetting mobs = new BooleanSetting("Mobs", true,this, z -> targetParent.getValue());
-    public BooleanSetting animals = new BooleanSetting("Animals", true,this, z -> targetParent.getValue());
+    public BooleanSetting players = new BooleanSetting("Players", true,this, v -> targetParent.getValue());
+    public BooleanSetting mobs = new BooleanSetting("Mobs", true,this, v -> targetParent.getValue());
+    public BooleanSetting animals = new BooleanSetting("Animals", true,this, v -> targetParent.getValue());
 
     //render
     public BooleanSetting renderParent = new BooleanSetting("Render", true, this);
-    public BooleanSetting render = new BooleanSetting("Render", true, this, z -> renderParent.getValue());
-    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.BOTH, this, z -> renderParent.getValue() && render.getValue());
+    public BooleanSetting render = new BooleanSetting("Render", true, this, v -> renderParent.getValue());
+    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.BOTH, this, v -> renderParent.getValue() && render.getValue());
 
     public enum RenderMode {BOTH, OUTLINE, FILL}
 
-    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> renderParent.getValue() && render.getValue());
-    public IntegerSetting lineWidth = new IntegerSetting("LineWidth", 1, 0, 3, this, z -> renderParent.getValue() && render.getValue());
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, v -> renderParent.getValue() && render.getValue());
+    public IntegerSetting lineWidth = new IntegerSetting("LineWidth", 1, 0, 3, this, v -> renderParent.getValue() && render.getValue());
     //misc
     public BooleanSetting miscParent = new BooleanSetting("Misc", true, this);
-    public BooleanSetting onlySword = new BooleanSetting("OnlySword", false, this, z -> miscParent.getValue());
-    public IntegerSetting range = new IntegerSetting("Range", 4, 1, 6, this, z -> miscParent.getValue());
-    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, z -> miscParent.getValue());
-    public BooleanSetting switchToSword = new BooleanSetting("SwitchToSword", true, this, z -> miscParent.getValue());
+    public BooleanSetting onlySword = new BooleanSetting("OnlySword", false, this, v -> miscParent.getValue());
+    public IntegerSetting range = new IntegerSetting("Range", 4, 1, 6, this, v -> miscParent.getValue());
+    public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, v -> miscParent.getValue());
+    public BooleanSetting switchToSword = new BooleanSetting("SwitchToSword", true, this, v -> miscParent.getValue());
     public Entity target = null;
 
     @Override

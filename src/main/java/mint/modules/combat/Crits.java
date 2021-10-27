@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Crits extends Module {
 
     public BooleanSetting targetParent = new BooleanSetting("Target", true, this);
-    public BooleanSetting crystal = new BooleanSetting("End Crystals", false, this, z -> targetParent.getValue());
+    public BooleanSetting crystal = new BooleanSetting("End Crystals", false, this, v -> targetParent.getValue());
     public BooleanSetting pauseInLiquids = new BooleanSetting("Pause In Liquids", true, this);
     public BooleanSetting confirmPos = new BooleanSetting("Confirm Position", true, this);
 

@@ -2,11 +2,10 @@ package mint.managers;
 
 import com.google.gson.*;
 import mint.Mint;
+import mint.modules.Module;
 import mint.setting.Bind;
 import mint.setting.EnumSetting;
 import mint.setting.Setting;
-import mint.modules.Feature;
-import mint.modules.Module;
 
 import java.awt.*;
 import java.io.*;
@@ -18,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConfigManager {
-    public ArrayList<Feature> features = new ArrayList<>();
+    public ArrayList<Module> features = new ArrayList<Module>();
     public String config = "mint/config/";
     public boolean loadingConfig;
     public boolean savingConfig;
@@ -29,11 +28,11 @@ public class ConfigManager {
         config = files.contains(new File("mint/" + name + "/")) ? "mint/" + name + "/" : "mint/config/";
         assert Mint.friendManager != null;
         Mint.friendManager.onLoad();
-        for (Feature feature : features) {
-            try {
-                loadSettings(feature);
-            } catch (IOException ignored) {
-            }
+        for (Module feature : features) {
+            //    try {
+            //       loadSettings(feature);
+            //   } catch (IOException ignored) {
+            //   }
         }
         saveCurrentConfig();
         loadingConfig = false;
@@ -47,8 +46,8 @@ public class ConfigManager {
             path.mkdir();
         }
         assert Mint.friendManager != null;
-        Mint.friendManager.saveFriends();
-        for (Feature feature : features) {
+        //  Mint.friendManager.saveFriends();
+        for (Module feature : features) {
             try {
                 saveSettings(feature);
             } catch (IOException ignored) {
@@ -111,7 +110,7 @@ public class ConfigManager {
         return name;
     }
 
-    public void saveSettings(Feature feature) throws IOException {
+    public void saveSettings(Module feature) throws IOException {
         Path outputFile;
         File directory = new File(config + getDirectory(feature));
         if (!directory.exists()) {
@@ -121,9 +120,9 @@ public class ConfigManager {
             Files.createFile(outputFile);
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(writeSettings(feature));
+        //String json = gson.toJson(writeSettings(feature));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(outputFile)));
-        writer.write(json);
+        //writer.write(json);
         writer.close();
     }
 
@@ -172,79 +171,76 @@ public class ConfigManager {
     public void init() {
         assert Mint.moduleManager != null;
         features.addAll(Mint.moduleManager.moduleList);
-        features.add(Mint.friendManager);
+      //  features.add(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
         createFragFile();
     }
 
-    private void loadSettings(Feature feature) throws IOException {
-        String featureName = config + getDirectory(feature) + feature.getName() + ".json";
-        Path featurePath = Paths.get(featureName);
-        if (!Files.exists(featurePath))
-            return;
-        loadPath(featurePath, feature);
-    }
+    /** private void loadSettings(Module feature) throws IOException {
+     String featureName = config + getDirectory(feature) + feature.getName() + ".json";
+     Path featurePath = Paths.get(featureName);
+     if (!Files.exists(featurePath))
+     return;
+     loadPath(featurePath, feature);
+     } **/
 
-    private void loadPath(Path path, Feature feature) throws IOException {
-        InputStream stream = Files.newInputStream(path);
-        try {
-            ConfigManager.loadFile(new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
-        } catch (IllegalStateException e) {
-            ConfigManager.loadFile(new JsonObject(), feature);
-        }
-        stream.close();
-    }
+    /** private void loadPath(Path path, Module feature) throws IOException {
+     InputStream stream = Files.newInputStream(path);
+     try {
+     ConfigManager.loadFile(new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
+     } catch (IllegalStateException e) {
+     ConfigManager.loadFile(new JsonObject(), feature);
+     }
+     stream.close();
+     } **/
 
-    private static void loadFile(JsonObject input, Feature feature) {
-        for (Map.Entry<String, JsonElement> entry : input.entrySet()) {
-            String settingName = entry.getKey();
-            JsonElement element = entry.getValue();
-            if (feature instanceof FriendManager) {
-                try {
-                    assert Mint.friendManager != null;
-                    Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
-                } catch (Exception ignored) {
-                }
-            } else {
-                for (Setting setting : feature.getSettings()) {
-                    if (!settingName.equals(setting.getName()))
-                        continue;
-                    try {
-                        ConfigManager.setValueFromJson(setting, element);
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        }
-    }
+    /** private static void loadFile(JsonObject input, Module feature) {
+     for (Map.Entry<String, JsonElement> entry : input.entrySet()) {
+     String settingName = entry.getKey();
+     JsonElement element = entry.getValue();
+     try {
+     assert Mint.friendManager != null;
+     Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
+     } catch (Exception ignored) {
+     }
+     for (Setting setting : feature.getSettings()) {
+     if (!settingName.equals(setting.getName()))
+     continue;
+     try {
+     ConfigManager.setValueFromJson(setting, element);
+     } catch (Exception ignored) {
+     }
+     }
+     }
+     } **/
 
-    public JsonObject writeSettings(Feature feature) {
-        JsonObject object = new JsonObject();
-        JsonParser jp = new JsonParser();
-        for (Setting setting : feature.getSettings()) {
-            if (setting.isEnumSetting()) {
-                EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
-                object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
-                continue;
-            }
-            if (setting.getValue() instanceof String) {
-                String str = (String) setting.getValue();
-                setting.setValue(str.replace(" ", "_"));
-                continue;
-            }
-            if (setting.isColorSetting()) {
-                object.add(setting.getName(), jp.parse(setting.getColorAsString()));
-            }
-            try {
-                object.add(setting.getName(), jp.parse(setting.getValueAsString()));
-            } catch (Exception ignored) {
-            }
-        }
-        return object;
-    }
+    /** public JsonObject writeSettings(Module feature) {
+     JsonObject object = new JsonObject();
+     JsonParser jp = new JsonParser();
+     for (Setting setting : feature.getSettings()) {
+     if (setting.isEnumSetting()) {
+     EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
+     object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
+     continue;
+     }
+     if (setting.getValue() instanceof String) {
+     String str = (String) setting.getValue();
+     setting.setValue(str.replace(" ", "_"));
+     continue;
+     }
+     if (setting.isColorSetting()) {
+     object.add(setting.getName(), jp.parse(setting.getColorAsString()));
+     }
+     try {
+     object.add(setting.getName(), jp.parse(setting.getValueAsString()));
+     } catch (Exception ignored) {
+     }
+     }
+     return object;
+     } **/
 
-    public String getDirectory(Feature feature) {
+    public String getDirectory(Module feature) {
         String directory = "";
         if (feature instanceof Module) {
             directory = directory + "/";

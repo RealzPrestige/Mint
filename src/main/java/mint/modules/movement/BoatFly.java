@@ -14,14 +14,14 @@ import net.minecraft.entity.item.EntityBoat;
 public class BoatFly extends Module {
 
     public ParentSetting spoofParent = new ParentSetting("Spoof", false, this);
-    public BooleanSetting noClip = new BooleanSetting("NoClip", true, this, z -> spoofParent.getValue());
-    public BooleanSetting onGround = new BooleanSetting("OnGround", false, this, z -> spoofParent.getValue());
-    public BooleanSetting cancelGravity = new BooleanSetting("CancelGravity", true, this, z -> spoofParent.getValue());
+    public BooleanSetting noClip = new BooleanSetting("NoClip", true, this, v -> spoofParent.getValue());
+    public BooleanSetting onGround = new BooleanSetting("OnGround", false, this, v -> spoofParent.getValue());
+    public BooleanSetting cancelGravity = new BooleanSetting("CancelGravity", true, this, v -> spoofParent.getValue());
 
     public ParentSetting flightParent = new ParentSetting("Flight", false, this);
     public BooleanSetting stopUnloaded = new BooleanSetting("Pause In Unloaded", true, this);
-    public FloatSetting hSpeed = new FloatSetting("Horizontal speed", 2.0f, 0.1f, 2.5f, this, z -> flightParent.getValue());
-    public FloatSetting vSpeed = new FloatSetting("Vertical speed", 2.0f, 0.1f, 2.5f, this, z -> flightParent.getValue());
+    public FloatSetting hSpeed = new FloatSetting("Horizontal speed", 2.0f, 0.1f, 2.5f, this, v -> flightParent.getValue());
+    public FloatSetting vSpeed = new FloatSetting("Vertical speed", 2.0f, 0.1f, 2.5f, this, v -> flightParent.getValue());
 
     @Override
     public void onUpdate() {

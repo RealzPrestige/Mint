@@ -24,16 +24,6 @@ public class Feature {
         return this.settings;
     }
 
-    public boolean isEnabled() {
-        if (this instanceof Module) {
-            return ((Module) this).isOn();
-        }
-        return false;
-    }
-
-    public boolean isDisabled() {
-        return !this.isEnabled();
-    }
 
     public Setting register(Setting setting) {
         setting.setFeature(this);

@@ -56,30 +56,30 @@ public class HoleFiller extends Module {
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting autoDisable = new BooleanSetting("AutoDisable", false, this);
     public BooleanSetting autoSwitch = new BooleanSetting("AutoSwitch", false, this);
-    public BooleanSetting silentSwitch = new BooleanSetting("SilentSwitch", false, this, z -> autoSwitch.getValue());
+    public BooleanSetting silentSwitch = new BooleanSetting("SilentSwitch", false, this, v -> autoSwitch.getValue());
     public BooleanSetting doubles = new BooleanSetting("DoubleHoles", false, this);
     public BooleanSetting throughWalls = new BooleanSetting("ThroughWalls", false, this);
     public BooleanSetting swordCheck = new BooleanSetting("SwordCheck", false, this);
-    public BooleanSetting targetUnSafe = new BooleanSetting("TargetUnSafe", false, this, z -> mode.getValue() == Mode.SMART);
-    public IntegerSetting smartRange = new IntegerSetting("Smart-Range", 5, 0, 6, this, z -> mode.getValue() == Mode.SMART);
-    public IntegerSetting targetRange = new IntegerSetting("TargetRange", 9, 1, 15, this, z -> mode.getValue() == Mode.SMART);
+    public BooleanSetting targetUnSafe = new BooleanSetting("TargetUnSafe", false, this, v -> mode.getValue() == Mode.SMART);
+    public IntegerSetting smartRange = new IntegerSetting("Smart-Range", 5, 0, 6, this, v -> mode.getValue() == Mode.SMART);
+    public IntegerSetting targetRange = new IntegerSetting("TargetRange", 9, 1, 15, this, v -> mode.getValue() == Mode.SMART);
     public IntegerSetting rangeX = new IntegerSetting("X-Range", 5, 1, 6, this);
     public IntegerSetting rangeY = new IntegerSetting("Y-Range", 5, 1, 6, this);
     public BooleanSetting render = new BooleanSetting("Render", false, this);
-    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.STATIC, this, z -> render.getValue());
+    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.STATIC, this, v -> render.getValue());
 
     public enum RenderMode {STATIC, FADE}
 
-    public BooleanSetting box = new BooleanSetting("Box", false, this, z -> render.getValue());
-    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> render.getValue() && box.getValue());
+    public BooleanSetting box = new BooleanSetting("Box", false, this, v -> render.getValue());
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, v -> render.getValue() && box.getValue());
 
-    public BooleanSetting outline = new BooleanSetting("Outline", false, this, z -> render.getValue());
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> render.getValue() && outline.getValue());
+    public BooleanSetting outline = new BooleanSetting("Outline", false, this, v -> render.getValue());
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> render.getValue() && outline.getValue());
 
-    public FloatSetting lineWidth = new FloatSetting("LineWidth", 1.0f, 0.0f, 5.0f, this, z -> render.getValue() && outline.getValue());
-    public IntegerSetting startAlpha = new IntegerSetting("StartAlpha", 255, 0, 255, this, z -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
-    public IntegerSetting endAlpha = new IntegerSetting("EndAlpha", 0, 0, 255, this, z -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
-    public IntegerSetting fadeStep = new IntegerSetting("FadeStep", 20, 10, 100, this, z -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
+    public FloatSetting lineWidth = new FloatSetting("LineWidth", 1.0f, 0.0f, 5.0f, this, v -> render.getValue() && outline.getValue());
+    public IntegerSetting startAlpha = new IntegerSetting("StartAlpha", 255, 0, 255, this, v -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
+    public IntegerSetting endAlpha = new IntegerSetting("EndAlpha", 0, 0, 255, this, v -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
+    public IntegerSetting fadeStep = new IntegerSetting("FadeStep", 20, 10, 100, this, v -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
 
     public void onTick() {
         fillableHoles.clear();

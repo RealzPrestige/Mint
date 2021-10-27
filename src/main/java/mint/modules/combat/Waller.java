@@ -26,14 +26,14 @@ public class Waller extends Module {
     public BooleanSetting packet = new BooleanSetting("Packet", false, this);
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting swing = new BooleanSetting("Swing", false, this);
-    public EnumSetting swingMode = new EnumSetting("Swing Mode", SwingHand.MAINHAND, this, z -> swing.getValue());
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", SwingHand.MAINHAND, this, v -> swing.getValue());
 
     public enum SwingHand {MAINHAND, OFFHAND, PACKET}
 
     public BooleanSetting render = new BooleanSetting("Render", false, this);
-    public BooleanSetting text = new BooleanSetting("Text", false, this, z -> render.getValue());
-    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> render.getValue());
-    public IntegerSetting duration = new IntegerSetting("Duration", 2000, 0, 5000, this, z -> render.getValue());
+    public BooleanSetting text = new BooleanSetting("Text", false, this, v -> render.getValue());
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, v -> render.getValue());
+    public IntegerSetting duration = new IntegerSetting("Duration", 2000, 0, 5000, this, v -> render.getValue());
 
     Timer timer = new Timer();
     Timer renderRemove = new Timer();

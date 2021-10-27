@@ -2,14 +2,19 @@ package mint.modules.core;
 
 import mint.Mint;
 import mint.events.RenderOverlayEvent;
+import mint.managers.MessageManager;
 import mint.modules.Module;
 import mint.modules.ModuleInfo;
 import mint.settingsrewrite.impl.ColorSetting;
+import mint.settingsrewrite.impl.EnumSetting;
 
 import java.awt.*;
 
 @ModuleInfo(name = "Hud", category = Module.Category.Core, description = "Draws hud stuff")
 public class Hud extends Module {
+    public EnumSetting test = new EnumSetting("Test Enum", Test.One, this);
+
+    public enum Test {One, two, three}
 
     static Hud INSTANCE = new Hud();
     public ColorSetting color = new ColorSetting("Color", new Color(-1), this);
@@ -26,6 +31,12 @@ public class Hud extends Module {
 
     void setInstance() {
         INSTANCE = this;
+    }
+
+    @Override
+    public void onEnable() {
+        if (test.getValueEnum().equals(Test.One))
+            MessageManager.sendMessage(test.getValueEnum().toString() + ".");
     }
 
     @Override

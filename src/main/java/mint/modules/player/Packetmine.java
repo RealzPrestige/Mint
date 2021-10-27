@@ -45,12 +45,12 @@ public class Packetmine extends Module {
 
     public enum SilentSwitchMode {AUTO, KEYBIND}
 
-    public KeySetting switchBind = new KeySetting("Switch Bind", Keyboard.KEY_NONE, this, z -> silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND);
+    public KeySetting switchBind = new KeySetting("Switch Bind", Keyboard.KEY_NONE, this, v -> silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND);
     public BooleanSetting render = new BooleanSetting("Render", false, this);
 
-    public EnumSetting renderMode = new EnumSetting("Render Mode", RenderMode.EXPAND, this, z -> render.getValue());
-    public EnumSetting boxMode = new EnumSetting("Box Mode", BoxMode.BOTH, this, z -> render.getValue());
-    public EnumSetting colorMode = new EnumSetting("Color Mode", ColorMode.READYFADE, this, z -> render.getValue());
+    public EnumSetting renderMode = new EnumSetting("Render Mode", RenderMode.EXPAND, this, v -> render.getValue());
+    public EnumSetting boxMode = new EnumSetting("Box Mode", BoxMode.BOTH, this, v -> render.getValue());
+    public EnumSetting colorMode = new EnumSetting("Color Mode", ColorMode.READYFADE, this, v -> render.getValue());
 
     public enum ColorMode {READYFADE, STATUS, STATIC}
 
@@ -58,9 +58,9 @@ public class Packetmine extends Module {
 
     public enum BoxMode {FILL, OUTLINE, BOTH}
 
-    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, z -> render.getValue());
-    public ColorSetting readyColor = new ColorSetting("Ready Color", new Color(-1), this, z -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE)));
-    public IntegerSetting speed = new IntegerSetting("ReadySpeed", 2, 1, 5, this, z -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE)));
+    public ColorSetting color = new ColorSetting("Color", new Color(-1), this, v -> render.getValue());
+    public ColorSetting readyColor = new ColorSetting("Ready Color", new Color(-1), this, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE)));
+    public IntegerSetting speed = new IntegerSetting("ReadySpeed", 2, 1, 5, this, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE)));
 
     int currentAlpha;
     int count;

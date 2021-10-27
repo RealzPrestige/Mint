@@ -33,31 +33,31 @@ public class PopESP extends Module {
     public EntityOtherPlayerMP fakeEntity;
 
     public ParentSetting solidParent = new ParentSetting("Solid", false, this);
-    public BooleanSetting solidSetting = new BooleanSetting("RenderSolid", true, this, z -> solidParent.getValue());
-    public ColorSetting solidColor = new ColorSetting("Solid Color", new Color(-1), this, z -> solidSetting.getValue() && solidParent.getValue());
+    public BooleanSetting solidSetting = new BooleanSetting("RenderSolid", true, this, v -> solidParent.getValue());
+    public ColorSetting solidColor = new ColorSetting("Solid Color", new Color(-1), this, v -> solidSetting.getValue() && solidParent.getValue());
 
     public ParentSetting wireFrameParent = new ParentSetting("WireFrame", false, this);
-    public BooleanSetting wireFrameSetting = new BooleanSetting("RenderWire", true, this, z -> wireFrameParent.getValue());
-    public ColorSetting wireColor = new ColorSetting("Wire Color", new Color(-1), this, z -> wireFrameSetting.getValue() && wireFrameParent.getValue());
+    public BooleanSetting wireFrameSetting = new BooleanSetting("RenderWire", true, this, v -> wireFrameParent.getValue());
+    public ColorSetting wireColor = new ColorSetting("Wire Color", new Color(-1), this, v -> wireFrameSetting.getValue() && wireFrameParent.getValue());
 
     public ParentSetting fadeParent = new ParentSetting("Fade", false, this);
-    public IntegerSetting startAlpha = new IntegerSetting("StartAlpha", 255, 0, 255, this, z -> fadeParent.getValue());
-    public IntegerSetting endAlpha = new IntegerSetting("EndAlpha", 0, 0, 255, this, z -> fadeParent.getValue());
-    public IntegerSetting fadeStep = new IntegerSetting("FadeStep", 10, 10, 100, this, z -> fadeParent.getValue());
+    public IntegerSetting startAlpha = new IntegerSetting("StartAlpha", 255, 0, 255, this, v -> fadeParent.getValue());
+    public IntegerSetting endAlpha = new IntegerSetting("EndAlpha", 0, 0, 255, this, v -> fadeParent.getValue());
+    public IntegerSetting fadeStep = new IntegerSetting("FadeStep", 10, 10, 100, this, v -> fadeParent.getValue());
 
     public ParentSetting yTravelParent = new ParentSetting("YMovement", false, this);
-    public BooleanSetting yTravel = new BooleanSetting("YTravel", false, this, z -> yTravelParent.getValue());
-    public EnumSetting yTravelMode = new EnumSetting("TravelMode", YTravelMode.UP, this, z -> yTravelParent.getValue() && yTravel.getValue());
+    public BooleanSetting yTravel = new BooleanSetting("YTravel", false, this, v -> yTravelParent.getValue());
+    public EnumSetting yTravelMode = new EnumSetting("TravelMode", YTravelMode.UP, this, v -> yTravelParent.getValue() && yTravel.getValue());
 
     public enum YTravelMode {UP, DOWN}
 
-    public DoubleSetting yTravelSpeed = new DoubleSetting("TravelSpeed", 0.1, 0.0, 2.0, this, z -> yTravel.getValue());
+    public DoubleSetting yTravelSpeed = new DoubleSetting("TravelSpeed", 0.1, 0.0, 2.0, this, v -> yTravel.getValue());
 
     public ParentSetting miscParent = new ParentSetting("Misc", false, this);
-    public BooleanSetting onDeath = new BooleanSetting("OnDeath", false, this, z -> miscParent.getValue());
-    public BooleanSetting clearListOnPop = new BooleanSetting("ClearListOnPop", false, this, z -> miscParent.getValue());
-    public BooleanSetting clearListOnDeath = new BooleanSetting("ClearListOnDeath", false, this, z -> miscParent.getValue());
-    public BooleanSetting antiSelf = new BooleanSetting("AntiSelf", false, this, z -> miscParent.getValue());
+    public BooleanSetting onDeath = new BooleanSetting("OnDeath", false, this, v -> miscParent.getValue());
+    public BooleanSetting clearListOnPop = new BooleanSetting("ClearListOnPop", false, this, v -> miscParent.getValue());
+    public BooleanSetting clearListOnDeath = new BooleanSetting("ClearListOnDeath", false, this, v -> miscParent.getValue());
+    public BooleanSetting antiSelf = new BooleanSetting("AntiSelf", false, this, v -> miscParent.getValue());
 
     public HashMap<EntityPlayer, Integer> poppedPlayers = new HashMap<>();
 

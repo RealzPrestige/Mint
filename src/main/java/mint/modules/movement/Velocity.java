@@ -17,11 +17,11 @@ public class Velocity extends Module {
     public BooleanSetting entityCollisionPush = new BooleanSetting("Entity Push Collision", false, this);
     public BooleanSetting entityCollisionBlock = new BooleanSetting("Entity Block Collision", false, this);
     public BooleanSetting webCollision = new BooleanSetting("Entity Web Collision", false, this);
-    public EnumSetting webCollisionMode = new EnumSetting("Entity Web Collision Mode", WebCollisionMode.Speed, this, z -> webCollision.getValue());
+    public EnumSetting webCollisionMode = new EnumSetting("Entity Web Collision Mode", WebCollisionMode.Speed, this, v -> webCollision.getValue());
 
     public enum WebCollisionMode {Speed, Cancel}
 
-    public FloatSetting webCollisionSpeed = new FloatSetting("Web Speed", 1.0f, 0.1f, 50.0f, this, z -> webCollisionMode.getValue().equals(WebCollisionMode.Speed));
+    public FloatSetting webCollisionSpeed = new FloatSetting("Web Speed", 1.0f, 0.1f, 50.0f, this, v -> webCollisionMode.getValue().equals(WebCollisionMode.Speed));
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {

@@ -19,13 +19,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Backpack extends Module {
 
     public ParentSetting containerParent = new ParentSetting("Containers", true, this);
-    public BooleanSetting chest = new BooleanSetting("Chest", false, this, z -> containerParent.getValue());
-    public BooleanSetting furnace = new BooleanSetting("Furnace", false, this, z -> containerParent.getValue());
-    public BooleanSetting inventory = new BooleanSetting("Inventory", false, this, z -> containerParent.getValue());
+    public BooleanSetting chest = new BooleanSetting("Chest", false, this, v -> containerParent.getValue());
+    public BooleanSetting furnace = new BooleanSetting("Furnace", false, this, v -> containerParent.getValue());
+    public BooleanSetting inventory = new BooleanSetting("Inventory", false, this, v -> containerParent.getValue());
 
     public ParentSetting miscParent =new ParentSetting("Misc", true, this);
-    public BooleanSetting open = new BooleanSetting("Open", false, this, z -> miscParent.getValue());
-    public BooleanSetting close = new BooleanSetting("Close", false, this, z -> miscParent.getValue());
+    public BooleanSetting open = new BooleanSetting("Open", false, this, v -> miscParent.getValue());
+    public BooleanSetting close = new BooleanSetting("Close", false, this, v -> miscParent.getValue());
     private GuiScreen cancelledGui = null;
 
     @SubscribeEvent

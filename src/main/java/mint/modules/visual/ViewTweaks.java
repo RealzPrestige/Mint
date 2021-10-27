@@ -23,21 +23,21 @@ public class ViewTweaks extends Module {
     public BooleanSetting fullBright = new BooleanSetting("Full Bright", false, this);
 
     public ParentSetting fovParent = new ParentSetting("FOV", false, this);
-    public BooleanSetting fov = new BooleanSetting("FOV Changer", false, this, z -> fovParent.getValue());
-    public BooleanSetting fovStay = new BooleanSetting("FOV Stay", false, this, z -> fovParent.getValue());
-    public FloatSetting fovValue = new FloatSetting("Fov Value", 140.0f, 0.0f, 180.0f, this, z -> fovParent.getValue());
+    public BooleanSetting fov = new BooleanSetting("FOV Changer", false, this, v -> fovParent.getValue());
+    public BooleanSetting fovStay = new BooleanSetting("FOV Stay", false, this, v -> fovParent.getValue());
+    public FloatSetting fovValue = new FloatSetting("Fov Value", 140.0f, 0.0f, 180.0f, this, v -> fovParent.getValue());
 
     public BooleanSetting antiFog = new BooleanSetting("Anti Fog", false, this);
     public BooleanSetting noWeather = new BooleanSetting("No Weather", false, this);
 
     public ParentSetting timeParent = new ParentSetting("Time", false, this);
-    public BooleanSetting timeChange = new BooleanSetting("Time Changer", true, this, z -> timeParent.getValue());
-    public IntegerSetting time = new IntegerSetting("Time", 0, 0, 23000, this, z -> timeParent.getValue());
+    public BooleanSetting timeChange = new BooleanSetting("Time Changer", true, this, v -> timeParent.getValue());
+    public IntegerSetting time = new IntegerSetting("Time", 0, 0, 23000, this, v -> timeParent.getValue());
 
     public ParentSetting skyParent = new ParentSetting("Sky", false, this);
-    public BooleanSetting skyColorChange = new BooleanSetting("Sky Color Changer", false, this, z -> skyParent.getValue());
-    public BooleanSetting rainbow = new BooleanSetting("Rainbow", false, this, z -> skyParent.getValue());
-    public ColorSetting color = new ColorSetting("Sky Color", new Color(-1), this, z -> skyParent.getValue() && !rainbow.getValue());
+    public BooleanSetting skyColorChange = new BooleanSetting("Sky Color Changer", false, this, v -> skyParent.getValue());
+    public BooleanSetting rainbow = new BooleanSetting("Rainbow", false, this, v -> skyParent.getValue());
+    public ColorSetting color = new ColorSetting("Sky Color", new Color(-1), this, v -> skyParent.getValue() && !rainbow.getValue());
     public KeySetting bind = new KeySetting("Third Person", Keyboard.KEY_NONE, this);
 
 
@@ -80,10 +80,11 @@ public class ViewTweaks extends Module {
 
     @SubscribeEvent
     public void onWorld(EntityViewRenderEvent.RenderFogEvent event) {
-        if (timeChange.getValue()) {
-            mc.world.setTotalWorldTime((long) time.getValue());
-            mc.world.setWorldTime((long) time.getValue());
-        }
+        if (isEnabled())
+            if (timeChange.getValue()) {
+                mc.world.setTotalWorldTime((long) time.getValue());
+                mc.world.setWorldTime((long) time.getValue());
+            }
     }
 
     public void onLogin() {
@@ -95,6 +96,7 @@ public class ViewTweaks extends Module {
 
     @SubscribeEvent
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
+        if(isEnabled())
         if (antiFog.getValue()) {
             event.setDensity(0.0f);
             event.setCanceled(true);
@@ -103,15 +105,17 @@ public class ViewTweaks extends Module {
 
     @SubscribeEvent
     public void onFogColor(final EntityViewRenderEvent.FogColors event) {
-        if (skyColorChange.getValue()) {
-            event.setRed(color.getColor().getRed() / 255.0f);
-            event.setGreen(color.getColor().getGreen() / 255.0f);
-            event.setBlue(color.getColor().getBlue() / 255.0f);
-        }
+        if (isEnabled())
+            if (skyColorChange.getValue()) {
+                event.setRed(color.getColor().getRed() / 255.0f);
+                event.setGreen(color.getColor().getGreen() / 255.0f);
+                event.setBlue(color.getColor().getBlue() / 255.0f);
+            }
     }
 
     @SubscribeEvent
     public void onFovChange(EntityViewRenderEvent.FOVModifier event) {
+        if(isEnabled())
         if (fovStay.getValue())
             event.setFOV(fovValue.getValue());
     }

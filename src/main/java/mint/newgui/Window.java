@@ -3,7 +3,6 @@ package mint.newgui;
 import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
-import mint.setting.Setting;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.ColorSetting;
 import mint.settingsrewrite.impl.EnumSetting;
@@ -58,15 +57,6 @@ public class Window {
             for (Module module : Mint.moduleManager.getModulesByCategory(category)) {
                 int openedHeight = 0;
                 if (module.isOpened) {
-                    for (Setting setting : module.getSettings()) {
-                        if (setting.isVisible() && !setting.getName().equals("Enabled") && !setting.getName().equals("DisplayName"))
-                            openedHeight += 10;
-                        if (setting.isColorSetting() && setting.isOpen) {
-                            openedHeight += 112;
-                            if (setting.selected)
-                                openedHeight += 10;
-                        }
-                    }
                     assert Mint.settingsRewrite != null;
                     for (SettingRewrite settingsRewrite : Mint.settingsRewrite.doesModuleContainSetting(module)) {
                         if (settingsRewrite.isVisible())

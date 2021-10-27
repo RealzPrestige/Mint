@@ -33,16 +33,16 @@ public class TickShift extends Module {
 
     public enum DisableMode {Ticks, Distance, None}
 
-    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 12, 1, 100, this, z -> disableMode.getValue() == DisableMode.Ticks);
-    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, z -> disableMode.getValue() == DisableMode.Distance);
+    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 12, 1, 100, this, v -> disableMode.getValue() == DisableMode.Ticks);
+    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, v -> disableMode.getValue() == DisableMode.Distance);
 
     public BooleanSetting blink = new BooleanSetting("Blink", false, this);
-    public EnumSetting mode = new EnumSetting("Mode", D.Client, this, z -> blink.getValue());
+    public EnumSetting mode = new EnumSetting("Mode", D.Client, this, v -> blink.getValue());
 
     public enum D {Client, Server, Both}
 
-    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, z -> blink.getValue());
-    public BooleanSetting test = new BooleanSetting("Phobos Test", false, this, z -> mode.getValue() != D.Server && blink.getValue());
+    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, v -> blink.getValue());
+    public BooleanSetting test = new BooleanSetting("Phobos Test", false, this, v -> mode.getValue() != D.Server && blink.getValue());
 
     Queue<Packet<?>> packets = new ConcurrentLinkedQueue<>();
     EntityOtherPlayerMP fakePlayer;

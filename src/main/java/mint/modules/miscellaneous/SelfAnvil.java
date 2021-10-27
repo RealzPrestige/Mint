@@ -25,11 +25,11 @@ public class SelfAnvil extends Module {
     public IntegerSetting startDelay = new IntegerSetting("Start Delay", 50, 0, 200, this);
     public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 20, 0, 200, this);
     public BooleanSetting smart = new BooleanSetting("Smart", false, this);
-    public IntegerSetting smartRange = new IntegerSetting("Smart Range", 10, 0, 15, this, z -> smart.getValue());
+    public IntegerSetting smartRange = new IntegerSetting("Smart Range", 10, 0, 15, this, v -> smart.getValue());
     public BooleanSetting packet = new BooleanSetting("Packet", false, this);
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this);
     public BooleanSetting swing = new BooleanSetting("Swing", false, this);
-    public EnumSetting swingMode = new EnumSetting("Swing Mode", EnumHand.MAIN_HAND, this, z -> swing.getValue());
+    public EnumSetting swingMode = new EnumSetting("Swing Mode", EnumHand.MAIN_HAND, this, v -> swing.getValue());
 
     int blockSlot;
     BlockPos pos;
