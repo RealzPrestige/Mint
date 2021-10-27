@@ -5,11 +5,11 @@ import mint.modules.Module;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsRewrite {
+public class SettingRewriteInitializer {
 
     List<SettingRewrite> settingRewriteList;
 
-    public SettingsRewrite() {
+    public SettingRewriteInitializer() {
         settingRewriteList = new ArrayList<>();
     }
 

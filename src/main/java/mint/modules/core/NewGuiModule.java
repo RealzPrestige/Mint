@@ -5,6 +5,7 @@ import mint.modules.Module;
 import mint.modules.ModuleInfo;
 import mint.newgui.NewGui;
 import mint.settingsrewrite.impl.ColorSetting;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
@@ -15,6 +16,7 @@ public class NewGuiModule extends Module {
     public ColorSetting backgroundColor = new ColorSetting("Background Color", new Color(0, 0, 0, 50), this);
 
     public NewGuiModule() {
+        setBind(Keyboard.KEY_O);
         this.setInstance();
     }
 

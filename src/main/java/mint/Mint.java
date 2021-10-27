@@ -5,12 +5,11 @@ import kotlin.text.Regex;
 import mint.commands.CommandManager;
 import mint.managers.*;
 import mint.newgui.hud.HudComponentManager;
-import mint.settingsrewrite.SettingsRewrite;
+import mint.settingsrewrite.SettingRewriteInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -34,15 +33,11 @@ public final class Mint {
     public static TextManager textManager;
     public static ServerManager serverManager;
     public static HudComponentManager hudComponentManager;
-    public static SettingsRewrite settingsRewrite;
+    public static SettingRewriteInitializer settingsRewrite;
     private static boolean unloaded = false;
 
     public final Logger getLOGGER() {
         return this.LOGGER;
-    }
-
-    @EventHandler
-    public final void preInit(FMLPreInitializationEvent event) {
     }
 
     @EventHandler
@@ -61,7 +56,7 @@ public final class Mint {
         eventManager = new EventManager();
         configManager = new ConfigManager();
         hudComponentManager = new HudComponentManager();
-        settingsRewrite = new SettingsRewrite();
+        settingsRewrite = new SettingRewriteInitializer();
         ModuleManager var10000 = Mint.moduleManager;
         if (var10000 == null) {
             Intrinsics.throwNpe();
@@ -144,6 +139,5 @@ public final class Mint {
             var10.unload();
             Mint.unloaded = true;
         }
-
     }
 }
