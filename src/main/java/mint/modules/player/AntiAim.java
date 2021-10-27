@@ -1,22 +1,21 @@
 package mint.modules.player;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Anti Aim", category = Module.Category.Player, description = "Spoofs your yaw and pitch.")
 public class AntiAim extends Module {
 
-    public AntiAim() {
-        super("Anti Aim", Module.Category.Player, "Spoofs your yaw and pitch.");
-    }
-
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.Custom));
-    public Setting<Integer> yaw = register(new Setting("Yaw", 90, -90, 90, z -> mode.getValue() == Mode.Custom));
-    public Setting<Integer> pitch = register(new Setting("Pitch", 90, -90, 90, z -> mode.getValue() == Mode.Custom));
-    public Setting<Integer> spinSpeed = register(new Setting("SpinSpeed", 10, 0, 50, z -> mode.getValue() == Mode.Spin));
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Custom, this);
+    public IntegerSetting yaw = new IntegerSetting("Yaw", 90, -90, 90, this, z -> mode.getValue() == Mode.Custom);
+    public IntegerSetting pitch = new IntegerSetting("Pitch", 90, -90, 90, this, z -> mode.getValue() == Mode.Custom);
+    public IntegerSetting spinSpeed = new IntegerSetting("SpinSpeed", 10, 0, 50, this, z -> mode.getValue() == Mode.Spin);
     int nextValue;
 
     @Override
@@ -30,16 +29,12 @@ public class AntiAim extends Module {
             return;
         }
         if (e.getPacket() instanceof CPacketPlayer && !Mint.INSTANCE.mc.player.isHandActive()) {
-            switch (mode.getValue()) {
-                case Custom:
-                    ((CPacketPlayer)e.getPacket()).yaw = yaw.getValue();
-                    ((CPacketPlayer)e.getPacket()).pitch = pitch.getValue();
-                    break;
-
-                case Spin:
-                    ((CPacketPlayer)e.getPacket()).yaw = nextValue;
-                    ((CPacketPlayer)e.getPacket()).pitch = nextValue;
-                    break;
+            if (mode.getValue().equals(Mode.Custom)) {
+                ((CPacketPlayer) e.getPacket()).yaw = yaw.getValue();
+                ((CPacketPlayer) e.getPacket()).pitch = pitch.getValue();
+            } else if (mode.getValue().equals(Mode.Spin)) {
+                ((CPacketPlayer) e.getPacket()).yaw = nextValue;
+                ((CPacketPlayer) e.getPacket()).pitch = nextValue;
             }
         }
     }

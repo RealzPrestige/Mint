@@ -1,24 +1,23 @@
 package mint.modules.player;
 
 import com.mojang.authlib.GameProfile;
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
 import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Blink", category = Module.Category.Player, description = "Lets you teleport yes.")
 public class Blink extends Module {
-    public Setting<Boolean> renderPlayer = register(new Setting("Render Player", false));
-    public Setting<Mode> mode = register(new Setting("Mode", Mode.FULL));
+    public BooleanSetting renderPlayer = new BooleanSetting("Render Player", false, this);
+    public EnumSetting mode = new EnumSetting("Mode", Mode.FULL, this);
 
     enum Mode {FULL, RECEIVE, SEND}
 
     EntityOtherPlayerMP fake_player;
-
-    public Blink() {
-        super("Blink", Category.Player, "Lets you teleport yes.");
-    }
 
     public void onEnable() {
         if (NullUtil.fullNullCheck())

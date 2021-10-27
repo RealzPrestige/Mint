@@ -1,30 +1,25 @@
 package mint.modules.player;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
 import mint.utils.InventoryUtil;
 import mint.utils.NullUtil;
 import net.minecraft.init.Items;
 
+@ModuleInfo(name = "Fast Place", category = Module.Category.Player, description = "Allows you to do things faster.")
 public class FastPlace extends Module {
 
-    public Setting <Boolean> exp = register(new Setting<>("Exp", false));
-    public Setting <Boolean> crystal = register(new Setting<>("Crystals", false));
-
-    public FastPlace(){
-        super("Fast Place", Category.Player, "Allows you to do things faster.");
-    }
+    public BooleanSetting exp = new BooleanSetting("Exp", false, this);
+    public BooleanSetting crystal = new BooleanSetting("Crystals", false, this);
 
     @Override
     public void onUpdate(){
         if (NullUtil.fullNullCheck())
             return;
-
-        if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both) && exp.getValue()) {
+        if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both) && exp.getValue())
             mc.rightClickDelayTimer = 0;
-        }
-        if (InventoryUtil.heldItem(Items.END_CRYSTAL, InventoryUtil.Hand.Both) && crystal.getValue()){
+        if (InventoryUtil.heldItem(Items.END_CRYSTAL, InventoryUtil.Hand.Both) && crystal.getValue())
             mc.rightClickDelayTimer = 0;
-        }
     }
 }

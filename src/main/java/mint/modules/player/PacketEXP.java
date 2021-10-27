@@ -1,7 +1,9 @@
 package mint.modules.player;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.InventoryUtil;
 import mint.utils.NullUtil;
 import net.minecraft.init.Items;
@@ -9,14 +11,11 @@ import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 
+@ModuleInfo(name = "Packet EXP", category = Module.Category.Player,description = "Uses packets to throw Exp.")
 public class PacketEXP extends Module {
 
-    public Setting<Integer> packets = register(new Setting("Packets", 1, 0, 10));
-    public Setting<Boolean> rightClickOnly = register(new Setting("Right Click Only", false));
-
-    public PacketEXP() {
-        super("Packet EXP", Category.Player, "Uses packets to throw Exp.");
-    }
+    public IntegerSetting packets = new IntegerSetting("Packets", 1, 0, 10, this);
+    public BooleanSetting rightClickOnly = new BooleanSetting("Right Click Only", false, this);
 
     public void onUpdate() {
         if (NullUtil.fullNullCheck())

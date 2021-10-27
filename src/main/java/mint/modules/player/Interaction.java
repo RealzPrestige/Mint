@@ -1,8 +1,9 @@
 package mint.modules.player;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
 import mint.utils.NullUtil;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBoat;
@@ -12,17 +13,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "Interaction", category = Module.Category.Player, description = "Tweaks player's interactions.")
 public class Interaction extends Module {
 
-
-    public Interaction(){
-        super("Interaction", Module.Category.Player, "Tweaks player's interactions.");
-    }
-
     //todo add shit like echest canceller(when trying to open an echest it just doesnt open it)
-    public Setting<Boolean> placementParent = register(new Setting("Placement", true, false));
-    public Setting<Boolean> boatPlace = register(new Setting("Boat", true, z -> placementParent.getValue()));
-    public Setting<Boolean> blockPlace = register(new Setting("Illegal Blocks", false, z -> placementParent.getValue()));
+    public BooleanSetting placementParent = new BooleanSetting("Placement", true, this);
+    public BooleanSetting boatPlace = new BooleanSetting("Boat", true, this, z -> placementParent.getValue());
+    public BooleanSetting blockPlace = new BooleanSetting("Illegal Blocks", false, this, z -> placementParent.getValue());
     boolean cancelled;
 
     @Override

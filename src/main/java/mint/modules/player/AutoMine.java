@@ -1,8 +1,9 @@
 package mint.modules.player;
 
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -12,35 +13,25 @@ import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 
+@ModuleInfo(name = "Auto Mine", category = Module.Category.Player, description = "Automatically mines stuff.")
 public class AutoMine extends Module {
 
-    public Setting<MineMode> mineMode = register(new Setting<>("Mine Mode", MineMode.Normal));
+    public EnumSetting mineMode = new EnumSetting("Mine Mode", MineMode.Normal, this);
     public enum MineMode {Normal, Combat}
 
-    public Setting<Priority> minePriority = register(new Setting<>("Mine Priority", Priority.Surrounds, z -> mineMode.getValue() == MineMode.Combat));
+    public EnumSetting minePriority = new  EnumSetting("Mine Priority", Priority.Surrounds, this, z -> mineMode.getValue().equals(MineMode.Combat));
     public enum Priority {Surrounds, City, Dynamic}
 
-    //.equals woah amazing!!
-    public Setting<Float> targetRange = register(new Setting<>("Target Range", 9.0f, 0.0f, 15.0f, z -> mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Boolean> boxParent = register(new Setting("Box", false, true, z -> mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Boolean> boxSetting = register(new Setting("Box Setting", false, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> boxRed = register(new Setting<>("Box Red", 255, 0, 255, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> boxGreen = register(new Setting<>("Box Green", 255, 0, 255, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> boxBlue = register(new Setting<>("Box Blue", 255, 0, 255, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> boxAlpha = register(new Setting<>("Box Alpha", 120, 0, 255, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Boolean> outlineParent = register(new Setting("Outline", false, true, z -> mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Boolean> outlineSetting = register(new Setting("Outline Setting", false, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 255, 0, 255, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 255, 0, 255, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
-    public Setting<Integer> outlineAlpha = register(new Setting<>("Outline Alpha", 120, 0, 255, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat)));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 9.0f, 0.0f, 15.0f, this, z -> mineMode.getValue().equals(MineMode.Combat));
+    public ParentSetting boxParent = new ParentSetting("Box", false, this, z -> mineMode.getValue().equals(MineMode.Combat));
+    public BooleanSetting boxSetting = new BooleanSetting("Box Setting", false, this, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, z -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public ParentSetting outlineParent = new ParentSetting("Outline", false, this, z -> mineMode.getValue().equals(MineMode.Combat));
+    public BooleanSetting outlineSetting = new BooleanSetting("Outline Setting", false, this, z -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> outlineParent.getValue() && outlineSetting.getValue() && mineMode.getValue().equals(MineMode.Combat));
 
     BlockPos targetBlock = null;
     Timer timer = new Timer();
-
-    public AutoMine() {
-        super("Auto Mine", Category.Player, "Automatically mines stuff.");
-    }
 
     public void onDisable() {
         if (mineMode.getValue().equals(MineMode.Normal)) {
@@ -127,7 +118,7 @@ public class AutoMine extends Module {
 
     public void renderWorldLastEvent(RenderWorldEvent event) {
         if (targetBlock != null && !mc.world.getBlockState(targetBlock).getBlock().equals(Blocks.AIR)) {
-            RenderUtil.drawBoxESP(targetBlock, new Color(boxRed.getValue(), boxGreen.getValue(), boxBlue.getValue(), boxAlpha.getValue()), true, new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), outlineAlpha.getValue()), 1, outlineSetting.getValue(), boxSetting.getValue(), boxAlpha.getValue(), true);
+            RenderUtil.drawBoxESP(targetBlock, boxColor.getColor(), true, outlineColor.getColor(), 1, outlineSetting.getValue(), boxSetting.getValue(), boxColor.getColor().getAlpha(), true);
         }
     }
 }

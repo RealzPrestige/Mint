@@ -1,10 +1,13 @@
 package mint.modules.player;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.events.RenderWorldEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.ColorSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.NullUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,36 +21,30 @@ import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.awt.*;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
 
 /**
- * @Author zPrestige_
+ * @author zPrestige_
  * Inspired by KamiV
- * @Since 24/09/2021
+ * @since 24/09/2021
  */
+
+@ModuleInfo(name = "Chorus Manipulator", category = Module.Category.Player, description = "Manipulates your Chorus Fruits.")
 public class ChorusManipulator extends Module {
     public static ChorusManipulator INSTANCE = new ChorusManipulator();
-    public Setting<Boolean> cancel = register(new Setting<>("Cancel", false));
-    public Setting<Boolean> tpOnSwitch = register(new Setting<>("Tp on Switch", true));
-    public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
-    public Setting<Boolean> solidSetting = register(new Setting("Render Solid", true, z -> solidParent.getValue()));
-    public Setting<Float> red = register(new Setting<>("Solid Red", 140.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Float> green = register(new Setting<>("Solid Green", 100.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Float> blue = register(new Setting<>("Solid Blue", 140.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Float> alpha = register(new Setting<>("Solid Alpha", 50.0f, 0.0f, 255.0f, z -> solidParent.getValue() && solidSetting.getValue()));
-    public Setting<Boolean> wireFrameParent = register(new Setting<>("Wire Frame", true, false));
-    public Setting<Boolean> wireFrameSetting = register(new Setting("Render Wire", true, z -> wireFrameParent.getValue()));
-    public Setting<Float> wireRed = register(new Setting<>("Wire Red", 140.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
-    public Setting<Float> wireGreen = register(new Setting<>("Wire Green", 100.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
-    public Setting<Float> wireBlue = register(new Setting<>("WireBlue", 140.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
-    public Setting<Float> wireAlpha = register(new Setting<>("WireBlue", 255.0f, 0.0f, 255.0f, z -> wireFrameParent.getValue() && wireFrameSetting.getValue()));
+    public BooleanSetting cancel = new BooleanSetting("Cancel", false, this);
+    public BooleanSetting tpOnSwitch = new BooleanSetting("Tp on Switch", true, this);
+    public ParentSetting solidParent = new ParentSetting("Solid", false, this);
+    public BooleanSetting solidSetting = new BooleanSetting("Render Solid", true, this, z -> solidParent.getValue());
+    public ColorSetting solidColor = new ColorSetting("Solid Red", new Color(-1), this, z -> solidParent.getValue() && solidSetting.getValue());
+    public ParentSetting wireFrameParent = new ParentSetting("Wire Frame", false, this);
+    public BooleanSetting wireFrameSetting = new BooleanSetting("Render Wire", true, this, z -> wireFrameParent.getValue());
+    public ColorSetting wireColor = new ColorSetting("Wire Color", new Color(-1), this, z -> wireFrameParent.getValue() && wireFrameSetting.getValue());
 
     Queue<CPacketPlayer> packets;
     Queue<CPacketConfirmTeleport> tpPackets;
@@ -62,7 +59,6 @@ public class ChorusManipulator extends Module {
     public HashMap<EntityPlayer, Integer> playerCham = new HashMap<>();
 
     public ChorusManipulator() {
-        super("Chorus Manipulator", Category.Player, "Manipulates your Chorus Fruits.");
         packets = new LinkedList<>();
         tpPackets = new LinkedList<>();
     }
@@ -97,10 +93,10 @@ public class ChorusManipulator extends Module {
     public void onTick() {
         if (isCancelled && mc.player.getHeldItemMainhand().getItem() != Items.CHORUS_FRUIT && tpOnSwitch.getValue()) {
             while (!packets.isEmpty()) {
-                mc.getConnection().sendPacket(packets.poll());
+                Objects.requireNonNull(mc.getConnection()).sendPacket(Objects.requireNonNull(packets.poll()));
             }
             while (!tpPackets.isEmpty()) {
-                mc.getConnection().sendPacket(tpPackets.poll());
+                Objects.requireNonNull(mc.getConnection()).sendPacket(Objects.requireNonNull(tpPackets.poll()));
             }
             playerCham.clear();
             isCancelled = false;
@@ -110,10 +106,10 @@ public class ChorusManipulator extends Module {
     @Override
     public void onDisable() {
         while (!packets.isEmpty()) {
-            mc.getConnection().sendPacket(packets.poll());
+            Objects.requireNonNull(mc.getConnection()).sendPacket(Objects.requireNonNull(packets.poll()));
         }
         while (!tpPackets.isEmpty()) {
-            mc.getConnection().sendPacket(tpPackets.poll());
+            Objects.requireNonNull(mc.getConnection()).sendPacket(Objects.requireNonNull(tpPackets.poll()));
         }
         playerCham.clear();
         isCancelled = false;
@@ -132,7 +128,7 @@ public class ChorusManipulator extends Module {
                 glEnable(2848);
                 glEnable(3042);
                 GL11.glBlendFunc(770, 771);
-                GL11.glColor4f(wireRed.getValue() / 255f, wireGreen.getValue() / 255f, wireBlue.getValue() / 255f, wireAlpha.getValue() / 255f);
+                GL11.glColor4f(wireColor.getColor().getRed() / 255f, wireColor.getColor().getGreen() / 255f, wireColor.getColor().getBlue() / 255f, wireColor.getColor().getAlpha() / 255f);
                 renderEntityStatic(pop.getKey(), event.getPartialTicks(), false);
                 GL11.glLineWidth(1f);
                 glEnable(2896);
@@ -150,7 +146,7 @@ public class ChorusManipulator extends Module {
                 GL11.glDepthMask(false);
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
                 GL11.glLineWidth(1f);
-                GL11.glColor4f(red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, alpha.getValue() / 255f);
+                GL11.glColor4f(solidColor.getColor().getRed() / 255f, solidColor.getColor().getGreen() / 255f, solidColor.getColor().getBlue()/ 255f, solidColor.getColor().getAlpha() / 255f);
                 renderEntityStatic(pop.getKey(), event.getPartialTicks(), false);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 GL11.glDepthMask(true);
