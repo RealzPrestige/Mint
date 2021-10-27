@@ -39,7 +39,7 @@ public class KillAura extends Module {
     //render
     public BooleanSetting renderParent = new BooleanSetting("Render", true, this);
     public BooleanSetting render = new BooleanSetting("Render", true, this, z -> renderParent.getValue());
-    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.BOTH, this, v -> renderParent.getValue() && render.getValue());
+    public EnumSetting renderMode = new EnumSetting("RenderMode", RenderMode.BOTH, this, z -> renderParent.getValue() && render.getValue());
 
     public enum RenderMode {BOTH, OUTLINE, FILL}
 

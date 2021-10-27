@@ -3,6 +3,7 @@ package mint.modules.visual;
 import mint.events.CrystalTextureEvent;
 import mint.events.RenderCrystalEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.settingsrewrite.impl.*;
 import mint.utils.NullUtil;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +15,7 @@ import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
+@ModuleInfo(name = "Crystal Chams", category = Module.Category.Visual, description = "Changes crystal looks :))")
 public class CrystalChams extends Module {
     public BooleanSetting crystalBlend = new BooleanSetting("Crystal Blend", false, this);
     public BooleanSetting glintBlend = new BooleanSetting("Glint Blend", false, this);
@@ -26,10 +28,6 @@ public class CrystalChams extends Module {
 
     static {
         RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-    }
-
-    public CrystalChams() {
-        super();
     }
 
     @SubscribeEvent

@@ -9,10 +9,6 @@ import mint.events.RenderWorldEvent;
 @ModuleInfo(name = "Crip Walk", description = "Gang shit" , category = Module.Category.Visual)
 public class CripWalk extends Module {
 
-    public CripWalk(){
-        super();
-    }
-
     @SubscribeEvent
     public void renderWorldLastEvent(RenderWorldEvent event) {
         if(NullUtil.fullNullCheck())

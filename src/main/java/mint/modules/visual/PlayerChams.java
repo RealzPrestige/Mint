@@ -1,8 +1,11 @@
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.events.RenderLivingEntityEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.ColorSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.ParentSetting;
 import mint.utils.NullUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -17,32 +20,25 @@ import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
+@ModuleInfo(name = "Player Chams", category = Module.Category.Visual, description = "player chams..")
 public class PlayerChams extends Module {
 
-    public Setting<Boolean> solidParent = register(new Setting<>("Solid", true, false));
-    public Setting<Integer> red = register(new Setting<>("Red", 0, 0, 255, v-> solidParent.getValue()));
-    public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255, v-> solidParent.getValue()));
-    public Setting<Integer> blue = register(new Setting<>("Blue", 0, 0, 255, v-> solidParent.getValue()));
-    public Setting<Boolean> outlineParent = register(new Setting<>("Outline", true, false));
-    public Setting<Float> lineWidth = register(new Setting<>("Line Width", 1.0f, 0.0f, 5.0f, v-> outlineParent.getValue()));
-    public Setting<Integer> outlineRed = register(new Setting<>("Outline Red", 0, 0, 255, v-> outlineParent.getValue()));
-    public Setting<Integer> outlineGreen = register(new Setting<>("Outline Green", 255, 0, 255, v-> outlineParent.getValue()));
-    public Setting<Integer> outlineBlue = register(new Setting<>("Outline Blue", 0, 0, 255, v-> outlineParent.getValue()));
-
-    public PlayerChams() {
-        super("Player Chams", Category.Visual, "");
-    }
+    public ParentSetting solidParent = new ParentSetting("Solid", false, this);
+    public ColorSetting solidColor = new ColorSetting("Solid Color", new Color(-1), this, z -> solidParent.getValue());
+    public ParentSetting outlineParent = new ParentSetting("Outline", false, this);
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, z -> outlineParent.getValue());
+    public FloatSetting lineWidth = new FloatSetting("Line Width", 1.0f, 0.0f, 5.0f, this, z -> outlineParent.getValue());
 
     @SubscribeEvent
     public void onRenderLivingEntity(RenderLivingEntityEvent event) {
-        if(NullUtil.fullNullCheck() || !isEnabled())
+        if (NullUtil.fullNullCheck() || !isEnabled())
             return;
         if (event.getEntityLivingBase() instanceof EntityPlayer && !event.getEntityLivingBase().equals(PopESP.getInstance().fakeEntity)) {
             event.getEntityLivingBase().hurtTime = 0;
             beginSolid();
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
             endSolid();
-            setColor(new Color(red.getValue(), green.getValue(), blue.getValue(), 255));
+            setColor(solidColor.getColor());
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
             renderOne(lineWidth.getValue());
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
@@ -50,13 +46,14 @@ public class PlayerChams extends Module {
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
             renderThree();
             renderFour();
-            setColor(new Color(outlineRed.getValue(), outlineGreen.getValue(), outlineBlue.getValue(), 255));
+            setColor(outlineColor.getColor());
             event.getModelBase().render(event.getEntityLivingBase(), event.getLimbSwing(), event.getLimbSwingAmount(), event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScaleFactor());
             renderFive();
             setColor(Color.WHITE);
         }
     }
-    public void beginSolid(){
+
+    public void beginSolid() {
         GL11.glPushAttrib(GL11.GL_ALL_CLIENT_ATTRIB_BITS);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -65,10 +62,10 @@ public class PlayerChams extends Module {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GL11.glColor4f(red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, 255);
+        GL11.glColor4f(solidColor.getColor().getRed(), solidColor.getColor().getGreen(), solidColor.getColor().getBlue(), solidColor.getColor().getAlpha());
     }
 
-    public void endSolid(){
+    public void endSolid() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_ALPHA_TEST);

@@ -4,7 +4,8 @@ package mint.modules.visual;
 
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
-import mint.setting.Setting;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.EnumSetting;
 import mint.utils.MathUtil;
 import mint.utils.shader.FramebufferShader;
 import mint.utils.shader.shaders.*;
@@ -15,13 +16,13 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.Objects;
 
+@ModuleInfo(name = "Shader Chams", category = Module.Category.Visual, description = "Makes shader on cham")
 public class ShaderChams extends Module {
-    //TODO: make full alpha?
+
     static ShaderChams INSTANCE = new ShaderChams();
-    public Setting<modes> mode = register(new Setting<>("Mode", modes.Aqua));
+    public EnumSetting mode = new EnumSetting("Mode", modes.Aqua, this);
 
     public ShaderChams() {
-        super("Shader Chams", Category.Visual, "Makes shader on cham");
         setInstance();
     }
 
@@ -41,60 +42,33 @@ public class ShaderChams extends Module {
             return;
         }
         FramebufferShader framebufferShader = null;
-        switch (mode.getValue()) {
-            case Smoke:
-                framebufferShader = SmokeShader.SMOKE_SHADER;
-                break;
-            case Aqua:
-                framebufferShader = AquaShader.AQUA_SHADER;
-                break;
-            case Flow:
-                framebufferShader = FlowShader.FLOW_SHADER;
-                break;
-            case Red:
-                framebufferShader = RedShader.RED_SHADER;
-                break;
-            case Outline:
-                framebufferShader = GlowShader.GLOW_SHADER;
-                break;
-            case Rainbow:
-                framebufferShader = RainbowShader.RAINBOW_SHADER;
-                break;
-            case Star:
-                framebufferShader = StarShader.STAR_SHADER;
-                break;
-            case Galaxy:
-                framebufferShader = GalaxyShader.GALAXY_SHADER;
-                break;
-            case IIV:
-                framebufferShader = IIVShader.IIV_SHADER;
-                break;
-            case Cloud:
-                framebufferShader = CloudShader.CLOUD_SHADER;
-                break;
-            case BlueSpace:
-                framebufferShader = BlueSpaceShader.BLUE_SPACE_SHADER;
-                break;
-            case Aurora:
-                framebufferShader = AuroraShader.AURORA_SHADER;
-                break;
-            case Hamburger:
-                framebufferShader = HamburgerShader.HAMBURGER_SHADER;
-                break;
-            case Custom:
-                framebufferShader = CustomShader.CUSTOM_SHADER;
-                break;
-            case Lava:
-                framebufferShader = LavaShader.LAVA_SHADER;
-                break;
-            case Black:
-                framebufferShader = BlackShader.BLACK_SHADER;
-                break;
-            case GreenGalaxy:
-                framebufferShader = GreenGalaxyShader.GREENGALAXY_SHADER;
-                break;
+        if (mode.getValue().equals(modes.Smoke))
+            framebufferShader = SmokeShader.SMOKE_SHADER;
+        else if (mode.getValue().equals(modes.Aqua))
+            framebufferShader = AquaShader.AQUA_SHADER;
+        else if (mode.getValue().equals(modes.Flow))
+            framebufferShader = FlowShader.FLOW_SHADER;
+        else if (mode.getValue().equals(modes.Red))
+            framebufferShader = RedShader.RED_SHADER;
+        else if (mode.getValue().equals(modes.Outline))
+            framebufferShader = GlowShader.GLOW_SHADER;
+        else if (mode.getValue().equals(modes.Rainbow))
+            framebufferShader = RainbowShader.RAINBOW_SHADER;
+        else if (mode.getValue().equals(modes.Star))
+            framebufferShader = StarShader.STAR_SHADER;
+        else if (mode.getValue().equals(modes.Galaxy))
+            framebufferShader = GalaxyShader.GALAXY_SHADER;
+        else if (mode.getValue().equals(modes.IIV))
+            framebufferShader = IIVShader.IIV_SHADER;
+        else if (mode.getValue().equals(modes.Cloud))
+            framebufferShader = CloudShader.CLOUD_SHADER;
+        else if (mode.getValue().equals(modes.BlueSpace))
+            framebufferShader = BlueSpaceShader.BLUE_SPACE_SHADER;
+        else if (mode.getValue().equals(modes.Aurora))
+            framebufferShader = AuroraShader.AURORA_SHADER;
+        else if (mode.getValue().equals(modes.Hamburger))
+            framebufferShader = HamburgerShader.HAMBURGER_SHADER;
 
-        }
         final FramebufferShader framebufferShader2 = framebufferShader;
         if (framebufferShader2 == null) {
             return;
@@ -142,11 +116,7 @@ public class ShaderChams extends Module {
         Cloud,
         BlueSpace,
         Aurora,
-        Hamburger,
-        Black,
-        GreenGalaxy,
-        Lava,
-        Custom;
+        Hamburger;
 
         public static modes[] $VALUES;
 
@@ -165,10 +135,6 @@ public class ShaderChams extends Module {
                     modes.BlueSpace,
                     modes.Aurora,
                     modes.Hamburger,
-                    modes.Black,
-                    modes.GreenGalaxy,
-                    modes.Lava,
-                    modes.Custom
             };
         }
     }

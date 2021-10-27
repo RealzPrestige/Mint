@@ -1,25 +1,28 @@
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.EnumSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.NullUtil;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumHand;
 
-
+@ModuleInfo(name = "Swing", category = Module.Category.Visual, description = "Tweaks the way your swing looks.")
 public class SwingAnimations extends Module {
 
-    boolean urMomLikestosuckCOCKYEASHYEAH = true;
-    private final Setting<Switch> switchSetting = register(new Setting<>("Switch", Switch.ONEDOTEIGHT));
-    private enum Switch {ONEDOTNINE, ONEDOTEIGHT}
-    private final Setting<Swing> swing = register(new Setting<>("Swing", Swing.MAINHAND));
-    private enum Swing {MAINHAND, OFFHAND, CANCEL}
-    public final Setting<Boolean> speed = register(new Setting<>("Speed", Boolean.valueOf(urMomLikestosuckCOCKYEASHYEAH)));
-    public final Setting<Integer> amplifier = register(new Setting<>("SpeedVal", 1, 1, 1000));
+    public EnumSetting switchSetting = new EnumSetting("Switch", Switch.ONEDOTEIGHT, this);
 
-    public SwingAnimations() {
-        super("Swing", Category.Visual, "Tweaks the way your swing looks.");
-    }
+    public enum Switch {ONEDOTNINE, ONEDOTEIGHT}
+
+    public EnumSetting swing = new EnumSetting("Swing", Swing.MAINHAND, this);
+
+    public enum Swing {MAINHAND, OFFHAND, CANCEL}
+
+    public BooleanSetting speed = new BooleanSetting("Speed", false, this);
+    public IntegerSetting amplifier = new IntegerSetting("SpeedVal", 1, 1, 1000, this);
+
     @Override
     public void onUpdate() {
         if (NullUtil.fullNullCheck()) {
@@ -32,12 +35,12 @@ public class SwingAnimations extends Module {
         }
     }
 
-    public void onTick(){
-        if(swing.getValue() == Swing.OFFHAND) {
+    public void onTick() {
+        if (swing.getValue() == Swing.OFFHAND) {
             mc.player.swingingHand = EnumHand.OFF_HAND;
-        } else if(swing.getValue() == Swing.MAINHAND){
+        } else if (swing.getValue() == Swing.MAINHAND) {
             mc.player.swingingHand = EnumHand.MAIN_HAND;
-        } else if(swing.getValue() == Swing.CANCEL){
+        } else if (swing.getValue() == Swing.CANCEL) {
             mc.player.isSwingInProgress = false;
             mc.player.swingProgressInt = 0;
             mc.player.swingProgress = 0.0f;

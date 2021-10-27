@@ -1,8 +1,12 @@
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.ColorSetting;
+import mint.settingsrewrite.impl.FloatSetting;
+import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.ColorUtil;
 import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
@@ -18,28 +22,20 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+@ModuleInfo(name = "Player Trails", category = Module.Category.Visual, description = "Draws a line behind you (Breadcrumbs)")
 public class PlayerTrails extends Module {
 
-    public Setting<Double> lineWidth = register(new Setting<>("Line Width", 2.0, 0.1, 5.0));
-    public Setting<Boolean> fade = register(new Setting<>("Fade", false));
+    public FloatSetting lineWidth = new FloatSetting("Line Width", 2.0f, 0.1f, 5.0f, this);
+    public BooleanSetting fade = new BooleanSetting("Fade", false, this);
 
-    public Setting<Integer> selfTime = register(new Setting<>("Remove Delay", 1000, 0, 2000));
+    public IntegerSetting selfTime = new IntegerSetting("Remove Delay", 1000, 0, 2000, this);
 
-    public Setting<Integer> startRed = register(new Setting<>("Start Red", 0, 0, 255));
-    public Setting<Integer> startGreen = register(new Setting<>("Start Green", 0, 0, 255));
-    public Setting<Integer> startBlue = register(new Setting<>("Start Blue", 0, 0, 255));
-    public Setting<Integer> startAlpha = register(new Setting<>("Start Alpha", 100, 0, 255));
+    public ColorSetting startColor = new ColorSetting("Start Color", new Color(-1), this);
 
-    public Setting<Integer> endRed = register(new Setting<>("End Red", 0, 0, 255));
-    public Setting<Integer> endGreen = register(new Setting<>("End Green", 0, 0, 255));
-    public Setting<Integer> endBlue = register(new Setting<>("End Blue", 0, 0, 255));
-    public Setting<Integer> endAlpha = register(new Setting<>("End Alpha", 100, 0, 255));
+    public ColorSetting endColor = new ColorSetting("End Color", new Color(-1), this);
 
     Map<UUID, ItemTrail> trails = new HashMap<>();
 
-    public PlayerTrails() {
-        super("Player Trails", Category.Visual, "Draws a line behind you (Breadcrumbs)");
-    }
 
     public void onTick() {
         if (!isEnabled() || NullUtil.fullNullCheck())
@@ -49,16 +45,13 @@ public class PlayerTrails extends Module {
             final ItemTrail playerTrail = trails.get(mc.player.getUniqueID());
             playerTrail.timer.reset();
             final List<Position> toRemove = new ArrayList<>();
-            for (final Position position : playerTrail.positions) {
-                if (System.currentTimeMillis() - position.time > selfTime.getValue().longValue()) {
+            for (final Position position : playerTrail.positions)
+                if (System.currentTimeMillis() - position.time > selfTime.getValue().longValue())
                     toRemove.add(position);
-                }
-            }
             playerTrail.positions.removeAll(toRemove);
             playerTrail.positions.add(new Position(mc.player.getPositionVector()));
-        } else {
-            trails.put(mc.player.getUniqueID(), new ItemTrail(mc.player));
-        }
+        } else trails.put(mc.player.getUniqueID(), new ItemTrail(mc.player));
+
     }
 
     @Override
@@ -80,12 +73,12 @@ public class PlayerTrails extends Module {
     }
 
     void drawTrail(final ItemTrail trail) {
-        final Color fadeColor = new Color(endRed.getValue(), endGreen.getValue(), endBlue.getValue(), endAlpha.getValue());
+        final Color fadeColor = endColor.getColor();
         RenderUtil.prepare();
-        GL11.glLineWidth(lineWidth.getValue().floatValue());
+        GL11.glLineWidth(lineWidth.getValue());
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         (RenderUtil.builder = RenderUtil.tessellator.getBuffer()).begin(3, DefaultVertexFormats.POSITION_COLOR);
-        buildBuffer(RenderUtil.builder, trail, new Color(startRed.getValue(), startGreen.getValue(), startBlue.getValue(), startAlpha.getValue()), fade.getValue() ? fadeColor : new Color(startRed.getValue(), startGreen.getValue(), startBlue.getValue(), startAlpha.getValue()));
+        buildBuffer(RenderUtil.builder, trail, startColor.getColor(), fade.getValue() ? fadeColor : startColor.getColor());
         RenderUtil.tessellator.draw();
         RenderUtil.release();
     }

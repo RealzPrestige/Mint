@@ -1,10 +1,10 @@
 package mint.modules.visual;
 
 import com.google.common.collect.Sets;
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
-import mint.utils.ColorUtil;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.*;
 import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3i;
 import java.awt.*;
 import java.util.HashSet;
 
+@ModuleInfo(name = "Hole ESP", category = Module.Category.Visual, description = "Renders safe holes.")
 public class HoleESP extends Module {
 
     /**
@@ -22,47 +23,30 @@ public class HoleESP extends Module {
      */
 
     public int updates;
-
     HashSet<BlockPos> bedrockholes = Sets.newHashSet();
     HashSet<BlockPos> obsidianholes = Sets.newHashSet();
-     public Setting<Boolean> rangesParent = register(new Setting("Ranges", true, false));
-    public Setting<Integer> range = register(new Setting<>("X Range", 8, 1, 20, z -> rangesParent.getValue()));
-    public Setting<Integer> rangeY = register(new Setting<>("Y Range", 6, 1, 20, z -> rangesParent.getValue()));
-    public Setting<Boolean> othersParent = register(new Setting("Others", true, false));
-    public Setting<Integer> updateDelay = register(new Setting<>("Update Delay", 1, 0, 30, z -> othersParent.getValue()));
-    public Setting<Boolean> gradient = register(new Setting("Gradient", false, z -> othersParent.getValue()));
-    public Setting<Boolean> dynamicHeights = register(new Setting("Dynamic Height", false, z -> gradient.getValue() && othersParent.getValue()));
-    public Setting<Double> height = register(new Setting<>("Height", 1.0, 0.0, 3.0, z -> gradient.getValue() && othersParent.getValue()));
-    public Setting<Double> value = register(new Setting<>("height Value", 10.0, 0.1, 30.0, z -> gradient.getValue() && othersParent.getValue()));
-    public Setting<Boolean> antiInverse = register(new Setting("Anti Inverse", false, z -> gradient.getValue() && othersParent.getValue()));
-    public Setting<Boolean> bedrockParent = register(new Setting("Bedrock", true, false));
-    public Setting<Boolean> bedrockBox = register(new Setting("Bedrock Box", true, z -> bedrockParent.getValue()));
-    public Setting<Integer> bedrockBoxRed = register(new Setting<>("Bedrock Box Red", 0, 0, 255, z -> bedrockBox.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockBoxGreen = register(new Setting<>("Bedrock Box Green", 255, 0, 255, z -> bedrockBox.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockBoxBlue = register(new Setting<>("Bedrock Box Blue", 0, 0, 255, z -> bedrockBox.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockBoxAlpha = register(new Setting<>("Bedrock Box Alpha", 120, 0, 255, z -> bedrockBox.getValue() && bedrockParent.getValue()));
-    public Setting<Boolean> bedrockOutline = register(new Setting("Bedrock Outline", true, z -> bedrockParent.getValue()));
-    public Setting<Integer> bedrockOutlineRed = register(new Setting<>("Bedrock Outline Red", 0, 0, 255, z -> bedrockOutline.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockOutlineGreen = register(new Setting<>("Bedrock Outline Green", 255, 0, 255, z -> bedrockOutline.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockOutlineBlue = register(new Setting<>("Bedrock Outline Blue", 0, 0, 255, z -> bedrockOutline.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockOutlineAlpha = register(new Setting<>("Bedrock Outline Alpha", 255, 0, 255, z -> bedrockOutline.getValue() && bedrockParent.getValue()));
-    public Setting<Integer> bedrockOutlineLineWidth = register(new Setting<>("Bedrock Outline Line Width", 1, 0, 5, z -> bedrockOutline.getValue() && bedrockParent.getValue()));
-    public Setting<Boolean> obsidianParent = register(new Setting("Obsidian", true, false));
-    public Setting<Boolean> obsidianBox = register(new Setting("Obsidian Box", true, z -> obsidianParent.getValue()));
-    public Setting<Integer> obsidianBoxRed = register(new Setting<>("Obsidian Box Red", 255, 0, 255, z -> obsidianBox.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianBoxGreen = register(new Setting<>("Obsidian Box Green", 0, 0, 255, z -> obsidianBox.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianBoxBlue = register(new Setting<>("Obsidian Box Blue", 0, 0, 255, z -> obsidianBox.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianBoxAlpha = register(new Setting<>("Obsidian Box Alpha", 120, 0, 255, z -> obsidianBox.getValue() && obsidianParent.getValue()));
-    public Setting<Boolean> obsidianOutline = register(new Setting("Obsidian Outline", true, z -> obsidianParent.getValue()));
-    public Setting<Integer> obsidianOutlineRed = register(new Setting<>("Obsidian Outline Red", 255, 0, 255, z -> obsidianOutline.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianOutlineGreen = register(new Setting<>("Obsidian Outline Green", 0, 0, 255, z -> obsidianOutline.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianOutlineBlue = register(new Setting<>("Obsidian Outline Blue", 0, 0, 255, z -> obsidianOutline.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianOutlineAlpha = register(new Setting<>("Obsidian Outline Alpha", 255, 0, 255, z -> obsidianOutline.getValue() && obsidianParent.getValue()));
-    public Setting<Integer> obsidianOutlineLineWidth = register(new Setting<>("Obsidian Outline Line Width", 1, 0, 5, z -> obsidianOutline.getValue() && obsidianParent.getValue()));
-
-    public HoleESP() {
-        super("Hole ESP", Category.Visual, "Draws a box around safe holes for crystal PVP.");
-    }
+    public ParentSetting rangesParent = new ParentSetting("Ranges", false, this);
+    public IntegerSetting range = new IntegerSetting("X Range", 8, 1, 20, this, z -> rangesParent.getValue());
+    public IntegerSetting rangeY = new IntegerSetting("Y Range", 6, 1, 20, this, z -> rangesParent.getValue());
+    public ParentSetting othersParent = new ParentSetting("Others", false, this);
+    public IntegerSetting updateDelay = new IntegerSetting("Update Delay", 1, 0, 30, this, z -> othersParent.getValue());
+    public BooleanSetting gradient = new BooleanSetting("Gradient", false, this, z -> othersParent.getValue());
+    public BooleanSetting dynamicHeights = new BooleanSetting("Dynamic Height", false, this, z -> gradient.getValue() && othersParent.getValue());
+    public DoubleSetting height = new DoubleSetting("Height", 1.0, 0.0, 3.0, this, z -> gradient.getValue() && othersParent.getValue());
+    public DoubleSetting value = new DoubleSetting("height Value", 10.0, 0.1, 30.0, this, z -> gradient.getValue() && othersParent.getValue());
+    public BooleanSetting antiInverse = new BooleanSetting("Anti Inverse", false, this, z -> gradient.getValue() && othersParent.getValue());
+    public ParentSetting bedrockParent = new ParentSetting("Bedrock", false, this);
+    public BooleanSetting bedrockBox = new BooleanSetting("Bedrock Box", true, this, z -> bedrockParent.getValue());
+    public ColorSetting bedrockBoxColor = new ColorSetting("Bedrock Box Color", new Color(-1), this, z -> bedrockBox.getValue() && bedrockParent.getValue());
+    public BooleanSetting bedrockOutline = new BooleanSetting("Bedrock Outline", true, this, z -> bedrockParent.getValue());
+    public ColorSetting bedrockOutlineColor = new ColorSetting("Bedrock Outline Color", new Color(-1), this, z -> bedrockOutline.getValue() && bedrockParent.getValue());
+    public FloatSetting bedrockOutlineLineWidth = new FloatSetting("Bedrock Outline Line Width", 1f, 0f, 5f, this, z -> bedrockOutline.getValue() && bedrockParent.getValue());
+    public ParentSetting obsidianParent = new ParentSetting("Obsidian", false, this);
+    public BooleanSetting obsidianBox = new BooleanSetting("Obsidian Box", true, this, z -> obsidianParent.getValue());
+    public ColorSetting obsidianBoxColor = new ColorSetting("Obsidian Box Color", new Color(-1), this, z -> obsidianBox.getValue() && obsidianParent.getValue());
+    public BooleanSetting obsidianOutline = new BooleanSetting("Obsidian Outline", true, this, z -> obsidianParent.getValue());
+    public ColorSetting obsidianOutlineColor = new ColorSetting("Obsidian Outline Color", new Color(-1), this, z -> obsidianOutline.getValue() && obsidianParent.getValue());
+    public FloatSetting obsidianOutlineLineWidth = new FloatSetting("Obsidian Outline Line Width", 1f, 0f, 5f, this, z -> obsidianOutline.getValue() && obsidianParent.getValue());
 
     public void onTick() {
         if (updates > updateDelay.getValue()) {
@@ -82,24 +66,24 @@ public class HoleESP extends Module {
     }
 
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if(NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
 
         for (BlockPos pos : bedrockholes) {
             double dynamicHeight = height.getValue() - mc.player.getDistanceSq(pos) / (range.getValue() * value.getValue());
             double finalDynamicHeight = (antiInverse.getValue() && dynamicHeight < -1) ? -1 : dynamicHeight;
             if (gradient.getValue()) {
-                RenderUtil.drawGlowBox(pos, new Color(bedrockBoxRed.getValue(), bedrockBoxGreen.getValue(), bedrockBoxBlue.getValue(), bedrockBoxAlpha.getValue()), dynamicHeights.getValue() ? finalDynamicHeight : height.getValue() - 1);
+                RenderUtil.drawGlowBox(pos, bedrockBoxColor.getColor(), dynamicHeights.getValue() ? finalDynamicHeight : height.getValue() - 1);
             }
-            RenderUtil.drawBoxESPFlat(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), new Color(ColorUtil.toRGBA(bedrockBoxRed.getValue(), bedrockBoxGreen.getValue(), bedrockBoxBlue.getValue(), bedrockBoxAlpha.getValue())), true, new Color(ColorUtil.toRGBA(bedrockOutlineRed.getValue(), bedrockOutlineGreen.getValue(), bedrockOutlineBlue.getValue(), bedrockOutlineAlpha.getValue())), bedrockOutlineLineWidth.getValue(), bedrockOutline.getValue(), bedrockBox.getValue(), bedrockBoxAlpha.getValue(), true);
+            RenderUtil.drawBoxESPFlat(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), bedrockBoxColor.getColor(), true, bedrockOutlineColor.getColor(), bedrockOutlineLineWidth.getValue(), bedrockOutline.getValue(), bedrockBox.getValue(), bedrockBoxColor.getColor().getAlpha(), true);
         }
         for (BlockPos pos : obsidianholes) {
             double dynamicHeight = height.getValue() - mc.player.getDistanceSq(pos) / (range.getValue() * value.getValue());
             double finalDynamicHeight = (antiInverse.getValue() && dynamicHeight < -1) ? -1 : dynamicHeight;
             if (gradient.getValue()) {
-                RenderUtil.drawGlowBox(pos, new Color(obsidianBoxRed.getValue(), obsidianBoxGreen.getValue(), obsidianBoxBlue.getValue(), obsidianBoxAlpha.getValue()), dynamicHeights.getValue() ? finalDynamicHeight : height.getValue() - 1);
+                RenderUtil.drawGlowBox(pos, obsidianBoxColor.getColor(), dynamicHeights.getValue() ? finalDynamicHeight : height.getValue() - 1);
             }
-            RenderUtil.drawBoxESPFlat(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), new Color(ColorUtil.toRGBA(obsidianBoxRed.getValue(), obsidianBoxGreen.getValue(), obsidianBoxBlue.getValue(), obsidianBoxAlpha.getValue())), true, new Color(ColorUtil.toRGBA(obsidianOutlineRed.getValue(), obsidianOutlineGreen.getValue(), obsidianOutlineBlue.getValue(), obsidianOutlineAlpha.getValue())), obsidianOutlineLineWidth.getValue(), obsidianOutline.getValue(), obsidianBox.getValue(), obsidianBoxAlpha.getValue(), true);
+            RenderUtil.drawBoxESPFlat(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), obsidianBoxColor.getColor(), true, obsidianOutlineColor.getColor(), obsidianOutlineLineWidth.getValue(), obsidianOutline.getValue(), obsidianBox.getValue(), obsidianBoxColor.getColor().getAlpha(), true);
         }
         if (updates > updateDelay.getValue()) {
             obsidianholes.clear();

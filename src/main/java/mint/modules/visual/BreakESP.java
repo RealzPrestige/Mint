@@ -28,9 +28,6 @@ public class BreakESP extends Module {
 
     public ColorSetting box = new ColorSetting("Box",new Color(-1),this);
     public ColorSetting out = new ColorSetting("Outline", new Color(-1),this);
-    public BreakESP() {
-        super();
-    }
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {

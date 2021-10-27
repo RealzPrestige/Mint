@@ -1,9 +1,11 @@
 package mint.modules.visual;
 
 import mint.Mint;
-import mint.setting.Setting;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
+import mint.settingsrewrite.impl.ColorSetting;
 import mint.utils.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -19,22 +21,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Objects;
 
+@ModuleInfo(name = "Name Tags", category = Module.Category.Visual, description = "Draws info about an entity above their head.")
 public class NameTags extends Module {
     private static NameTags INSTANCE = new NameTags();
-    private final Setting<Boolean> boxParent = register(new Setting<>("Rect", true, false));
-    private final Setting<Boolean> rect = register(new Setting("RectSetting", true, z -> boxParent.getValue()));
-    private final Setting<Integer> rectRed = register(new Setting<>("RectRed", 0, 0, 255, z -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Integer> rectGreen = register(new Setting<>("RectGreen", 0, 0, 255, z -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Integer> rectBlue = register(new Setting<>("RectBlue", 0, 0, 255, z -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Integer> rectAlpha = register(new Setting<>("RectAlpha", 50, 0, 255, z -> rect.getValue() && boxParent.getValue()));
-    private final Setting<Boolean> healthLine = register(new Setting("HealthLine", true));
-    private final Setting<Boolean> fullHealthLine = register(new Setting("FullHealthLine", true));
-    private final Setting<Boolean> enchant = register(new Setting("Enchantment", true));
+    public BooleanSetting boxParent = new BooleanSetting("Rect", false, this);
+    public BooleanSetting rect = new BooleanSetting("Rectangle Setting", true, this, z -> boxParent.getValue());
+    public ColorSetting rectColor = new ColorSetting("Rectangle Color", new Color(-1), this, z -> rect.getValue() && boxParent.getValue());
+    public BooleanSetting healthLine = new BooleanSetting("HealthLine", true, this);
+    public BooleanSetting fullHealthLine = new BooleanSetting("FullHealthLine", true, this);
+    public BooleanSetting enchant = new BooleanSetting("Enchantment", true, this);
 
     public NameTags() {
-        super("Name Tags", Category.Visual, "Draws info about an entity above their head.");
         setInstance();
     }
 
@@ -78,7 +78,7 @@ public class NameTags extends Module {
         camera.posZ = interpolate(camera.prevPosZ, camera.posZ, delta);
         String displayTag = getDisplayTag(player);
         double distance = camera.getDistance(x + mc.getRenderManager().viewerPosX, y + mc.getRenderManager().viewerPosY, z + mc.getRenderManager().viewerPosZ);
-        int width = renderer.getStringWidth(displayTag) / 2;
+        int width = Mint.textManager.getStringWidth(displayTag) / 2;
         double scale = (0.0018 + (double) 10 * (distance * 0.3)) / 1000.0;
         if (distance <= 8.0) {
             scale = 0.0245;
@@ -96,7 +96,7 @@ public class NameTags extends Module {
         GlStateManager.enableBlend();
         GlStateManager.enableBlend();
         if (rect.getValue()) {
-            RenderUtil.drawRect(-width - 1, -9, (float) width + 2.0f, 0.5f, ColorUtil.toRGBA(rectRed.getValue(), rectGreen.getValue(), rectBlue.getValue(), rectAlpha.getValue()));
+            RenderUtil.drawRect(-width - 1, -9, (float) width + 2.0f, 0.5f, rectColor.getColor().getRGB());
         }
         if (healthLine.getValue()) {
             float healthAmount = player.getHealth() + player.getAbsorptionAmount();
@@ -141,7 +141,7 @@ public class NameTags extends Module {
         renderItemStack(renderMainHand, xOffset);
         GlStateManager.popMatrix();
         assert Mint.friendManager != null;
-        renderer.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
+        Mint.textManager.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
         camera.posX = originalPositionX;
         camera.posY = originalPositionY;
         camera.posZ = originalPositionZ;
@@ -178,7 +178,7 @@ public class NameTags extends Module {
     private void renderEnchantmentText(ItemStack stack, int x) {
         int enchantmentY = -28 + 1;
         if (stack.getItem() == Items.GOLDEN_APPLE && stack.hasEffect()) {
-            renderer.drawStringWithShadow("God", x * 2, enchantmentY, -3977919);
+            Mint.textManager.drawStringWithShadow("God", x * 2, enchantmentY, -3977919);
             enchantmentY -= 8;
         }
         if (enchant.getValue()) {
@@ -189,14 +189,14 @@ public class NameTags extends Module {
                 Enchantment enc = Enchantment.getEnchantmentByID(id);
                 if (enc == null) continue;
                 String encName = findStringForEnchants(enc, level);
-                renderer.drawStringWithShadow(encName, x * 2, enchantmentY, -1);
+                Mint.textManager    .drawStringWithShadow(encName, x * 2, enchantmentY, -1);
                 enchantmentY -= 8;
             }
         }
         if (PlayerUtil.hasDurability(stack)) {
             int percent = PlayerUtil.getRoundedDamage(stack);
             String color = percent >= 60 ? "\u00a7a" : (percent >= 25 ? "\u00a7e" : "\u00a7c");
-            renderer.drawStringWithShadow(color + percent + "%", x * 2, enchantmentY, -1);
+            Mint.textManager.drawStringWithShadow(color + percent + "%", x * 2, enchantmentY, -1);
         }
     }
 

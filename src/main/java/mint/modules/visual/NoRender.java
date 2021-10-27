@@ -1,24 +1,25 @@
 package mint.modules.visual;
 
-import mint.setting.Setting;
 import mint.events.PacketEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
 import mint.utils.NullUtil;
 import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@ModuleInfo(name = "No Render", category = Module.Category.Visual, description = "Renders No")
 public class NoRender extends Module {
     static NoRender INSTANCE = new NoRender();
 
-    public Setting<Boolean> fire = register(new Setting<>("Fire Overlay", false));
-    public Setting<Boolean> hurtCam = register(new Setting<>("Hurt Camera Effect", false));
-    public Setting<Boolean> insideBlocks = register(new Setting<>("Inside Blocks Overlay", false));
-    public Setting<Boolean> explosions = register(new Setting<>("Explosions Effect", false));
-    public Setting<Boolean> armorRemover = register(new Setting<>("Armor Remover", false));
+    public BooleanSetting fire = new BooleanSetting("Fire Overlay", false, this);
+    public BooleanSetting hurtCam = new BooleanSetting("Hurt Camera Effect", false, this);
+    public BooleanSetting insideBlocks = new BooleanSetting("Inside Blocks Overlay", false, this);
+    public BooleanSetting explosions = new BooleanSetting("Explosions Effect", false, this);
+    public BooleanSetting armorRemover = new BooleanSetting("Armor Remover", false, this);
 
     public NoRender() {
-        super("No Render", Category.Visual, "Renders No");
         setInstance();
     }
 
