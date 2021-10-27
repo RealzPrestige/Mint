@@ -163,17 +163,6 @@ public class Setting<T> {
         return EnumSetting.currentEnum((Enum) value);
     }
 
-    public void increaseEnum() {
-        this.plannedValue = (T) EnumSetting.increaseEnum((Enum) value);
-        ClientEvent event = new ClientEvent(this);
-        MinecraftForge.EVENT_BUS.post(event);
-        if (!event.isCanceled()) {
-            this.value = this.plannedValue;
-        } else {
-            this.plannedValue = this.value;
-        }
-    }
-
     public void resetEnum() {
         value = (T) EnumSetting.resetEnum((Enum) value);
     }

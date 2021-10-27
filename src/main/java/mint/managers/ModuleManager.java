@@ -154,7 +154,7 @@ public class ModuleManager {
     }
 
     public void onLoad() {
-        moduleList.stream().filter(Module::listening).forEach(((EventBus) MinecraftForge.EVENT_BUS)::register);
+        moduleList.forEach(((EventBus) MinecraftForge.EVENT_BUS)::register);
         moduleList.forEach(Module::onLoad);
     }
 
@@ -175,9 +175,9 @@ public class ModuleManager {
     }
 
     public void sortModules(boolean reverse) {
-        sortedModules = getEnabledModules().stream().filter(Module::isDrawn).sorted(Comparator.comparing(module -> {
+        sortedModules = getEnabledModules().stream().sorted(Comparator.comparing(module -> {
             assert Mint.textManager != null;
-            return Mint.textManager.getStringWidth(module.getFullArrayString()) * (reverse ? -1 : 1);
+            return Mint.textManager.getStringWidth(module.getName()) * (reverse ? -1 : 1);
         })).collect(Collectors.toList());
     }
 
@@ -192,7 +192,6 @@ public class ModuleManager {
 
     public void onUnload() {
         moduleList.forEach(MinecraftForge.EVENT_BUS::unregister);
-        moduleList.forEach(Module::onUnload);
     }
 
     public void onUnloadPost() {

@@ -2,6 +2,7 @@ package mint.modules.core;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
+import mint.events.ModuleToggleEvent;
 import mint.events.RenderOverlayEvent;
 import mint.managers.MessageManager;
 import mint.modules.Module;
@@ -10,6 +11,8 @@ import mint.settingsrewrite.impl.*;
 import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -50,7 +53,38 @@ public class Notifications extends Module {
     public Notifications() {
         this.setInstance();
     }
+    
+    @SubscribeEvent
+    public void onModuleEnable(ModuleToggleEvent.Enable event){
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
+        if (isEnabled() && (mode.getValue() == Notifications.Mode.CHAT || mode.getValue() == Notifications.Mode.BOTH)) {
+            Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
+        }
+        if (isEnabled() && modules.getValue() && (mode.getValue() == Notifications.Mode.HUD || mode.getValue() == Notifications.Mode.BOTH)) {
+            notification.clear();
+            hasReachedEndState = false;
+            waitTime = 0;
+            width = 0;
+            lefinalewidth = false;
+            notification.put(this.getName().replace("_", " ") + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!", 1000);
+        }
+    }
 
+    @SubscribeEvent
+    public void onModuleDisable(ModuleToggleEvent.Disable event){
+        TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
+        if (isEnabled() && (mode.getValue() == Notifications.Mode.CHAT || mode.getValue() == Notifications.Mode.BOTH)) {
+            Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
+        }
+        if (isEnabled() && modules.getValue() && (mode.getValue() == Notifications.Mode.HUD || mode.getValue() == Notifications.Mode.BOTH)) {
+            notification.clear();
+            hasReachedEndState = false;
+            waitTime = 0;
+            width = 0;
+            lefinalewidth = false;
+            notification.put(this.getName().replace("_", " ") + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!", 1000);
+        }
+    }
     public void renderOverlayEvent(RenderOverlayEvent event) {
         for (Map.Entry<String, Integer> entry : notification.entrySet()) {
             if (modules.getValue()) {
@@ -109,9 +143,9 @@ public class Notifications extends Module {
                 if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                     width = 0;
                     lefinalewidth = false;
-                    Notifications.getInstance().notification.clear();
-                    Notifications.getInstance().hasReachedEndState = false;
-                    Notifications.getInstance().waitTime = 0;
+                    notification.clear();
+                    hasReachedEndState = false;
+                    waitTime = 0;
                     notification.put(ChatFormatting.WHITE + "" + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", 1000);
                 }
             } else {
@@ -128,9 +162,9 @@ public class Notifications extends Module {
                 if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                     width = 0;
                     lefinalewidth = false;
-                    Notifications.getInstance().notification.clear();
-                    Notifications.getInstance().hasReachedEndState = false;
-                    Notifications.getInstance().waitTime = 0;
+                    notification.clear();
+                    hasReachedEndState = false;
+                    waitTime = 0;
                     notification.put(ChatFormatting.WHITE + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", 1000);
                 }
             }
@@ -165,9 +199,9 @@ public class Notifications extends Module {
             if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                 width = 0;
                 lefinalewidth = false;
-                Notifications.getInstance().notification.clear();
-                Notifications.getInstance().hasReachedEndState = false;
-                Notifications.getInstance().waitTime = 0;
+                notification.clear();
+                hasReachedEndState = false;
+                waitTime = 0;
                 notification.put(ChatFormatting.WHITE + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", 1000);
             }
         } else {
@@ -184,9 +218,9 @@ public class Notifications extends Module {
             if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
                 width = 0;
                 lefinalewidth = false;
-                Notifications.getInstance().notification.clear();
-                Notifications.getInstance().hasReachedEndState = false;
-                Notifications.getInstance().waitTime = 0;
+                notification.clear();
+                hasReachedEndState = false;
+                waitTime = 0;
                 notification.put(ChatFormatting.WHITE + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", 1000);
             }
         }

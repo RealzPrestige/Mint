@@ -1,16 +1,16 @@
-package mint.newgui.buttons;
+package mint.newgui.settinbutton;
 
-import mint.setting.Setting;
+import mint.settingsrewrite.SettingRewrite;
 
-public class Button {
+public class NewButton {
     public int x;
     public int y;
     public int width;
     public int height;
     boolean isTyping;
-    Setting setting;
+    SettingRewrite setting;
 
-    public Button(Setting setting){
+    public NewButton(SettingRewrite setting){
         this.setting = setting;
     }
 
@@ -52,7 +52,7 @@ public class Button {
         return (mouseX > x && mouseX < x + width) && (mouseY > y && mouseY < y + height);
     }
 
-    public Setting getSetting(){
+    public SettingRewrite getSetting(){
         return setting;
     }
 

@@ -3,8 +3,7 @@ package mint.newgui;
 import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
-import mint.newgui.buttons.Button;
-import mint.newgui.buttons.a.*;
+import mint.newgui.settinbutton.*;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
@@ -39,7 +38,6 @@ public class ModuleWindow {
     }
 
     public void getSettings() {
-        ArrayList<Button> buttons = new ArrayList<>();
         ArrayList<NewButton> penius = new ArrayList<>();
 
         assert Mint.settingsRewrite != null;
@@ -83,7 +81,7 @@ public class ModuleWindow {
         if (module.isEnabled())
             RenderUtil.drawRect(x + 1, y, x + width - 1, y + height, enabledColor.getRGB());
         if (isInside(mouseX, mouseY))
-            RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
+            RenderUtil.drawRect(x + 1, y, x + width - 1, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
         Mint.textManager.drawStringWithShadow(name, isInside(mouseX, mouseY) ? x + 2 : x + 1, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (module.isOpened) {

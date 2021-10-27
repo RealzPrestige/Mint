@@ -1,4 +1,4 @@
-package mint.newgui.buttons.a;
+package mint.newgui.settinbutton;
 
 import mint.Mint;
 import mint.modules.core.NewGuiModule;

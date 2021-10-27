@@ -1,4 +1,4 @@
-package mint.newgui.buttons.a;
+package mint.newgui.settinbutton;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
