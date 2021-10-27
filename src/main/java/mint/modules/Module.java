@@ -14,7 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class Module extends Feature {
     public static Minecraft mc = Minecraft.getMinecraft();
-    private final String description;
+    private final String description = getModuleInfo().description();
     private final Category category;
     public Setting<Boolean> enabled = register(new Setting<>("Enabled", false));
     public boolean drawn = false;
@@ -23,11 +23,10 @@ public class Module extends Feature {
     public boolean hidden;
     public boolean sliding;
     public boolean isOpened;
-    public Module(String name, Category category, String description) {
-        super(name);
-        this.displayName = register(new Setting<>("DisplayName", name));
-        this.description = description;
-        this.category = category;
+    public Module() {
+        super();
+        this.displayName = register(new Setting<>(this.getModuleInfo().name(), this.getModuleInfo().name()));
+        this.category = getModuleInfo().category();
         isOpened = false;
     }
 
@@ -175,6 +174,10 @@ public class Module extends Feature {
 
     public String getFullArrayString() {
         return this.getDisplayName() + ChatFormatting.GRAY + (this.getDisplayInfo() != null ? " [" + ChatFormatting.WHITE + this.getDisplayInfo() + ChatFormatting.GRAY + "]" : "");
+    }
+
+    private ModuleInfo getModuleInfo(){
+        return getClass().getAnnotation(ModuleInfo.class);
     }
 
 

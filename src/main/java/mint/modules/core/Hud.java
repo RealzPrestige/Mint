@@ -3,13 +3,18 @@ package mint.modules.core;
 import mint.Mint;
 import mint.events.RenderOverlayEvent;
 import mint.modules.Module;
+import mint.modules.ModuleInfo;
 import mint.setting.Setting;
 import mint.settingsrewrite.impl.*;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
+@ModuleInfo(name = "", description = "", category = Module.Category.Core)
 public class Hud extends Module {
+
+    final ModuleInfo annotation = this.getClass().getAnnotation(ModuleInfo.class);
+
 
     static Hud INSTANCE = new Hud();
     public Setting color = register(new Setting<>("Color", new Color(199, 45, 45)));
