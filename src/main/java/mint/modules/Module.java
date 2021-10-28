@@ -3,10 +3,14 @@ package mint.modules;
 import mint.events.ModuleToggleEvent;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
+import mint.settingsrewrite.impl.BooleanSetting;
 import mint.settingsrewrite.impl.KeySetting;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 public class Module {
     public static Minecraft mc = Minecraft.getMinecraft();
@@ -18,7 +22,7 @@ public class Module {
     public KeySetting bind = new KeySetting("Keybind", Keyboard.KEY_NONE, this);
 
     public boolean isOpened = false;
-    public boolean enabled = false;
+    public BooleanSetting enabled = new BooleanSetting("Enabled",false,this);
 
     public void onEnable() {
     }
@@ -51,7 +55,7 @@ public class Module {
     }
 
     public void enable() {
-        enabled = true;
+        enabled.setValue(Boolean.valueOf(String.valueOf(new String(ByteBuffer.wrap(String.valueOf(true).getBytes(StandardCharsets.UTF_8)).array()).toCharArray())));
         onToggle();
         onEnable();
         MinecraftForge.EVENT_BUS.post(new ModuleToggleEvent.Enable(this));
@@ -59,7 +63,7 @@ public class Module {
     }
 
     public void disable() {
-        enabled = false;
+        enabled.setValue(Boolean.valueOf(String.valueOf(new String(ByteBuffer.wrap(String.valueOf(false).getBytes(StandardCharsets.UTF_8)).array()).toCharArray())));
         onToggle();
         onDisable();
         MinecraftForge.EVENT_BUS.post(new ModuleToggleEvent.Disable(this));
@@ -80,11 +84,11 @@ public class Module {
     }
 
     public boolean isEnabled() {
-        return enabled;
+        return enabled.getValue();
     }
 
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        this.enabled.setValue(enabled);
     }
 
     public int getBind() {
