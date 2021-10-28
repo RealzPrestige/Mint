@@ -45,7 +45,7 @@ public class Packetmine extends Module {
 
     public enum SilentSwitchMode {AUTO, KEYBIND}
 
-    public KeySetting switchBind = new KeySetting("Switch Bind", Keyboard.KEY_NONE, this, v -> silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND);
+    public KeySetting switchBind = new KeySetting("Switch Bind", Keyboard.KEY_NONE, this, v -> silentSwitch.getValue() && silentSwitchMode.getValueEnum().equals(SilentSwitchMode.KEYBIND));
     public BooleanSetting render = new BooleanSetting("Render", false, this);
 
     public EnumSetting renderMode = new EnumSetting("Render Mode", RenderMode.EXPAND, this, v -> render.getValue());
@@ -59,8 +59,8 @@ public class Packetmine extends Module {
     public enum BoxMode {FILL, OUTLINE, BOTH}
 
     public ColorSetting color = new ColorSetting("Color", new Color(-1), this, v -> render.getValue());
-    public ColorSetting readyColor = new ColorSetting("Ready Color", new Color(-1), this, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE)));
-    public IntegerSetting speed = new IntegerSetting("ReadySpeed", 2, 1, 5, this, v -> render.getValue() && (colorMode.getValue().equals(ColorMode.STATUS) || colorMode.getValue().equals(ColorMode.READYFADE)));
+    public ColorSetting readyColor = new ColorSetting("Ready Color", new Color(-1), this, v -> render.getValue() && (colorMode.getValueEnum().equals(ColorMode.STATUS) || colorMode.getValueEnum().equals(ColorMode.READYFADE)));
+    public IntegerSetting speed = new IntegerSetting("ReadySpeed", 2, 1, 5, this, v -> render.getValue() && (colorMode.getValueEnum().equals(ColorMode.STATUS) || colorMode.getValueEnum().equals(ColorMode.READYFADE)));
 
     int currentAlpha;
     int count;
@@ -118,7 +118,7 @@ public class Packetmine extends Module {
             currentAlpha = currentAlpha + 3;
         }
 
-        if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.AUTO && timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) && getPickSlot() != -1) {
+        if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValueEnum().equals(SilentSwitchMode.AUTO) && timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) && getPickSlot() != -1) {
             if (pickSlot == -1) {
                 TextComponentString text = new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.WHITE + ChatFormatting.BOLD + " Speedmine: " + ChatFormatting.RESET + ChatFormatting.GRAY + "No pickaxe found, stopped" + ChatFormatting.WHITE + ChatFormatting.BOLD + " SilentSwitch");
                 Module.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
@@ -126,11 +126,11 @@ public class Packetmine extends Module {
                 mc.player.connection.sendPacket(new CPacketHeldItemChange(getPickSlot()));
             }
         }
-        if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.AUTO && timer.passedMs((int) (2200.0f * Mint.serverManager.getTpsFactor()))) {
+        if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValueEnum().equals(SilentSwitchMode.AUTO) && timer.passedMs((int) (2200.0f * Mint.serverManager.getTpsFactor()))) {
             oldSlot = mc.player.inventory.currentItem;
             mc.player.connection.sendPacket(new CPacketHeldItemChange(oldSlot));
         }
-        if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValue() == SilentSwitchMode.KEYBIND) {
+        if (mc.player != null && silentSwitch.getValue() && silentSwitchMode.getValueEnum().equals(SilentSwitchMode.KEYBIND)) {
             if (switchBind.getKey() != -1) {
                 if (Keyboard.isKeyDown(switchBind.getKey())) {
                     if (pickSlot == -1) {
@@ -156,7 +156,7 @@ public class Packetmine extends Module {
             }
         }
         count++;
-        if (colorMode.getValue().equals(ColorMode.READYFADE)) {
+        if (colorMode.getValueEnum().equals(ColorMode.READYFADE)) {
             if (red0 != readyColor.getColor().getRed()) {
                 if (red0 > readyColor.getColor().getRed()) {
                     red0 = red0 - speed.getValue();
@@ -199,22 +199,22 @@ public class Packetmine extends Module {
                 bb = mc.world.getBlockState(currentPos).getSelectedBoundingBox(mc.world, currentPos);
 
                 // i had a headache making this i hope this works - kambing
-                Color color = new Color(colorMode.getValue().equals(ColorMode.STATIC) ? this.color.getColor().getRed() : colorMode.getValue().equals(ColorMode.READYFADE) ? red0 : colorMode.getValue().equals(ColorMode.STATUS) && this.timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) ? readyColor.getColor().getRed() : this.color.getColor().getRed(),
-                        colorMode.getValue().equals(ColorMode.STATIC) ? this.color.getColor().getGreen() : colorMode.getValue().equals(ColorMode.READYFADE) ? green0 : colorMode.getValue().equals(ColorMode.STATUS) && this.timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) ? readyColor.getColor().getGreen() : this.color.getColor().getGreen(),
-                        colorMode.getValue().equals(ColorMode.STATIC) ? this.color.getColor().getBlue() : colorMode.getValue().equals(ColorMode.READYFADE) ? blue0 : colorMode.getValue().equals(ColorMode.STATUS) && this.timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) ? readyColor.getColor().getBlue() : this.color.getColor().getBlue(),
-                        renderMode.getValue().equals(RenderMode.FADE) ? currentAlpha : this.color.getColor().getAlpha());
+                Color color = new Color(colorMode.getValueEnum().equals(ColorMode.STATIC) ? this.color.getColor().getRed() : colorMode.getValueEnum().equals(ColorMode.READYFADE) ? red0 : colorMode.getValueEnum().equals(ColorMode.STATUS) && this.timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) ? readyColor.getColor().getRed() : this.color.getColor().getRed(),
+                        colorMode.getValueEnum().equals(ColorMode.STATIC) ? this.color.getColor().getGreen() : colorMode.getValueEnum().equals(ColorMode.READYFADE) ? green0 : colorMode.getValueEnum().equals(ColorMode.STATUS) && this.timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) ? readyColor.getColor().getGreen() : this.color.getColor().getGreen(),
+                        colorMode.getValueEnum().equals(ColorMode.STATIC) ? this.color.getColor().getBlue() : colorMode.getValueEnum().equals(ColorMode.READYFADE) ? blue0 : colorMode.getValueEnum().equals(ColorMode.STATUS) && this.timer.passedMs((int) (2000.0f * Mint.serverManager.getTpsFactor())) ? readyColor.getColor().getBlue() : this.color.getColor().getBlue(),
+                        renderMode.getValueEnum().equals(RenderMode.FADE) ? currentAlpha : this.color.getColor().getAlpha());
 
-                if(renderMode.getValue().equals(RenderMode.EXPAND))
+                if(renderMode.getValueEnum().equals(RenderMode.EXPAND))
                     bb = bb.shrink(Math.max(Math.min(normalize(count, getMineTime(currentBlock, item, false) - subVal), 1.0), 0.0));
-                else if(renderMode.getValue().equals(RenderMode.EXPAND2))
+                else if(renderMode.getValueEnum().equals(RenderMode.EXPAND2))
                     bb = bb.setMaxY(bb.minY - 0.5 + (Math.max(Math.min(normalize(count * 2, getMineTime(currentBlock, item, false) - subVal), 1.5), 0.0)));
 
                 if (render.getValue() && currentPos != null) {
-                    if(boxMode.getValue().equals(BoxMode.OUTLINE))
+                    if(boxMode.getValueEnum().equals(BoxMode.OUTLINE))
                         RenderUtil.drawBlockOutlineBB(bb, color, 1f);
-                    else if(boxMode.getValue().equals(BoxMode.FILL))
+                    else if(boxMode.getValueEnum().equals(BoxMode.FILL))
                         RenderUtil.drawBBBox(bb, color, color.getAlpha());
-                    else if(boxMode.getValue().equals(BoxMode.BOTH)){
+                    else if(boxMode.getValueEnum().equals(BoxMode.BOTH)){
                         RenderUtil.drawBBBox(bb, color, color.getAlpha());
                         RenderUtil.drawBlockOutlineBB(bb, color, 1f);
                     }

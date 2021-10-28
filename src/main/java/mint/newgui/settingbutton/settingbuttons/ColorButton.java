@@ -1,9 +1,10 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton.settingbuttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.managers.MessageManager;
 import mint.modules.core.NewGuiModule;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.ColorSetting;
 import mint.utils.ColorUtil;
@@ -21,7 +22,7 @@ import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class ColorButton extends NewButton {
+public class ColorButton extends Button {
     SettingRewrite setting;
     ColorSetting colorSetting;
     private Color finalColor;

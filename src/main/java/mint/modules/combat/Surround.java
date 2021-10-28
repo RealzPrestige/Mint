@@ -50,11 +50,11 @@ public class Surround extends Module {
         BlockPos pos = PlayerUtil.getPlayerPos(mc.player);
         BlockPos center = PlayerUtil.getCenterPos(pos.getX(), pos.getY(), pos.getZ());
 
-        if (blocks.getValue().equals(BlockSelection.Obsidian))
+        if (blocks.getValueEnum().equals(BlockSelection.Obsidian))
             itemSlot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
-        else if (blocks.getValue().equals(BlockSelection.Echest))
+        else if (blocks.getValueEnum().equals(BlockSelection.Echest))
             itemSlot = InventoryUtil.findHotbarBlock(BlockEnderChest.class);
-        else if (blocks.getValue().equals(BlockSelection.Auto))
+        else if (blocks.getValueEnum().equals(BlockSelection.Auto))
             if (InventoryUtil.findHotbarBlock(BlockObsidian.class) != -1)
                 itemSlot = InventoryUtil.findHotbarBlock(BlockObsidian.class);
             else if (InventoryUtil.findHotbarBlock(BlockEnderChest.class) != -1)
@@ -64,19 +64,19 @@ public class Surround extends Module {
         if (itemSlot == -1)
             disable();
 
-        if (disableMode.getValue().equals(DisableMode.Smart))
+        if (disableMode.getValueEnum().equals(DisableMode.Smart))
             if (mc.player.motionY > 0.2 && !mc.player.onGround && mc.player.stepHeight > 0.6 || Step.getInstance().isEnabled())
                 disable();
-            else if (disableMode.getValue().equals(DisableMode.Motion))
+            else if (disableMode.getValueEnum().equals(DisableMode.Motion))
                 if (mc.player.motionY > 0.2)
                     disable();
-                else if (disableMode.getValue().equals(DisableMode.Onground))
+                else if (disableMode.getValueEnum().equals(DisableMode.Onground))
                     if (!mc.player.onGround)
                         disable();
-                    else if (disableMode.getValue().equals(DisableMode.OnComplete))
+                    else if (disableMode.getValueEnum().equals(DisableMode.OnComplete))
                         if (mc.world.getBlockState(center.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.south()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(center.west()).getBlock().equals(Blocks.OBSIDIAN))
                             disable();
-                        else if (disableMode.getValue().equals(DisableMode.StepHeight))
+                        else if (disableMode.getValueEnum().equals(DisableMode.StepHeight))
                             if (mc.player.stepHeight > 1)
                                 disable();
 
@@ -84,39 +84,39 @@ public class Surround extends Module {
             return;
 
         if (bottomBlocksExtend.getValue() && !(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.down().north()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.down().north(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.down().north(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (bottomBlocksExtend.getValue() && !(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.down().east()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.down().east(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.down().east(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (bottomBlocksExtend.getValue() && !(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.down().south()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.down().south(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.down().south(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (bottomBlocksExtend.getValue() && !(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.down().west()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.down().west(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.down().west(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (!(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.down()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.down(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.down(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (!(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.north()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.north(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.north(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (!(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.east()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.east(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.east(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (!(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.south()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.south(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.south(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
         if (!(maxBlock.getValue() && maxBlocks < maxBlocksAmount.getValue()) && mc.world.getBlockState(center.west()).getBlock().equals(Blocks.AIR)) {
-            placeSurroundBlocks(center.west(), rotate.getValue(), placeMode.getValue().equals(PlaceMode.Packet));
+            placeSurroundBlocks(center.west(), rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.Packet));
             timer.reset();
         }
     }

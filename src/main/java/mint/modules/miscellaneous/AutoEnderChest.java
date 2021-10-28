@@ -53,7 +53,7 @@ public class AutoEnderChest extends Module {
             InventoryUtil.SilentSwitchToSlot(enderChestSlot);
             if (getFace() == 1) {
 
-                BlockUtil.placeBlock(pos.north().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                BlockUtil.placeBlock(pos.north().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValueEnum().equals(Hand.Mainhand) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
                 mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos.north().up(), EnumFacing.UP));
@@ -66,7 +66,7 @@ public class AutoEnderChest extends Module {
                 }
             } else if (getFace() == 2) {
 
-                BlockUtil.placeBlock(pos.east().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                BlockUtil.placeBlock(pos.east().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValueEnum().equals(Hand.Mainhand) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
                 mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos.east().up(), EnumFacing.UP));
@@ -79,7 +79,7 @@ public class AutoEnderChest extends Module {
                 }
             } else if (getFace() == 3) {
 
-                BlockUtil.placeBlock(pos.south().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                BlockUtil.placeBlock(pos.south().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValueEnum().equals(Hand.Mainhand) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
                 mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos.south().up(), EnumFacing.UP));
@@ -92,7 +92,7 @@ public class AutoEnderChest extends Module {
                 }
             } else if (getFace() == 4) {
 
-                BlockUtil.placeBlock(pos.west().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValue() == Hand.Mainhand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                BlockUtil.placeBlock(pos.west().up(), EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false, swing.getValue(), enumHand.getValueEnum().equals(Hand.Mainhand) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                 mc.player.inventory.currentItem = lastSlot;
                 mc.playerController.updateController();
                 mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos.west().up(), EnumFacing.UP));

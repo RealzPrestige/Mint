@@ -1,8 +1,9 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton.settingbuttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.StringSetting;
 import mint.utils.ColorUtil;
@@ -10,7 +11,7 @@ import mint.utils.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
-public class StringButton extends NewButton {
+public class StringButton extends Button {
     SettingRewrite setting;
     StringSetting stringSetting;
 

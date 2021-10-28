@@ -21,7 +21,7 @@ public class Velocity extends Module {
 
     public enum WebCollisionMode {Speed, Cancel}
 
-    public FloatSetting webCollisionSpeed = new FloatSetting("Web Speed", 1.0f, 0.1f, 50.0f, this, v -> webCollisionMode.getValue().equals(WebCollisionMode.Speed));
+    public FloatSetting webCollisionSpeed = new FloatSetting("Web Speed", 1.0f, 0.1f, 50.0f, this, v -> webCollisionMode.getValueEnum().equals(WebCollisionMode.Speed));
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
@@ -50,10 +50,10 @@ public class Velocity extends Module {
         if (NullUtil.fullNullCheck())
             return;
 
-        if (webCollisionMode.getValue().equals(WebCollisionMode.Speed) && mc.player != null && mc.player.isInWeb && !mc.player.onGround && mc.gameSettings.keyBindSneak.isKeyDown())
-            mc.player.motionY *= webCollisionSpeed.getValue();
+        if (webCollisionMode.getValueEnum().equals(WebCollisionMode.Speed) && mc.player != null && mc.player.isInWeb && !mc.player.onGround && mc.gameSettings.keyBindSneak.isKeyDown())
+            mc.player.motionY *= webCollisionSpeed.getMaximum();
 
-        if (webCollisionMode.getValue().equals(WebCollisionMode.Cancel) && mc.player.isInWeb)
+        if (webCollisionMode.getValueEnum().equals(WebCollisionMode.Cancel) && mc.player.isInWeb)
             mc.player.isInWeb = false;
     }
 }

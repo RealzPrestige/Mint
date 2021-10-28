@@ -54,9 +54,9 @@ public class Step extends Module {
         if (cancelLiquids.getValue() && EntityUtil.isInLiquid())
             return;
 
-        if (mode.getValue() == Mode.Vanilla)
+        if (mode.getValueEnum().equals(Mode.Vanilla))
             mc.player.stepHeight = height.getValue();
-        else if (mode.getValue() == Mode.NCP) {
+        else if (mode.getValueEnum().equals(Mode.NCP)) {
             final double[] forward = forward(0.1);
             boolean b = false;
             boolean b2 = false;
@@ -113,7 +113,7 @@ public class Step extends Module {
                 }
             }
 
-        } else if (mode.getValue() == Mode.Timer) {
+        } else if (mode.getValueEnum().equals(Mode.Timer)) {
             mc.player.stepHeight = height.getValue();
             if (Step.mc.player.collidedHorizontally && (Step.mc.player.moveForward != 0.0f || Step.mc.player.moveStrafing != 0.0f))
                 mc.timer.tickLength = 50.0f / 0.6f;

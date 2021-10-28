@@ -90,11 +90,11 @@ public class Waller extends Module {
     }
 
     public void swingArm() {
-        if (swingMode.getValue().equals(SwingHand.MAINHAND))
+        if (swingMode.getValueEnum().equals(SwingHand.MAINHAND))
             mc.player.swingArm(EnumHand.MAIN_HAND);
-        else if (swingMode.getValue().equals(SwingHand.OFFHAND))
+        else if (swingMode.getValueEnum().equals(SwingHand.OFFHAND))
             mc.player.swingArm(EnumHand.OFF_HAND);
-        else if (swingMode.getValue().equals(SwingHand.PACKET))
+        else if (swingMode.getValueEnum().equals(SwingHand.PACKET))
             mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
 
     }

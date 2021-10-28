@@ -31,17 +31,17 @@ public class Strafe extends Module {
 
     public enum SpeedMode {SwitchBind, Normal}
 
-    public EnumSetting strafeMode = new EnumSetting("Strafe Mode", StrafeMode.Strafe, this, v -> speedMode.getValue().equals(SpeedMode.Normal));
+    public EnumSetting strafeMode = new EnumSetting("Strafe Mode", StrafeMode.Strafe, this, v -> speedMode.getValueEnum().equals(SpeedMode.Normal));
 
     public enum StrafeMode {Strafe, Instant, StrafeTest}
 
-    public EnumSetting keyBindStrafe = new EnumSetting("Key Bind Strafe", KeyBindStrafe.Strafe, this, v -> speedMode.getValue().equals(SpeedMode.SwitchBind));
+    public EnumSetting keyBindStrafe = new EnumSetting("Key Bind Strafe", KeyBindStrafe.Strafe, this, v -> speedMode.getValueEnum().equals(SpeedMode.SwitchBind));
 
     public enum KeyBindStrafe {Strafe, StrafeTest}
 
     public BooleanSetting useTimer = new BooleanSetting("Use Timer", false, this);
     public FloatSetting timerAmount = new FloatSetting("Timer Amount", 1.3f, 1.0f, 2.0f, this, v -> useTimer.getValue());
-    public KeySetting switchBind = new KeySetting("SwitchBind", Keyboard.KEY_NONE, this, v -> speedMode.getValue().equals(SpeedMode.SwitchBind));
+    public KeySetting switchBind = new KeySetting("Switch Bind", Keyboard.KEY_NONE, this, v -> speedMode.getValueEnum().equals(SpeedMode.SwitchBind));
 
     private int level;
     private double moveSpeed;
@@ -80,7 +80,7 @@ public class Strafe extends Module {
     public void onPlayerUpdateWalking(UpdateWalkingPlayerEvent event) {
         if (Phase.getInstance().isEnabled() || !isEnabled())
             return;
-        if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
+        if (strafeMode.getValueEnum().equals(StrafeMode.Strafe)) {
             final double xDist = mc.player.posX - mc.player.prevPosX;
             final double zDist = mc.player.posZ - mc.player.prevPosZ;
             lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
@@ -95,15 +95,15 @@ public class Strafe extends Module {
         }
         if (ticks > 10) {
             if (switchBind.getKey() > -1) {
-                if (Keyboard.isKeyDown(switchBind.getKey()) && speedMode.getValue().equals(SpeedMode.SwitchBind)) {
-                    if (strafeMode.getValue().equals(StrafeMode.Instant)) {
-                        if (keyBindStrafe.getValue().equals(KeyBindStrafe.Strafe))
+                if (Keyboard.isKeyDown(switchBind.getKey()) && speedMode.getValueEnum().equals(SpeedMode.SwitchBind)) {
+                    if (strafeMode.getValueEnum().equals(StrafeMode.Instant)) {
+                        if (keyBindStrafe.getValueEnum().equals(KeyBindStrafe.Strafe))
                             strafeMode.setValue(StrafeMode.Strafe);
                         else strafeMode.setValue(StrafeMode.StrafeTest);
 
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + strafeMode.getValue().toString()), 1);
                         ticks = 0;
-                    } else if (strafeMode.getValue().equals(StrafeMode.Strafe) || strafeMode.getValue().equals(StrafeMode.StrafeTest)) {
+                    } else if (strafeMode.getValueEnum().equals(StrafeMode.Strafe) || strafeMode.getValueEnum().equals(StrafeMode.StrafeTest)) {
                         strafeMode.setValue(StrafeMode.Instant);
                         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(Mint.commandManager.getClientMessage() + ChatFormatting.BOLD + " Strafe: " + ChatFormatting.AQUA + "Mode set to: " + ChatFormatting.DARK_AQUA + ChatFormatting.BOLD + "Instant"), 1);
                         ticks = 0;
@@ -142,7 +142,7 @@ public class Strafe extends Module {
         if (NullUtil.fullNullCheck() || !isEnabled() || Phase.getInstance().isEnabled())
             return;
 
-        if (strafeMode.getValue().equals(StrafeMode.Strafe)) {
+        if (strafeMode.getValueEnum().equals(StrafeMode.Strafe)) {
             if (EntityUtil.isMoving()) {
                 final EntityPlayerSP player2 = mc.player;
                 player2.motionX *= 1.0199999809265137;
@@ -207,7 +207,7 @@ public class Strafe extends Module {
                 event.x = (0.0);
                 event.z = (0.0);
             }
-        } else if (strafeMode.getValue().equals(StrafeMode.Instant)) {
+        } else if (strafeMode.getValueEnum().equals(StrafeMode.Instant)) {
             if (!(event.getStage() != 0 || NullUtil.fullNullCheck() || mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.movementInput.moveForward == 0.0f && mc.player.movementInput.moveStrafe == 0.0f) || !mc.player.onGround) {
                 MovementInput movementInput = mc.player.movementInput;
                 float moveForward = movementInput.moveForward;
@@ -230,7 +230,7 @@ public class Strafe extends Module {
                     event.z = ((double) moveForward * EntityUtil.getMaxSpeed() * Math.sin(Math.toRadians(rotationYaw + 90.0f)) - (double) moveStrafe * EntityUtil.getMaxSpeed() * Math.cos(Math.toRadians(rotationYaw + 90.0f)));
                 }
             }
-        } else if (strafeMode.getValue().equals(StrafeMode.StrafeTest)) {
+        } else if (strafeMode.getValueEnum().equals(StrafeMode.StrafeTest)) {
             switch (currentState) {
                 case 0:
                     ++currentState;

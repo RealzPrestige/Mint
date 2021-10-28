@@ -44,10 +44,10 @@ public class WaterSpeed extends Module {
         if (mc.world.getBlockState(PlayerUtil.getPlayerPos(mc.player)).getBlock().equals(Blocks.AIR) || mc.world.getBlockState(PlayerUtil.getPlayerPos(mc.player).up()).getBlock().equals(Blocks.AIR))
             return;
 
-        if (onGround.getValue().equals(OnGround.Cancel) && mc.player.onGround)
+        if (onGround.getValueEnum().equals(OnGround.Cancel) && mc.player.onGround)
             return;
 
-        if (onGround.getValue().equals(OnGround.Offground) && mc.player.onGround)
+        if (onGround.getValueEnum().equals(OnGround.Offground) && mc.player.onGround)
             mc.player.onGround = false;
 
         if (useTimer.getValue() && EntityUtil.isMoving())

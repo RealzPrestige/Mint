@@ -1,8 +1,9 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton.settingbuttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.IntegerSetting;
 import mint.utils.ColorUtil;
@@ -12,7 +13,7 @@ import org.lwjgl.input.Mouse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class IntegerButton extends NewButton {
+public class IntegerButton extends Button {
 
     int minimax;
     IntegerSetting integerSetting;

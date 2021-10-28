@@ -42,31 +42,31 @@ public class ShaderChams extends Module {
             return;
         }
         FramebufferShader framebufferShader = null;
-        if (mode.getValue().equals(modes.Smoke))
+        if (mode.getValueEnum().equals(modes.Smoke))
             framebufferShader = SmokeShader.SMOKE_SHADER;
-        else if (mode.getValue().equals(modes.Aqua))
+        else if (mode.getValueEnum().equals(modes.Aqua))
             framebufferShader = AquaShader.AQUA_SHADER;
-        else if (mode.getValue().equals(modes.Flow))
+        else if (mode.getValueEnum().equals(modes.Flow))
             framebufferShader = FlowShader.FLOW_SHADER;
-        else if (mode.getValue().equals(modes.Red))
+        else if (mode.getValueEnum().equals(modes.Red))
             framebufferShader = RedShader.RED_SHADER;
-        else if (mode.getValue().equals(modes.Outline))
+        else if (mode.getValueEnum().equals(modes.Outline))
             framebufferShader = GlowShader.GLOW_SHADER;
-        else if (mode.getValue().equals(modes.Rainbow))
+        else if (mode.getValueEnum().equals(modes.Rainbow))
             framebufferShader = RainbowShader.RAINBOW_SHADER;
-        else if (mode.getValue().equals(modes.Star))
+        else if (mode.getValueEnum().equals(modes.Star))
             framebufferShader = StarShader.STAR_SHADER;
-        else if (mode.getValue().equals(modes.Galaxy))
+        else if (mode.getValueEnum().equals(modes.Galaxy))
             framebufferShader = GalaxyShader.GALAXY_SHADER;
-        else if (mode.getValue().equals(modes.IIV))
+        else if (mode.getValueEnum().equals(modes.IIV))
             framebufferShader = IIVShader.IIV_SHADER;
-        else if (mode.getValue().equals(modes.Cloud))
+        else if (mode.getValueEnum().equals(modes.Cloud))
             framebufferShader = CloudShader.CLOUD_SHADER;
-        else if (mode.getValue().equals(modes.BlueSpace))
+        else if (mode.getValueEnum().equals(modes.BlueSpace))
             framebufferShader = BlueSpaceShader.BLUE_SPACE_SHADER;
-        else if (mode.getValue().equals(modes.Aurora))
+        else if (mode.getValueEnum().equals(modes.Aurora))
             framebufferShader = AuroraShader.AURORA_SHADER;
-        else if (mode.getValue().equals(modes.Hamburger))
+        else if (mode.getValueEnum().equals(modes.Hamburger))
             framebufferShader = HamburgerShader.HAMBURGER_SHADER;
 
         final FramebufferShader framebufferShader2 = framebufferShader;

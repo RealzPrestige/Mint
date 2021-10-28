@@ -57,10 +57,10 @@ public class Notifications extends Module {
     @SubscribeEvent
     public void onModuleEnable(ModuleToggleEvent.Enable event){
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.GREEN + "" + ChatFormatting.BOLD + "on!");
-        if (isEnabled() && (mode.getValue() == Notifications.Mode.CHAT || mode.getValue() == Notifications.Mode.BOTH)) {
+        if (isEnabled() && (mode.getValueEnum().equals(Mode.CHAT) || mode.getValueEnum().equals(Mode.BOTH))) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
-        if (isEnabled() && modules.getValue() && (mode.getValue() == Notifications.Mode.HUD || mode.getValue() == Notifications.Mode.BOTH)) {
+        if (isEnabled() && modules.getValue() && (mode.getValueEnum().equals(Mode.HUD) || mode.getValueEnum().equals(Mode.BOTH))) {
             notification.clear();
             hasReachedEndState = false;
             waitTime = 0;
@@ -73,10 +73,10 @@ public class Notifications extends Module {
     @SubscribeEvent
     public void onModuleDisable(ModuleToggleEvent.Disable event){
         TextComponentString text = new TextComponentString(ChatFormatting.AQUA + "" + ChatFormatting.AQUA + Mint.commandManager.getClientMessage() + ChatFormatting.RESET + ChatFormatting.DARK_AQUA + "" + ChatFormatting.BOLD + " " + this.getName().replace("_", " ") + ChatFormatting.RESET + " was toggled " + ChatFormatting.RED + "" + ChatFormatting.BOLD + "off!");
-        if (isEnabled() && (mode.getValue() == Notifications.Mode.CHAT || mode.getValue() == Notifications.Mode.BOTH)) {
+        if (isEnabled() && (mode.getValueEnum().equals(Mode.CHAT) || mode.getValueEnum().equals(Mode.BOTH))) {
             Mint.INSTANCE.mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(text, 1);
         }
-        if (isEnabled() && modules.getValue() && (mode.getValue() == Notifications.Mode.HUD || mode.getValue() == Notifications.Mode.BOTH)) {
+        if (isEnabled() && modules.getValue() && (mode.getValueEnum().equals(Mode.HUD) || mode.getValueEnum().equals(Mode.BOTH))) {
             notification.clear();
             hasReachedEndState = false;
             waitTime = 0;
@@ -135,12 +135,12 @@ public class Notifications extends Module {
                     id += character;
                     id *= 10;
                 }
-                if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValueEnum().equals(Mode.CHAT) || mode.getValueEnum().equals(Mode.BOTH))) {
                     width = 0;
                     lefinalewidth = false;
                     MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
                 }
-                if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValueEnum().equals(Mode.HUD) || mode.getValueEnum().equals(Mode.BOTH))) {
                     width = 0;
                     lefinalewidth = false;
                     notification.clear();
@@ -154,12 +154,12 @@ public class Notifications extends Module {
                     id += character;
                     id *= 10;
                 }
-                if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValueEnum() == Mode.CHAT || mode.getValueEnum() == Mode.BOTH)) {
                     width = 0;
                     lefinalewidth = false;
                     MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " died after popping " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
                 }
-                if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
+                if (pops.getValue() && (mode.getValueEnum().equals(Mode.HUD) || mode.getValueEnum() == Mode.BOTH)) {
                     width = 0;
                     lefinalewidth = false;
                     notification.clear();
@@ -191,12 +191,12 @@ public class Notifications extends Module {
                 id += character;
                 id *= 10;
             }
-            if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+            if (pops.getValue() && (mode.getValueEnum().equals(Mode.CHAT) || mode.getValueEnum().equals(Mode.BOTH))) {
                 width = 0;
                 lefinalewidth = false;
                 MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totem.", id);
             }
-            if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
+            if (pops.getValue() && (mode.getValueEnum().equals(Mode.HUD) || mode.getValueEnum().equals(Mode.BOTH))) {
                 width = 0;
                 lefinalewidth = false;
                 notification.clear();
@@ -210,12 +210,12 @@ public class Notifications extends Module {
                 id += character;
                 id *= 10;
             }
-            if (pops.getValue() && (mode.getValue() == Mode.CHAT || mode.getValue() == Mode.BOTH)) {
+            if (pops.getValue() && (mode.getValueEnum().equals(Mode.CHAT) || mode.getValueEnum().equals(Mode.BOTH))) {
                 width = 0;
                 lefinalewidth = false;
                 MessageManager.sendRemovableMessage(ChatFormatting.BOLD + player.getName() + ChatFormatting.RESET + ChatFormatting.RED + " has popped " + ChatFormatting.WHITE + ChatFormatting.BOLD + totemCount + ChatFormatting.RESET + ChatFormatting.RED + " totems.", id);
             }
-            if (pops.getValue() && (mode.getValue().equals(Mode.HUD) || mode.getValue() == Mode.BOTH)) {
+            if (pops.getValue() && (mode.getValueEnum().equals(Mode.HUD) || mode.getValueEnum().equals(Mode.BOTH))) {
                 width = 0;
                 lefinalewidth = false;
                 notification.clear();

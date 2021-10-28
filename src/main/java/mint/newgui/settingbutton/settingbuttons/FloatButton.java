@@ -1,8 +1,9 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton.settingbuttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.FloatSetting;
 import mint.utils.ColorUtil;
@@ -10,7 +11,7 @@ import mint.utils.MathUtil;
 import mint.utils.RenderUtil;
 import org.lwjgl.input.Mouse;
 
-public class FloatButton extends NewButton {
+public class FloatButton extends Button {
 
     int minimax;
     FloatSetting floatSetting;

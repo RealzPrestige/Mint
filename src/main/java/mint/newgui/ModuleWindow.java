@@ -3,7 +3,8 @@ package mint.newgui;
 import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
-import mint.newgui.settinbutton.*;
+import mint.newgui.settingbutton.settingbuttons.*;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
@@ -23,7 +24,7 @@ public class ModuleWindow {
     public Color disabledColor;
     public Color enabledColor;
     public Module module;
-    ArrayList<NewButton> newButton = new ArrayList<>();
+    ArrayList<Button> newButton = new ArrayList<>();
 
     public ModuleWindow(String name, int x, int y, int width, int height, Color disabledColor, Color enabledColor, Module module) {
         this.name = name;
@@ -38,7 +39,7 @@ public class ModuleWindow {
     }
 
     public void getSettings() {
-        ArrayList<NewButton> penius = new ArrayList<>();
+        ArrayList<Button> settingList = new ArrayList<>();
 
         assert Mint.settingsRewrite != null;
         for (SettingRewrite settingsRewrite : Mint.settingsRewrite.getSettingsInModule(module)) {
@@ -46,34 +47,34 @@ public class ModuleWindow {
                 continue;
 
             if (settingsRewrite instanceof BooleanSetting)
-                penius.add(new BooleanButton(settingsRewrite));
+                settingList.add(new BooleanButton(settingsRewrite));
 
             if (settingsRewrite instanceof IntegerSetting)
-                penius.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
+                settingList.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
 
             if (settingsRewrite instanceof FloatSetting)
-                penius.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
+                settingList.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
 
             if (settingsRewrite instanceof DoubleSetting)
-                penius.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
+                settingList.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
 
             if (settingsRewrite instanceof EnumSetting)
-                penius.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
+                settingList.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
 
             if (settingsRewrite instanceof StringSetting)
-                penius.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
+                settingList.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
 
             if (settingsRewrite instanceof ColorSetting)
-                penius.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
+                settingList.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
 
             if (settingsRewrite instanceof ParentSetting)
-                penius.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
+                settingList.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
 
             if (settingsRewrite instanceof KeySetting)
-                penius.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
+                settingList.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
 
         }
-        newButton = penius;
+        newButton = settingList;
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -86,7 +87,7 @@ public class ModuleWindow {
         Mint.textManager.drawStringWithShadow(name, isInside(mouseX, mouseY) ? x + 2 : x + 1, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (module.isOpened) {
             int y = this.y;
-            for (NewButton button : newButton) {
+            for (Button button : newButton) {
                 button.setX(x + 2);
                 button.setY(y += height);
                 button.setWidth(width - 4);
@@ -119,7 +120,7 @@ public class ModuleWindow {
 
     public void initGui() {
         if (module.isOpened)
-            newButton.forEach(NewButton::initGui);
+            newButton.forEach(Button::initGui);
     }
 
     public void onKeyTyped(char typedChar, int keyCode) {

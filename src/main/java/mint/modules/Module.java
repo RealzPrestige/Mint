@@ -74,7 +74,6 @@ public class Module {
         return name;
     }
 
-
     public String getDescription() {
         return description;
     }

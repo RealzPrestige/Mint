@@ -40,11 +40,11 @@ public class BowAmplifier extends Module {
 
                 Objects.requireNonNull(mc.getConnection()).sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SPRINTING));
                 for (int s = 0; s < spoofs.getValue(); ++s) {
-                    if (y.getValue() == Y.Positive) {
+                    if (y.getValueEnum().equals(Y.Positive)) {
                         mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1e-10, mc.player.posZ, false));
                         mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY - 1e-10, mc.player.posZ, true));
                     }
-                    if (y.getValue() == Y.Negative) {
+                    if (y.getValueEnum().equals(Y.Negative)) {
                         mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY - 1e-10, mc.player.posZ, true));
                         mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1e-10, mc.player.posZ, false));
                     }
