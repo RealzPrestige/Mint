@@ -24,7 +24,7 @@ public class Phase extends Module {
     public enum Mode {Clip, Test}
 
     public BooleanSetting packet = new BooleanSetting("Packet Move", true, this);
-    public IntegerSetting speed = new IntegerSetting("Speed", 1, 1, 10, this, v -> mode.getValue() == Mode.Test);
+    public IntegerSetting speed = new IntegerSetting("Speed", 1, 1, 10, this, v -> mode.getValueEnum().equals(Mode.Test));
 
     public BooleanSetting spoofonGround = new BooleanSetting("Spoof onGround", true, this);
     public BooleanSetting offground = new BooleanSetting("Off ground", false, this);
@@ -63,7 +63,7 @@ public class Phase extends Module {
             mc.player.onGround = false;
         }
 
-        if (mode.getValue().equals(Mode.Clip)) {
+        if (mode.getValueEnum().equals(Mode.Clip)) {
             if (packet.getValue()) {
 
                 //horizontal

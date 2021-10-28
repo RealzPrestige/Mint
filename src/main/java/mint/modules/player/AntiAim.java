@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AntiAim extends Module {
 
     public EnumSetting mode = new EnumSetting("Mode", Mode.Custom, this);
-    public IntegerSetting yaw = new IntegerSetting("Yaw", 90, -90, 90, this, v -> mode.getValue() == Mode.Custom);
-    public IntegerSetting pitch = new IntegerSetting("Pitch", 90, -90, 90, this, v -> mode.getValue() == Mode.Custom);
-    public IntegerSetting spinSpeed = new IntegerSetting("SpinSpeed", 10, 0, 50, this, v -> mode.getValue() == Mode.Spin);
+    public IntegerSetting yaw = new IntegerSetting("Yaw", 90, -90, 90, this, v -> mode.getValueEnum().equals(Mode.Custom));
+    public IntegerSetting pitch = new IntegerSetting("Pitch", 90, -90, 90, this, v -> mode.getValueEnum().equals(Mode.Custom));
+    public IntegerSetting spinSpeed = new IntegerSetting("SpinSpeed", 10, 0, 50, this, v -> mode.getValueEnum().equals(Mode.Spin));
     int nextValue;
 
     @Override
@@ -29,10 +29,10 @@ public class AntiAim extends Module {
             return;
         }
         if (e.getPacket() instanceof CPacketPlayer && !Mint.INSTANCE.mc.player.isHandActive()) {
-            if (mode.getValue().equals(Mode.Custom)) {
+            if (mode.getValueEnum().equals(Mode.Custom)) {
                 ((CPacketPlayer) e.getPacket()).yaw = yaw.getValue();
                 ((CPacketPlayer) e.getPacket()).pitch = pitch.getValue();
-            } else if (mode.getValue().equals(Mode.Spin)) {
+            } else if (mode.getValueEnum().equals(Mode.Spin)) {
                 ((CPacketPlayer) e.getPacket()).yaw = nextValue;
                 ((CPacketPlayer) e.getPacket()).pitch = nextValue;
             }

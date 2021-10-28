@@ -1,7 +1,8 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton.settingbuttons;
 
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -10,7 +11,7 @@ import net.minecraft.init.SoundEvents;
 
 import java.awt.*;
 
-public class BooleanButton extends NewButton {
+public class BooleanButton extends Button {
     SettingRewrite setting;
 
     public BooleanButton(SettingRewrite setting) {

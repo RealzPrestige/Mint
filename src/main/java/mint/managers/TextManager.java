@@ -38,13 +38,13 @@ public class TextManager {
     }
 
     public int getStyle() {
-        if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.NORMAL))
+        if (FontChanger.getInstance().style.getValueEnum().equals(FontChanger.Style.NORMAL))
             return 0;
-        else if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.ITALIC))
+        else if (FontChanger.getInstance().style.getValueEnum().equals(FontChanger.Style.ITALIC))
             return 2;
-        else if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.BOLD))
+        else if (FontChanger.getInstance().style.getValueEnum().equals(FontChanger.Style.BOLD))
             return 1;
-        else if (FontChanger.getInstance().style.getValue().equals(FontChanger.Style.ITALICBOLD))
+        else if (FontChanger.getInstance().style.getValueEnum().equals(FontChanger.Style.ITALICBOLD))
             return 3;
 
         return 0;

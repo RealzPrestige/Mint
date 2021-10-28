@@ -45,20 +45,20 @@ public class Blink extends Module {
     public void onPacketSend(PacketEvent.Send event) {
         if (!isEnabled())
             return;
-        event.setCanceled(mode.getValue().equals(Mode.SEND));
+        event.setCanceled(mode.getValueEnum().equals(Mode.SEND));
     }
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
         if (!isEnabled())
             return;
-        event.setCanceled(mode.getValue().equals(Mode.RECEIVE));
+        event.setCanceled(mode.getValueEnum().equals(Mode.RECEIVE));
     }
 
     @SubscribeEvent
     public void onPacket(PacketEvent event) {
         if (!isEnabled())
             return;
-        event.setCanceled(mode.getValue().equals(Mode.FULL));
+        event.setCanceled(mode.getValueEnum().equals(Mode.FULL));
     }
 }

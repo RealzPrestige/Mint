@@ -1,8 +1,8 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton;
 
 import mint.settingsrewrite.SettingRewrite;
 
-public class NewButton {
+public class Button {
     public int x;
     public int y;
     public int width;
@@ -10,7 +10,7 @@ public class NewButton {
     boolean isTyping;
     SettingRewrite setting;
 
-    public NewButton(SettingRewrite setting){
+    public Button(SettingRewrite setting){
         this.setting = setting;
     }
 

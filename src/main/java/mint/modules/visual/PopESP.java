@@ -87,11 +87,11 @@ public class PopESP extends Module {
                 poppedPlayers.remove(pop.getKey());
                 return;
             }
-            if (PopESP.getInstance().yTravel.getValue()) {
-                if (PopESP.getInstance().yTravelMode.getValue() == PopESP.YTravelMode.UP) {
-                    pop.getKey().posY = pop.getKey().posY + (PopESP.getInstance().yTravelSpeed.getValue() / 20);
-                } else if (PopESP.getInstance().yTravelMode.getValue() == PopESP.YTravelMode.DOWN) {
-                    pop.getKey().posY = pop.getKey().posY - (PopESP.getInstance().yTravelSpeed.getValue() / 20);
+            if (yTravel.getValue()) {
+                if (yTravelMode.getValueEnum().equals(PopESP.YTravelMode.UP)) {
+                    pop.getKey().posY = pop.getKey().posY + (yTravelSpeed.getValue() / 20);
+                } else if (yTravelMode.getValueEnum().equals(PopESP.YTravelMode.DOWN)) {
+                    pop.getKey().posY = pop.getKey().posY - (yTravelSpeed.getValue() / 20);
                 }
             }
             if (wireFrameSetting.getValue()) {

@@ -33,8 +33,8 @@ public class TickShift extends Module {
 
     public enum DisableMode {Ticks, Distance, None}
 
-    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 12, 1, 100, this, v -> disableMode.getValue() == DisableMode.Ticks);
-    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, v -> disableMode.getValue() == DisableMode.Distance);
+    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 12, 1, 100, this, v -> disableMode.getValueEnum().equals(DisableMode.Ticks));
+    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, v -> disableMode.getValueEnum().equals(DisableMode.Distance));
 
     public BooleanSetting blink = new BooleanSetting("Blink", false, this);
     public EnumSetting mode = new EnumSetting("Mode", D.Client, this, v -> blink.getValue());
@@ -42,7 +42,7 @@ public class TickShift extends Module {
     public enum D {Client, Server, Both}
 
     public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, v -> blink.getValue());
-    public BooleanSetting test = new BooleanSetting("Phobos Test", false, this, v -> mode.getValue() != D.Server && blink.getValue());
+    public BooleanSetting test = new BooleanSetting("Phobos Test", false, this, v -> !mode.getValueEnum().equals(D.Server) && blink.getValue());
 
     Queue<Packet<?>> packets = new ConcurrentLinkedQueue<>();
     EntityOtherPlayerMP fakePlayer;
@@ -56,10 +56,10 @@ public class TickShift extends Module {
             disable();
 
         ticks++;
-        if (disableMode.getValue() == DisableMode.Ticks && ticks >= ticksVal.getValue())
+        if (disableMode.getValueEnum().equals(DisableMode.Ticks) && ticks >= ticksVal.getValue())
             disable();
 
-        if (disableMode.getValue() == DisableMode.Distance && startPos != null && mc.player.getDistanceSq(startPos) >= MathUtil.square(distanceVal.getValue()))
+        if (disableMode.getValueEnum().equals(DisableMode.Distance) && startPos != null && mc.player.getDistanceSq(startPos) >= MathUtil.square(distanceVal.getValue()))
             disable();
 
     }

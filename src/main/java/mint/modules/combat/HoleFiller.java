@@ -60,9 +60,9 @@ public class HoleFiller extends Module {
     public BooleanSetting doubles = new BooleanSetting("DoubleHoles", false, this);
     public BooleanSetting throughWalls = new BooleanSetting("ThroughWalls", false, this);
     public BooleanSetting swordCheck = new BooleanSetting("SwordCheck", false, this);
-    public BooleanSetting targetUnSafe = new BooleanSetting("TargetUnSafe", false, this, v -> mode.getValue() == Mode.SMART);
-    public IntegerSetting smartRange = new IntegerSetting("Smart-Range", 5, 0, 6, this, v -> mode.getValue() == Mode.SMART);
-    public IntegerSetting targetRange = new IntegerSetting("TargetRange", 9, 1, 15, this, v -> mode.getValue() == Mode.SMART);
+    public BooleanSetting targetUnSafe = new BooleanSetting("TargetUnSafe", false, this, v -> mode.getValueEnum().equals(Mode.SMART));
+    public IntegerSetting smartRange = new IntegerSetting("Smart-Range", 5, 0, 6, this, v -> mode.getValueEnum().equals(Mode.SMART));
+    public IntegerSetting targetRange = new IntegerSetting("TargetRange", 9, 1, 15, this, v -> mode.getValueEnum().equals(Mode.SMART));
     public IntegerSetting rangeX = new IntegerSetting("X-Range", 5, 1, 6, this);
     public IntegerSetting rangeY = new IntegerSetting("Y-Range", 5, 1, 6, this);
     public BooleanSetting render = new BooleanSetting("Render", false, this);
@@ -77,9 +77,9 @@ public class HoleFiller extends Module {
     public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> render.getValue() && outline.getValue());
 
     public FloatSetting lineWidth = new FloatSetting("LineWidth", 1.0f, 0.0f, 5.0f, this, v -> render.getValue() && outline.getValue());
-    public IntegerSetting startAlpha = new IntegerSetting("StartAlpha", 255, 0, 255, this, v -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
-    public IntegerSetting endAlpha = new IntegerSetting("EndAlpha", 0, 0, 255, this, v -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
-    public IntegerSetting fadeStep = new IntegerSetting("FadeStep", 20, 10, 100, this, v -> render.getValue() && renderMode.getValue() == RenderMode.FADE);
+    public IntegerSetting startAlpha = new IntegerSetting("StartAlpha", 255, 0, 255, this, v -> render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE));
+    public IntegerSetting endAlpha = new IntegerSetting("EndAlpha", 0, 0, 255, this, v -> render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE));
+    public IntegerSetting fadeStep = new IntegerSetting("FadeStep", 20, 10, 100, this, v -> render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE));
 
     public void onTick() {
         fillableHoles.clear();
@@ -89,7 +89,7 @@ public class HoleFiller extends Module {
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
         if (render.getValue()) {
-            if (renderMode.getValue() == RenderMode.FADE) {
+            if (renderMode.getValueEnum().equals(RenderMode.FADE)) {
                 for (Map.Entry<BlockPos, Integer> entry : filledFadeHoles.entrySet()) {
                     filledFadeHoles.put(entry.getKey(), entry.getValue() - (fadeStep.getValue() / 10));
                     if (entry.getValue() <= endAlpha.getValue()) {
@@ -110,21 +110,21 @@ public class HoleFiller extends Module {
         if (NullUtil.fullNullCheck())
             return;
         for (BlockPos pos : fillableHoles) {
-            if (block.getValue().equals(Block.OBSIDIAN))
+            if (block.getValueEnum().equals(Block.OBSIDIAN))
                 blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
-            if (block.getValue().equals(Block.ECHEST))
+            if (block.getValueEnum().equals(Block.ECHEST))
                 blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ENDER_CHEST));
-            if (block.getValue().equals(Block.WEB))
+            if (block.getValueEnum().equals(Block.WEB))
                 blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.WEB));
-            if (onGroundChecks.getValue().equals(OnGroundChecks.SELF) && !mc.player.onGround)
+            if (onGroundChecks.getValueEnum().equals(OnGroundChecks.SELF) && !mc.player.onGround)
                 return;
 
-            if (onGroundChecks.getValue().equals(OnGroundChecks.TARGET) && !getPlayerTarget(targetRange.getValue()).onGround)
+            if (onGroundChecks.getValueEnum().equals(OnGroundChecks.TARGET) && !getPlayerTarget(targetRange.getValue()).onGround)
                 return;
-            if (onGroundChecks.getValue().equals(OnGroundChecks.BOTH) && (getPlayerTarget(targetRange.getValue()).onGround || !mc.player.onGround))
+            if (onGroundChecks.getValueEnum().equals(OnGroundChecks.BOTH) && (getPlayerTarget(targetRange.getValue()).onGround || !mc.player.onGround))
                 return;
 
-            if (mode.getValue() == Mode.NORMAL) {
+            if (mode.getValueEnum() == Mode.NORMAL) {
                 if (swordCheck.getValue() && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD) {
                     return;
                 }
@@ -141,12 +141,12 @@ public class HoleFiller extends Module {
                                 mc.player.inventory.currentItem = blockSlot;
                             }
                         }
-                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.PACKET), false, swingMode.getValue() != SwingMode.NONE, swingMode.getValueEnum().equals(SwingMode.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                         if (autoSwitch.getValue() && silentSwitch.getValue()) {
                             mc.player.inventory.currentItem = lastSlot;
                             mc.playerController.updateController();
                         }
-                        if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                        if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                             if (!filledFadeHoles.containsKey(pos)) {
                                 filledFadeHoles.put(pos, startAlpha.getValue());
                             }
@@ -161,12 +161,12 @@ public class HoleFiller extends Module {
                                 mc.player.inventory.currentItem = blockSlot;
                             }
                         }
-                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.PACKET), false, swingMode.getValue() != SwingMode.NONE, swingMode.getValueEnum().equals(SwingMode.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                         if (autoSwitch.getValue() && silentSwitch.getValue()) {
                             mc.player.inventory.currentItem = lastSlot;
                             mc.playerController.updateController();
                         }
-                        if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                        if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                             if (!filledFadeHoles.containsKey(pos)) {
                                 filledFadeHoles.put(pos, startAlpha.getValue());
                             }
@@ -178,7 +178,7 @@ public class HoleFiller extends Module {
                 }
             }
 
-            if (mode.getValue() == Mode.SMART) {
+            if (mode.getValueEnum().equals(Mode.SMART)) {
                 if (swordCheck.getValue() && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD) {
                     return;
                 }
@@ -199,12 +199,12 @@ public class HoleFiller extends Module {
                                             mc.player.inventory.currentItem = blockSlot;
                                         }
                                     }
-                                    BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                    BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.PACKET), false, swingMode.getValue() != SwingMode.NONE, swingMode.getValueEnum().equals(SwingMode.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                     if (autoSwitch.getValue() && silentSwitch.getValue()) {
                                         mc.player.inventory.currentItem = lastSlot;
                                         mc.playerController.updateController();
                                     }
-                                    if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                                    if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
                                         }
@@ -219,12 +219,12 @@ public class HoleFiller extends Module {
                                             mc.player.inventory.currentItem = blockSlot;
                                         }
                                     }
-                                    BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                    BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.PACKET), false, swingMode.getValue() != SwingMode.NONE, swingMode.getValueEnum().equals(SwingMode.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                     if (autoSwitch.getValue() && silentSwitch.getValue()) {
                                         mc.player.inventory.currentItem = lastSlot;
                                         mc.playerController.updateController();
                                     }
-                                    if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                                    if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                                         if (!filledFadeHoles.containsKey(pos)) {
                                             filledFadeHoles.put(pos, startAlpha.getValue());
                                         }
@@ -242,12 +242,12 @@ public class HoleFiller extends Module {
                                         mc.player.inventory.currentItem = blockSlot;
                                     }
                                 }
-                                BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.PACKET), false, swingMode.getValue() != SwingMode.NONE, swingMode.getValueEnum().equals(SwingMode.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                 if (autoSwitch.getValue() && silentSwitch.getValue()) {
                                     mc.player.inventory.currentItem = lastSlot;
                                     mc.playerController.updateController();
                                 }
-                                if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                                if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                                     if (!filledFadeHoles.containsKey(pos)) {
                                         filledFadeHoles.put(pos, startAlpha.getValue());
                                     }
@@ -262,18 +262,18 @@ public class HoleFiller extends Module {
                                         mc.player.inventory.currentItem = blockSlot;
                                     }
                                 }
-                                BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValue() == PlaceMode.PACKET, false, swingMode.getValue() != SwingMode.NONE, swingMode.getValue() == SwingMode.MAINHAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+                                BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), placeMode.getValueEnum().equals(PlaceMode.PACKET), false, swingMode.getValue() != SwingMode.NONE, swingMode.getValueEnum().equals(SwingMode.MAINHAND) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
                                 if (autoSwitch.getValue() && silentSwitch.getValue()) {
                                     mc.player.inventory.currentItem = lastSlot;
                                     mc.playerController.updateController();
                                 }
-                                if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                                if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                                     if (!filledFadeHoles.containsKey(pos)) {
                                         filledFadeHoles.put(pos, startAlpha.getValue());
                                     }
                                 }
                             } else {
-                                if (render.getValue() && renderMode.getValue() == RenderMode.FADE) {
+                                if (render.getValue() && renderMode.getValueEnum().equals(RenderMode.FADE)) {
                                     if (!filledFadeHoles.containsKey(pos)) {
                                         filledFadeHoles.put(pos, startAlpha.getValue());
                                     }

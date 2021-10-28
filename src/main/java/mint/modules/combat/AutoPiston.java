@@ -556,27 +556,27 @@ public class AutoPiston extends Module {
     public void swingArm(boolean place, boolean blockSwing) {
         if (place) {
             if (blockSwing) {
-                if (blockSwingMode.getValue().equals(BlockSwingHand.MAINHAND))
+                if (blockSwingMode.getValueEnum().equals(BlockSwingHand.MAINHAND))
                     mc.player.swingArm(EnumHand.MAIN_HAND);
-                if (blockSwingMode.getValue().equals(BlockSwingHand.OFFHAND))
+                if (blockSwingMode.getValueEnum().equals(BlockSwingHand.OFFHAND))
                     mc.player.swingArm(EnumHand.OFF_HAND);
-                if (blockSwingMode.getValue().equals(BlockSwingHand.PACKET))
+                if (blockSwingMode.getValueEnum().equals(BlockSwingHand.PACKET))
                     mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
 
             } else {
-                if (placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND))
+                if (placeSwingHand.getValueEnum().equals(PlaceSwingHand.MAINHAND))
                     mc.player.swingArm(EnumHand.MAIN_HAND);
-                if (placeSwingHand.getValue().equals(PlaceSwingHand.OFFHAND))
+                if (placeSwingHand.getValueEnum().equals(PlaceSwingHand.OFFHAND))
                     mc.player.swingArm(EnumHand.OFF_HAND);
-                if (placeSwingHand.getValue().equals(PlaceSwingHand.PACKET))
+                if (placeSwingHand.getValueEnum().equals(PlaceSwingHand.PACKET))
                     mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
             }
         } else {
-            if(breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND))
+            if(breakSwingHand.getValueEnum().equals(BreakSwingHand.MAINHAND))
                 mc.player.swingArm(EnumHand.MAIN_HAND);
-            if(breakSwingHand.getValue().equals(BreakSwingHand.OFFHAND))
+            if(breakSwingHand.getValueEnum().equals(BreakSwingHand.OFFHAND))
                 mc.player.swingArm(EnumHand.OFF_HAND);
-            if(breakSwingHand.getValue().equals(BreakSwingHand.PACKET))
+            if(breakSwingHand.getValueEnum().equals(BreakSwingHand.PACKET))
                 mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
         }
     }

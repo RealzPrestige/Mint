@@ -14,6 +14,8 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Objects;
+
 @ModuleInfo(name = "Self Fill", category = Module.Category.Combat, description = "Rubberbands you in a block.")
 public class SelfFill extends Module {
 
@@ -26,7 +28,7 @@ public class SelfFill extends Module {
 
     public enum LagMode {Packet, YMotion, Teleport, LagFall, DoubleJump}
 
-    public BooleanSetting packetJump = new BooleanSetting("PacketJump", true, this, v -> lagBack.getValue() == LagMode.DoubleJump);
+    public BooleanSetting packetJump = new BooleanSetting("PacketJump", true, this, v -> lagBack.getValueEnum().equals(LagMode.DoubleJump));
     public BlockPos startPos = null;
     Timer timer = new Timer();
 
@@ -54,13 +56,10 @@ public class SelfFill extends Module {
             disable(); //how did no1 notice this oml
         }
 
-        if (prefer.getValue() == Block.EChest && ecSlot != -1) {
+        if (prefer.getValueEnum().equals(Block.EChest) && ecSlot != -1) {
             InventoryUtil.SilentSwitchToSlot(ecSlot);
-            if (ecSlot == -1 && obbySlot != -1) {
-                InventoryUtil.SilentSwitchToSlot(obbySlot);
-            }
         }
-        if (prefer.getValue() == Block.Obsidian) {
+        if (prefer.getValueEnum().equals(Block.Obsidian)) {
             InventoryUtil.SilentSwitchToSlot(obbySlot);
             if (obbySlot == -1 && ecSlot != -1) {
                 InventoryUtil.SilentSwitchToSlot(ecSlot);
@@ -71,17 +70,17 @@ public class SelfFill extends Module {
         EntityUtil.packetJump(true);
         BlockUtil.placeBlock(startPos, EnumHand.MAIN_HAND, false, true, false, true, EnumHand.MAIN_HAND);
 
-        if (lagBack.getValue().equals(LagMode.Packet))
-            mc.getConnection().sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ, true));
-        if (lagBack.getValue().equals(LagMode.YMotion))
+        if (lagBack.getValueEnum().equals(LagMode.Packet))
+            Objects.requireNonNull(mc.getConnection()).sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ, true));
+        if (lagBack.getValueEnum().equals(LagMode.YMotion))
             mc.player.motionY = height.getValue();
-        if (lagBack.getValue().equals(LagMode.Teleport))
+        if (lagBack.getValueEnum().equals(LagMode.Teleport))
             mc.player.setPositionAndUpdate(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ);
-        if (lagBack.getValue().equals(LagMode.LagFall)) {
-            mc.getConnection().sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
+        if (lagBack.getValueEnum().equals(LagMode.LagFall)) {
+            Objects.requireNonNull(mc.getConnection()).sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + height.getValue(), mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
             mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
         }
-        if (lagBack.getValue().equals(LagMode.DoubleJump))
+        if (lagBack.getValueEnum().equals(LagMode.DoubleJump))
             if (packetJump.getValue())
                 EntityUtil.packetJump(true);
             else mc.player.jump();

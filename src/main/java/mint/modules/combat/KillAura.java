@@ -87,13 +87,13 @@ public class KillAura extends Module {
     public void renderWorldLastEvent(RenderWorldEvent event) {
         boolean fill = false;
         boolean outline = false;
-        if (renderMode.getValue().equals(RenderMode.BOTH)) {
+        if (renderMode.getValueEnum().equals(RenderMode.BOTH)) {
             fill = true;
             outline = true;
-        } else if (renderMode.getValue().equals(RenderMode.FILL)) {
+        } else if (renderMode.getValueEnum().equals(RenderMode.FILL)) {
             fill = true;
             outline = false;
-        } else if (renderMode.getValue().equals(RenderMode.OUTLINE)) {
+        } else if (renderMode.getValueEnum().equals(RenderMode.OUTLINE)) {
             fill = false;
             outline = true;
         }

@@ -97,8 +97,8 @@ public class AutoCrystal extends Module {
 
     public enum FacePlaceMode {Never, Health, Bind, Always}
 
-    public FloatSetting facePlaceHp = new FloatSetting("Face Place Health", 15f, 0f, 36f, this, v -> facePlaceMode.getValue().equals(FacePlaceMode.Health) && facePlaceParent.getValue());
-    public KeySetting facePlaceBind = new KeySetting("Face Place Bind", Keyboard.KEY_NONE, this, v -> facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceParent.getValue());
+    public FloatSetting facePlaceHp = new FloatSetting("Face Place Health", 15f, 0f, 36f, this, v -> facePlaceMode.getValueEnum().equals(FacePlaceMode.Health) && facePlaceParent.getValue());
+    public KeySetting facePlaceBind = new KeySetting("Face Place Bind", Keyboard.KEY_NONE, this, v -> facePlaceMode.getValueEnum().equals(FacePlaceMode.Bind) && facePlaceParent.getValue());
 
     public ParentSetting pauseParent = new ParentSetting("Pause Parent", false, this);
     public BooleanSetting pauseOnGapple = new BooleanSetting("Gapple", false, this, v -> pauseParent.getValue());
@@ -252,7 +252,7 @@ public class AutoCrystal extends Module {
                     if (mc.player.getDistanceSq(entity.posX + 0.5f, entity.posY + 1, entity.posZ + 0.5f) > MathUtil.square(breakRange.getValue()))
                         continue;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValueEnum().equals(FacePlaceMode.Always) || (facePlaceMode.getValueEnum().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValueEnum().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
                         minimumDamageValue = 2;
 
                     if (antiSuicide.getValue() && selfDamage > selfHealth)
@@ -309,7 +309,7 @@ public class AutoCrystal extends Module {
                     if (!allowCollision.getValue() && !mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos).setMaxY(1)).isEmpty())
                         continue;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValueEnum().equals(FacePlaceMode.Always) || (facePlaceMode.getValueEnum().equals(FacePlaceMode.Health) && targetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValueEnum().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
                         minimumDamageValue = 2;
 
                     if (targetDamage < minimumDamageValue)
@@ -355,7 +355,7 @@ public class AutoCrystal extends Module {
                     if (mc.player.getDistanceSq(packet.getX(), packet.getY(), packet.getZ()) > MathUtil.square(breakRange.getValue()))
                         return;
 
-                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValue().equals(FacePlaceMode.Always) || (facePlaceMode.getValue().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValue().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
+                    if (BlockUtil.isPlayerSafe(targetPlayer) && (facePlaceMode.getValueEnum().equals(FacePlaceMode.Always) || (facePlaceMode.getValueEnum().equals(FacePlaceMode.Health) && mainTargetHealth < facePlaceHp.getValue()) || (facePlaceMode.getValueEnum().equals(FacePlaceMode.Bind) && facePlaceBind.getKey() != -1 && Keyboard.isKeyDown(facePlaceBind.getKey()))))
                         mainMinimumDamageValue = 2;
 
                     if (antiSuicide.getValue() && mainSelfDamage > mainSelfHealth)
@@ -400,18 +400,18 @@ public class AutoCrystal extends Module {
 
     public void swingArm(boolean place) {
         if (place) {
-            if (placeSwingHand.getValue().equals(PlaceSwingHand.MAINHAND))
+            if (placeSwingHand.getValueEnum().equals(PlaceSwingHand.MAINHAND))
                 mc.player.swingArm(EnumHand.MAIN_HAND);
-            if (placeSwingHand.getValue().equals(PlaceSwingHand.OFFHAND))
+            if (placeSwingHand.getValueEnum().equals(PlaceSwingHand.OFFHAND))
                 mc.player.swingArm(EnumHand.OFF_HAND);
-            if (placeSwingHand.getValue().equals(PlaceSwingHand.PACKET))
+            if (placeSwingHand.getValueEnum().equals(PlaceSwingHand.PACKET))
                 mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
         } else {
-            if (breakSwingHand.getValue().equals(BreakSwingHand.MAINHAND))
+            if (breakSwingHand.getValueEnum().equals(BreakSwingHand.MAINHAND))
                 mc.player.swingArm(EnumHand.MAIN_HAND);
-            if (breakSwingHand.getValue().equals(BreakSwingHand.OFFHAND))
+            if (breakSwingHand.getValueEnum().equals(BreakSwingHand.OFFHAND))
                 mc.player.swingArm(EnumHand.OFF_HAND);
-            if (breakSwingHand.getValue().equals(BreakSwingHand.PACKET))
+            if (breakSwingHand.getValueEnum().equals(BreakSwingHand.PACKET))
                 mc.player.connection.sendPacket(new CPacketAnimation(mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
         }
     }

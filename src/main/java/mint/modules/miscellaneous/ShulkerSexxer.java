@@ -64,7 +64,7 @@ public class ShulkerSexxer extends Module {
                     || mc.world.getBlockState(pos).getBlock().equals(Blocks.RED_SHULKER_BOX)
                     || mc.world.getBlockState(pos).getBlock().equals(Blocks.WHITE_SHULKER_BOX)
                     || mc.world.getBlockState(pos).getBlock().equals(Blocks.YELLOW_SHULKER_BOX)) {
-                if (!sexType.getValue().equals(SexType.OPEN)) {
+                if (!sexType.getValueEnum().equals(SexType.OPEN)) {
                     if (pickSlot != -1)
                         InventoryUtil.switchToSlot(pickSlot);
                     else {
@@ -73,17 +73,17 @@ public class ShulkerSexxer extends Module {
                     }
                 }
                 if (breakTimer.passedMs(delay.getValue())) {
-                    if (sexType.getValue().equals(SexType.BREAK)) {
+                    if (sexType.getValueEnum().equals(SexType.BREAK)) {
                         mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, EnumFacing.UP));
                         mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, EnumFacing.UP));
                         if (debug.getValue())
                             MessageManager.sendMessage(ChatFormatting.BOLD + " Shulker Sexxer: " + ChatFormatting.RESET + "Position found at:" + ChatFormatting.AQUA + " X: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getX(), 0) + ChatFormatting.RESET + "," + ChatFormatting.AQUA + " Y: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getY(), 0) + ChatFormatting.RESET + "," + ChatFormatting.AQUA + " Z: " + ChatFormatting.RESET + ChatFormatting.BOLD + MathUtil.round(pos.getZ(), 0) + ChatFormatting.RESET + "!");
                         breakTimer.reset();
-                    } else if (sexType.getValue().equals(SexType.OPEN) && openTimer.passedMs(delay.getValue())) {
+                    } else if (sexType.getValueEnum().equals(SexType.OPEN) && openTimer.passedMs(delay.getValue())) {
                         if (mc.currentScreen == null)
                             Objects.requireNonNull(mc.getConnection()).sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, EnumFacing.UP, mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
                     }
-                    if (sexType.getValue().equals(SexType.OPEN)) {
+                    if (sexType.getValueEnum().equals(SexType.OPEN)) {
                         mc.player.inventory.currentItem = currentItem;
                         mc.playerController.updateController();
                     }

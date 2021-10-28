@@ -3,8 +3,8 @@ package mint.newgui;
 import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
-import mint.newgui.settinbutton.*;
-import mint.settingsrewrite.SettingRewrite;
+import mint.newgui.settingbutton.Button;
+import mint.newgui.settingbutton.settingbuttons.*;
 import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -23,7 +23,7 @@ public class ModuleWindow {
     public Color disabledColor;
     public Color enabledColor;
     public Module module;
-    ArrayList<NewButton> newButton = new ArrayList<>();
+    ArrayList<Button> newButton = new ArrayList<>();
 
     public ModuleWindow(String name, int x, int y, int width, int height, Color disabledColor, Color enabledColor, Module module) {
         this.name = name;
@@ -38,42 +38,31 @@ public class ModuleWindow {
     }
 
     public void getSettings() {
-        ArrayList<NewButton> penius = new ArrayList<>();
+        ArrayList<Button> settingList = new ArrayList<>();
 
         assert Mint.settingsRewrite != null;
-        for (SettingRewrite settingsRewrite : Mint.settingsRewrite.getSettingsInModule(module)) {
-            if (!settingsRewrite.isVisible())
-                continue;
-
-            if (settingsRewrite instanceof BooleanSetting && !settingsRewrite.getName().equals("Enabled"))
-                penius.add(new BooleanButton(settingsRewrite));
-
-            if (settingsRewrite instanceof IntegerSetting)
-                penius.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof FloatSetting)
-                penius.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof DoubleSetting)
-                penius.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof EnumSetting)
-                penius.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof StringSetting)
-                penius.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof ColorSetting)
-                penius.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof ParentSetting)
-                penius.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof KeySetting)
-                penius.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
-
-        }
-        newButton = penius;
+        if (Mint.settingsRewrite.getSettingsInModule(module) != null)
+            Mint.settingsRewrite.getSettingsInModule(module).stream().filter(settingsRewrite -> settingsRewrite != null && settingsRewrite.isVisible()).forEach(settingsRewrite -> {
+                if (settingsRewrite instanceof BooleanSetting)
+                    settingList.add(new BooleanButton(settingsRewrite));
+                if (settingsRewrite instanceof IntegerSetting)
+                    settingList.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
+                if (settingsRewrite instanceof FloatSetting)
+                    settingList.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
+                if (settingsRewrite instanceof DoubleSetting)
+                    settingList.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
+                if (settingsRewrite instanceof EnumSetting)
+                    settingList.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
+                if (settingsRewrite instanceof StringSetting)
+                    settingList.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
+                if (settingsRewrite instanceof ColorSetting)
+                    settingList.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
+                if (settingsRewrite instanceof ParentSetting)
+                    settingList.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
+                if (settingsRewrite instanceof KeySetting)
+                    settingList.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
+            });
+        newButton = settingList;
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -86,7 +75,7 @@ public class ModuleWindow {
         Mint.textManager.drawStringWithShadow(name, isInside(mouseX, mouseY) ? x + 2 : x + 1, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
         if (module.isOpened) {
             int y = this.y;
-            for (NewButton button : newButton) {
+            for (Button button : newButton) {
                 button.setX(x + 2);
                 button.setY(y += height);
                 button.setWidth(width - 4);
@@ -110,7 +99,7 @@ public class ModuleWindow {
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
         if (isInside(mouseX, mouseY) && mouseButton == 0)
-            if(module.isEnabled())
+            if (module.isEnabled())
                 module.disable();
             else module.enable();
 
@@ -119,7 +108,7 @@ public class ModuleWindow {
 
     public void initGui() {
         if (module.isOpened)
-            newButton.forEach(NewButton::initGui);
+            newButton.forEach(Button::initGui);
     }
 
     public void onKeyTyped(char typedChar, int keyCode) {

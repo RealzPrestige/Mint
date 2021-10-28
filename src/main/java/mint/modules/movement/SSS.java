@@ -25,9 +25,9 @@ public class SSS extends Module {
     public EnumSetting moveType = new EnumSetting("MoveType", MoveType.YPort, this, v -> movementParent.getValue());
 
     public BooleanSetting step = new BooleanSetting("Step", true, this, v -> movementParent.getValue());
-    public DoubleSetting yPortSpeed = new DoubleSetting("YPortSpeed", 0.1d, 0.0d, 1.0d, this, v -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
-    public FloatSetting fallSpeed = new FloatSetting("FallSpeed", 0.8f, 0.1f, 9.0f, this, v -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
-    public IntegerSetting yMotion = new IntegerSetting("YMotion", 390, 350, 420, this, v -> movementParent.getValue() && moveType.getValue() == MoveType.YPort);
+    public DoubleSetting yPortSpeed = new DoubleSetting("YPortSpeed", 0.1d, 0.0d, 1.0d, this, v -> movementParent.getValue() && moveType.getValueEnum().equals(MoveType.YPort));
+    public FloatSetting fallSpeed = new FloatSetting("FallSpeed", 0.8f, 0.1f, 9.0f, this, v -> movementParent.getValue() && moveType.getValueEnum().equals(MoveType.YPort));
+    public IntegerSetting yMotion = new IntegerSetting("YMotion", 390, 350, 420, this, v -> movementParent.getValue() && moveType.getValueEnum().equals(MoveType.YPort));
 
 
     public BooleanSetting playerParent = new BooleanSetting("Player", true, this);
@@ -35,11 +35,11 @@ public class SSS extends Module {
     public EnumSetting playerType = new EnumSetting("Type", PlayerType.Blink, this, v -> playerParent.getValue());
 
     //blink
-    public EnumSetting mode = new EnumSetting("Mode", Mode.Both, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
-    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
-    public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink);
-    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 20, 1, 100, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Ticks);
-    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, v -> playerParent.getValue() && playerType.getValue() == PlayerType.Blink && disableMode.getValue() == DisableMode.Distance);
+    public EnumSetting mode = new EnumSetting("Mode", Mode.Both, this, v -> playerParent.getValue() && playerType.getValueEnum().equals(PlayerType.Blink));
+    public BooleanSetting renderPlayer = new BooleanSetting("Visualize", false, this, v -> playerParent.getValue() && playerType.getValueEnum().equals(PlayerType.Blink));
+    public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this, v -> playerParent.getValue() && playerType.getValueEnum().equals(PlayerType.Blink));
+    public IntegerSetting ticksVal = new IntegerSetting("Ticks", 20, 1, 100, this, v -> playerParent.getValue() && playerType.getValueEnum().equals(PlayerType.Blink) && disableMode.getValueEnum().equals(DisableMode.Ticks));
+    public DoubleSetting distanceVal = new DoubleSetting("Distance", 3.2d, 0.1d, 15.0d, this, v -> playerParent.getValue() && playerType.getValueEnum().equals(PlayerType.Blink) && disableMode.getValueEnum().equals(DisableMode.Distance));
 
 
     //something else
@@ -52,13 +52,13 @@ public class SSS extends Module {
         if (NullUtil.fullNullCheck())
             disable();
         ticks++;
-        if (disableMode.getValue() == DisableMode.Ticks && ticks >= ticksVal.getValue()) {
+        if (disableMode.getValueEnum().equals(DisableMode.Ticks) && ticks >= ticksVal.getValue()) {
             disable();
         }
-        if (disableMode.getValue() == DisableMode.Distance && startPos != null && mc.player.getDistanceSq(startPos) >= MathUtil.square(distanceVal.getValue())) {
+        if (disableMode.getValueEnum().equals(DisableMode.Distance) && startPos != null && mc.player.getDistanceSq(startPos) >= MathUtil.square(distanceVal.getValue())) {
             disable();
         }
-        if (moveType.getValue() == MoveType.YPort) {
+        if (moveType.getValueEnum().equals(MoveType.YPort)) {
             if (mc.player.isSneaking() || EntityUtil.isInLiquid() || mc.player.isOnLadder()) {
                 return;
             }
@@ -87,7 +87,7 @@ public class SSS extends Module {
         ticks = 0;
         startPos = mc.player.getPosition();
         mc.player.stepHeight = 0.6f;
-        if (renderPlayer.getValue() && playerType.getValue() == PlayerType.Blink) {
+        if (renderPlayer.getValue() && playerType.getValueEnum().equals(PlayerType.Blink)) {
             fakePlayer = new EntityOtherPlayerMP(mc.world, new GameProfile(mc.player.getUniqueID(), mc.session.getUsername()));
             fakePlayer.copyLocationAndAnglesFrom(mc.player);
             fakePlayer.rotationYawHead = mc.player.rotationYawHead;
@@ -102,7 +102,7 @@ public class SSS extends Module {
         ticks = 0;
         startPos = null;
         mc.player.stepHeight = 0.6f;
-        if (renderPlayer.getValue() && playerType.getValue() == PlayerType.Blink) {
+        if (renderPlayer.getValue() && playerType.getValueEnum().equals(PlayerType.Blink)) {
             try {
                 mc.world.removeEntity(fakePlayer);
             } catch (Exception ignored) {
@@ -114,7 +114,7 @@ public class SSS extends Module {
     public void onPacketSend(PacketEvent.Send event) {
         if (!isEnabled())
             return;
-        if (isEnabled() && playerType.getValue() == PlayerType.Blink && mode.getValue() != Mode.Server) {
+        if (isEnabled() && playerType.getValueEnum().equals(PlayerType.Blink) && !mode.getValueEnum().equals(Mode.Server)) {
             event.setCanceled(true); // or add == client || == both
         }
     }
@@ -123,7 +123,7 @@ public class SSS extends Module {
     public void onPacketReceive(PacketEvent.Receive event) {
         if (!isEnabled())
             return;
-        if (isEnabled() && playerType.getValue() == PlayerType.Blink && mode.getValue() != Mode.Client) {
+        if (isEnabled() && playerType.getValueEnum().equals(PlayerType.Blink) && !mode.getValueEnum().equals(Mode.Client)) {
             event.setCanceled(true);
         }
     }

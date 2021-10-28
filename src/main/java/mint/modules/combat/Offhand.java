@@ -65,7 +65,7 @@ public class Offhand extends Module {
             switchItem(offhandSlot < 9 ? offhandSlot + 36 : offhandSlot);
             mc.playerController.updateController();
             switchTimer.reset();
-            if (render.getValue() != RenderMode.NEVER) {
+            if (!render.getValueEnum().equals(RenderMode.NEVER)) {
                 renderString.clear();
                 renderString.put(getRendererString(), 255);
             }
@@ -81,9 +81,9 @@ public class Offhand extends Module {
     public void renderOverlayEvent(RenderOverlayEvent event) {
         int screenWidth = new ScaledResolution(mc).getScaledWidth();
         for (Map.Entry<String, Integer> entry : renderString.entrySet()) {
-            if (render.getValue() == RenderMode.ALWAYS) {
+            if (render.getValueEnum().equals(RenderMode.ALWAYS)) {
                 Mint.textManager.drawStringWithShadow("Current Item: " + ChatFormatting.BOLD + entry.getKey(), (screenWidth / 2f) - (Mint.textManager.getStringWidth("Current Item: " + entry.getKey()) / 2f), 0, ColorUtil.toRGBA(255, 255, 255, entry.getValue()));
-            } else if (render.getValue() == RenderMode.ONSWITCH) {
+            } else if (render.getValueEnum().equals(RenderMode.ONSWITCH)) {
                 renderString.put(entry.getKey(), entry.getValue() - 1);
                 if (entry.getValue() <= 0) {
                     renderString.remove(entry.getKey());

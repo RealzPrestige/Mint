@@ -78,9 +78,9 @@ public class SelfAnvil extends Module {
 
         if (anvilSlot == -1)
             return;
-        if (baseBlock.getValue().equals(BaseBlock.Obsidian))
+        if (baseBlock.getValueEnum().equals(BaseBlock.Obsidian))
             blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.OBSIDIAN));
-        else if (baseBlock.getValue().equals(BaseBlock.Anvils))
+        else if (baseBlock.getValueEnum().equals(BaseBlock.Anvils))
             blockSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ANVIL));
 
         if (blockSlot == -1) return;

@@ -19,22 +19,22 @@ public class AutoMine extends Module {
     public EnumSetting mineMode = new EnumSetting("Mine Mode", MineMode.Normal, this);
     public enum MineMode {Normal, Combat}
 
-    public EnumSetting minePriority = new  EnumSetting("Mine Priority", Priority.Surrounds, this, v -> mineMode.getValue().equals(MineMode.Combat));
+    public EnumSetting minePriority = new  EnumSetting("Mine Priority", Priority.Surrounds, this, v -> mineMode.getValueEnum().equals(MineMode.Combat));
     public enum Priority {Surrounds, City, Dynamic}
 
-    public FloatSetting targetRange = new FloatSetting("Target Range", 9.0f, 0.0f, 15.0f, this, v -> mineMode.getValue().equals(MineMode.Combat));
-    public ParentSetting boxParent = new ParentSetting("Box", false, this, v -> mineMode.getValue().equals(MineMode.Combat));
-    public BooleanSetting boxSetting = new BooleanSetting("Box Setting", false, this, v -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
-    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, v -> boxParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
-    public ParentSetting outlineParent = new ParentSetting("Outline", false, this, v -> mineMode.getValue().equals(MineMode.Combat));
-    public BooleanSetting outlineSetting = new BooleanSetting("Outline Setting", false, this, v -> outlineParent.getValue() && mineMode.getValue().equals(MineMode.Combat));
-    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> outlineParent.getValue() && outlineSetting.getValue() && mineMode.getValue().equals(MineMode.Combat));
+    public FloatSetting targetRange = new FloatSetting("Target Range", 9.0f, 0.0f, 15.0f, this, v -> mineMode.getValueEnum().equals(MineMode.Combat));
+    public ParentSetting boxParent = new ParentSetting("Box", false, this, v -> mineMode.getValueEnum().equals(MineMode.Combat));
+    public BooleanSetting boxSetting = new BooleanSetting("Box Setting", false, this, v -> boxParent.getValue() && mineMode.getValueEnum().equals(MineMode.Combat));
+    public ColorSetting boxColor = new ColorSetting("Box Color", new Color(-1), this, v -> boxParent.getValue() && mineMode.getValueEnum().equals(MineMode.Combat));
+    public ParentSetting outlineParent = new ParentSetting("Outline", false, this, v -> mineMode.getValueEnum().equals(MineMode.Combat));
+    public BooleanSetting outlineSetting = new BooleanSetting("Outline Setting", false, this, v -> outlineParent.getValue() && mineMode.getValueEnum().equals(MineMode.Combat));
+    public ColorSetting outlineColor = new ColorSetting("Outline Color", new Color(-1), this, v -> outlineParent.getValue() && outlineSetting.getValue() && mineMode.getValueEnum().equals(MineMode.Combat));
 
     BlockPos targetBlock = null;
     Timer timer = new Timer();
 
     public void onDisable() {
-        if (mineMode.getValue().equals(MineMode.Normal)) {
+        if (mineMode.getValueEnum().equals(MineMode.Normal)) {
             mc.gameSettings.keyBindAttack.pressed = false;
         }
     }
@@ -45,18 +45,18 @@ public class AutoMine extends Module {
 
 
         EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
-        if (mineMode.getValue() == MineMode.Normal) {
+        if (mineMode.getValueEnum() == MineMode.Normal) {
             mc.gameSettings.keyBindAttack.pressed = true;
         }
 
-        if (mineMode.getValue().equals(MineMode.Combat)) {
+        if (mineMode.getValueEnum().equals(MineMode.Combat)) {
 
             if (target == null) return;
 
             BlockPos pos = PlayerUtil.getPlayerPos(target);
 
             if (EntityUtil.isPlayerSafe(target)) {
-                if (minePriority.getValue().equals(Priority.Surrounds)) {
+                if (minePriority.getValueEnum().equals(Priority.Surrounds)) {
                     if (mc.world.getBlockState(pos.north()).getBlock().equals(Blocks.OBSIDIAN)) {
                         targetBlock = pos.north();
                     } else if (mc.world.getBlockState(pos.east()).getBlock().equals(Blocks.OBSIDIAN)) {
@@ -69,7 +69,7 @@ public class AutoMine extends Module {
                         targetBlock = null;
                     }
                 }
-                if (minePriority.getValue() == Priority.City) {
+                if (minePriority.getValueEnum() == Priority.City) {
                     if (mc.world.getBlockState(pos.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.north().north()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.north().north().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.BEDROCK))) {
                         targetBlock = pos.north();
                     } else if (mc.world.getBlockState(pos.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.east().east()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.east().east().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.BEDROCK))) {
@@ -82,7 +82,7 @@ public class AutoMine extends Module {
                         targetBlock = null;
                     }
                 }
-                if (minePriority.getValue() == Priority.Dynamic) {
+                if (minePriority.getValueEnum() == Priority.Dynamic) {
                     if (mc.world.getBlockState(pos.north()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.north().north()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.north().north().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.north().north().down()).getBlock().equals(Blocks.BEDROCK))) {
                         targetBlock = pos.north();
                     } else if (mc.world.getBlockState(pos.east()).getBlock().equals(Blocks.OBSIDIAN) && mc.world.getBlockState(pos.east().east()).getBlock().equals(Blocks.AIR) && mc.world.getBlockState(pos.east().east().up()).getBlock().equals(Blocks.AIR) && (mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.OBSIDIAN) || mc.world.getBlockState(pos.east().east().down()).getBlock().equals(Blocks.BEDROCK))) {

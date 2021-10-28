@@ -1,8 +1,9 @@
-package mint.newgui.settinbutton;
+package mint.newgui.settingbutton.settingbuttons;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import mint.Mint;
 import mint.modules.core.NewGuiModule;
+import mint.newgui.settingbutton.Button;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.KeySetting;
 import mint.utils.ColorUtil;
@@ -11,7 +12,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 import org.lwjgl.input.Keyboard;
 
-public class KeyButton extends NewButton {
+public class KeyButton extends Button {
     KeySetting keySetting;
     public KeyButton(SettingRewrite setting, KeySetting keySetting) {
         super(setting);
