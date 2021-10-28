@@ -24,7 +24,7 @@ public class KeyButton extends NewButton {
         if (isInside(mouseX, mouseY))
             RenderUtil.drawRect(x, y, x + width, y + height, ColorUtil.toRGBA(0, 0, 0, 100));
         assert Mint.textManager != null;
-        Mint.textManager.drawStringWithShadow(keySetting.isTyping ? keySetting.getName() + " " + Mint.textManager.getIdleSign() : keySetting.getName() + " " + ChatFormatting.GRAY + Keyboard.getKeyName(keySetting.getKey()), x + 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
+        Mint.textManager.drawStringWithShadow(keySetting.isTyping ? keySetting.getName() + " " + Mint.textManager.getIdleSign() : keySetting.getName() + " " + ChatFormatting.GRAY + (keySetting.getKey() == -1 ? "None" : Keyboard.getKeyName(keySetting.getKey())), x + 2, y + (height / 2f) - (Mint.textManager.getFontHeight() / 2f), -1);
     }
 
     @Override
