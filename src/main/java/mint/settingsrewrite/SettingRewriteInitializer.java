@@ -20,9 +20,11 @@ public class SettingRewriteInitializer {
 
     public List<SettingRewrite> getSettingsInModule(Module module) {
         List<SettingRewrite> settings = new ArrayList<>();
-        for (SettingRewrite setting : settingRewriteList)
-            if (setting.getModule() == module)
-                settings.add(setting);
+        for (SettingRewrite setting : settingRewriteList) {
+            if (setting.getModule() != module)
+                continue;
+            settings.add(setting);
+        }
 
         return settings;
     }
