@@ -44,6 +44,10 @@ public class SettingRewrite<T> {
         return module;
     }
 
+    public String getValueAsString() {
+        return value.toString();
+    }
+
     public boolean isVisible() {
         if (shown == null)
             return true;

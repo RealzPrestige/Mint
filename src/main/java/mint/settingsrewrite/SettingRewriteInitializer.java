@@ -18,7 +18,7 @@ public class SettingRewriteInitializer {
     }
 
 
-    public List<SettingRewrite> doesModuleContainSetting(Module module) {
+    public List<SettingRewrite> getSettingsInModule(Module module) {
         List<SettingRewrite> settings = new ArrayList<>();
         for (SettingRewrite setting : settingRewriteList)
             if (setting.getModule() == module)
@@ -26,4 +26,5 @@ public class SettingRewriteInitializer {
 
         return settings;
     }
+
 }

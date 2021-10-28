@@ -42,4 +42,8 @@ public class ColorSetting extends SettingRewrite<Color> {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
+    public String getColorAsString() {
+        return String.valueOf(value.getRGB());
+    }
 }

@@ -57,6 +57,30 @@ public class Bind {
 
             return new Bind(key);
         }
+
+        public int doBackwardInt(JsonElement element) {
+            String s = element.getAsString();
+
+            if (s.equalsIgnoreCase("None"))
+                return -1;
+
+            int key = -1;
+
+            try {
+                key = Keyboard.getKeyIndex(s.toUpperCase());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (key == 0)
+                return -1;
+
+            return new Bind(key).key;
+
+        }
     }
 }
+
+
+
 

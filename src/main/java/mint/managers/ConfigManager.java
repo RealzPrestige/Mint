@@ -4,8 +4,8 @@ import com.google.gson.*;
 import mint.Mint;
 import mint.modules.Module;
 import mint.setting.Bind;
-import mint.setting.EnumSetting;
-import mint.setting.Setting;
+import mint.settingsrewrite.SettingRewrite;
+import mint.settingsrewrite.impl.*;
 
 import java.awt.*;
 import java.io.*;
@@ -29,10 +29,10 @@ public class ConfigManager {
         assert Mint.friendManager != null;
         Mint.friendManager.onLoad();
         for (Module feature : features) {
-            //    try {
-            //       loadSettings(feature);
-            //   } catch (IOException ignored) {
-            //   }
+            try {
+                loadSettings(feature);
+            } catch (IOException ignored) {
+            }
         }
         saveCurrentConfig();
         loadingConfig = false;
@@ -120,125 +120,112 @@ public class ConfigManager {
             Files.createFile(outputFile);
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        //String json = gson.toJson(writeSettings(feature));
+        String json = gson.toJson(writeSettings(feature));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(outputFile)));
-        //writer.write(json);
+        writer.write(json);
         writer.close();
     }
 
-    public static void setValueFromJson(Setting setting, JsonElement element) {
-        if (setting.isColorSetting()) {
-            setting.setColor(new Color(element.getAsInt(), true));
-        }
-        switch (setting.getType()) {
-            case "Boolean": {
-                setting.setValue(element.getAsBoolean());
-                break;
+    public static void setValueFromJson(SettingRewrite setting, JsonElement element) {
+        if (setting instanceof ColorSetting) {
+            setting.setValue(new Color(element.getAsInt(), true));
+        } else if (setting instanceof BooleanSetting) {
+            setting.setValue(element.getAsBoolean());
+        } else if (setting instanceof DoubleSetting) {
+            setting.setValue(element.getAsDouble());
+        } else if (setting instanceof EnumSetting) {
+            try {
+                mint.setting.EnumSetting converter = new mint.setting.EnumSetting(((Enum) setting.getValue()).getClass());
+                Enum value = converter.doBackward(element);
+                setting.setValue(value == null ? setting.getValue() : value);
+            } catch (Exception ignored) {
             }
-            case "Double": {
-                setting.setValue(element.getAsDouble());
-                break;
-            }
-            case "Float": {
-                setting.setValue(element.getAsFloat());
-                break;
-            }
-            case "Integer": {
-                setting.setValue(element.getAsInt());
-                break;
-            }
-            case "String": {
-                String str = element.getAsString();
-                setting.setValue(str.replace("_", " "));
-                break;
-            }
-            case "Bind": {
-                setting.setValue(new Bind.BindConverter().doBackward(element));
-                break;
-            }
-            case "Enum": {
-                try {
-                    EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
-                    Enum value = converter.doBackward(element);
-                    setting.setValue(value == null ? setting.getDefaultValue() : value);
-                } catch (Exception ignored) {
-                }
-                break;
-            }
+        } else if (setting instanceof FloatSetting) {
+            setting.setValue(element.getAsFloat());
+        } else if (setting instanceof IntegerSetting) {
+            setting.setValue(element.getAsInt());
+        } else if (setting instanceof KeySetting) {
+            ((KeySetting) setting).setBind(new Bind.BindConverter().doBackwardInt(element));
+        } else if (setting instanceof ParentSetting) {
+            setting.setValue(element.getAsBoolean());
+        } else if (setting instanceof StringSetting) {
+            setting.setValue(element.getAsString());
         }
     }
 
     public void init() {
         assert Mint.moduleManager != null;
         features.addAll(Mint.moduleManager.moduleList);
-      //  features.add(Mint.friendManager);
+        // features.addAll(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
         createFragFile();
     }
 
-    /** private void loadSettings(Module feature) throws IOException {
-     String featureName = config + getDirectory(feature) + feature.getName() + ".json";
-     Path featurePath = Paths.get(featureName);
-     if (!Files.exists(featurePath))
-     return;
-     loadPath(featurePath, feature);
-     } **/
+    private void loadSettings(Module feature) throws IOException {
+        String featureName = config + getDirectory(feature) + feature.getName() + ".json";
+        Path featurePath = Paths.get(featureName);
+        if (!Files.exists(featurePath))
+            return;
+        loadPath(featurePath, feature);
+    }
 
-    /** private void loadPath(Path path, Module feature) throws IOException {
-     InputStream stream = Files.newInputStream(path);
-     try {
-     ConfigManager.loadFile(new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
-     } catch (IllegalStateException e) {
-     ConfigManager.loadFile(new JsonObject(), feature);
-     }
-     stream.close();
-     } **/
+    private void loadPath(Path path, Module feature) throws IOException {
+        InputStream stream = Files.newInputStream(path);
+        try {
+            ConfigManager.loadFile(new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject(), feature);
+        } catch (IllegalStateException e) {
+            ConfigManager.loadFile(new JsonObject(), feature);
+        }
+        stream.close();
+    }
 
-    /** private static void loadFile(JsonObject input, Module feature) {
-     for (Map.Entry<String, JsonElement> entry : input.entrySet()) {
-     String settingName = entry.getKey();
-     JsonElement element = entry.getValue();
-     try {
-     assert Mint.friendManager != null;
-     Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
-     } catch (Exception ignored) {
-     }
-     for (Setting setting : feature.getSettings()) {
-     if (!settingName.equals(setting.getName()))
-     continue;
-     try {
-     ConfigManager.setValueFromJson(setting, element);
-     } catch (Exception ignored) {
-     }
-     }
-     }
-     } **/
+    private static void loadFile(JsonObject input, Module feature) {
+        for (Map.Entry<String, JsonElement> entry : input.entrySet()) {
+            String settingName = entry.getKey();
+            JsonElement element = entry.getValue();
+            try {
+                assert Mint.friendManager != null;
+                Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
+            } catch (Exception ignored) {
+            }
+            for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
+                if (!settingName.equals(setting.getName()))
+                    continue;
+                try {
+                    ConfigManager.setValueFromJson(setting, element);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+    }
 
-    /** public JsonObject writeSettings(Module feature) {
-     JsonObject object = new JsonObject();
-     JsonParser jp = new JsonParser();
-     for (Setting setting : feature.getSettings()) {
-     if (setting.isEnumSetting()) {
-     EnumSetting converter = new EnumSetting(((Enum) setting.getValue()).getClass());
-     object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
-     continue;
-     }
-     if (setting.getValue() instanceof String) {
-     String str = (String) setting.getValue();
-     setting.setValue(str.replace(" ", "_"));
-     continue;
-     }
-     if (setting.isColorSetting()) {
-     object.add(setting.getName(), jp.parse(setting.getColorAsString()));
-     }
-     try {
-     object.add(setting.getName(), jp.parse(setting.getValueAsString()));
-     } catch (Exception ignored) {
-     }
-     }
-     return object;
-     } **/
+
+    public JsonObject writeSettings(Module feature) {
+        JsonObject object = new JsonObject();
+        JsonParser jp = new JsonParser();
+        for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
+            if (setting instanceof EnumSetting) {
+                mint.setting.EnumSetting converter = new mint.setting.EnumSetting(((Enum) setting.getValue()).getClass());
+                object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
+                continue;
+            }
+            if (setting.getValue() instanceof String) {
+                String str = (String) setting.getValue();
+                setting.setValue(str.replace(" ", "_"));
+                continue;
+            }
+            if (setting instanceof ColorSetting) {
+                object.add(setting.getName(), jp.parse(((ColorSetting) setting).getColorAsString()));
+            }
+            try {
+                object.add(setting.getName(), jp.parse(setting.getValueAsString()));
+            } catch (Exception ignored) {
+            }
+        }
+        return object;
+    }
+
 
     public String getDirectory(Module feature) {
         String directory = "";

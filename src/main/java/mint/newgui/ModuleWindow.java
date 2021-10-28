@@ -41,7 +41,7 @@ public class ModuleWindow {
         ArrayList<NewButton> penius = new ArrayList<>();
 
         assert Mint.settingsRewrite != null;
-        for (SettingRewrite settingsRewrite : Mint.settingsRewrite.doesModuleContainSetting(module)) {
+        for (SettingRewrite settingsRewrite : Mint.settingsRewrite.getSettingsInModule(module)) {
             if (!settingsRewrite.isVisible())
                 continue;
 
