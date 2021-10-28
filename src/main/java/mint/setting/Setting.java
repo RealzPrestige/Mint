@@ -2,6 +2,8 @@ package mint.setting;
 
 import mint.events.ClientEvent;
 import mint.modules.Feature;
+import mint.utils.BindUtil;
+import mint.utils.EnumUtil;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.awt.*;
@@ -156,21 +158,21 @@ public class Setting<T> {
     }
 
     public String currentEnumName() {
-        return EnumSetting.getProperName((Enum) this.value);
+        return EnumUtil.getProperName((Enum) this.value);
     }
 
     public int currentEnum() {
-        return EnumSetting.currentEnum((Enum) value);
+        return EnumUtil.currentEnum((Enum) value);
     }
 
     public void resetEnum() {
-        value = (T) EnumSetting.resetEnum((Enum) value);
+        value = (T) EnumUtil.resetEnum((Enum) value);
     }
 
     public String getType() {
         if (isEnumSetting())
             return "Enum";
-        if (getValue() instanceof Bind)
+        if (getValue() instanceof BindUtil)
             return "Bind";
         if (getValue() instanceof Boolean)
             return "Boolean";
@@ -190,7 +192,7 @@ public class Setting<T> {
     }
 
     public boolean isEnumSetting() {
-        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof Bind) && !(this.value instanceof Character) && !(this.value instanceof Boolean) && !isColorSetting;
+        return !this.isNumberSetting() && !(this.value instanceof String) && !(this.value instanceof BindUtil) && !(this.value instanceof Character) && !(this.value instanceof Boolean) && !isColorSetting;
     }
 
     public T getDefaultValue() {
