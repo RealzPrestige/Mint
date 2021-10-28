@@ -17,6 +17,7 @@ public class SettingRewrite<T> {
         this.module = module;
         assert Mint.settingsRewrite != null;
         Mint.settingsRewrite.addSetting(this);
+        module.settings.add(this);
     }
 
     public SettingRewrite(String name, T value, Module module, Predicate<T> shown) {
@@ -26,6 +27,7 @@ public class SettingRewrite<T> {
         this.shown = shown;
         assert Mint.settingsRewrite != null;
         Mint.settingsRewrite.addSetting(this);
+        module.settings.add(this);
     }
 
     public void setValue(T value) {

@@ -3,6 +3,7 @@ package mint.modules;
 import mint.events.ModuleToggleEvent;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
+import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.BooleanSetting;
 import mint.settingsrewrite.impl.KeySetting;
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,8 @@ import org.lwjgl.input.Keyboard;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Module {
     public static Minecraft mc = Minecraft.getMinecraft();
@@ -18,6 +21,7 @@ public class Module {
     public String name = getModuleInfo().name();
     public String description = getModuleInfo().description();
     public Category category = getModuleInfo().category();
+    public List<SettingRewrite> settings = new ArrayList<>();
 
     public KeySetting bind = new KeySetting("Keybind", Keyboard.KEY_NONE, this);
 
@@ -96,6 +100,10 @@ public class Module {
 
     public void setBind(int key) {
         this.bind.setValue(key);
+    }
+
+    public List<SettingRewrite> getSettings() {
+        return settings;
     }
 
     public ModuleInfo getModuleInfo() {

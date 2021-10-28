@@ -21,7 +21,7 @@ public class SettingRewriteInitializer {
     public List<SettingRewrite> getSettingsInModule(Module module) {
         List<SettingRewrite> settings = new ArrayList<>();
         for (SettingRewrite setting : settingRewriteList) {
-            if (!setting.getModule().equals(module) || settingRewriteList.isEmpty())
+            if (!setting.getModule().equals(module))
                 continue;
 
                 settings.add(setting);

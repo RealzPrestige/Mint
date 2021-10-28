@@ -44,6 +44,10 @@ public class Button {
         this.height = height;
     }
 
+    public boolean isVisible() {
+        return setting.isVisible();
+    }
+
     public boolean isTyping(){
         return isTyping;
     }

@@ -5,6 +5,7 @@ import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
 import mint.newgui.settingbutton.Button;
 import mint.newgui.settingbutton.settingbuttons.*;
+import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -37,31 +38,35 @@ public class ModuleWindow {
         getSettings();
     }
 
+    /**
+     * Note for zprestige by kambing
+     * <p>
+     * It throws an exception because ur doing two loops at the same time
+     * which java doesnt like that (java is a crybaby) xD
+     */
+
     public void getSettings() {
         ArrayList<Button> settingList = new ArrayList<>();
-
-        assert Mint.settingsRewrite != null;
-        if (Mint.settingsRewrite.getSettingsInModule(module) != null)
-            Mint.settingsRewrite.getSettingsInModule(module).stream().filter(settingsRewrite -> settingsRewrite != null && settingsRewrite.isVisible()).forEach(settingsRewrite -> {
-                if (settingsRewrite instanceof BooleanSetting)
-                    settingList.add(new BooleanButton(settingsRewrite));
-                if (settingsRewrite instanceof IntegerSetting)
-                    settingList.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
-                if (settingsRewrite instanceof FloatSetting)
-                    settingList.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
-                if (settingsRewrite instanceof DoubleSetting)
-                    settingList.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
-                if (settingsRewrite instanceof EnumSetting)
-                    settingList.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
-                if (settingsRewrite instanceof StringSetting)
-                    settingList.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
-                if (settingsRewrite instanceof ColorSetting)
-                    settingList.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
-                if (settingsRewrite instanceof ParentSetting)
-                    settingList.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
-                if (settingsRewrite instanceof KeySetting)
-                    settingList.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
-            });
+        for (SettingRewrite settingsRewrite : module.getSettings()) {
+            if (settingsRewrite instanceof BooleanSetting && !settingsRewrite.getName().equals("Enabled"))
+                settingList.add(new BooleanButton(settingsRewrite));
+            if (settingsRewrite instanceof IntegerSetting)
+                settingList.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
+            if (settingsRewrite instanceof FloatSetting)
+                settingList.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
+            if (settingsRewrite instanceof DoubleSetting)
+                settingList.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
+            if (settingsRewrite instanceof EnumSetting)
+                settingList.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
+            if (settingsRewrite instanceof StringSetting)
+                settingList.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
+            if (settingsRewrite instanceof ColorSetting)
+                settingList.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
+            if (settingsRewrite instanceof ParentSetting)
+                settingList.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
+            if (settingsRewrite instanceof KeySetting)
+                settingList.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
+        }
         newButton = settingList;
     }
 
@@ -76,22 +81,25 @@ public class ModuleWindow {
         if (module.isOpened) {
             int y = this.y;
             for (Button button : newButton) {
-                button.setX(x + 2);
-                button.setY(y += height);
-                button.setWidth(width - 4);
-                button.setHeight(button instanceof EnumButton ? height + 4 : height);
-                button.drawScreen(mouseX, mouseY, partialTicks);
-                if (button instanceof EnumButton)
-                    y += 4;
-                if (button instanceof ColorButton && ((ColorButton) button).getColorSetting().isOpen()) {
-                    y += 112;
-                    if (((ColorButton) button).getColorSetting().isSelected())
-                        y += 10;
+                if (button.isVisible()) {
+                    button.setX(x + 2);
+                    button.setY(y += height);
+                    button.setWidth(width - 4);
+                    button.setHeight(button instanceof EnumButton ? height + 4 : height);
+                    button.drawScreen(mouseX, mouseY, partialTicks);
+                    if (button instanceof EnumButton)
+                        y += 4;
+                    if (button instanceof ColorButton && ((ColorButton) button).getColorSetting().isOpen()) {
+                        y += 112;
+                        if (((ColorButton) button).getColorSetting().isSelected())
+                            y += 10;
+                    }
                 }
+                    RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height - 1, NewGuiModule.getInstance().color.getColor(), 1f);
             }
-            RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height - 1, NewGuiModule.getInstance().color.getColor(), 1f);
         }
     }
+
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (mouseButton == 1 && isInside(mouseX, mouseY)) {
