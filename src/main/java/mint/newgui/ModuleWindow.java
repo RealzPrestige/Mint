@@ -3,9 +3,8 @@ package mint.newgui;
 import mint.Mint;
 import mint.modules.Module;
 import mint.modules.core.NewGuiModule;
-import mint.newgui.settingbutton.settingbuttons.*;
 import mint.newgui.settingbutton.Button;
-import mint.settingsrewrite.SettingRewrite;
+import mint.newgui.settingbutton.settingbuttons.*;
 import mint.settingsrewrite.impl.*;
 import mint.utils.ColorUtil;
 import mint.utils.RenderUtil;
@@ -42,38 +41,27 @@ public class ModuleWindow {
         ArrayList<Button> settingList = new ArrayList<>();
 
         assert Mint.settingsRewrite != null;
-        for (SettingRewrite settingsRewrite : Mint.settingsRewrite.getSettingsInModule(module)) {
-            if (!settingsRewrite.isVisible())
-                continue;
-
-            if (settingsRewrite instanceof BooleanSetting)
-                settingList.add(new BooleanButton(settingsRewrite));
-
-            if (settingsRewrite instanceof IntegerSetting)
-                settingList.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof FloatSetting)
-                settingList.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof DoubleSetting)
-                settingList.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof EnumSetting)
-                settingList.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof StringSetting)
-                settingList.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof ColorSetting)
-                settingList.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof ParentSetting)
-                settingList.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
-
-            if (settingsRewrite instanceof KeySetting)
-                settingList.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
-
-        }
+        if (Mint.settingsRewrite.getSettingsInModule(module) != null)
+            Mint.settingsRewrite.getSettingsInModule(module).stream().filter(settingsRewrite -> settingsRewrite != null && settingsRewrite.isVisible()).forEach(settingsRewrite -> {
+                if (settingsRewrite instanceof BooleanSetting)
+                    settingList.add(new BooleanButton(settingsRewrite));
+                if (settingsRewrite instanceof IntegerSetting)
+                    settingList.add(new IntegerButton(settingsRewrite, (IntegerSetting) settingsRewrite));
+                if (settingsRewrite instanceof FloatSetting)
+                    settingList.add(new FloatButton(settingsRewrite, (FloatSetting) settingsRewrite));
+                if (settingsRewrite instanceof DoubleSetting)
+                    settingList.add(new DoubleButton(settingsRewrite, (DoubleSetting) settingsRewrite));
+                if (settingsRewrite instanceof EnumSetting)
+                    settingList.add(new EnumButton(settingsRewrite, (EnumSetting) settingsRewrite));
+                if (settingsRewrite instanceof StringSetting)
+                    settingList.add(new StringButton(settingsRewrite, (StringSetting) settingsRewrite));
+                if (settingsRewrite instanceof ColorSetting)
+                    settingList.add(new ColorButton(settingsRewrite, (ColorSetting) settingsRewrite));
+                if (settingsRewrite instanceof ParentSetting)
+                    settingList.add(new ParentButton(settingsRewrite, (ParentSetting) settingsRewrite));
+                if (settingsRewrite instanceof KeySetting)
+                    settingList.add(new KeyButton(settingsRewrite, (KeySetting) settingsRewrite));
+            });
         newButton = settingList;
     }
 
@@ -111,7 +99,7 @@ public class ModuleWindow {
             Mint.INSTANCE.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
         if (isInside(mouseX, mouseY) && mouseButton == 0)
-            if(module.isEnabled())
+            if (module.isEnabled())
                 module.disable();
             else module.enable();
 

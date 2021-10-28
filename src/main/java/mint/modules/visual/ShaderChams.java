@@ -7,6 +7,7 @@ import mint.modules.Module;
 import mint.modules.ModuleInfo;
 import mint.settingsrewrite.impl.EnumSetting;
 import mint.utils.MathUtil;
+import mint.utils.NullUtil;
 import mint.utils.shader.FramebufferShader;
 import mint.utils.shader.shaders.*;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,7 +21,7 @@ import java.util.Objects;
 public class ShaderChams extends Module {
 
     static ShaderChams INSTANCE = new ShaderChams();
-    public EnumSetting mode = new EnumSetting("Mode", modes.Aqua, this);
+    public EnumSetting mode = new EnumSetting("Mode", modes.Smoke, this);
 
     public ShaderChams() {
         setInstance();
@@ -38,9 +39,8 @@ public class ShaderChams extends Module {
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if (mc.player == null || mc.world == null) {
+        if(NullUtil.fullNullCheck())
             return;
-        }
         FramebufferShader framebufferShader = null;
         if (mode.getValueEnum().equals(modes.Smoke))
             framebufferShader = SmokeShader.SMOKE_SHADER;
