@@ -1,21 +1,17 @@
 package mint.commands;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import mint.Mint;
 import mint.managers.MessageManager;
-import mint.modules.Feature;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class CommandManager
-        extends Feature {
-    private final ArrayList<Command> commands = new ArrayList();
+public class CommandManager {
+    private final ArrayList<Command> commands = new ArrayList<>();
     private final String clientMessage = ChatFormatting.AQUA + "[Mint]";
     private String prefix = ".";
 
     public CommandManager() {
-        super("Command");
         commands.add(new Bind());
         commands.add(new Prefix());
         commands.add(new Config());
