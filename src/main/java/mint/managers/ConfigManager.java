@@ -3,6 +3,7 @@ package mint.managers;
 import com.google.gson.*;
 import mint.Mint;
 import mint.modules.Module;
+import mint.setting.Bind;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
 
@@ -144,7 +145,7 @@ public class ConfigManager {
         } else if (setting instanceof IntegerSetting) {
             setting.setValue(element.getAsInt());
         } else if (setting instanceof KeySetting) {
-            ((KeySetting) setting).setBind(element.getAsInt());
+            ((KeySetting) setting).setBind(new Bind.BindConverter().doBackward(element).getKey());
         } else if (setting instanceof ParentSetting) {
             setting.setValue(element.getAsBoolean());
         } else if (setting instanceof StringSetting) {
