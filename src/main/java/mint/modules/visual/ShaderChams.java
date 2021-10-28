@@ -116,6 +116,7 @@ public class ShaderChams extends Module {
         Cloud,
         BlueSpace,
         Aurora,
+        Custom,
         Hamburger;
 
         public static modes[] $VALUES;
@@ -134,6 +135,7 @@ public class ShaderChams extends Module {
                     modes.Cloud,
                     modes.BlueSpace,
                     modes.Aurora,
+                    Custom,
                     modes.Hamburger,
             };
         }

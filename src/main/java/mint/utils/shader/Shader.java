@@ -1,10 +1,15 @@
 package mint.utils.shader;
 
+import mint.Mint;
+import mint.managers.MessageManager;
+import mint.modules.visual.ShaderChams;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -13,6 +18,16 @@ import java.util.Map;
 public abstract class Shader
 {
     public int program;
+    InputStream inputStream;
+
+    {
+        try {
+            inputStream = new FileInputStream(Mint.configManager.getFragFile());
+        } catch (FileNotFoundException e) {
+            MessageManager.sendMessage("nigga ur mint/customShader.frag is empty bich ass nigga bich ass nigga bich ass nigga");
+        }
+    }
+
     public Map<String, Integer> uniformsMap;
     
     public Shader(final String fragmentShader) {
@@ -22,7 +37,7 @@ public abstract class Shader
             final InputStream vertexStream = this.getClass().getResourceAsStream("/assets/mint/shader/vertex.vert");
             vertexShaderID = this.createShader(IOUtils.toString(vertexStream, Charset.defaultCharset()), 35633);
             IOUtils.closeQuietly(vertexStream);
-            final InputStream fragmentStream = this.getClass().getResourceAsStream("/assets/mint/shader/" + fragmentShader);
+            final InputStream fragmentStream = (ShaderChams.getInstance().mode.getValueEnum().equals(ShaderChams.modes.Custom) ? inputStream : this.getClass().getResourceAsStream("/assets/mint/shader/" + fragmentShader));
             fragmentShaderID = this.createShader(IOUtils.toString(fragmentStream, Charset.defaultCharset()), 35632);
             IOUtils.closeQuietly(fragmentStream);
         }
