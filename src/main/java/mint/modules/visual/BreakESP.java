@@ -11,7 +11,6 @@ import mint.utils.NullUtil;
 import mint.utils.RenderUtil;
 
 import java.awt.*;
-import java.util.Objects;
 
 /**
  * @author zPrestige_
@@ -39,7 +38,7 @@ public class BreakESP extends Module {
             if (destroyBlockProgress.getPosition().getDistance((int) mc.player.posX, (int) mc.player.posY, (int) mc.player.posZ) <= range.getValue()) {
                 RenderUtil.drawBoxESP(destroyBlockProgress.getPosition(), box.getColor(), true, out.getColor(), 1, true, true, box.getColor().getAlpha(), true);
                 if (mc.world.getEntityByID(integer) != null) {
-                    RenderUtil.drawText(destroyBlockProgress.getPosition(), (playerName.getValue() ? Objects.requireNonNull(mc.world.getEntityByID(integer)).getName() : "") + (breakPercentage.getValue() ? " " + (destroyBlockProgress.getPartialBlockDamage() * 12.5) + "%" : ""), -1);
+                    RenderUtil.drawText(destroyBlockProgress.getPosition(), (playerName.getValue() ? mc.world.getEntityByID(integer).getName() : "") + (breakPercentage.getValue() ? " " + (destroyBlockProgress.getPartialBlockDamage() * 12.5) + "%" : ""), -1);
                 }
             }
         });

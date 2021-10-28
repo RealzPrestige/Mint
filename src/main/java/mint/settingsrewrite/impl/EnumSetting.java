@@ -2,6 +2,7 @@ package mint.settingsrewrite.impl;
 
 import mint.modules.Module;
 import mint.settingsrewrite.SettingRewrite;
+import mint.utils.EnumUtil;
 
 import java.util.function.Predicate;
 
@@ -49,5 +50,11 @@ public final class EnumSetting extends SettingRewrite<Enum> {
             if (constants[i] == value)
                 return i;
         return -1;
+    }
+
+    public void setEnum(String enumString) {
+        EnumUtil converter = new EnumUtil(((Enum) getValue()).getClass());
+        Enum value = converter.doBackward(enumString);
+        setValue(value == null ? getValue() : value);
     }
 }

@@ -3,6 +3,8 @@ package mint.managers;
 import com.google.gson.*;
 import mint.Mint;
 import mint.modules.Module;
+import mint.utils.EnumUtil;
+import mint.utils.BindUtil;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
 
@@ -134,7 +136,7 @@ public class ConfigManager {
             setting.setValue(element.getAsDouble());
         } else if (setting instanceof EnumSetting) {
             try {
-                mint.setting.EnumSetting converter = new mint.setting.EnumSetting(((Enum) setting.getValue()).getClass());
+                EnumUtil converter = new EnumUtil(((Enum) setting.getValue()).getClass());
                 Enum value = converter.doBackward(element);
                 setting.setValue(value == null ? setting.getValue() : value);
             } catch (Exception ignored) {
@@ -144,7 +146,7 @@ public class ConfigManager {
         } else if (setting instanceof IntegerSetting) {
             setting.setValue(element.getAsInt());
         } else if (setting instanceof KeySetting) {
-            ((KeySetting) setting).setBind(element.getAsInt());
+            ((KeySetting) setting).setBind(new BindUtil.BindConverter().doBackward(element).getKey());
         } else if (setting instanceof ParentSetting) {
             setting.setValue(element.getAsBoolean());
         } else if (setting instanceof StringSetting) {
@@ -205,7 +207,7 @@ public class ConfigManager {
         JsonParser jp = new JsonParser();
         for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
             if (setting instanceof EnumSetting) {
-                mint.setting.EnumSetting converter = new mint.setting.EnumSetting(((Enum) setting.getValue()).getClass());
+                EnumUtil converter = new EnumUtil(((Enum) setting.getValue()).getClass());
                 object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
                 continue;
             }

@@ -1,19 +1,19 @@
-package mint.setting;
+package mint.utils;
 
 import com.google.common.base.Converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.lwjgl.input.Keyboard;
 
-public class Bind {
+public class BindUtil {
     private final int key;
 
-    public Bind(int key) {
+    public BindUtil(int key) {
         this.key = key;
     }
 
-    public static Bind none() {
-        return new Bind(-1);
+    public static BindUtil none() {
+        return new BindUtil(-1);
     }
 
     public int getKey() {
@@ -32,17 +32,17 @@ public class Bind {
         return !isEmpty() && Keyboard.isKeyDown(getKey());
     }
 
-    public static class BindConverter extends Converter<Bind, JsonElement> {
+    public static class BindConverter extends Converter<BindUtil, JsonElement> {
 
-        public JsonElement doForward(Bind bind) {
-            return new JsonPrimitive(bind.toString());
+        public JsonElement doForward(BindUtil bindUtil) {
+            return new JsonPrimitive(bindUtil.toString());
         }
 
-        public Bind doBackward(JsonElement jsonElement) {
+        public BindUtil doBackward(JsonElement jsonElement) {
             String s = jsonElement.getAsString();
 
             if (s.equalsIgnoreCase("None"))
-                return Bind.none();
+                return BindUtil.none();
 
             int key = -1;
 
@@ -53,9 +53,9 @@ public class Bind {
             }
 
             if (key == 0)
-                return Bind.none();
+                return BindUtil.none();
 
-            return new Bind(key);
+            return new BindUtil(key);
         }
 
         public int doBackwardInt(JsonElement element) {
@@ -75,7 +75,7 @@ public class Bind {
             if (key == 0)
                 return -1;
 
-            return new Bind(key).key;
+            return new BindUtil(key).key;
 
         }
     }

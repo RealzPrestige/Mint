@@ -1,14 +1,14 @@
-package mint.setting;
+package mint.utils;
 
 import com.google.common.base.Converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-public class EnumSetting
+public class EnumUtil
         extends Converter<Enum, JsonElement> {
     private final Class<? extends Enum> clazz;
 
-    public EnumSetting(Class<? extends Enum> clazz) {
+    public EnumUtil(Class<? extends Enum> clazz) {
         this.clazz = clazz;
     }
 
@@ -22,7 +22,7 @@ public class EnumSetting
     }
 
     public static Enum increaseEnum(Enum clazz) {
-        int index = EnumSetting.currentEnum(clazz);
+        int index = EnumUtil.currentEnum(clazz);
         for (int i = 0; i < clazz.getClass().getEnumConstants().length; ++i) {
             Enum e = clazz.getClass().getEnumConstants()[i];
             if (i != index + 1) continue;
@@ -32,7 +32,7 @@ public class EnumSetting
     }
 
     public static Enum resetEnum(Enum clazz) {
-        int index = EnumSetting.currentEnum(clazz);
+        int index = EnumUtil.currentEnum(clazz);
         for (int i = 0; i > clazz.getClass().getEnumConstants().length; --i) {
             Enum e = clazz.getClass().getEnumConstants()[i];
             if (i != index - 1)
@@ -53,6 +53,13 @@ public class EnumSetting
     public Enum doBackward(JsonElement jsonElement) {
         try {
             return Enum.valueOf(this.clazz, jsonElement.getAsString());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+    public Enum doBackward(String string) {
+        try {
+            return Enum.valueOf(this.clazz, string);
         } catch (IllegalArgumentException e) {
             return null;
         }
