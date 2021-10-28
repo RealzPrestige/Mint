@@ -36,6 +36,7 @@ public abstract class FramebufferShader extends Shader
         FramebufferShader.framebuffer.bindFramebuffer(true);
         entityShadows = mc.gameSettings.entityShadows;
         mc.gameSettings.entityShadows = false;
+        mc.entityRenderer.setupCameraTransform(partialTicks, 0);
     }
 
     public void stopDraw(final float red, final float green, final float blue, final float alpha, final float radius, final float quality) {
