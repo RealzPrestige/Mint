@@ -1,15 +1,16 @@
 package mint.managers;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import mint.Mint;
 import mint.modules.Module;
-import mint.utils.EnumUtil;
-import mint.utils.BindUtil;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
+import mint.utils.EnumUtil;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,8 +28,11 @@ public class ConfigManager {
         loadingConfig = true;
         final List<File> files = Arrays.stream(Objects.requireNonNull(new File("mint").listFiles())).filter(File::isDirectory).collect(Collectors.toList());
         config = files.contains(new File("mint/" + name + "/")) ? "mint/" + name + "/" : "mint/config/";
-        assert Mint.friendManager != null;
-        Mint.friendManager.onLoad();
+        try {
+            loadFriends();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for (Module feature : features) {
             try {
                 loadSettings(feature);
@@ -47,7 +51,11 @@ public class ConfigManager {
             path.mkdir();
         }
         assert Mint.friendManager != null;
-        //  Mint.friendManager.saveFriends();
+        try {
+            saveFriends();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for (Module feature : features) {
             try {
                 saveSettings(feature);
@@ -146,7 +154,7 @@ public class ConfigManager {
         } else if (setting instanceof IntegerSetting) {
             setting.setValue(element.getAsInt());
         } else if (setting instanceof KeySetting) {
-            ((KeySetting) setting).setBind(new BindUtil.BindConverter().doBackward(element).getKey());
+            ((KeySetting) setting).setBind(Integer.parseInt(String.valueOf(element)));
         } else if (setting instanceof ParentSetting) {
             setting.setValue(element.getAsBoolean());
         } else if (setting instanceof StringSetting) {
@@ -157,7 +165,6 @@ public class ConfigManager {
     public void init() {
         assert Mint.moduleManager != null;
         features.addAll(Mint.moduleManager.moduleList);
-        // features.addAll(Mint.friendManager);
         String name = loadCurrentConfig();
         loadConfig(name);
         createFragFile();
@@ -185,11 +192,6 @@ public class ConfigManager {
         for (Map.Entry<String, JsonElement> entry : input.entrySet()) {
             String settingName = entry.getKey();
             JsonElement element = entry.getValue();
-            try {
-                assert Mint.friendManager != null;
-                Mint.friendManager.addFriend(new FriendManager.Friend(element.getAsString(), UUID.fromString(settingName)));
-            } catch (Exception ignored) {
-            }
             for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
                 if (!settingName.equals(setting.getName()))
                     continue;
@@ -199,6 +201,26 @@ public class ConfigManager {
                 }
             }
         }
+    }
+
+    private void saveFriends() throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(Mint.friendManager.getFriends());
+        OutputStreamWriter file;
+
+        file = new OutputStreamWriter(new FileOutputStream("mint/friends.json"), StandardCharsets.UTF_8);
+        file.write(json);
+        file.close();
+    }
+
+    private void loadFriends() throws IOException {
+        Gson gson = new Gson();
+        Reader reader = Files.newBufferedReader(Paths.get("mint/friends.json"));
+
+        Mint.friendManager.setFriends(gson.fromJson(reader, new TypeToken<ArrayList<FriendManager.friend>>() {
+        }.getType()));
+
+        reader.close();
     }
 
 

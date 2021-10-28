@@ -41,7 +41,7 @@ public class CityAnvil extends Module {
 
     public void onUpdate() {
         EntityPlayer target = EntityUtil.getTarget(targetRange.getValue());
-        if (target != null && !Mint.friendManager.isFriend(target)) {
+        if (target != null && !Mint.friendManager.isFriend(target.getName())) {
             BlockPos pos = PlayerUtil.getPlayerPos(target);
             int anvilSlot = InventoryUtil.getItemFromHotbar(Item.getItemFromBlock(Blocks.ANVIL));
             int crystalSlot = InventoryUtil.getItemFromHotbar(Items.END_CRYSTAL);

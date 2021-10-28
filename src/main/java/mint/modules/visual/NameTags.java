@@ -141,7 +141,7 @@ public class NameTags extends Module {
         renderItemStack(renderMainHand, xOffset);
         GlStateManager.popMatrix();
         assert Mint.friendManager != null;
-        Mint.textManager.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player) ? ColorUtil.toRGBA(0, 255, 255) : -1);
+        Mint.textManager.drawStringWithShadow(displayTag, -width, -10, Mint.friendManager.isFriend(player.getName()) ? ColorUtil.toRGBA(0, 255, 255) : -1);
         camera.posX = originalPositionX;
         camera.posY = originalPositionY;
         camera.posZ = originalPositionZ;

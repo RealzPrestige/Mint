@@ -1,99 +1,69 @@
 package mint.managers;
 
-import mint.modules.Feature;
-import mint.setting.Setting;
 import mint.utils.PlayerUtil;
-import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
-public class FriendManager extends Feature {
-    private List<Friend> friends = new ArrayList<>();
+public class FriendManager {
+    private List<friend> friends;
 
     public FriendManager() {
-        super("Friends");
-    }
-
-    public boolean isFriend(String name) {
-        cleanFriends();
-        return friends.stream().anyMatch(friend -> friend.username.equalsIgnoreCase(name));
-    }
-
-    public boolean isFriend(EntityPlayer player) {
-        return isFriend(player.getName());
+        friends = new ArrayList<>();
     }
 
     public void addFriend(String name) {
-        Friend friend = getFriendByName(name);
-        if (friend != null) {
-            friends.add(friend);
+        if (!isFriend(name)) {
+            friends.add(new friend(name));
         }
-        cleanFriends();
     }
 
     public void removeFriend(String name) {
-        cleanFriends();
-        for (Friend friend : friends) {
-            if (!friend.getUsername().equalsIgnoreCase(name))
-                continue;
-            friends.remove(friend);
-            break;
+        friends.removeIf(player -> player.getName().equalsIgnoreCase(name));
+    }
+
+    public boolean isFriend(String name) {
+        for (friend player : friends) {
+            if (player.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
         }
+        return false;
     }
 
-    public void onLoad() {
-        friends = new ArrayList<>();
-        clearSettings();
+    public void setFriends(List<friend> list) {
+        friends = list;
     }
 
-    public void saveFriends() {
-        clearSettings();
-        cleanFriends();
-        for (Friend friend : friends) {
-            register(new Setting<>(friend.getUuid().toString(), friend.getUsername()));
-        }
-    }
-
-    public void cleanFriends() {
-        friends.stream().filter(Objects::nonNull).filter(friend -> friend.getUsername() != null);
-    }
-
-    public List<Friend> getFriends() {
-        cleanFriends();
+    public List<friend> getFriends() {
         return friends;
     }
 
-    public Friend getFriendByName(String input) {
-        UUID uuid = PlayerUtil.getUUIDFromName(input);
-        if (uuid != null) {
-            return new Friend(input, uuid);
-        }
-        return null;
+    public void clear() {
+        friends.clear();
     }
 
-    public void addFriend(Friend friend) {
-        friends.add(friend);
-    }
+    public static class friend {
+        private final String name;
+        private String nickName;
 
-    public static class Friend {
-        private final String username;
-        private final UUID uuid;
-
-        public Friend(String username, UUID uuid) {
-            this.username = username;
-            this.uuid = uuid;
+        public friend(String name) {
+            this.name = name;
+            PlayerUtil.getUUIDFromName(name);
         }
 
-        public String getUsername() {
-            return username;
+        public String getName() {
+            return name;
         }
 
-        public UUID getUuid() {
-            return uuid;
+        public String getNickName() {
+            return nickName;
         }
+
+        public void setNickName(String name) {
+            nickName = name;
+        }
+
     }
 }
 

@@ -10,7 +10,7 @@ import java.util.List;
 public class Feature {
     public List<Setting> settings = new ArrayList<>();
     public TextManager renderer = Mint.textManager;
-    private String name;
+    private final String name;
 
     public Feature(String name) {
         this.name = name;
@@ -29,14 +29,6 @@ public class Feature {
         setting.setFeature(this);
         this.settings.add(setting);
         return setting;
-    }
-
-    public Setting getSettingByName(String name) {
-        for (Setting setting : this.settings) {
-            if (!setting.getName().equalsIgnoreCase(name)) continue;
-            return setting;
-        }
-        return null;
     }
 
     public void clearSettings() {

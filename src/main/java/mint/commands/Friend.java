@@ -15,12 +15,12 @@ public class Friend
     public void execute(String[] commands) {
         if (commands.length == 1) {
             if (Mint.friendManager.getFriends().isEmpty()) {
-                MessageManager.sendMessage("Friend list empty D:.");
+                MessageManager.sendMessage("Friend list empty.");
             } else {
                 String f = "Friends: ";
-                for (FriendManager.Friend friend : Mint.friendManager.getFriends()) {
+                for (FriendManager.friend friend : Mint.friendManager.getFriends()) {
                     try {
-                        f = f + friend.getUsername() + ", ";
+                        f = f + friend.getName() + ", ";
                     } catch (Exception exception) {
                     }
                 }
@@ -29,12 +29,9 @@ public class Friend
             return;
         }
         if (commands.length == 2) {
-            switch (commands[0]) {
-                case "reset": {
-                    Mint.friendManager.onLoad();
-                    MessageManager.sendMessage("Friends got reset.");
-                    return;
-                }
+            if ("reset".equals(commands[0])) {
+                MessageManager.sendMessage("Friends got reset.");
+                return;
             }
             MessageManager.sendMessage(commands[0] + (Mint.friendManager.isFriend(commands[0]) ? " is friended." : " isn't friended."));
             return;
