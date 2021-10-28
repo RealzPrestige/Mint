@@ -209,7 +209,7 @@ public class ConfigManager {
                 object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
                 continue;
             }
-            if (setting.getValue() instanceof String) {
+            if (setting instanceof StringSetting) {
                 String str = (String) setting.getValue();
                 setting.setValue(str.replace(" ", "_"));
                 continue;
@@ -219,7 +219,7 @@ public class ConfigManager {
             }
             try {
                 object.add(setting.getName(), jp.parse(setting.getValueAsString()));
-            } catch (Exception ignored) {
+            } catch (Exception e) {
             }
         }
         return object;
