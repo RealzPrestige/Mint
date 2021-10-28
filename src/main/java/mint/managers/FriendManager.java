@@ -37,7 +37,8 @@ public class FriendManager extends Feature {
     public void removeFriend(String name) {
         cleanFriends();
         for (Friend friend : friends) {
-            if (!friend.getUsername().equalsIgnoreCase(name)) continue;
+            if (!friend.getUsername().equalsIgnoreCase(name))
+                continue;
             friends.remove(friend);
             break;
         }

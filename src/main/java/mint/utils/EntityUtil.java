@@ -497,6 +497,20 @@ public class EntityUtil {
         }
     }
 
+    public static void setMotion(double x, double y, double z){
+        if (mc.player != null) {
+            if (mc.player.isRiding()) {
+                mc.player.ridingEntity.motionX = x;
+                mc.player.ridingEntity.motionY = y;
+                mc.player.ridingEntity.motionZ = z;
+            } else {
+                mc.player.motionX = x;
+                mc.player.motionY = y;
+                mc.player.motionZ = z;
+            }
+        }
+    }
+
     //pasted
     public static void setSpeed(final EntityLivingBase entity, final double speed) {
         double[] dir = forward(speed);

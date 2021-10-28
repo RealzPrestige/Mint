@@ -39,6 +39,7 @@ public final class EnumSetting extends SettingRewrite<Enum> {
         else modeIndex--;
     }
 
+
     public Enum<?> getValueEnum() {
         return constants[modeIndex];
     }

@@ -155,16 +155,8 @@ public class Setting<T> {
         return -1;
     }
 
-    public String currentEnumName() {
-        return EnumSetting.getProperName((Enum) this.value);
-    }
-
     public int currentEnum() {
         return EnumSetting.currentEnum((Enum) value);
-    }
-
-    public void resetEnum() {
-        value = (T) EnumSetting.resetEnum((Enum) value);
     }
 
     public String getType() {
@@ -197,18 +189,6 @@ public class Setting<T> {
         return this.defaultValue;
     }
 
-    public String getValueAsString() {
-        return this.value.toString();
-    }
-
-    public String getColorAsString() {
-        return String.valueOf(color.getRGB());
-    }
-
-    public boolean hasRestriction() {
-        return this.hasRestriction;
-    }
-
     public boolean isParent() {
         return this.isParent;
     }
@@ -223,14 +203,6 @@ public class Setting<T> {
 
     public boolean isColorSetting() {
         return isColorSetting;
-    }
-
-
-    public boolean isVisible() {
-        if (this.visibility == null) {
-            return true;
-        }
-        return this.visibility.test(this.getValue());
     }
 }
 

@@ -95,8 +95,8 @@ public class ModuleWindow {
                             y += 10;
                     }
                 }
-                    RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height - 1, NewGuiModule.getInstance().color.getColor(), 1f);
             }
+            RenderUtil.drawOutlineRect(x + 2, this.y + height, x + width - 2, y + height - 1, NewGuiModule.getInstance().color.getColor(), 1f);
         }
     }
 

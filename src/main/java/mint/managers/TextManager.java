@@ -30,7 +30,7 @@ public class TextManager {
             doneLoad = false;
         }
         assert Mint.moduleManager != null;
-        FontChanger cFont = Mint.moduleManager.getModuleByClass(FontChanger.class);
+        FontChanger cFont = FontChanger.getInstance();
         try {
             setFontRenderer(new Font("Dialog", getStyle(), cFont.fontSize.getValue()), true, true);
         } catch (Exception ignored) {
@@ -56,7 +56,7 @@ public class TextManager {
 
     public void drawString(String text, float x, float y, int color, boolean shadow) {
         assert Mint.moduleManager != null;
-        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
+        if (FontChanger.getInstance().isEnabled()) {
             if (shadow) {
                 customFont.drawStringWithShadow(text, x, y, color);
             } else {
@@ -69,7 +69,7 @@ public class TextManager {
 
     public float drawStringFull(String text, float x, float y, int color, boolean shadow) {
         assert Mint.moduleManager != null;
-        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
+        if (FontChanger.getInstance().isEnabled()) {
             if (shadow) {
                 customFont.drawStringWithShadow(text, x, y, color);
             } else {
@@ -83,7 +83,7 @@ public class TextManager {
 
     public int getStringWidth(String text) {
         assert Mint.moduleManager != null;
-        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
+        if (FontChanger.getInstance().isEnabled()) {
             return customFont.getStringWidth(text);
         }
         return Mint.INSTANCE.mc.fontRenderer.getStringWidth(text);
@@ -91,7 +91,7 @@ public class TextManager {
 
     public int getFontHeight() {
         assert Mint.moduleManager != null;
-        if (Mint.moduleManager.isModuleEnabled(FontChanger.getInstance().getName())) {
+        if (FontChanger.getInstance().isEnabled()) {
             return customFont.getStringHeight();
         }
         return Mint.INSTANCE.mc.fontRenderer.FONT_HEIGHT;

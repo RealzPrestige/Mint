@@ -13,7 +13,7 @@ void main() {
     vec4 centerCol = texture2D(texture, gl_TexCoord[0].xy);
 
      if (centerCol.a != 0) {
-         gl_FragColor = vec4(centerCol.rgb, 0);
+         gl_FragColor = vec4(1.,1.,1., 0);
      } else {
 
          float alpha = 0;

@@ -7,6 +7,7 @@ import mint.modules.Module;
 import mint.modules.ModuleInfo;
 import mint.settingsrewrite.impl.ColorSetting;
 import mint.settingsrewrite.impl.EnumSetting;
+import mint.utils.Timer;
 
 import java.awt.*;
 
@@ -32,6 +33,8 @@ public class Hud extends Module {
     void setInstance() {
         INSTANCE = this;
     }
+
+    Timer timer = new Timer();
 
     @Override
     public void onEnable() {

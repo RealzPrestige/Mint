@@ -5,6 +5,7 @@ package mint.modules.visual;
 import mint.events.RenderWorldEvent;
 import mint.modules.Module;
 import mint.modules.ModuleInfo;
+import mint.settingsrewrite.impl.BooleanSetting;
 import mint.settingsrewrite.impl.EnumSetting;
 import mint.utils.MathUtil;
 import mint.utils.NullUtil;
@@ -22,6 +23,8 @@ public class ShaderChams extends Module {
 
     static ShaderChams INSTANCE = new ShaderChams();
     public EnumSetting mode = new EnumSetting("Mode", modes.Smoke, this);
+    public BooleanSetting playerOnly = new BooleanSetting("Players Only", false, this);
+    public BooleanSetting alwaysGlow = new BooleanSetting("Always Glow", false, this);
 
     public ShaderChams() {
         setInstance();
@@ -39,9 +42,10 @@ public class ShaderChams extends Module {
 
     @Override
     public void renderWorldLastEvent(RenderWorldEvent event) {
-        if(NullUtil.fullNullCheck())
+        if (NullUtil.fullNullCheck())
             return;
         FramebufferShader framebufferShader = null;
+        FramebufferShader outlinebufferShader = null;
         if (mode.getValueEnum().equals(modes.Smoke))
             framebufferShader = SmokeShader.SMOKE_SHADER;
         else if (mode.getValueEnum().equals(modes.Aqua))
@@ -56,6 +60,8 @@ public class ShaderChams extends Module {
             framebufferShader = RainbowShader.RAINBOW_SHADER;
         else if (mode.getValueEnum().equals(modes.Star))
             framebufferShader = StarShader.STAR_SHADER;
+        else if (mode.getValueEnum().equals(modes.RainbowStar))
+            framebufferShader = RainbowStarShader.RAINBOW_STAR_SHADER;
         else if (mode.getValueEnum().equals(modes.Galaxy))
             framebufferShader = GalaxyShader.GALAXY_SHADER;
         else if (mode.getValueEnum().equals(modes.IIV))
@@ -69,31 +75,33 @@ public class ShaderChams extends Module {
         else if (mode.getValueEnum().equals(modes.Hamburger))
             framebufferShader = HamburgerShader.HAMBURGER_SHADER;
 
+        if(alwaysGlow.getValue())
+            outlinebufferShader = GlowShader.GLOW_SHADER;
+
+        final FramebufferShader framebufferFinal = outlinebufferShader;
         final FramebufferShader framebufferShader2 = framebufferShader;
-        if (framebufferShader2 == null) {
+        if (framebufferShader2 == null || framebufferFinal == null)
             return;
-        }
         GlStateManager.matrixMode(5889);
         GlStateManager.pushMatrix();
         GlStateManager.matrixMode(5888);
         GlStateManager.pushMatrix();
         framebufferShader2.startDraw(event.getPartialTicks());
+        framebufferFinal.startDraw(event.getPartialTicks());
         try {
             for (final Entity entity : mc.world.loadedEntityList) {
-                if (entity != mc.player && entity != mc.getRenderViewEntity()) {
-                    if (!(entity instanceof EntityPlayer))
-                        continue;
-                    if (mc.getRenderManager().getEntityRenderObject(entity) == null)
-                        continue;
-                    final Vec3d vector = MathUtil.getInterpolatedRenderPos(entity, event.getPartialTicks());
-                    ((EntityPlayer) entity).hurtTime = 0;
-                    Objects.requireNonNull(mc.getRenderManager().getEntityRenderObject(entity)).doRender(entity, vector.x, vector.y, vector.z, entity.rotationYaw, event.getPartialTicks());
-
-                }
+                if (entity == mc.player && entity == mc.getRenderViewEntity() || !(entity instanceof EntityPlayer && playerOnly.getValue()))
+                    continue;
+                if (mc.getRenderManager().getEntityRenderObject(entity) == null)
+                    continue;
+                final Vec3d vector = MathUtil.getInterpolatedRenderPos(entity, event.getPartialTicks());
+                ((EntityPlayer) entity).hurtTime = 0;
+                Objects.requireNonNull(mc.getRenderManager().getEntityRenderObject(entity)).doRender(entity, vector.x, vector.y, vector.z, entity.rotationYaw, event.getPartialTicks());
             }
         } catch (Exception ignored) {
         }
         final float radius = Float.intBitsToFloat(Float.floatToIntBits(1799.2811f) ^ 0x7BE0E8FF) + Float.intBitsToFloat(Float.floatToIntBits(0.9867451f) ^ 0x7F3C9B54);
+        framebufferFinal.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), 255.0f, radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
         framebufferShader2.stopDraw(Float.intBitsToFloat(Float.floatToIntBits(0.010916991f) ^ 0x7F4DDD2E), Float.intBitsToFloat(Float.floatToIntBits(3.0171999E38f) ^ 0x7F62FD28), Float.intBitsToFloat(Float.floatToIntBits(0.00893931f) ^ 0x7F6D762F), 255.0f, radius, Float.intBitsToFloat(Float.floatToIntBits(4.801641f) ^ 0x7F19A70B));
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.matrixMode(5889);
@@ -111,6 +119,7 @@ public class ShaderChams extends Module {
         Outline,
         Rainbow,
         Star,
+        RainbowStar,
         Galaxy,
         IIV,
         Cloud,
@@ -130,6 +139,7 @@ public class ShaderChams extends Module {
                     modes.Outline,
                     modes.Rainbow,
                     modes.Star,
+                    modes.RainbowStar,
                     modes.Galaxy,
                     modes.IIV,
                     modes.Cloud,

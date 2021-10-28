@@ -11,6 +11,7 @@ import mint.utils.*;
 import net.minecraft.block.BlockEnderChest;
 import net.minecraft.block.BlockObsidian;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
@@ -25,6 +26,7 @@ public class Surround extends Module {
     public ParentSetting miscParent = new ParentSetting("Misc", true, this);
     public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 50, 0, 500, this, v -> miscParent.getValue());
     public BooleanSetting rotate = new BooleanSetting("Rotate", false, this, v -> miscParent.getValue());
+    public BooleanSetting cancelOnChorus = new BooleanSetting("Cancel On Chorus", false, this, v -> miscParent.getValue());
     public BooleanSetting bottomBlocks = new BooleanSetting("Bottom Blocks", false, this, v -> miscParent.getValue());
     public BooleanSetting bottomBlocksExtend = new BooleanSetting("Bottom Blocks Extend", false, this, v -> bottomBlocks.getValue() && miscParent.getValue());
     public BooleanSetting maxBlock = new BooleanSetting("Max Blocks", false, this, v -> miscParent.getValue());
@@ -49,6 +51,9 @@ public class Surround extends Module {
 
         BlockPos pos = PlayerUtil.getPlayerPos(mc.player);
         BlockPos center = PlayerUtil.getCenterPos(pos.getX(), pos.getY(), pos.getZ());
+
+        if(mc.player.getHeldItemMainhand().getItem().equals(Items.CHORUS_FRUIT) && mc.player.isHandActive() && cancelOnChorus.getValue())
+            disable();
 
         if (blocks.getValueEnum().equals(BlockSelection.Obsidian))
             itemSlot = InventoryUtil.findHotbarBlock(BlockObsidian.class);

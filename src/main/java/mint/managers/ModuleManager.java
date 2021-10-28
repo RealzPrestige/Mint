@@ -3,13 +3,9 @@ package mint.managers;
 import mint.Mint;
 import mint.events.RenderOverlayEvent;
 import mint.events.RenderWorldEvent;
+import mint.modules.ClassFinder;
 import mint.modules.Module;
-import mint.modules.combat.*;
-import mint.modules.core.*;
-import mint.modules.miscellaneous.*;
-import mint.modules.movement.*;
-import mint.modules.player.*;
-import mint.modules.visual.*;
+import mint.modules.miscellaneous.SignExploit;
 import mint.newgui.NewGui;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -31,81 +27,12 @@ public class ModuleManager {
             SignExploit.nullCheck();
             doneLoad = false;
         }
-        /** Core **/
-        moduleList.add(new FontChanger());
-        moduleList.add(new Descriptions());
-        moduleList.add(new Notifications());
-        moduleList.add(new RubberbandNotify());
-        moduleList.add(new NewGuiModule());
-        moduleList.add(new HudEditor());
-        moduleList.add(new Hud());
-
-        /** Combat **/
-        moduleList.add(new AutoCrystal());
-        moduleList.add(new AutoPiston());
-        moduleList.add(new BowAmplifier());
-        moduleList.add(new CityAnvil());
-        moduleList.add(new Crits());
-        moduleList.add(new HoleFiller());
-        moduleList.add(new KillAura());
-        moduleList.add(new Offhand());
-        moduleList.add(new SelfFill());
-        moduleList.add(new Surround());
-        moduleList.add(new Waller());
-        moduleList.add(new EntityPredict());
-
-        /** Miscellaneous **/
-        moduleList.add(new AutoEnderChest());
-        moduleList.add(new Backpack());
-        //moduleList.add(new BuildHeight());
-        moduleList.add(new ChorusPredict());
-        moduleList.add(new EntityCrammer());
-        moduleList.add(new FakePlayer());
-        //moduleList.add(new PacketManipulator());
-        moduleList.add(new SelfAnvil());
-        moduleList.add(new TabTweaks());
-        moduleList.add(new HotbarRefiller());
-
-        /** Movement **/
-        moduleList.add(new Anchor());
-        moduleList.add(new BoatFly());
-        moduleList.add(new Clip());
-        moduleList.add(new LongJump());
-        moduleList.add(new Phase());
-        moduleList.add(new ReverseStep());
-        moduleList.add(new SSS());
-        moduleList.add(new Step());
-        moduleList.add(new Strafe());
-        moduleList.add(new YPort());
-        moduleList.add(new TickShift());
-        moduleList.add(new WaterSpeed());
-        moduleList.add(new Velocity());
-
-        /** Player **/
-        moduleList.add(new AntiAim());
-        //moduleList.add(new AutoLog());
-        moduleList.add(new AutoMine());
-        moduleList.add(new Blink());
-        moduleList.add(new ChorusManipulator());
-        moduleList.add(new FastPlace());
-        moduleList.add(new Interaction());
-        moduleList.add(new PacketEXP());
-        moduleList.add(new Packetmine());
-
-        /** Visual **/
-        moduleList.add(new BreakESP());
-        moduleList.add(new CripWalk());
-        moduleList.add(new CrystalChams());
-        moduleList.add(new Hand());
-        moduleList.add(new HoleESP());
-        moduleList.add(new NameTags());
-        moduleList.add(new PlayerChams());
-        moduleList.add(new PlayerTrails());
-        moduleList.add(new PopESP());
-        moduleList.add(new SwingAnimations());
-        moduleList.add(new ViewTweaks());
-        moduleList.add(new ShaderChams());
-        moduleList.add(new NoRender());
+        ClassFinder.addModules("combat");
+        ClassFinder.addModules("core");
+        ClassFinder.addModules("miscellaneous");
+        ClassFinder.addModules("movement");
+        ClassFinder.addModules("player");
+        ClassFinder.addModules("visual");
     }
 
     public Module getModuleByName(String name) {
@@ -114,19 +41,6 @@ public class ModuleManager {
             return module;
         }
         return null;
-    }
-
-    public <T extends Module> T getModuleByClass(Class<T> clazz) {
-        for (Module module : moduleList) {
-            if (!clazz.isInstance(module)) continue;
-            return (T) module;
-        }
-        return null;
-    }
-
-    public boolean isModuleEnabled(String name) {
-        Module module = getModuleByName(name);
-        return module != null && module.isEnabled();
     }
 
     public ArrayList<Module> getEnabledModules() {
@@ -206,9 +120,9 @@ public class ModuleManager {
 
         moduleList.forEach(module -> {
             if (module.bind.getKey() == eventKey) {
-                if(module.isEnabled())
+                if (module.isEnabled())
                     module.disable();
-                else if(!module.isEnabled())
+                else if (!module.isEnabled())
                     module.enable();
             }
         });
