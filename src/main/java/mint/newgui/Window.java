@@ -58,7 +58,7 @@ public class Window {
                 int openedHeight = 0;
                 if (module.isOpened) {
                     assert Mint.settingsRewrite != null;
-                    for (SettingRewrite settingsRewrite : Mint.settingsRewrite.getSettingsInModule(module)) {
+                    for (SettingRewrite settingsRewrite : module.getSettings()) {
                         if (settingsRewrite.isVisible())
                             openedHeight += 10;
                         if (settingsRewrite instanceof EnumSetting && settingsRewrite.isVisible())
