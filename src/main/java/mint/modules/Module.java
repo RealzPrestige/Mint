@@ -26,7 +26,7 @@ public class Module {
     public KeySetting bind = new KeySetting("Keybind", Keyboard.KEY_NONE, this);
 
     public boolean isOpened = false;
-    public BooleanSetting enabled = new BooleanSetting("Enabled",false,this);
+    public BooleanSetting enabled = new BooleanSetting("Enabled",false,this, v -> false);
 
     public void onEnable() {
     }
