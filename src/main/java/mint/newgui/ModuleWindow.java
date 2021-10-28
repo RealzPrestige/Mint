@@ -45,7 +45,7 @@ public class ModuleWindow {
             if (!settingsRewrite.isVisible())
                 continue;
 
-            if (settingsRewrite instanceof BooleanSetting)
+            if (settingsRewrite instanceof BooleanSetting && !settingsRewrite.getName().equals("Enabled"))
                 penius.add(new BooleanButton(settingsRewrite));
 
             if (settingsRewrite instanceof IntegerSetting)
