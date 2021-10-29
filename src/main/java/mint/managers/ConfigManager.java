@@ -142,18 +142,13 @@ public class ConfigManager {
         } else if (setting instanceof DoubleSetting) {
             setting.setValue(element.getAsDouble());
         } else if (setting instanceof EnumSetting) {
-            try {
-                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil(( ((EnumSetting) setting).getValueEnum()).getClass());
-                Enum value = converter.doBackward(element);
-                ((EnumSetting) setting).setEnum(value == null ? ((EnumSetting) setting).getValueEnum().toString() : value.toString());
-            } catch (Exception ignored) {
-            }
+            ((EnumSetting) setting).setEnum(element.getAsString());
         } else if (setting instanceof FloatSetting) {
             setting.setValue(element.getAsFloat());
         } else if (setting instanceof IntegerSetting) {
             setting.setValue(element.getAsInt());
         } else if (setting instanceof KeySetting) {
-            ((KeySetting) setting).setBind(new KeySetting.BindUtil.BindConverter().doBackwardInt(element));
+            ((KeySetting) setting).setBind(Integer.parseInt(String.valueOf(element)));
         } else if (setting instanceof ParentSetting) {
             setting.setValue(element.getAsBoolean());
         } else if (setting instanceof StringSetting) {

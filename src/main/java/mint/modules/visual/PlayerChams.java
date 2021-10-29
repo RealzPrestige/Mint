@@ -62,7 +62,7 @@ public class PlayerChams extends Module {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GL11.glColor4f(solidColor.getColor().getRed(), solidColor.getColor().getGreen(), solidColor.getColor().getBlue(), solidColor.getColor().getAlpha());
+        GL11.glColor4f(solidColor.getColor().getRed() / 255f, solidColor.getColor().getGreen() / 255f, solidColor.getColor().getBlue() / 255f, solidColor.getColor().getAlpha() / 255f);
     }
 
     public void endSolid() {
