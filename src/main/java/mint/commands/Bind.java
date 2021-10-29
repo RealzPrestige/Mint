@@ -37,7 +37,7 @@ public class Bind
             MessageManager.sendMessage("Unknown key '" + rkey + "'!");
             return;
         }
-        module.bind.setValue(key);
+        module.bind.setValue(Integer.parseInt(String.valueOf(key)));
         MessageManager.sendMessage("Bind for " + ChatFormatting.GREEN + module.getName() + ChatFormatting.WHITE + " set to " + ChatFormatting.GRAY + rkey.toUpperCase());
     }
 }

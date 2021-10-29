@@ -461,11 +461,7 @@ public class AutoCrystal extends Module {
             this.blockPos = blockPos;
             this.targetDamage = targetDamage;
         }
-
-        public float getTargetDamage() {
-            return targetDamage;
-        }
-
+        
         public BlockPos getBlockPos() {
             return blockPos;
         }

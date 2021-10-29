@@ -4,8 +4,7 @@ import com.google.common.base.Converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-public class EnumUtil
-        extends Converter<Enum, JsonElement> {
+public class EnumUtil extends Converter<Enum, JsonElement> {
     private final Class<? extends Enum> clazz;
 
     public EnumUtil(Class<? extends Enum> clazz) {
