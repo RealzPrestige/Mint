@@ -55,13 +55,12 @@ public final class EnumSetting extends SettingRewrite<Enum> {
     }
 
     public void setEnum(String enumString) {
-        EnumUtil converter = new EnumUtil(((Enum) getValue()).getClass());
+        EnumUtil converter = new EnumUtil(getValue().getClass());
         Enum value = converter.doBackward(enumString);
         setValue(value == null ? getValue() : value);
     }
 
-    public static class EnumUtil
-            extends Converter<Enum, JsonElement> {
+    public static class EnumUtil extends Converter<Enum, JsonElement> {
         private final Class<? extends Enum> clazz;
 
         public EnumUtil(Class<? extends Enum> clazz) {
