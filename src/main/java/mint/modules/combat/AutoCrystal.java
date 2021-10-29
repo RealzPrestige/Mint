@@ -15,10 +15,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
-import net.minecraft.network.play.server.SPacketEntityVelocity;
-import net.minecraft.network.play.server.SPacketExplosion;
-import net.minecraft.network.play.server.SPacketSoundEffect;
-import net.minecraft.network.play.server.SPacketSpawnObject;
+import net.minecraft.network.play.server.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -33,6 +30,7 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 
@@ -59,6 +57,8 @@ public class AutoCrystal extends Module {
     public BooleanSetting soundPredict = new BooleanSetting("Sound Predict", false, this, v -> predictParent.getValue());
     public BooleanSetting breakPredict = new BooleanSetting("Break Predict", false, this, v -> predictParent.getValue());
     public BooleanSetting breakPredictCalc = new BooleanSetting("Break Predict Calc", false, this, v -> predictParent.getValue() && breakPredict.getValue());
+    public BooleanSetting globalEntitySpawnPredict = new BooleanSetting("Global Entity Spawn Predict", false, this, v -> predictParent.getValue());
+    public BooleanSetting spawnObject = new BooleanSetting("Spawn Object", false, this, v -> predictParent.getValue());
 
     public ParentSetting delayParent = new ParentSetting("Delays", false, this);
     public IntegerSetting placeDelay = new IntegerSetting("Place Delay", 100, 0, 500, this, v -> delayParent.getValue());
@@ -337,7 +337,24 @@ public class AutoCrystal extends Module {
             if (cancelExplosion.getValue())
                 event.setCanceled(true);
         }
-
+        if (event.getPacket() instanceof SPacketSpawnGlobalEntity && globalEntitySpawnPredict.getValue()) {
+            CPacketUseEntity predict = new CPacketUseEntity();
+            SPacketSpawnGlobalEntity packet = new SPacketSpawnGlobalEntity();
+            if (mc.player.getDistanceSq(new BlockPos(packet.getX(), packet.getY(), packet.getZ())) > MathUtil.square(breakRange.getValue()))
+                return;
+            predict.entityId = packet.getEntityId();
+            predict.action = CPacketUseEntity.Action.ATTACK;
+            Objects.requireNonNull(mc.getConnection()).sendPacket(predict);
+        }
+        if(event.getPacket() instanceof SPacketSpawnObject && spawnObject.getValue()){
+            CPacketUseEntity predict = new CPacketUseEntity();
+            SPacketSpawnObject sPacketSpawnObject = new SPacketSpawnObject();
+            if (mc.player.getDistanceSq(new BlockPos(sPacketSpawnObject.getX(), sPacketSpawnObject.getY(), sPacketSpawnObject.getZ())) > MathUtil.square(breakRange.getValue()))
+                return;
+            predict.entityId = sPacketSpawnObject.getEntityID();
+            predict.action = CPacketUseEntity.Action.ATTACK;
+            Objects.requireNonNull(mc.getConnection()).sendPacket(predict);
+        }
         if (event.getPacket() instanceof SPacketEntityVelocity) {
             SPacketEntityVelocity velocity = event.getPacket();
 
@@ -461,7 +478,7 @@ public class AutoCrystal extends Module {
             this.blockPos = blockPos;
             this.targetDamage = targetDamage;
         }
-        
+
         public BlockPos getBlockPos() {
             return blockPos;
         }
