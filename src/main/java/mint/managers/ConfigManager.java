@@ -6,7 +6,6 @@ import mint.Mint;
 import mint.modules.Module;
 import mint.settingsrewrite.SettingRewrite;
 import mint.settingsrewrite.impl.*;
-import mint.utils.EnumUtil;
 
 import java.awt.*;
 import java.io.*;
@@ -144,7 +143,7 @@ public class ConfigManager {
             setting.setValue(element.getAsDouble());
         } else if (setting instanceof EnumSetting) {
             try {
-                EnumUtil converter = new EnumUtil(((Enum) setting.getValue()).getClass());
+                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil(((Enum) setting.getValue()).getClass());
                 Enum value = converter.doBackward(element);
                 setting.setValue(value == null ? setting.getValue() : value);
             } catch (Exception ignored) {
@@ -229,7 +228,7 @@ public class ConfigManager {
         JsonParser jp = new JsonParser();
         for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
             if (setting instanceof EnumSetting) {
-                EnumUtil converter = new EnumUtil(((Enum) setting.getValue()).getClass());
+                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil(((Enum) setting.getValue()).getClass());
                 object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
                 continue;
             }
