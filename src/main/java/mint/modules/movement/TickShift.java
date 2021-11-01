@@ -29,6 +29,7 @@ public class TickShift extends Module {
     public BooleanSetting step = new BooleanSetting("Step", Boolean.valueOf(String.valueOf(new String(ByteBuffer.wrap(String.valueOf(true).getBytes(StandardCharsets.UTF_8)).array()).toCharArray())), this);
     public IntegerSetting timerFactor = new IntegerSetting("Factor", 1, 0, 9, this);
 
+    public BooleanSetting instant = new BooleanSetting("Instant Test", Boolean.valueOf(String.valueOf(new String(ByteBuffer.wrap(String.valueOf(true).getBytes(StandardCharsets.UTF_8)).array()).toCharArray())), this);
     public EnumSetting disableMode = new EnumSetting("Disable", DisableMode.Distance, this);
 
     public enum DisableMode {Ticks, Distance, None}
@@ -114,49 +115,52 @@ public class TickShift extends Module {
                 if (InventoryUtil.heldItem(Items.EXPERIENCE_BOTTLE, InventoryUtil.Hand.Both) && mc.player.isHandActive()) {
                     return;
                 } else {
-                    switch (timerFactor.getValue()) {
-                        case 1: {
-                            Timer.setTimer(1.15f);
-                            break;
-                        }
-                        case 2: {
-                            Timer.setTimer(1.3f);
-                            break;
-                        }
-                        case 3: {
-                            Timer.setTimer(1.45f);
-                            break;
-                        }
-                        case 4: {
-                            Timer.setTimer(1.6f);
-                            break;
-                        }
-                        case 5: {
-                            Timer.setTimer(1.75f);
-                            break;
-                        }
-                        case 6: {
-                            Timer.setTimer(1.9f);
-                            break;
-                        }
-                        case 7: {
-                            Timer.setTimer(2.05f);
-                            break;
-                        }
-                        case 8: {
-                            Timer.setTimer(2.2f);
-                            break;
-                        }
-                        case 9: {
-                            Timer.setTimer(2.35f);
-                            break;
+                    if (instant.getValue()) {
+                        Timer.setTimer(100.0f);
+                    } else {
+                        switch (timerFactor.getValue()) {
+                            case 1: {
+                                Timer.setTimer(1.15f);
+                                break;
+                            }
+                            case 2: {
+                                Timer.setTimer(1.3f);
+                                break;
+                            }
+                            case 3: {
+                                Timer.setTimer(1.45f);
+                                break;
+                            }
+                            case 4: {
+                                Timer.setTimer(1.6f);
+                                break;
+                            }
+                            case 5: {
+                                Timer.setTimer(1.75f);
+                                break;
+                            }
+                            case 6: {
+                                Timer.setTimer(1.9f);
+                                break;
+                            }
+                            case 7: {
+                                Timer.setTimer(2.05f);
+                                break;
+                            }
+                            case 8: {
+                                Timer.setTimer(2.2f);
+                                break;
+                            }
+                            case 9: {
+                                Timer.setTimer(2.35f);
+                                break;
+                            }
                         }
                     }
                 }
             }
             if (step.getValue())
                 mc.player.stepHeight = 2.0f;
-
             final MovementInput movementInput = mc.player.movementInput;
             float moveForward = movementInput.moveForward;
             float moveStrafe = movementInput.moveStrafe;

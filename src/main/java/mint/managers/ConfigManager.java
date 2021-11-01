@@ -223,8 +223,8 @@ public class ConfigManager {
         JsonParser jp = new JsonParser();
         for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
             if (setting instanceof EnumSetting) {
-                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil(((Enum) setting.getValue()).getClass());
-                object.add(setting.getName(), converter.doForward((Enum) setting.getValue()));
+                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil((((EnumSetting)setting).getValueEnum()).getClass());
+                object.add(setting.getName(), converter.doForward(((EnumSetting) setting).getValueEnum()));
                 continue;
             }
             if (setting instanceof StringSetting) {
