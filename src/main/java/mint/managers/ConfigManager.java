@@ -142,7 +142,12 @@ public class ConfigManager {
         } else if (setting instanceof DoubleSetting) {
             setting.setValue(element.getAsDouble());
         } else if (setting instanceof EnumSetting) {
-            ((EnumSetting) setting).setEnum(element.getAsString());
+            try {
+                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil(((Enum) setting.getValue()).getClass());
+                Enum value = converter.doBackward(element);
+                setting.setValue(value == null ? setting.getValue() : value);
+            } catch (Exception ignored) {
+            }
         } else if (setting instanceof FloatSetting) {
             setting.setValue(element.getAsFloat());
         } else if (setting instanceof IntegerSetting) {

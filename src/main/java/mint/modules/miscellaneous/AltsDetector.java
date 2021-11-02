@@ -42,7 +42,7 @@ public class AltsDetector extends Module {
         }catch (Exception ignored) {
         }
         for (String strings : list) {
-            String[] string = strings.split(":");
+            String[] string = strings.split(" : ");
             list1.add(string[0]);
         }
     }
@@ -78,8 +78,10 @@ public class AltsDetector extends Module {
 
     @Override
     public void onLogin() {
-        this.disable();
-        this.enable();
+        if (this.isEnabled()) {
+            this.disable();
+            this.enable();
+        }
     }
 
     public void saveFile(String name, String ping) {
