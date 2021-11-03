@@ -142,8 +142,7 @@ public class ConfigManager {
         } else if (setting instanceof DoubleSetting) {
             setting.setValue(element.getAsDouble());
         } else if (setting instanceof EnumSetting) {
-            String[] string = element.getAsString().split(":");
-            ((EnumSetting) setting).setModeIndex(Integer.parseInt(string[1]));
+            ((EnumSetting) setting).setModeIndex(Integer.parseInt(element.getAsString()));
         } else if (setting instanceof FloatSetting) {
             setting.setValue(element.getAsFloat());
         } else if (setting instanceof IntegerSetting) {
@@ -224,7 +223,7 @@ public class ConfigManager {
         JsonParser jp = new JsonParser();
         for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
             if (setting instanceof EnumSetting) {
-                object.add(setting.getName(), jp.parse(((EnumSetting) setting).getValueAndIndex()));
+                object.add(setting.getName(), jp.parse(String.valueOf(((EnumSetting) setting).getModeIndex())));
                 continue;
             }
             if (setting instanceof StringSetting) {
