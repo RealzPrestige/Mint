@@ -38,10 +38,6 @@ public final class EnumSetting extends SettingRewrite<Enum> {
         modeIndex = value;
     }
 
-    public String getValueAndIndex() {
-        return getValueEnum().name() + ":" + modeIndex;
-    }
-
     public void increase() {
         if (modeIndex == constants.length - 1)
             modeIndex = 0;
