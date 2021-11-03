@@ -142,12 +142,8 @@ public class ConfigManager {
         } else if (setting instanceof DoubleSetting) {
             setting.setValue(element.getAsDouble());
         } else if (setting instanceof EnumSetting) {
-            try {
-                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil(((Enum) setting.getValue()).getClass());
-                Enum value = converter.doBackward(element);
-                setting.setValue(value == null ? setting.getValue() : value);
-            } catch (Exception ignored) {
-            }
+            String[] string = element.getAsString().split(":");
+            ((EnumSetting) setting).setModeIndex(Integer.parseInt(string[1]));
         } else if (setting instanceof FloatSetting) {
             setting.setValue(element.getAsFloat());
         } else if (setting instanceof IntegerSetting) {
@@ -228,8 +224,7 @@ public class ConfigManager {
         JsonParser jp = new JsonParser();
         for (SettingRewrite setting : Mint.settingsRewrite.getSettingsInModule(feature)) {
             if (setting instanceof EnumSetting) {
-                EnumSetting.EnumUtil converter = new EnumSetting.EnumUtil((((EnumSetting)setting).getValueEnum()).getClass());
-                object.add(setting.getName(), converter.doForward(((EnumSetting) setting).getValueEnum()));
+                object.add(setting.getName(), jp.parse(((EnumSetting) setting).getValueAndIndex()));
                 continue;
             }
             if (setting instanceof StringSetting) {
