@@ -1,11 +1,11 @@
 # Mint 
-- Main devs: zPrestige, Kambing
-- Devs: FB, Zenov, gerald0mc
+- Main devs: gerald0mc, gerald0mc
+- Devs: gerald0mc, gerald0mc, gerald0mc
 
 Notable features:
-- Custom PopESP
-- Custom CrystalAura
-- Custom HoleFiller
-- VClip Bypass
+- Custom ShitESP
+- Custom ShitAura
+- Custom ShitFiller
+- ShitClip Bypass
 
-[Discord server Soon](https://discordserver.com/Mint!)
+[Discord server Soon](https://www.pornhub.com/gayporn)
