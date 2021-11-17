@@ -1,9 +1,1 @@
-YO RILEY BRO WHY UR FACE LOOK LIKE THAT RILEY??!?!?! SWATTED LEL - Retard
-
-BRO WHERE IS THE SWAT IM STILL WAITING!??!?!?!?!?!?!? - Based Dev
-
-AT UR DOORSTEP RILEY 😵💀☠️ - Retard
-
-THATS WHY YOU LOOK AUTISTIC LOOOL - Based Dev
-
-https://cdn.discordapp.com/attachments/905432886902132798/910214339141730304/image0-44.jpg
+degerald0iqmc 
